@@ -12,7 +12,8 @@ public class Networking : MonoBehaviour {
 	{
 		if (!isServer)
 		{
-
+			print ("Trying to connect!");
+			Network.Connect("10.96.10.42", 25000);
 		}
 		else
 		{
@@ -27,5 +28,10 @@ public class Networking : MonoBehaviour {
 	void Update () 
 	{
 	
+	}
+
+	void OnConnectedToServer()
+	{
+		print ("Connected to server!!!!");
 	}
 }
