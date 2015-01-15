@@ -12,7 +12,7 @@ public class HandCycler : MonoBehaviour {
   public HandModel[] leftHands;
   public HandModel[] rightHands;
 
-  private int hand_index_ = 0;
+  private int hand_index_ = 7;
 
   void Start() {
     SetNewHands();
