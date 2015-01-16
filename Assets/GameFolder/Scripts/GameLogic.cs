@@ -10,10 +10,12 @@ public class GameLogic : MonoBehaviour
 
 	private Dictionary<string, GameObject> playerAvatars; 
 	private NetworkView view;
+
+	private GameObject playerAvatar;
 	// Use this for initialization
 	void Start () 
 	{
-
+		view = gameObject.networkView;
 	}
 	
 	// Update is called once per frame
@@ -24,16 +26,24 @@ public class GameLogic : MonoBehaviour
 
 	public void createNewPlayer ()
 	{
-		view.RPC ("MakePlayer", RPCMode.Others);
+		view.RPC ("MakePlayerOnClient", RPCMode.Others);
 	}
+
+
+
+
+
+
+
+
+
 
 
 
 	[RPC]
-	public void MakePlayer ()
+	public void MakePlayerOnClient ()
 	{
 		print ("Remote procedure called!");
+		playerAvatar = (GameObject) Network.Instantiate (avatarPrefab, thisPlayer.transform.position, thisPlayer.transform.rotation, 1);
 	}
-
-
 }
