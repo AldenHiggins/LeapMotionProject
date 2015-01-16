@@ -1,21 +1,18 @@
 using UnityEngine;
 using System.Collections;
 
-public class Networking : MonoBehaviour {
+public class Networking : MonoBehaviour 
+{
 
 //	private Network
 
 	public bool isServer;
 
+	public GameLogic gameLogic;
+
 	// Use this for initialization
 	void Start ()
 	{
-
-
-
-
-
-
 		if (!isServer)
 		{
 			print ("Trying to connect!");
@@ -47,5 +44,6 @@ public class Networking : MonoBehaviour {
 	void OnConnectedToServer()
 	{
 		print ("Connected to server!!!!");
+		gameLogic.createNewPlayer ();
 	}
 }
