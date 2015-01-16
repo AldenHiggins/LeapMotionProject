@@ -39,7 +39,6 @@ public class Networking : MonoBehaviour
 	void OnPlayerConnected ()
 	{
 		print ("Player has connected to the server!");
-		gameLogic.createNewPlayer ();
 	}
 
 	void OnConnectedToServer()

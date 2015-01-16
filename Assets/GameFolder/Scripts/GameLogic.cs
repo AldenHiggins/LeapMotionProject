@@ -16,6 +16,7 @@ public class GameLogic : MonoBehaviour
 	void Start () 
 	{
 		view = gameObject.networkView;
+		makePlayerOnClient ();
 	}
 	
 	// Update is called once per frame
@@ -24,29 +25,20 @@ public class GameLogic : MonoBehaviour
 
 	}
 
-	public void createNewPlayer ()
-	{
-		view.RPC ("MakePlayerOnClient", RPCMode.Others);
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-	[RPC]
-	public void MakePlayerOnClient ()
+//	public void createNewPlayer ()
+//	{
+//		view.RPC ("MakePlayerOnClient", RPCMode.Others);
+//	}
+//
+//	[RPC]
+	public void makePlayerOnClient ()
 	{
 		print ("Remote procedure called!");
 		playerAvatar = (GameObject) Network.Instantiate (avatarPrefab, thisPlayer.transform.position, thisPlayer.transform.rotation, 1);
-
 		MoveAvatar avatar = (MoveAvatar) playerAvatar.GetComponent (typeof(MoveAvatar));
 		avatar.setPlayer (thisPlayer);
+		avatar.hidePlayer ();	
 	}
+
+
 }

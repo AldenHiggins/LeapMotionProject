@@ -25,4 +25,10 @@ public class MoveAvatar : MonoBehaviour
 	{
 		thisPlayer = playerInput;
 	}
+
+	public void hidePlayer()
+	{
+		transform.GetChild (0).renderer.enabled = false;
+		transform.GetChild (1).renderer.enabled = false;
+	}
 }
