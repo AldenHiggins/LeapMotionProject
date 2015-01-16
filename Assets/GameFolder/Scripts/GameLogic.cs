@@ -33,7 +33,7 @@ public class GameLogic : MonoBehaviour
 	public void makePlayerOnClient ()
 	{
 		print ("Remote procedure called!");
-
+		makePlayerOnClientHelper ();
 	}
 
 	public void makePlayerOnClientHelper()
