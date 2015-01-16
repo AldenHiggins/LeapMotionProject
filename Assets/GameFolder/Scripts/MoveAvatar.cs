@@ -14,6 +14,7 @@ public class MoveAvatar : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-		transform = thisPlayer.transform;
+		transform.position = thisPlayer.transform.position;
+		transform.rotation = thisPlayer.transform.rotation;
 	}
 }
