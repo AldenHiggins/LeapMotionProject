@@ -26,7 +26,7 @@ public class GameLogic : MonoBehaviour
 
 	public void createNewPlayer ()
 	{
-		view.RPC ("MakePlayerOnClient", RPCMode.Others);
+		view.RPC ("makePlayerOnClient", RPCMode.Others);
 	}
 
 	[RPC]
