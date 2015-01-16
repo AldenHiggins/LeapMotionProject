@@ -45,5 +45,8 @@ public class GameLogic : MonoBehaviour
 	{
 		print ("Remote procedure called!");
 		playerAvatar = (GameObject) Network.Instantiate (avatarPrefab, thisPlayer.transform.position, thisPlayer.transform.rotation, 1);
+
+		MoveAvatar avatar = (MoveAvatar) playerAvatar.GetComponent (typeof(MoveAvatar));
+		avatar.setPlayer (thisPlayer);
 	}
 }

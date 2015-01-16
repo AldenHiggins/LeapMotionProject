@@ -3,7 +3,7 @@ using System.Collections;
 
 public class MoveAvatar : MonoBehaviour 
 {
-	public GameObject thisPlayer;
+	private GameObject thisPlayer;
 
 	// Use this for initialization
 	void Start () 
@@ -14,7 +14,15 @@ public class MoveAvatar : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-		transform.position = thisPlayer.transform.position;
-		transform.rotation = thisPlayer.transform.rotation;
+		if (thisPlayer != null)
+		{
+			transform.position = thisPlayer.transform.position;
+			transform.rotation = thisPlayer.transform.rotation;
+		}
+	}
+
+	public void setPlayer(GameObject playerInput)
+	{
+		thisPlayer = playerInput;
 	}
 }
