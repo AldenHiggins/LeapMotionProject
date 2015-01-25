@@ -79,6 +79,7 @@ public class GameLogic : MonoBehaviour
 
 	public void makePlayerOnClientHelper()
 	{
+		// previously was Network.Instantiate
 		playerAvatar = (GameObject) Network.Instantiate (avatarPrefab, thisPlayer.transform.position, thisPlayer.transform.rotation, 1);
 		MoveAvatar avatar = (MoveAvatar) playerAvatar.GetComponent (typeof(MoveAvatar));
 		avatar.setPlayer (thisPlayer);

@@ -65,3 +65,8 @@ Temporary Items
  *.unityproj
  *.sln
  *.userprefs
+
+########
+# Ignores that we added
+
+demo1withalden_Data

@@ -16,13 +16,13 @@ public class Networking : MonoBehaviour
 		if (!isServer)
 		{
 			print ("Trying to connect!");
-			Network.Connect("10.96.10.42", 25000);
+			Network.Connect("10.96.10.42", 80);
 		}
 		else
 		{
 			print ("Network IP: " + Network.player.ipAddress);
 
-			Network.InitializeServer (66, 25000, true);
+			Network.InitializeServer (22, 50005, true);
 			
 			print ("Server IP: " + Network.natFacilitatorIP);
 			print ("Server port: " + Network.natFacilitatorPort);
