@@ -8,6 +8,7 @@ public class GameLogic : MonoBehaviour
 	public GameObject thisPlayer;
 	public GameObject thisCamera;
 	public GameObject fireBall;
+	public GameObject floor;
 
 	public HandController handController = null;
 
@@ -26,6 +27,7 @@ public class GameLogic : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
+		//print (thisPlayer.transform.position);
 		HandModel[] hands = handController.GetAllGraphicsHands();
 		if (hands.Length > 0)
 		{
@@ -80,6 +82,8 @@ public class GameLogic : MonoBehaviour
 		GameObject newFireball = (GameObject) Instantiate(fireBall, position, rotation);
 		MoveFireball moveThis = (MoveFireball) newFireball.GetComponent(typeof(MoveFireball));
 		moveThis.setVelocity(velocity);
+		print (newFireball.name);
+		print (moveThis.name);
 	}
 
 
@@ -103,6 +107,35 @@ public class GameLogic : MonoBehaviour
 		avatar.setPlayer (thisPlayer);
 		avatar.hidePlayer ();	
 	}
+		
+	void OnCollisionEnter (Collision col)
+	{
+		if(col.gameObject.name == "Pyrclastic Puff(Clone)")
+		{
+			Destroy(col.gameObject);
+			thisPlayer.transform.position = RandomPointOnPlane();
+			 
+		}
+	}
 
 
+	private Vector3 RandomPointOnPlane()
+	{
+		Vector3 position = new Vector3 (0f,1f,-5.0f);
+		Vector3 normal = new Vector3(0f,1f,0f);
+		float radius = 24.0f;
+		Vector3 randomPoint;
+
+		do
+		{
+			randomPoint = Vector3.Cross(Random.insideUnitSphere, normal);
+		} while (randomPoint == Vector3.zero);
+
+		randomPoint.Normalize();
+		randomPoint *= radius;
+		randomPoint += position;
+
+		return randomPoint;
+//		return new Vector3 (0,1,0);
+	}
 }
