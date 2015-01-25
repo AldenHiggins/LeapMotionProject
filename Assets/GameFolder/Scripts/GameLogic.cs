@@ -50,10 +50,6 @@ public class GameLogic : MonoBehaviour
 				print ("Fire fireball!!!");
 				createFireball(hands[0].GetPalmPosition(), thisCamera.transform.rotation, thisCamera.transform.forward);
 				view.RPC ("makeFireballNetwork", RPCMode.Others, hands[0].GetPalmPosition(), thisCamera.transform.rotation, thisCamera.transform.forward);
-
-//				GameObject newFireball = (GameObject) Instantiate(fireBall, hands[0].GetPalmPosition(), thisCamera.transform.rotation);
-//				MoveFireball moveThis = (MoveFireball) newFireball.GetComponent(typeof(MoveFireball));
-//				moveThis.setVelocity(normal0);
 			}
 		}
 //		else if (hands.Length > 1)
