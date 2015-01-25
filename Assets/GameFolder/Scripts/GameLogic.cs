@@ -46,9 +46,12 @@ public class GameLogic : MonoBehaviour
 			{
 				fireballCharged = false;
 				print ("Fire fireball!!!");
-				GameObject newFireball = (GameObject) Instantiate(fireBall, hands[0].GetPalmPosition(), thisCamera.transform.rotation);
-				MoveFireball moveThis = (MoveFireball) newFireball.GetComponent(typeof(MoveFireball));
-				moveThis.setVelocity(normal0);
+				createFireball(hands[0].GetPalmPosition(), thisCamera.transform.rotation, thisCamera.transform.forward);
+				view.RPC ("makeFireballNetwork", RPCMode.Others, hands[0].GetPalmPosition(), thisCamera.transform.rotation, thisCamera.transform.forward);
+
+//				GameObject newFireball = (GameObject) Instantiate(fireBall, hands[0].GetPalmPosition(), thisCamera.transform.rotation);
+//				MoveFireball moveThis = (MoveFireball) newFireball.GetComponent(typeof(MoveFireball));
+//				moveThis.setVelocity(normal0);
 			}
 		}
 //		else if (hands.Length > 1)
@@ -64,6 +67,21 @@ public class GameLogic : MonoBehaviour
 //
 //		}
 	}
+
+	[RPC]
+	public void makeFireballNetwork(Vector3 position, Quaternion rotation, Vector3 velocity)
+	{
+		print ("Remote fireball called!");
+		createFireball (position, rotation, velocity);
+	}
+
+	public void createFireball(Vector3 position, Quaternion rotation, Vector3 velocity)
+	{
+		GameObject newFireball = (GameObject) Instantiate(fireBall, position, rotation);
+		MoveFireball moveThis = (MoveFireball) newFireball.GetComponent(typeof(MoveFireball));
+		moveThis.setVelocity(velocity);
+	}
+
 
 	public void createNewPlayer ()
 	{
