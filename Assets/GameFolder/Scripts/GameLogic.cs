@@ -9,6 +9,9 @@ public class GameLogic : MonoBehaviour
 	public GameObject thisCamera;
 	public GameObject fireBall;
 	public GameObject floor;
+	public Vector3 position = new Vector3 (0f,1f,-5.0f);
+	public Vector3 normal = new Vector3(0f,1f,0f);
+	public float radius = 24.0f;
 
 	public HandController handController = null;
 
@@ -106,8 +109,9 @@ public class GameLogic : MonoBehaviour
 		
 	void OnCollisionEnter (Collision col)
 	{
-		if(col.gameObject.name == "Pyrclastic Puff(Clone)")
+		if(col.gameObject.name == "Pyroclastic Puff(Clone)")
 		{
+			print ("Got Hit!");
 			Destroy(col.gameObject);
 			thisPlayer.transform.position = RandomPointOnPlane();
 			 
@@ -117,9 +121,6 @@ public class GameLogic : MonoBehaviour
 
 	private Vector3 RandomPointOnPlane()
 	{
-		Vector3 position = new Vector3 (0f,1f,-5.0f);
-		Vector3 normal = new Vector3(0f,1f,0f);
-		float radius = 24.0f;
 		Vector3 randomPoint;
 
 		do
