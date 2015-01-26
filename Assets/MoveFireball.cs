@@ -24,4 +24,17 @@ public class MoveFireball : MonoBehaviour {
 	{
 		velocity = newVelocity;
 	}
+
+
+	void OnCollisionEnter (Collision col)
+	{
+		print ("Got Hit!");
+//		if(col.gameObject.name == "Pyroclastic Puff(Clone)")
+//		{
+//			print ("Found fireball!");
+//			//			Destroy(col.gameObject);
+//			transform.position = game.RandomPointOnPlane();
+//			
+//		}
+	}
 }

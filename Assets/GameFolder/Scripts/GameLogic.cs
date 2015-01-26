@@ -20,11 +20,14 @@ public class GameLogic : MonoBehaviour
 	private bool fireballCharged;
 
 	private GameObject playerAvatar;
+	private int fireballTimer;
+
 	// Use this for initialization
 	void Start () 
 	{
 		view = gameObject.networkView;
 		fireballCharged = false;
+		fireballTimer = 0;
 	}
 	
 	// Update is called once per frame
@@ -51,8 +54,10 @@ public class GameLogic : MonoBehaviour
 			{
 				fireballCharged = false;
 				print ("Fire fireball!!!");
-				createFireball(hands[0].GetPalmPosition(), thisCamera.transform.rotation, thisCamera.transform.forward);
-				view.RPC ("makeFireballNetwork", RPCMode.Others, hands[0].GetPalmPosition(), thisCamera.transform.rotation, thisCamera.transform.forward);
+				Vector3 spawnPosition = hands[0].GetPalmPosition();
+				spawnPosition += new Vector3(thisCamera.transform.forward.normalized.x * 3.8f, thisCamera.transform.forward.normalized.y * 3.8f, thisCamera.transform.forward.normalized.z * 3.8f);
+				createFireball(spawnPosition, thisCamera.transform.rotation, thisCamera.transform.forward);
+				view.RPC ("makeFireballNetwork", RPCMode.Others, spawnPosition, thisCamera.transform.rotation, thisCamera.transform.forward);
 			}
 		}
 //		else if (hands.Length > 1)
@@ -66,6 +71,16 @@ public class GameLogic : MonoBehaviour
 //			print ("Normal 0: " + normal0);
 //			print ("Normal 1: " + normal1);
 //
+//		}
+
+
+
+//		// Temp fireball launcher to test
+//		fireballTimer++;
+//		if (fireballTimer > 300)
+//		{
+//			fireballTimer = 0;
+//			createFireball(new Vector3(-4.6f, 76.75f, 1.8f), Quaternion.identity, new Vector3(0.0f, 0.0f, -0.1f));
 //		}
 	}
 
@@ -112,14 +127,14 @@ public class GameLogic : MonoBehaviour
 		if(col.gameObject.name == "Pyroclastic Puff(Clone)")
 		{
 			print ("Got Hit!");
-			Destroy(col.gameObject);
+//			Destroy(col.gameObject);
 			thisPlayer.transform.position = RandomPointOnPlane();
 			 
 		}
 	}
 
 
-	private Vector3 RandomPointOnPlane()
+	public Vector3 RandomPointOnPlane()
 	{
 		Vector3 randomPoint;
 
