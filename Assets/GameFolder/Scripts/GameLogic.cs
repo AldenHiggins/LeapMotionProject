@@ -15,7 +15,7 @@ public class GameLogic : MonoBehaviour
 
 	public HandController handController = null;
 
-	private Dictionary<float, GameObject> projectiles;
+	private Dictionary<int, GameObject> projectiles;
 	private NetworkView view;
 	private bool fireballCharged;
 	private bool isBlocking;
@@ -33,7 +33,7 @@ public class GameLogic : MonoBehaviour
 		isBlocking = false;
 		fireballTimer = 0;
 		blockTimer = 0;
-		projectiles = new Dictionary<float, GameObject> ();
+		projectiles = new Dictionary<int, GameObject> ();
 		network = (Networking) gameObject.GetComponent (typeof(Networking));
 	}
 	
@@ -87,7 +87,7 @@ public class GameLogic : MonoBehaviour
 				Vector3 startingVelocity = thisCamera.transform.forward.normalized;
 				startingVelocity *= .2f;
 				// Generate a hash value for the fireball (for network synchronization)
-				float fireballHash = generateProjectileHash();
+				int fireballHash = generateProjectileHash();
 
 				createFireball(spawnPosition, thisCamera.transform.rotation, startingVelocity, fireballHash);
 				view.RPC ("makeFireballNetwork", RPCMode.Others, spawnPosition, thisCamera.transform.rotation, startingVelocity, fireballHash);
@@ -115,7 +115,7 @@ public class GameLogic : MonoBehaviour
 			if (fireballTimer > 300)
 			{
 				fireballTimer = 0;
-				float hash = generateProjectileHash();
+				int hash = generateProjectileHash();
 				createFireball(new Vector3(-4.6f, 76.75f, 1.8f), Quaternion.identity, new Vector3(0.0f, 0.0f, -0.1f), hash);
 				view.RPC ("makeFireballNetwork", RPCMode.Others, new Vector3(-4.6f, 76.75f, 1.8f), Quaternion.identity, new Vector3(0.0f, 0.0f, -0.1f), hash);
 			}
@@ -123,13 +123,13 @@ public class GameLogic : MonoBehaviour
 	}
 
 	[RPC]
-	public void makeFireballNetwork(Vector3 position, Quaternion rotation, Vector3 velocity, float hashValue)
+	public void makeFireballNetwork(Vector3 position, Quaternion rotation, Vector3 velocity, int hashValue)
 	{
 		print ("Remote fireball called!");
 		createFireball (position, rotation, velocity, hashValue);
 	}
 
-	public void createFireball(Vector3 position, Quaternion rotation, Vector3 velocity, float hashValue)
+	public void createFireball(Vector3 position, Quaternion rotation, Vector3 velocity, int hashValue)
 	{
 		GameObject newFireball = (GameObject) Instantiate(fireBall, position, rotation);
 		MoveFireball moveThis = (MoveFireball) newFireball.GetComponent(typeof(MoveFireball));
@@ -141,13 +141,13 @@ public class GameLogic : MonoBehaviour
 		projectiles.Add (hashValue, newFireball);
 	}
 
-	public void reverseProjectileOnOtherClients(float hashValue)
+	public void reverseProjectileOnOtherClients(int hashValue)
 	{
 		view.RPC ("reverseFireball", RPCMode.Others, hashValue);
 	}
 
 	[RPC]
-	public void reverseFireball(float fireballHash)
+	public void reverseFireball(int fireballHash)
 	{
 		GameObject fireball = projectiles [fireballHash];
 		print ("Got fireball: " + fireball.gameObject.name);
@@ -200,12 +200,12 @@ public class GameLogic : MonoBehaviour
 //		return new Vector3 (0,1,0);
 	}
 
-	private float generateProjectileHash()
+	private int generateProjectileHash()
 	{
-		float fireballHash = 0;
+		int fireballHash = 0;
 		do
 		{
-			fireballHash = Random.Range(0f, 100f);
+			fireballHash = Random.Range(0, 10000);
 		} while(projectiles.ContainsKey(fireballHash));
 
 		return fireballHash;

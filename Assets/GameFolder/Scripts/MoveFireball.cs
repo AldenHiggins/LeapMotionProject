@@ -4,7 +4,7 @@ using System.Collections;
 public class MoveFireball : MonoBehaviour {
 	private Vector3 velocity;
 	public GameLogic game;
-	private float hashValue;
+	private int hashValue;
 
 	// Use this for initialization
 	void Start () 
@@ -26,12 +26,12 @@ public class MoveFireball : MonoBehaviour {
 		velocity = newVelocity;
 	}
 
-	public void setHash(float newHash)
+	public void setHash(int newHash)
 	{
 		hashValue = newHash;
 	}
 
-	public float getHash()
+	public int getHash()
 	{
 		return hashValue;
 	}
