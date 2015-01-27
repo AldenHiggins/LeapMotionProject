@@ -125,7 +125,6 @@ public class GameLogic : MonoBehaviour
 	[RPC]
 	public void makeFireballNetwork(Vector3 position, Quaternion rotation, Vector3 velocity, int hashValue)
 	{
-		print ("Remote fireball called!");
 		createFireball (position, rotation, velocity, hashValue);
 	}
 
@@ -144,24 +143,11 @@ public class GameLogic : MonoBehaviour
 	public void reverseProjectileOnOtherClients(int hashValue)
 	{
 		view.RPC ("reverseFireball", RPCMode.Others, hashValue);
-		print ("Server side!");
-		print ("Trying to get this: " + hashValue);
-		foreach (int key in projectiles.Keys)
-		{
-			print ("Key: " + key);
-			
-		}
 	}
 
 	[RPC]
 	public void reverseFireball(int fireballHash)
 	{
-		foreach (int key in projectiles.Keys)
-		{
-			print ("Key: " + key);
-
-		}
-		
 		GameObject fireball = projectiles [fireballHash];
 		print ("Got fireball: " + fireball.gameObject.name);
 		MoveFireball fireballScript = (MoveFireball) fireball.GetComponent(typeof(MoveFireball));

@@ -28,9 +28,7 @@ public class MoveFireball : MonoBehaviour {
 
 	public void setHash(int newHash)
 	{
-		print ("Setting hash to: " + newHash);
 		hashValue = newHash;
-		print ("Setting hash to: " + hashValue);
 	}
 
 	public int getHash()
@@ -52,9 +50,7 @@ public class MoveFireball : MonoBehaviour {
 			// Reflect back blocked fireballs
 			else
 			{
-				print("Fireball blocked!");
 				reverseVelocity();
-				print("Firebal hash: " + hashValue);
 				game.reverseProjectileOnOtherClients(hashValue);
 			}
 		}
