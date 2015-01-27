@@ -149,6 +149,12 @@ public class GameLogic : MonoBehaviour
 	[RPC]
 	public void reverseFireball(int fireballHash)
 	{
+		foreach (int key in projectiles.Keys)
+		{
+			print ("Key: " + key);
+
+		}
+		
 		GameObject fireball = projectiles [fireballHash];
 		print ("Got fireball: " + fireball.gameObject.name);
 		MoveFireball fireballScript = (MoveFireball) fireball.GetComponent(typeof(MoveFireball));
