@@ -4,11 +4,12 @@ using System.Collections;
 public class MoveFireball : MonoBehaviour {
 	private Vector3 velocity;
 	public GameLogic game;
+	private float hashValue;
 
 	// Use this for initialization
 	void Start () 
 	{
-		
+		hashValue = 0; // Default hash value
 	}
 	
 	// Update is called once per frame
@@ -23,6 +24,16 @@ public class MoveFireball : MonoBehaviour {
 	public void setVelocity(Vector3 newVelocity)
 	{
 		velocity = newVelocity;
+	}
+
+	public void setHash(float newHash)
+	{
+		hashValue = newHash;
+	}
+
+	public float getHash()
+	{
+		return hashValue;
 	}
 
 
@@ -40,12 +51,18 @@ public class MoveFireball : MonoBehaviour {
 			else
 			{
 				print("Fireball blocked!");
-				velocity *= -1.0f;
+				game.reverseProjectileOnOtherClients(hashValue);
+				reverseVelocity();
 			}
 		}
 		else
 		{
 			Destroy(gameObject);
 		}
+	}
+
+	public void reverseVelocity()
+	{
+		velocity *= -1.0f;
 	}
 }
