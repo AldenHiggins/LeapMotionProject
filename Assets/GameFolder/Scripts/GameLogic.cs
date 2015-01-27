@@ -144,6 +144,13 @@ public class GameLogic : MonoBehaviour
 	public void reverseProjectileOnOtherClients(int hashValue)
 	{
 		view.RPC ("reverseFireball", RPCMode.Others, hashValue);
+		print ("Server side!");
+		print ("Trying to get this: " + hashValue);
+		foreach (int key in projectiles.Keys)
+		{
+			print ("Key: " + key);
+			
+		}
 	}
 
 	[RPC]

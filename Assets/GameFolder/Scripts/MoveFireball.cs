@@ -7,7 +7,7 @@ public class MoveFireball : MonoBehaviour {
 	private int hashValue;
 
 	// Use this for initialization
-	void Start () 
+	void Awake () 
 	{
 		hashValue = 0; // Default hash value
 	}
@@ -28,7 +28,9 @@ public class MoveFireball : MonoBehaviour {
 
 	public void setHash(int newHash)
 	{
+		print ("Setting hash to: " + newHash);
 		hashValue = newHash;
+		print ("Setting hash to: " + hashValue);
 	}
 
 	public int getHash()
@@ -51,8 +53,9 @@ public class MoveFireball : MonoBehaviour {
 			else
 			{
 				print("Fireball blocked!");
-				game.reverseProjectileOnOtherClients(hashValue);
 				reverseVelocity();
+				print("Firebal hash: " + hashValue);
+				game.reverseProjectileOnOtherClients(hashValue);
 			}
 		}
 		else
