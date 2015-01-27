@@ -22,10 +22,10 @@ public class Networking : MonoBehaviour
 		{
 			print ("Network IP: " + Network.player.ipAddress);
 
-			Network.InitializeServer (22, 50005, true);
+			Network.InitializeServer (22, 80, false);
 			
-			print ("Server IP: " + Network.natFacilitatorIP);
-			print ("Server port: " + Network.natFacilitatorPort);
+//			print ("Server IP: " + Network.natFacilitatorIP);
+//			print ("Server port: " + Network.natFacilitatorPort);
 			// Make the server's avatar
 			gameLogic.makePlayerOnClientHelper();
 		}

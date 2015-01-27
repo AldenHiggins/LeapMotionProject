@@ -18,16 +18,20 @@ public class GameLogic : MonoBehaviour
 	private Dictionary<string, GameObject> playerAvatars; 
 	private NetworkView view;
 	private bool fireballCharged;
+	private bool isBlocking;
 
 	private GameObject playerAvatar;
 	private int fireballTimer;
+	private int blockTimer;
 
 	// Use this for initialization
 	void Start () 
 	{
 		view = gameObject.networkView;
 		fireballCharged = false;
+		isBlocking = false;
 		fireballTimer = 0;
+		blockTimer = 0;
 	}
 	
 	// Update is called once per frame
@@ -47,6 +51,23 @@ public class GameLogic : MonoBehaviour
 			if (Vector3.Dot (normal0, thisCamera.transform.forward) < -.6 && !fireballCharged)
 			{
 				fireballCharged = true;
+			}
+
+			// .6 or more means the palm is facing away from the camera
+			if (Vector3.Dot (normal0, thisCamera.transform.forward) > .6)
+			{
+				print ("Player is facing away");
+				blockTimer++;
+				if (blockTimer > 100)
+				{
+					print ("Player is blocking");
+					isBlocking = true;
+				}
+			}
+			else
+			{
+				isBlocking = false;
+				blockTimer = 0;
 			}
 
 			// .6 or more means the palm is facing away from the camera
@@ -98,6 +119,11 @@ public class GameLogic : MonoBehaviour
 		moveThis.setVelocity(velocity);
 		print (newFireball.name);
 		print (moveThis.name);
+	}
+
+	public bool isPlayerBlocking ()
+	{
+		return isBlocking;
 	}
 
 

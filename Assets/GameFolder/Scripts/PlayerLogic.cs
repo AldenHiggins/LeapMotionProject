@@ -27,8 +27,15 @@ public class PlayerLogic : MonoBehaviour
 		{
 			print ("Found fireball!");
 			//			Destroy(col.gameObject);
-			transform.position = game.RandomPointOnPlane();
-			
+			if (!game.isPlayerBlocking())
+			{
+				transform.position = game.RandomPointOnPlane();
+			}
+			else
+			{
+				print ("Blocked fireball");
+				Destroy (col.gameObject);
+			}
 		}
 	}
 
