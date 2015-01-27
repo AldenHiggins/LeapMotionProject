@@ -5,7 +5,6 @@ public class PlayerLogic : MonoBehaviour
 {
 	public GameLogic game;
 
-
 	// Use this for initialization
 	void Start () 
 	{

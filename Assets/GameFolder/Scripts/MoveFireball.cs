@@ -2,8 +2,12 @@
 using System.Collections;
 
 public class MoveFireball : MonoBehaviour {
-	private Vector3 velocity;
 	public GameLogic game;
+
+	public GameObject explosion;
+
+	private Vector3 velocity;
+
 	private int hashValue;
 
 	// Use this for initialization
@@ -44,6 +48,7 @@ public class MoveFireball : MonoBehaviour {
 		{
 			if (!game.isPlayerBlocking())
 			{
+				Instantiate (explosion, transform.position, Quaternion.identity);
 				PlayerLogic hitPlayer = (PlayerLogic) col.gameObject.GetComponent(typeof(PlayerLogic));
 				hitPlayer.respawn();
 			}
@@ -56,6 +61,7 @@ public class MoveFireball : MonoBehaviour {
 		}
 		else
 		{
+			Instantiate (explosion, transform.position, Quaternion.identity);
 			Destroy(gameObject);
 		}
 	}

@@ -14,6 +14,9 @@ public class GameLogic : MonoBehaviour
 	public float radius = 24.0f;
 
 	public HandController handController = null;
+	public GameObject defensiveLightPrefab;
+
+
 
 	private Dictionary<int, GameObject> projectiles;
 	private NetworkView view;
@@ -24,10 +27,13 @@ public class GameLogic : MonoBehaviour
 	private int fireballTimer;
 	private int blockTimer;
 	private Networking network;
+	private GameObject defensiveLight;
 
 	// Use this for initialization
 	void Start () 
 	{
+		defensiveLight = (GameObject) Instantiate (defensiveLightPrefab, transform.position, Quaternion.identity);
+		defensiveLight.light.enabled = false;
 		view = gameObject.networkView;
 		fireballCharged = false;
 		isBlocking = false;
@@ -62,8 +68,9 @@ public class GameLogic : MonoBehaviour
 				blockTimer++;
 				if (blockTimer > 40 && !isBlocking)
 				{
-					print ("Player is blocking");
+//					print ("Player is blocking");
 					isBlocking = true;
+					defensiveLight.light.enabled = true;
 				}
 			}
 			else
@@ -71,7 +78,8 @@ public class GameLogic : MonoBehaviour
 				if (isBlocking)
 				{
 					isBlocking = false;
-					print ("Player not blocking any more!");
+					defensiveLight.light.enabled = false;
+//					print ("Player not blocking any more!");
 				}
 				blockTimer = 0;
 			}
@@ -91,6 +99,14 @@ public class GameLogic : MonoBehaviour
 
 				createFireball(spawnPosition, thisCamera.transform.rotation, startingVelocity, fireballHash);
 				view.RPC ("makeFireballNetwork", RPCMode.Others, spawnPosition, thisCamera.transform.rotation, startingVelocity, fireballHash);
+			}
+
+
+			
+			// Display the blocking light in the correct place if the player is blocking
+			if (isBlocking)
+			{
+				defensiveLight.transform.position = hands[0].gameObject.transform.position;
 			}
 		}
 //		else if (hands.Length > 1)
