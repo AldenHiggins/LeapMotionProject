@@ -23,6 +23,7 @@ public class GameLogic : MonoBehaviour
 	private GameObject playerAvatar;
 	private int fireballTimer;
 	private int blockTimer;
+	private Networking network;
 
 	// Use this for initialization
 	void Start () 
@@ -33,6 +34,7 @@ public class GameLogic : MonoBehaviour
 		fireballTimer = 0;
 		blockTimer = 0;
 		projectiles = new Dictionary<float, GameObject> ();
+		network = (Networking) gameObject.GetComponent (typeof(Networking));
 	}
 	
 	// Update is called once per frame
@@ -104,12 +106,19 @@ public class GameLogic : MonoBehaviour
 //
 //		}
 
-		// Temp fireball launcher to test
-		fireballTimer++;
-		if (fireballTimer > 300)
+		// Only make the fireball if you're the server for synchronization purposes (so the two fireballs generated at the same time
+		// won't have different hashes)
+		if (network.isServer)
 		{
-			fireballTimer = 0;
-			createFireball(new Vector3(-4.6f, 76.75f, 1.8f), Quaternion.identity, new Vector3(0.0f, 0.0f, -0.1f), generateProjectileHash());
+			// Temp fireball launcher to test
+			fireballTimer++;
+			if (fireballTimer > 300)
+			{
+				fireballTimer = 0;
+				float hash = generateProjectileHash();
+				createFireball(new Vector3(-4.6f, 76.75f, 1.8f), Quaternion.identity, new Vector3(0.0f, 0.0f, -0.1f), hash);
+				view.RPC ("makeFireballNetwork", RPCMode.Others, new Vector3(-4.6f, 76.75f, 1.8f), Quaternion.identity, new Vector3(0.0f, 0.0f, -0.1f), hash);
+			}
 		}
 	}
 
