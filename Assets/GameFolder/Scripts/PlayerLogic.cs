@@ -9,7 +9,6 @@ public class PlayerLogic : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
-		print ("This is running!");
 	}
 	
 	// Update is called once per frame
@@ -18,25 +17,9 @@ public class PlayerLogic : MonoBehaviour
 	
 	}
 
-
-
-	void OnCollisionEnter (Collision col)
+	public void respawn()
 	{
-		print ("Got Hit!");
-		if(col.gameObject.name == "Pyroclastic Puff(Clone)")
-		{
-			print ("Found fireball!");
-			//			Destroy(col.gameObject);
-			if (!game.isPlayerBlocking())
-			{
-				transform.position = game.RandomPointOnPlane();
-			}
-			else
-			{
-				print ("Blocked fireball");
-				Destroy (col.gameObject);
-			}
-		}
+		transform.position = game.RandomPointOnPlane();
 	}
 
 }

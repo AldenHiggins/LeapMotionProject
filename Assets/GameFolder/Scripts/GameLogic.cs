@@ -56,9 +56,8 @@ public class GameLogic : MonoBehaviour
 			// .6 or more means the palm is facing away from the camera
 			if (Vector3.Dot (normal0, thisCamera.transform.forward) > .6)
 			{
-				print ("Player is facing away");
 				blockTimer++;
-				if (blockTimer > 100)
+				if (blockTimer > 40 && !isBlocking)
 				{
 					print ("Player is blocking");
 					isBlocking = true;
@@ -66,7 +65,11 @@ public class GameLogic : MonoBehaviour
 			}
 			else
 			{
-				isBlocking = false;
+				if (isBlocking)
+				{
+					isBlocking = false;
+					print ("Player not blocking any more!");
+				}
 				blockTimer = 0;
 			}
 
@@ -74,11 +77,14 @@ public class GameLogic : MonoBehaviour
 			if (Vector3.Dot (normal0, thisCamera.transform.forward) > .6 && fireballCharged)
 			{
 				fireballCharged = false;
-				print ("Fire fireball!!!");
+				// Make sure the fireball spawns in front of the player at a reasonable distance
 				Vector3 spawnPosition = hands[0].GetPalmPosition();
 				spawnPosition += new Vector3(thisCamera.transform.forward.normalized.x * 3.8f, thisCamera.transform.forward.normalized.y * 3.8f, thisCamera.transform.forward.normalized.z * 3.8f);
-				createFireball(spawnPosition, thisCamera.transform.rotation, thisCamera.transform.forward);
-				view.RPC ("makeFireballNetwork", RPCMode.Others, spawnPosition, thisCamera.transform.rotation, thisCamera.transform.forward);
+				// Scale the fireball's velocity
+				Vector3 startingVelocity = thisCamera.transform.forward.normalized;
+				startingVelocity *= .2f;
+				createFireball(spawnPosition, thisCamera.transform.rotation, startingVelocity);
+				view.RPC ("makeFireballNetwork", RPCMode.Others, spawnPosition, thisCamera.transform.rotation, startingVelocity);
 			}
 		}
 //		else if (hands.Length > 1)
@@ -94,15 +100,13 @@ public class GameLogic : MonoBehaviour
 //
 //		}
 
-
-
-//		// Temp fireball launcher to test
-//		fireballTimer++;
-//		if (fireballTimer > 300)
-//		{
-//			fireballTimer = 0;
-//			createFireball(new Vector3(-4.6f, 76.75f, 1.8f), Quaternion.identity, new Vector3(0.0f, 0.0f, -0.1f));
-//		}
+		// Temp fireball launcher to test
+		fireballTimer++;
+		if (fireballTimer > 300)
+		{
+			fireballTimer = 0;
+			createFireball(new Vector3(-4.6f, 76.75f, 1.8f), Quaternion.identity, new Vector3(0.0f, 0.0f, -0.1f));
+		}
 	}
 
 	[RPC]
@@ -117,8 +121,7 @@ public class GameLogic : MonoBehaviour
 		GameObject newFireball = (GameObject) Instantiate(fireBall, position, rotation);
 		MoveFireball moveThis = (MoveFireball) newFireball.GetComponent(typeof(MoveFireball));
 		moveThis.setVelocity(velocity);
-		print (newFireball.name);
-		print (moveThis.name);
+		newFireball.renderer.enabled = true;
 	}
 
 	public bool isPlayerBlocking ()
@@ -146,17 +149,6 @@ public class GameLogic : MonoBehaviour
 		MoveAvatar avatar = (MoveAvatar) playerAvatar.GetComponent (typeof(MoveAvatar));
 		avatar.setPlayer (thisPlayer);
 		avatar.hidePlayer ();	
-	}
-		
-	void OnCollisionEnter (Collision col)
-	{
-		if(col.gameObject.name == "Pyroclastic Puff(Clone)")
-		{
-			print ("Got Hit!");
-//			Destroy(col.gameObject);
-			thisPlayer.transform.position = RandomPointOnPlane();
-			 
-		}
 	}
 
 
