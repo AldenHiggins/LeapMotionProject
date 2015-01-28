@@ -40,23 +40,31 @@ public class BasicEnemyController : MonoBehaviour {
 
 	public void dealDamage(int damage)
 	{
-		print ("Dealing damage");
+//		print ("Dealing damage");
 		health -= damage;
 		anim.Play ("wound");
+//		print ("Wound length: " + anim.GetCurrentAnimationClipState(0)[0].clip.length);
+	
+
 		if (health < 0)
 		{
-//			StartCoroutine(kill());
-//			anim.Play ("death");
-			Destroy (this.gameObject);
+			StartCoroutine(kill());
 		}
 	}
 
-//	IEnumerator kill()
-//	{
-//		anim.Play ("death");
-//		Animation anim = anim.
-//		yield return new WaitForSeconds (anim.animation["death"].length);
-//	}
+	IEnumerator kill()
+	{
+		anim.Play ("death");
+		while(!anim.GetCurrentAnimatorStateInfo(0).IsName("death"))
+		{
+			print ("Not playing death yet!");
+			yield return new WaitForSeconds(.1f);
+		}
+		print ("Playing wound!");
+		print ("Death length: " + anim.GetCurrentAnimationClipState(0)[0].clip.length);
+		yield return new WaitForSeconds (anim.GetCurrentAnimationClipState(0)[0].clip.length);
+		Destroy (this.gameObject);
+	}
 
 
 }

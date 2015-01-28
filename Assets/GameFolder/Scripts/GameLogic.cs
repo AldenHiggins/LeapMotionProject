@@ -90,7 +90,7 @@ public class GameLogic : MonoBehaviour
 				fireballCharged = false;
 				// Make sure the fireball spawns in front of the player at a reasonable distance
 				Vector3 spawnPosition = hands[0].GetPalmPosition();
-				spawnPosition += new Vector3(thisCamera.transform.forward.normalized.x * 3.8f, thisCamera.transform.forward.normalized.y * 3.8f, thisCamera.transform.forward.normalized.z * 3.8f);
+				spawnPosition += new Vector3(thisCamera.transform.forward.normalized.x * .8f, thisCamera.transform.forward.normalized.y * .8f, thisCamera.transform.forward.normalized.z * .8f);
 				// Scale the fireball's velocity
 				Vector3 startingVelocity = thisCamera.transform.forward.normalized;
 				startingVelocity *= .2f;
@@ -121,21 +121,6 @@ public class GameLogic : MonoBehaviour
 //			print ("Normal 1: " + normal1);
 //
 //		}
-
-		// Only make the fireball if you're the server for synchronization purposes (so the two fireballs generated at the same time
-		// won't have different hashes)
-		if (network.isServer)
-		{
-			// Temp fireball launcher to test
-			fireballTimer++;
-			if (fireballTimer > 50)
-			{
-				fireballTimer = 0;
-				int hash = generateProjectileHash();
-				createFireball(new Vector3(-4.6f, 76.75f, 1.8f), Quaternion.identity, new Vector3(0.0f, 0.0f, -0.1f), hash);
-				view.RPC ("makeFireballNetwork", RPCMode.Others, new Vector3(-4.6f, 76.75f, 1.8f), Quaternion.identity, new Vector3(0.0f, 0.0f, -0.1f), hash);
-			}
-		}
 	}
 
 	[RPC]
