@@ -128,7 +128,7 @@ public class GameLogic : MonoBehaviour
 		{
 			// Temp fireball launcher to test
 			fireballTimer++;
-			if (fireballTimer > 300)
+			if (fireballTimer > 50)
 			{
 				fireballTimer = 0;
 				int hash = generateProjectileHash();

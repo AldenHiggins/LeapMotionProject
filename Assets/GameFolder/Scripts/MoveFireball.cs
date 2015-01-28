@@ -43,8 +43,13 @@ public class MoveFireball : MonoBehaviour {
 
 	void OnCollisionEnter (Collision col)
 	{
+		// Ignore collisions with player's hands
+		if (col.gameObject.name == "palm" || col.gameObject.name == "bone1" || col.gameObject.name == "bone2")
+		{
+
+		}
 		// Check if a player or their leap motion hands are hit
-		if (col.gameObject.name == "LeapOVRPlayerController" || col.gameObject.name == "palm" || col.gameObject.name == "bone1" || col.gameObject.name == "bone2")
+		else if (col.gameObject.name == "LeapOVRPlayerController")
 		{
 			if (!game.isPlayerBlocking())
 			{
@@ -58,6 +63,13 @@ public class MoveFireball : MonoBehaviour {
 				reverseVelocity();
 				game.reverseProjectileOnOtherClients(hashValue);
 			}
+		}
+		else if (col.gameObject.name == "zombie_lowres")
+		{
+			BasicEnemyController enemy = (BasicEnemyController) col.gameObject.GetComponent(typeof(BasicEnemyController));
+			enemy.dealDamage(10);
+			Instantiate (explosion, transform.position, Quaternion.identity);
+			Destroy(gameObject);
 		}
 		else
 		{
