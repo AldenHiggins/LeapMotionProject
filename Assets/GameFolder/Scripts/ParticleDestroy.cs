@@ -3,9 +3,8 @@ using System.Collections;
 
 public class ParticleDestroy : MonoBehaviour 
 {
-	private ParticleSystem ps;
-	
-	
+	ParticleSystem ps;
+
 	public void Start() 
 	{
 		ps = GetComponent<ParticleSystem>();

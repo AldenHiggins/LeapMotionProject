@@ -3,16 +3,22 @@ using System.Collections;
 
 public class BasicEnemyController : MonoBehaviour {
 	public GameObject player;
+	public float speed;
+	public int startingHealth;
+	public float attackRadius;
+	public int attackDamage;
 
 	private Vector3 velocity;
 	private Animator anim;
 	private int health;
+	private bool attacking;
 
 	// Use this for initialization
 	void Start () 
 	{
+		attacking = false;
 		anim = GetComponent<Animator> ();
-		health = 20;
+		health = startingHealth;
 	}
 	
 	// Update is called once per frame
@@ -22,30 +28,64 @@ public class BasicEnemyController : MonoBehaviour {
 			return;
 		velocity = player.transform.position - transform.position;
 		velocity.y = 0.0f;
-		if (velocity.magnitude > 2)
+		// If the enemy is outside melee range keep coming forward
+		if (velocity.magnitude > attackRadius)
 		{
-			anim.SetBool ("Running", true);
-			velocity.Normalize ();
-			velocity *= .02f;
-			transform.position += velocity;
-			// Face the target as well
-			transform.rotation = Quaternion.LookRotation(player.transform.position - transform.position);
+//			print("Running");
+			if (attacking == false)
+			{
+				anim.SetBool ("Running", true);
+				velocity.Normalize ();
+				velocity *= speed;
+				transform.position += velocity;
+				// Face the target as well
+				transform.rotation = Quaternion.LookRotation(player.transform.position - transform.position);
+			}
 		}
+		// If the player is in range attack him
 		else
 		{
 			anim.SetBool ("Running", false);
+			if (attacking == false)
+			{
+				attacking = true;
+				StartCoroutine(attack());
+			}
 		}
 	}
+
+	IEnumerator attack()
+	{
+//		print ("Attacking");
+		anim.SetBool ("Attacking", true);
+		while(!anim.GetCurrentAnimatorStateInfo(0).IsName("attack0"))
+		{
+			yield return new WaitForSeconds(.01f);
+		}
+//		print ("Animation time: " + anim.GetCurrentAnimationClipState (0) [0].clip.length);
+		yield return new WaitForSeconds (anim.GetCurrentAnimationClipState(0)[0].clip.length - .1f);
+
+		Vector3 distance = player.transform.position - transform.position;
+		distance.y = 0.0f;
+		if (distance.magnitude < attackRadius)
+		{
+			PlayerLogic playerToAttack = (PlayerLogic) player.GetComponent(typeof(PlayerLogic));
+			playerToAttack.dealDamage(attackDamage);
+		}
+		attacking = false;
+		anim.SetBool ("Attacking", false);
+	}
+
 
 
 	public void dealDamage(int damage)
 	{
 //		print ("Dealing damage");
-		health -= damage;
-		anim.Play ("wound");
-//		print ("Wound length: " + anim.GetCurrentAnimationClipState(0)[0].clip.length);
-	
-
+		if (health >= 0)
+		{
+			health -= damage;
+			anim.Play ("wound");
+		}
 		if (health < 0)
 		{
 			StartCoroutine(kill());
@@ -57,11 +97,8 @@ public class BasicEnemyController : MonoBehaviour {
 		anim.Play ("death");
 		while(!anim.GetCurrentAnimatorStateInfo(0).IsName("death"))
 		{
-			print ("Not playing death yet!");
 			yield return new WaitForSeconds(.1f);
 		}
-		print ("Playing wound!");
-		print ("Death length: " + anim.GetCurrentAnimationClipState(0)[0].clip.length);
 		yield return new WaitForSeconds (anim.GetCurrentAnimationClipState(0)[0].clip.length);
 		Destroy (this.gameObject);
 	}
