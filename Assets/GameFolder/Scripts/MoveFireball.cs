@@ -64,7 +64,8 @@ public class MoveFireball : MonoBehaviour {
 				game.reverseProjectileOnOtherClients(hashValue);
 			}
 		}
-		else if (col.gameObject.name == "zombie_lowres")
+//		else if (col.gameObject.name == "zombie_lowres(Clone)")
+		else if (col.gameObject.GetComponent(typeof(BasicEnemyController)) != null)
 		{
 			BasicEnemyController enemy = (BasicEnemyController) col.gameObject.GetComponent(typeof(BasicEnemyController));
 			enemy.dealDamage(10);

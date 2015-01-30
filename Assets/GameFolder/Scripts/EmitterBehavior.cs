@@ -51,5 +51,8 @@ public class EmitterBehavior : MonoBehaviour
 		moveThis.setVelocity(velocity);
 		newFireball.renderer.enabled = true;
 		moveThis.setHash (hashValue);
+		// Also enable this particle's self destruct feature
+		ProjectileDestroy destroyThis = (ProjectileDestroy) newFireball.GetComponent (typeof(ProjectileDestroy));
+		destroyThis.enabled = true;
 	}
 }
