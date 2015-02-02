@@ -28,6 +28,7 @@ public class GameLogic : MonoBehaviour
 	private int blockTimer;
 	private Networking network;
 	private GameObject defensiveLight;
+	private PlayerLogic playerLogic;
 
 	// Use this for initialization
 	void Start () 
@@ -41,6 +42,7 @@ public class GameLogic : MonoBehaviour
 		blockTimer = 0;
 		projectiles = new Dictionary<int, GameObject> ();
 		network = (Networking) gameObject.GetComponent (typeof(Networking));
+		playerLogic = (PlayerLogic) thisPlayer.GetComponent (typeof(PlayerLogic));
 	}
 	
 	// Update is called once per frame
@@ -88,17 +90,24 @@ public class GameLogic : MonoBehaviour
 			if (Vector3.Dot (normal0, thisCamera.transform.forward) > .6 && fireballCharged)
 			{
 				fireballCharged = false;
-				// Make sure the fireball spawns in front of the player at a reasonable distance
-				Vector3 spawnPosition = hands[0].GetPalmPosition();
-				spawnPosition += new Vector3(thisCamera.transform.forward.normalized.x * .8f, thisCamera.transform.forward.normalized.y * .8f, thisCamera.transform.forward.normalized.z * .8f);
-				// Scale the fireball's velocity
-				Vector3 startingVelocity = thisCamera.transform.forward.normalized;
-				startingVelocity *= .2f;
-				// Generate a hash value for the fireball (for network synchronization)
-				int fireballHash = generateProjectileHash();
 
-				createFireball(spawnPosition, thisCamera.transform.rotation, startingVelocity, fireballHash);
-				view.RPC ("makeFireballNetwork", RPCMode.Others, spawnPosition, thisCamera.transform.rotation, startingVelocity, fireballHash);
+				// First check if the player has enough energy
+				if (playerLogic.getEnergy() > 10)
+				{
+					// Have the player spend mana
+					playerLogic.useEnergy(10);
+					// Make sure the fireball spawns in front of the player at a reasonable distance
+					Vector3 spawnPosition = hands[0].GetPalmPosition();
+					spawnPosition += new Vector3(thisCamera.transform.forward.normalized.x * .8f, thisCamera.transform.forward.normalized.y * .8f, thisCamera.transform.forward.normalized.z * .8f);
+					// Scale the fireball's velocity
+					Vector3 startingVelocity = thisCamera.transform.forward.normalized;
+					startingVelocity *= .2f;
+					// Generate a hash value for the fireball (for network synchronization)
+					int fireballHash = generateProjectileHash();
+					
+					createFireball(spawnPosition, thisCamera.transform.rotation, startingVelocity, fireballHash);
+					view.RPC ("makeFireballNetwork", RPCMode.Others, spawnPosition, thisCamera.transform.rotation, startingVelocity, fireballHash);
+				}
 			}
 
 
