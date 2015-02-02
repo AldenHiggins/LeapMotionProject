@@ -64,9 +64,22 @@ public class MoveFireball : MonoBehaviour {
 				game.reverseProjectileOnOtherClients(hashValue);
 			}
 		}
+		else if (col.gameObject.name == "ZombieParent")
+		{
+			print ("Hit this!");
+			print (velocity);
+			col.gameObject.rigidbody.AddForce(velocity * 60, ForceMode.Impulse);
+			Instantiate (explosion, transform.position, Quaternion.identity);
+			Destroy(gameObject);
+		}
 //		else if (col.gameObject.name == "zombie_lowres(Clone)")
 		else if (col.gameObject.GetComponent(typeof(BasicEnemyController)) != null)
 		{
+			// Apply a force to hit enemies
+			print ("Applying force");
+//			NavMeshAgent agent = (NavMeshAgent) col.gameObject.GetComponent<NavMeshAgent>();
+//			agent.enabled = false;
+			col.gameObject.rigidbody.AddForce(new Vector3(0.0f, 10.0f, 0.0f), ForceMode.Impulse);
 			BasicEnemyController enemy = (BasicEnemyController) col.gameObject.GetComponent(typeof(BasicEnemyController));
 			enemy.dealDamage(10);
 			Instantiate (explosion, transform.position, Quaternion.identity);

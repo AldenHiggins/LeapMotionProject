@@ -44,7 +44,6 @@ public class PlayerLogic : MonoBehaviour
 	public void dealDamage(int damageToDeal)
 	{
 		health -= damageToDeal;
-		print ("Taking damage!");
 		// Player is dead
 		if (health < 0)
 		{

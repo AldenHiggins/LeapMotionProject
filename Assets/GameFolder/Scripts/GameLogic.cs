@@ -8,6 +8,7 @@ public class GameLogic : MonoBehaviour
 	public GameObject thisPlayer;
 	public GameObject thisCamera;
 	public GameObject fireBall;
+	public GameObject clapProjectile;
 	public GameObject floor;
 	public Vector3 position = new Vector3 (0f,1f,-5.0f);
 	public Vector3 normal = new Vector3(0f,1f,0f);
@@ -50,7 +51,7 @@ public class GameLogic : MonoBehaviour
 	{
 		//print (thisPlayer.transform.position);
 		HandModel[] hands = handController.GetAllGraphicsHands();
-		if (hands.Length > 0)
+		if (hands.Length == 1)
 		{
 			Vector3 direction0 = (hands[0].GetPalmPosition() - handController.transform.position).normalized;
 			Vector3 normal0 = hands[0].GetPalmNormal().normalized;
@@ -64,27 +65,27 @@ public class GameLogic : MonoBehaviour
 				fireballCharged = true;
 			}
 
-			// .6 or more means the palm is facing away from the camera
-			if (Vector3.Dot (normal0, thisCamera.transform.forward) > .6)
-			{
-				blockTimer++;
-				if (blockTimer > 40 && !isBlocking)
-				{
-//					print ("Player is blocking");
-					isBlocking = true;
-					defensiveLight.light.enabled = true;
-				}
-			}
-			else
-			{
-				if (isBlocking)
-				{
-					isBlocking = false;
-					defensiveLight.light.enabled = false;
-//					print ("Player not blocking any more!");
-				}
-				blockTimer = 0;
-			}
+//			// .6 or more means the palm is facing away from the camera
+//			if (Vector3.Dot (normal0, thisCamera.transform.forward) > .6)
+//			{
+//				blockTimer++;
+//				if (blockTimer > 40 && !isBlocking)
+//				{
+////					print ("Player is blocking");
+//					isBlocking = true;
+//					defensiveLight.light.enabled = true;
+//				}
+//			}
+//			else
+//			{
+//				if (isBlocking)
+//				{
+//					isBlocking = false;
+//					defensiveLight.light.enabled = false;
+////					print ("Player not blocking any more!");
+//				}
+//				blockTimer = 0;
+//			}
 
 			// .6 or more means the palm is facing away from the camera
 			if (Vector3.Dot (normal0, thisCamera.transform.forward) > .6 && fireballCharged)
@@ -118,18 +119,37 @@ public class GameLogic : MonoBehaviour
 				defensiveLight.transform.position = hands[0].gameObject.transform.position;
 			}
 		}
-//		else if (hands.Length > 1)
-//		{
-//			Vector3 direction0 = (hands[0].GetPalmPosition() - handController.transform.position).normalized;
-//			Vector3 normal0 = hands[0].GetPalmNormal().normalized;
-//			
-//			Vector3 direction1 = (hands[1].GetPalmPosition() - handController.transform.position).normalized;
-//			Vector3 normal1 = hands[1].GetPalmNormal().normalized;
-//			
+		else if (hands.Length > 1)
+		{
+			Vector3 direction0 = (hands[0].GetPalmPosition() - handController.transform.position).normalized;
+			Vector3 normal0 = hands[0].GetPalmNormal().normalized;
+			
+			Vector3 direction1 = (hands[1].GetPalmPosition() - handController.transform.position).normalized;
+			Vector3 normal1 = hands[1].GetPalmNormal().normalized;
+			
 //			print ("Normal 0: " + normal0);
 //			print ("Normal 1: " + normal1);
 //
-//		}
+//			// Print if both of the hands are facing each other
+//			print (Vector3.Dot(normal0, normal1));
+			//  -.6 or less means the palm is facing the camera
+			if (Vector3.Dot (normal0, normal1) < -.6)
+			{
+//				print ("Hands facing each other!");
+				Vector3 distance = hands[0].GetPalmPosition() - hands[1].GetPalmPosition();
+				if (distance.magnitude < .09)
+				{
+					print ("Clapping");
+					clapAttack (thisPlayer.transform.position + new Vector3(0.0f, 0.7f, 0.0f));
+				}
+			}
+
+		}
+	}
+
+	public void clapAttack(Vector3 position)
+	{
+		Instantiate (clapProjectile, position, Quaternion.identity);
 	}
 
 	[RPC]
