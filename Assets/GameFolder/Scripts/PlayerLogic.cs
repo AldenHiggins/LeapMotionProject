@@ -7,6 +7,7 @@ public class PlayerLogic : MonoBehaviour
 	public bool isDefensivePlayer;
 	public AudioClip grunt;
 	private int health;
+	private int energy;
 
 	// Use this for initialization
 	void Start () 
@@ -17,12 +18,22 @@ public class PlayerLogic : MonoBehaviour
 		}
 			
 		health = 100;
+		energy = 100;
+		energyCounter = 0;
 	}
-	
+
+	private int energyRefreshCount = 100;
+	private int energyCounter;
 	// Update is called once per frame
 	void Update ()
 	{
-	
+		energyCounter++;
+		if (energyCounter > energyRefreshCount)
+		{
+			if (energy < 100)
+				energy += 10;
+			energyCounter = 0;
+		}
 	}
 
 	public void respawn()
@@ -33,7 +44,6 @@ public class PlayerLogic : MonoBehaviour
 	public void dealDamage(int damageToDeal)
 	{
 		health -= damageToDeal;
-		print ("Taking damage!");
 		// Player is dead
 		if (health < 0)
 		{
@@ -44,5 +54,20 @@ public class PlayerLogic : MonoBehaviour
 		{
 			AudioSource.PlayClipAtPoint(grunt,transform.position);
 		}
+	}
+
+	public void useEnergy(int energyCost)
+	{
+		energy -= energyCost;
+	}
+
+	public int getHealth()
+	{
+		return health;
+	}
+
+	public int getEnergy()
+	{
+		return energy;
 	}
 }

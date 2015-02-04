@@ -8,7 +8,7 @@ public class GameLogic : MonoBehaviour
 	public GameObject thisPlayer;
 	public GameObject thisCamera;
 	public GameObject fireBall;
-	public GameObject floor;
+	public GameObject clapProjectile;
 	public Vector3 position = new Vector3 (0f,1f,-5.0f);
 	public Vector3 normal = new Vector3(0f,1f,0f);
 	public float radius = 24.0f;
@@ -28,6 +28,7 @@ public class GameLogic : MonoBehaviour
 	private int blockTimer;
 	private Networking network;
 	private GameObject defensiveLight;
+	private PlayerLogic playerLogic;
 
 	// Use this for initialization
 	void Start () 
@@ -41,6 +42,7 @@ public class GameLogic : MonoBehaviour
 		blockTimer = 0;
 		projectiles = new Dictionary<int, GameObject> ();
 		network = (Networking) gameObject.GetComponent (typeof(Networking));
+		playerLogic = (PlayerLogic) thisPlayer.GetComponent (typeof(PlayerLogic));
 	}
 	
 	// Update is called once per frame
@@ -48,7 +50,7 @@ public class GameLogic : MonoBehaviour
 	{
 		//print (thisPlayer.transform.position);
 		HandModel[] hands = handController.GetAllGraphicsHands();
-		if (hands.Length > 0)
+		if (hands.Length == 1)
 		{
 			Vector3 direction0 = (hands[0].GetPalmPosition() - handController.transform.position).normalized;
 			Vector3 normal0 = hands[0].GetPalmNormal().normalized;
@@ -62,43 +64,50 @@ public class GameLogic : MonoBehaviour
 				fireballCharged = true;
 			}
 
-			// .6 or more means the palm is facing away from the camera
-			if (Vector3.Dot (normal0, thisCamera.transform.forward) > .6)
-			{
-				blockTimer++;
-				if (blockTimer > 40 && !isBlocking)
-				{
-//					print ("Player is blocking");
-					isBlocking = true;
-					defensiveLight.light.enabled = true;
-				}
-			}
-			else
-			{
-				if (isBlocking)
-				{
-					isBlocking = false;
-					defensiveLight.light.enabled = false;
-//					print ("Player not blocking any more!");
-				}
-				blockTimer = 0;
-			}
+//			// .6 or more means the palm is facing away from the camera
+//			if (Vector3.Dot (normal0, thisCamera.transform.forward) > .6)
+//			{
+//				blockTimer++;
+//				if (blockTimer > 40 && !isBlocking)
+//				{
+////					print ("Player is blocking");
+//					isBlocking = true;
+//					defensiveLight.light.enabled = true;
+//				}
+//			}
+//			else
+//			{
+//				if (isBlocking)
+//				{
+//					isBlocking = false;
+//					defensiveLight.light.enabled = false;
+////					print ("Player not blocking any more!");
+//				}
+//				blockTimer = 0;
+//			}
 
 			// .6 or more means the palm is facing away from the camera
 			if (Vector3.Dot (normal0, thisCamera.transform.forward) > .6 && fireballCharged)
 			{
 				fireballCharged = false;
-				// Make sure the fireball spawns in front of the player at a reasonable distance
-				Vector3 spawnPosition = hands[0].GetPalmPosition();
-				spawnPosition += new Vector3(thisCamera.transform.forward.normalized.x * .8f, thisCamera.transform.forward.normalized.y * .8f, thisCamera.transform.forward.normalized.z * .8f);
-				// Scale the fireball's velocity
-				Vector3 startingVelocity = thisCamera.transform.forward.normalized;
-				startingVelocity *= .2f;
-				// Generate a hash value for the fireball (for network synchronization)
-				int fireballHash = generateProjectileHash();
 
-				createFireball(spawnPosition, thisCamera.transform.rotation, startingVelocity, fireballHash);
-				view.RPC ("makeFireballNetwork", RPCMode.Others, spawnPosition, thisCamera.transform.rotation, startingVelocity, fireballHash);
+				// First check if the player has enough energy
+				if (playerLogic.getEnergy() > 10)
+				{
+					// Have the player spend mana
+					playerLogic.useEnergy(10);
+					// Make sure the fireball spawns in front of the player at a reasonable distance
+					Vector3 spawnPosition = hands[0].GetPalmPosition();
+					spawnPosition += new Vector3(thisCamera.transform.forward.normalized.x * .8f, thisCamera.transform.forward.normalized.y * .8f, thisCamera.transform.forward.normalized.z * .8f);
+					// Scale the fireball's velocity
+					Vector3 startingVelocity = thisCamera.transform.forward.normalized;
+					startingVelocity *= .2f;
+					// Generate a hash value for the fireball (for network synchronization)
+					int fireballHash = generateProjectileHash();
+					
+					createFireball(spawnPosition, thisCamera.transform.rotation, startingVelocity, fireballHash);
+					view.RPC ("makeFireballNetwork", RPCMode.Others, spawnPosition, thisCamera.transform.rotation, startingVelocity, fireballHash);
+				}
 			}
 
 			
@@ -108,6 +117,7 @@ public class GameLogic : MonoBehaviour
 				defensiveLight.transform.position = hands[0].gameObject.transform.position;
 			}
 		}
+
 //		else if (hands.Length > 1)
 //		{
 //			Vector3 direction0 = (hands[0].GetPalmPosition() - handController.transform.position).normalized;
@@ -139,6 +149,34 @@ public class GameLogic : MonoBehaviour
 			createFireball(spawnPosition, thisCamera.transform.rotation, startingVelocity, fireballHash);
 			view.RPC ("makeFireballNetwork", RPCMode.Others, spawnPosition, thisCamera.transform.rotation, startingVelocity, fireballHash);
 		}
+
+		else if (hands.Length > 1)
+		{
+			Vector3 direction0 = (hands[0].GetPalmPosition() - handController.transform.position).normalized;
+			Vector3 normal0 = hands[0].GetPalmNormal().normalized;
+			
+			Vector3 direction1 = (hands[1].GetPalmPosition() - handController.transform.position).normalized;
+			Vector3 normal1 = hands[1].GetPalmNormal().normalized;
+
+			//  -.6 or less means the palms are facing each other
+			if (Vector3.Dot (normal0, normal1) < -.6)
+			{
+//				print ("Hands facing each other!");
+				Vector3 distance = hands[0].GetPalmPosition() - hands[1].GetPalmPosition();
+				if (distance.magnitude < .09)
+				{
+					print ("Clapping");
+					clapAttack (thisPlayer.transform.position + new Vector3(0.0f, 0.7f, 0.0f));
+				}
+			}
+
+		}
+	}
+
+	public void clapAttack(Vector3 position)
+	{
+		Instantiate (clapProjectile, position, Quaternion.identity);
+
 	}
 
 	[RPC]

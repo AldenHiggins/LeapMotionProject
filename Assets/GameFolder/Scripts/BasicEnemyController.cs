@@ -40,6 +40,7 @@ public class BasicEnemyController : MonoBehaviour {
 				transform.position += velocity;
 				// Face the target as well
 				transform.rotation = Quaternion.LookRotation(player.transform.position - transform.position);
+				transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
 			}
 		}
 		// If the player is in range attack him
