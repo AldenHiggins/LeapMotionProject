@@ -9,7 +9,6 @@ public class GameLogic : MonoBehaviour
 	public GameObject thisCamera;
 	public GameObject fireBall;
 	public GameObject clapProjectile;
-	public GameObject floor;
 	public Vector3 position = new Vector3 (0f,1f,-5.0f);
 	public Vector3 normal = new Vector3(0f,1f,0f);
 	public float radius = 24.0f;
@@ -126,13 +125,8 @@ public class GameLogic : MonoBehaviour
 			
 			Vector3 direction1 = (hands[1].GetPalmPosition() - handController.transform.position).normalized;
 			Vector3 normal1 = hands[1].GetPalmNormal().normalized;
-			
-//			print ("Normal 0: " + normal0);
-//			print ("Normal 1: " + normal1);
-//
-//			// Print if both of the hands are facing each other
-//			print (Vector3.Dot(normal0, normal1));
-			//  -.6 or less means the palm is facing the camera
+
+			//  -.6 or less means the palms are facing each other
 			if (Vector3.Dot (normal0, normal1) < -.6)
 			{
 //				print ("Hands facing each other!");
