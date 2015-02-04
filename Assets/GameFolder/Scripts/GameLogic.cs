@@ -110,7 +110,6 @@ public class GameLogic : MonoBehaviour
 				}
 			}
 
-
 			
 			// Display the blocking light in the correct place if the player is blocking
 			if (isBlocking)
@@ -118,6 +117,39 @@ public class GameLogic : MonoBehaviour
 				defensiveLight.transform.position = hands[0].gameObject.transform.position;
 			}
 		}
+
+//		else if (hands.Length > 1)
+//		{
+//			Vector3 direction0 = (hands[0].GetPalmPosition() - handController.transform.position).normalized;
+//			Vector3 normal0 = hands[0].GetPalmNormal().normalized;
+//			
+//			Vector3 direction1 = (hands[1].GetPalmPosition() - handController.transform.position).normalized;
+//			Vector3 normal1 = hands[1].GetPalmNormal().normalized;
+//			
+//			print ("Normal 0: " + normal0);
+//			print ("Normal 1: " + normal1);
+//
+//		}
+
+		//<---------------------Adding Spacebar capability to fire ------------------------------->
+	
+
+		// .6 or more means the palm is facing away from the camera
+		if (Input.GetKeyDown(KeyCode.Z)) 
+		{
+			// Make sure the fireball spawns in front of the player at a reasonable distance
+			Vector3 spawnPosition = thisCamera.transform.position;
+			spawnPosition += new Vector3(thisCamera.transform.forward.normalized.x * .8f, thisCamera.transform.forward.normalized.y * .8f, thisCamera.transform.forward.normalized.z * .8f);
+			// Scale the fireball's velocity
+			Vector3 startingVelocity = thisCamera.transform.forward.normalized;
+			startingVelocity *= .2f;
+			// Generate a hash value for the fireball (for network synchronization)
+			int fireballHash = generateProjectileHash();
+			
+			createFireball(spawnPosition, thisCamera.transform.rotation, startingVelocity, fireballHash);
+			view.RPC ("makeFireballNetwork", RPCMode.Others, spawnPosition, thisCamera.transform.rotation, startingVelocity, fireballHash);
+		}
+
 		else if (hands.Length > 1)
 		{
 			Vector3 direction0 = (hands[0].GetPalmPosition() - handController.transform.position).normalized;
@@ -144,6 +176,7 @@ public class GameLogic : MonoBehaviour
 	public void clapAttack(Vector3 position)
 	{
 		Instantiate (clapProjectile, position, Quaternion.identity);
+
 	}
 
 	[RPC]
