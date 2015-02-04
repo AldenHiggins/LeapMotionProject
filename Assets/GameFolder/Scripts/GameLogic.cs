@@ -101,7 +101,6 @@ public class GameLogic : MonoBehaviour
 				view.RPC ("makeFireballNetwork", RPCMode.Others, spawnPosition, thisCamera.transform.rotation, startingVelocity, fireballHash);
 			}
 
-
 			
 			// Display the blocking light in the correct place if the player is blocking
 			if (isBlocking)
@@ -121,6 +120,25 @@ public class GameLogic : MonoBehaviour
 //			print ("Normal 1: " + normal1);
 //
 //		}
+
+		//<---------------------Adding Spacebar capability to fire ------------------------------->
+	
+
+		// .6 or more means the palm is facing away from the camera
+		if (Input.GetKeyDown(KeyCode.Z)) 
+		{
+			// Make sure the fireball spawns in front of the player at a reasonable distance
+			Vector3 spawnPosition = thisCamera.transform.position;
+			spawnPosition += new Vector3(thisCamera.transform.forward.normalized.x * .8f, thisCamera.transform.forward.normalized.y * .8f, thisCamera.transform.forward.normalized.z * .8f);
+			// Scale the fireball's velocity
+			Vector3 startingVelocity = thisCamera.transform.forward.normalized;
+			startingVelocity *= .2f;
+			// Generate a hash value for the fireball (for network synchronization)
+			int fireballHash = generateProjectileHash();
+			
+			createFireball(spawnPosition, thisCamera.transform.rotation, startingVelocity, fireballHash);
+			view.RPC ("makeFireballNetwork", RPCMode.Others, spawnPosition, thisCamera.transform.rotation, startingVelocity, fireballHash);
+		}
 	}
 
 	[RPC]
