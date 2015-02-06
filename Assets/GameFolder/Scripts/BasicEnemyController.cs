@@ -118,6 +118,13 @@ public class BasicEnemyController : MonoBehaviour
 		StartCoroutine (restartAgent ());
 	}
 
+	public void applyExplosiveForce(float force, Vector3 position, float radius)
+	{
+		rigidbody.AddExplosionForce (force, position, radius, 20.0f, ForceMode.Impulse);
+		agent.enabled = false;
+		StartCoroutine (restartAgent ());
+	}
+
 	IEnumerator restartAgent ()
 	{
 		while (rigidbody.velocity.magnitude > 0.1)
