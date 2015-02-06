@@ -71,7 +71,7 @@ public class MoveFireball : MonoBehaviour {
 		{
 			print ("Hit this!");
 			print (velocity);
-			enemy.applyForce(velocity * 40 + new Vector3(0.0f, 10.0f, 0.0f));
+			enemy.applyForce(velocity * 20 + new Vector3(0.0f, 10.0f, 0.0f));
 			enemy.dealDamage(10);
 			Instantiate (explosion, transform.position, Quaternion.identity);
 			Destroy(gameObject);

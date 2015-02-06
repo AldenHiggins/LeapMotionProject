@@ -24,7 +24,7 @@ public class EnemySpawner : MonoBehaviour
 		while(true)
 		{
 			GameObject monster = (GameObject) Instantiate (spawnThis, transform.position, Quaternion.identity);
-			BasicEnemyController enemy = (BasicEnemyController) monster.transform.GetChild(0).GetComponent(typeof(BasicEnemyController));
+			BasicEnemyController enemy = (BasicEnemyController) monster.GetComponent(typeof(BasicEnemyController));
 			enemy.enabled = true;
 			yield return new WaitForSeconds(spawnFrequency);
 		}

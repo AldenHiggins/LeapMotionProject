@@ -9,9 +9,11 @@ public class GameLogic : MonoBehaviour
 	public GameObject thisCamera;
 	public GameObject fireBall;
 	public GameObject clapProjectile;
+	public GameObject goalPosition;
 	public Vector3 position = new Vector3 (0f,1f,-5.0f);
 	public Vector3 normal = new Vector3(0f,1f,0f);
 	public float radius = 24.0f;
+	public GameObject cTurret;
 
 	public HandController handController = null;
 	public GameObject defensiveLightPrefab;
@@ -117,24 +119,30 @@ public class GameLogic : MonoBehaviour
 				defensiveLight.transform.position = hands[0].gameObject.transform.position;
 			}
 		}
+		else if (hands.Length > 1)
+		{
+			Vector3 direction0 = (hands[0].GetPalmPosition() - handController.transform.position).normalized;
+			Vector3 normal0 = hands[0].GetPalmNormal().normalized;
+			
+			Vector3 direction1 = (hands[1].GetPalmPosition() - handController.transform.position).normalized;
+			Vector3 normal1 = hands[1].GetPalmNormal().normalized;
+			
+			//  -.6 or less means the palms are facing each other
+			if (Vector3.Dot (normal0, normal1) < -.6)
+			{
+				//				print ("Hands facing each other!");
+				Vector3 distance = hands[0].GetPalmPosition() - hands[1].GetPalmPosition();
+				if (distance.magnitude < .09)
+				{
+					print ("Clapping");
+					clapAttack (thisPlayer.transform.position + new Vector3(0.0f, 0.7f, 0.0f));
+				}
+			}
+			
+		}
 
-//		else if (hands.Length > 1)
-//		{
-//			Vector3 direction0 = (hands[0].GetPalmPosition() - handController.transform.position).normalized;
-//			Vector3 normal0 = hands[0].GetPalmNormal().normalized;
-//			
-//			Vector3 direction1 = (hands[1].GetPalmPosition() - handController.transform.position).normalized;
-//			Vector3 normal1 = hands[1].GetPalmNormal().normalized;
-//			
-//			print ("Normal 0: " + normal0);
-//			print ("Normal 1: " + normal1);
-//
-//		}
 
-		//<---------------------Adding Spacebar capability to fire ------------------------------->
-	
-
-		// .6 or more means the palm is facing away from the camera
+		//<---------------------Adding Z capability to fire ------------------------------->	
 		if (Input.GetKeyDown(KeyCode.Z)) 
 		{
 			// Make sure the fireball spawns in front of the player at a reasonable distance
@@ -150,27 +158,18 @@ public class GameLogic : MonoBehaviour
 			view.RPC ("makeFireballNetwork", RPCMode.Others, spawnPosition, thisCamera.transform.rotation, startingVelocity, fireballHash);
 		}
 
-		else if (hands.Length > 1)
+		//<---------------------Adding c capability to place turret ------------------------------->
+		if (playerLogic.isDefensivePlayer && Input.GetKeyDown(KeyCode.C)) 
 		{
-			Vector3 direction0 = (hands[0].GetPalmPosition() - handController.transform.position).normalized;
-			Vector3 normal0 = hands[0].GetPalmNormal().normalized;
-			
-			Vector3 direction1 = (hands[1].GetPalmPosition() - handController.transform.position).normalized;
-			Vector3 normal1 = hands[1].GetPalmNormal().normalized;
-
-			//  -.6 or less means the palms are facing each other
-			if (Vector3.Dot (normal0, normal1) < -.6)
-			{
-//				print ("Hands facing each other!");
-				Vector3 distance = hands[0].GetPalmPosition() - hands[1].GetPalmPosition();
-				if (distance.magnitude < .09)
-				{
-					print ("Clapping");
-					clapAttack (thisPlayer.transform.position + new Vector3(0.0f, 0.7f, 0.0f));
-				}
-			}
-
+			int mask = 1 << 10;
+			Ray ray = new Ray(thisCamera.transform.position,thisCamera.transform.forward);
+			RaycastHit hit;
+			Physics.Raycast(ray, out hit, 100f, mask);
+			print ("Raycast position: " + hit.point);
+			Instantiate (cTurret, hit.point + new Vector3(0.0f, 2.0f, 0.0f), Quaternion.identity);
 		}
+
+
 	}
 
 	public void clapAttack(Vector3 position)
@@ -265,5 +264,15 @@ public class GameLogic : MonoBehaviour
 		} while(projectiles.ContainsKey(fireballHash));
 
 		return fireballHash;
+	}
+
+
+	public GameObject getEnemyTarget()
+	{
+		if (playerLogic.isDefensivePlayer)
+		{
+			return goalPosition;
+		}
+		return thisPlayer;
 	}
 }
