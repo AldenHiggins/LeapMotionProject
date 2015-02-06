@@ -9,6 +9,7 @@ public class GameLogic : MonoBehaviour
 	public GameObject thisCamera;
 	public GameObject fireBall;
 	public GameObject clapProjectile;
+	public GameObject goalTarget;
 	public Vector3 position = new Vector3 (0f,1f,-5.0f);
 	public Vector3 normal = new Vector3(0f,1f,0f);
 	public float radius = 24.0f;
@@ -265,5 +266,11 @@ public class GameLogic : MonoBehaviour
 		} while(projectiles.ContainsKey(fireballHash));
 
 		return fireballHash;
+	}
+	public GameObject getTarget(){
+		if (playerLogic.isDefensivePlayer) {
+			return goalTarget;	
+		}
+		return thisPlayer;
 	}
 }

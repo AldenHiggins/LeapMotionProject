@@ -7,6 +7,7 @@ public class BasicEnemyController : MonoBehaviour {
 	public int startingHealth;
 	public float attackRadius;
 	public int attackDamage;
+	public GameLogic game;
 
 	private Vector3 velocity;
 	private Animator anim;
