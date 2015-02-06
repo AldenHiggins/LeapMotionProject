@@ -43,6 +43,8 @@ public class MoveFireball : MonoBehaviour {
 
 	void OnCollisionEnter (Collision col)
 	{
+
+		BasicEnemyController enemy = (BasicEnemyController) col.gameObject.GetComponent(typeof(BasicEnemyController));	
 		// Ignore collisions with player's hands
 		if (col.gameObject.name == "palm" || col.gameObject.name == "bone1" || col.gameObject.name == "bone2")
 		{
@@ -64,12 +66,12 @@ public class MoveFireball : MonoBehaviour {
 				game.reverseProjectileOnOtherClients(hashValue);
 			}
 		}
-		else if (col.gameObject.name == "Zombie(Clone)")
+		// Collide with an enemy
+		else if (enemy != null)
 		{
 			print ("Hit this!");
 			print (velocity);
-			col.gameObject.rigidbody.AddForce(velocity * 60, ForceMode.Impulse);
-			BasicEnemyController enemy = (BasicEnemyController) col.transform.GetChild(0).GetComponent(typeof(BasicEnemyController));
+			enemy.applyForce(velocity * 40 + new Vector3(0.0f, 10.0f, 0.0f));
 			enemy.dealDamage(10);
 			Instantiate (explosion, transform.position, Quaternion.identity);
 			Destroy(gameObject);

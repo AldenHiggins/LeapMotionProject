@@ -13,13 +13,15 @@ public class BasicEnemyController : MonoBehaviour {
 	private Animator anim;
 	private int health;
 	private bool attacking;
+	private NavMeshAgent agent;
 
 	// Use this for initialization
 	void Start () 
 	{
 		attacking = false;
-		anim = GetComponent<Animator> ();
+		anim = transform.GetChild (0).gameObject.GetComponent<Animator> ();
 		health = startingHealth;
+		agent = gameObject.GetComponent<NavMeshAgent> ();
 	}
 	
 	// Update is called once per frame
@@ -27,6 +29,10 @@ public class BasicEnemyController : MonoBehaviour {
 	{
 		if (health < 0)
 			return;
+
+
+
+
 		velocity = player.transform.position - transform.position;
 		velocity.y = 0.0f;
 		// If the enemy is outside melee range keep coming forward
@@ -38,7 +44,11 @@ public class BasicEnemyController : MonoBehaviour {
 				anim.SetBool ("Running", true);
 				velocity.Normalize ();
 				velocity *= speed;
-				transform.position += velocity;
+				if (agent.enabled == true)
+					agent.SetDestination (player.transform.position);
+//				transform.position += velocity;
+//				rigidbody.AddForce (velocity, ForceMode.VelocityChange);
+
 				// Face the target as well
 				transform.rotation = Quaternion.LookRotation(player.transform.position - transform.position);
 				transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
@@ -51,6 +61,7 @@ public class BasicEnemyController : MonoBehaviour {
 			if (attacking == false)
 			{
 				attacking = true;
+				agent.Stop();
 				StartCoroutine(attack());
 			}
 		}
@@ -82,6 +93,9 @@ public class BasicEnemyController : MonoBehaviour {
 
 	public void dealDamage(int damage)
 	{
+		// TEMP TEMP TEMP check remove after forces can affect enemies
+		if (anim == null)
+			return;
 //		print ("Dealing damage");
 		if (health >= 0)
 		{
@@ -93,6 +107,14 @@ public class BasicEnemyController : MonoBehaviour {
 			StartCoroutine(kill());
 		}
 	}
+
+	public void applyForce(Vector3 force)
+	{
+		rigidbody.AddForce (force, ForceMode.Impulse);
+		agent.enabled = false;
+
+	}
+
 
 	IEnumerator kill()
 	{
