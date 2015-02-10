@@ -99,7 +99,9 @@ public class GameLogic : MonoBehaviour
 		//<--------------------- X to create explosion ------------------------------->	
 		if (Input.GetKeyDown(KeyCode.X)) 
 		{
-			int mask = 1 << 10;
+			int maskOne = 1 << 10;
+			int maskTwo = 1 << 11;
+			int mask = maskOne | maskTwo;
 			Ray ray = new Ray(thisCamera.transform.position,thisCamera.transform.forward);
 			RaycastHit hit;
 			Physics.Raycast(ray, out hit, 100f, mask);
@@ -109,7 +111,9 @@ public class GameLogic : MonoBehaviour
 		//<--------------------- C to place turret ------------------------------->
 		if (playerLogic.isDefensivePlayer && Input.GetKeyDown(KeyCode.V)) 
 		{
-			int mask = 1 << 10;
+			int maskOne = 1 << 10;
+			int maskTwo = 1 << 11;
+			int mask = maskOne | maskTwo;
 			Ray ray = new Ray(thisCamera.transform.position,thisCamera.transform.forward);
 			RaycastHit hit;
 			Physics.Raycast(ray, out hit, 100f, mask);
