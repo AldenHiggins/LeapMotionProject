@@ -353,7 +353,10 @@ public class OVRMainMenu : MonoBehaviour
 		Crosshair.SetCrosshairTexture(ref CrosshairImage);
 		Crosshair.SetOVRCameraController (ref CameraController);
 		Crosshair.SetOVRPlayerController(ref PlayerController);
-		
+		PlayerLogic player = (PlayerLogic)GetComponent (typeof(PlayerLogic));
+		if (player.isDefensivePlayer)
+			Crosshair.setEnabledOrNot (true);
+
 		// Check for HMD and sensor
         CheckIfRiftPresent();
 
