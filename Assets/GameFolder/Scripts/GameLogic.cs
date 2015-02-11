@@ -18,6 +18,7 @@ public class GameLogic : MonoBehaviour
 	public GameObject clapProjectile;
 	// TURRETS
 	public GameObject cTurret;
+	public GameObject turretPositions;
 
 	// INTERNAL VARIABLES
 	private NetworkView view;
@@ -27,6 +28,7 @@ public class GameLogic : MonoBehaviour
 	private int fireballTimer;
 	private Networking network;
 	private PlayerLogic playerLogic;
+	private bool previousTurretButtonPressed;
 
 	// RUNTIME GAME REPRESENTATION
 	private Dictionary<int, GameObject> projectiles;
@@ -35,9 +37,11 @@ public class GameLogic : MonoBehaviour
 	// Initialize variables
 	void Start () 
 	{
+		showHideTurretPositions (false);
 		view = gameObject.networkView;
 		fireballCharged = false;
 		isBlocking = false;
+		previousTurretButtonPressed = false;
 		fireballTimer = 0;
 		projectiles = new Dictionary<int, GameObject> ();
 		network = (Networking) gameObject.GetComponent (typeof(Networking));
@@ -108,18 +112,52 @@ public class GameLogic : MonoBehaviour
 			Instantiate (clapProjectile, hit.point + new Vector3(0.0f, 2.0f, 0.0f), Quaternion.identity);
 		}
 
+	
 		//<--------------------- C to place turret ------------------------------->
-		if (playerLogic.isDefensivePlayer && Input.GetKeyDown(KeyCode.V)) 
+		if (playerLogic.isDefensivePlayer && Input.GetKey(KeyCode.V)) 
 		{
+			// Display prospective turret spots
+			showHideTurretPositions(true);
+		}
+		else if (playerLogic.isDefensivePlayer && !Input.GetKey(KeyCode.V) && previousTurretButtonPressed)
+		{
+<<<<<<< HEAD
 			int maskOne = 1 << 10;
 			int maskTwo = 1 << 11;
 			int mask = maskOne | maskTwo;
+=======
+			showHideTurretPositions(false);
+
+			int mask = 1 << 10;
+>>>>>>> a4ef83038d1b812a58748707000623e00e0ca10b
 			Ray ray = new Ray(thisCamera.transform.position,thisCamera.transform.forward);
 			RaycastHit hit;
 			Physics.Raycast(ray, out hit, 100f, mask);
-			print ("Raycast position: " + hit.point);
-			Instantiate (cTurret, hit.point + new Vector3(0.0f, 2.0f, 0.0f), Quaternion.identity);
+			float minDistance = float.MaxValue;
+			GameObject closestTurret = null;
+			for (int i = 0; i < turretPositions.transform.childCount; i++)
+			{
+				GameObject turretPos = turretPositions.transform.GetChild (i).gameObject;
+				float distance = Vector3.Distance(turretPos.transform.position, hit.point);
+				if (distance < minDistance)
+				{
+					minDistance = distance;
+					closestTurret = turretPos;
+				}
+			}
+
+			if (closestTurret != null)
+			{
+				Instantiate (cTurret, closestTurret.transform.position, closestTurret.transform.rotation);
+				Destroy (closestTurret);
+			}
+			else
+			{
+				print ("Could not place a turret, no more locations available!");
+			}
+
 		}
+		previousTurretButtonPressed = Input.GetKey (KeyCode.V);
 	}
 
 	public void clapAttack(Vector3 position)
@@ -240,5 +278,16 @@ public class GameLogic : MonoBehaviour
 			return goalPosition;
 		}
 		return thisPlayer;
+	}
+
+	public void showHideTurretPositions(bool showOrHide)
+	{
+		// Don't display any of the turret positions
+		for (int i = 0; i < turretPositions.transform.childCount; i++)
+		{
+			GameObject turretPos = turretPositions.transform.GetChild (i).gameObject;
+			turretPos.transform.GetChild (0).gameObject.renderer.enabled = showOrHide;
+			turretPos.transform.GetChild (1).gameObject.renderer.enabled = showOrHide;
+		}
 	}
 }
