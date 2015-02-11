@@ -23,11 +23,37 @@ public class EmitterBehavior : MonoBehaviour
 //		// won't have different hashes)
 //		if (network.isServer)
 //		{
+		// Acquire the nearest target
+		Collider[] nearbyObjects = Physics.OverlapSphere (transform.position, 10);
+		float minDistance = float.MaxValue;
+		BasicEnemyController nearestEnemy = null;
+		for (int i = 0; i < nearbyObjects.Length; i++)
+		{
+			if (nearbyObjects[i].transform.childCount > 0)
+			{
+				BasicEnemyController enemy = (BasicEnemyController) nearbyObjects[i].gameObject.GetComponent(typeof(BasicEnemyController));
+				if (enemy != null)
+				{
+					float distance = Vector3.Distance (transform.position, enemy.transform.position);
+					if (distance < minDistance)
+					{
+						minDistance = distance;
+						nearestEnemy = enemy;
+					}
+				}
+			}
+		}
 
+		if (nearestEnemy != null)
+		{
+			// Turn to face the enemy
+			transform.rotation = Quaternion.LookRotation(nearestEnemy.transform.position - transform.position);
+			transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
+		}
 
 		// Temp fireball launcher to test
 		fireballTimer++;
-		if (fireballTimer > 50)
+		if (fireballTimer > 100)
 		{
 			fireballTimer = 0;
 			Vector3 velocity = transform.forward.normalized;
