@@ -57,7 +57,8 @@ public class MoveFireball : MonoBehaviour {
 			{
 				Instantiate (explosion, transform.position, Quaternion.identity);
 				PlayerLogic hitPlayer = (PlayerLogic) col.gameObject.GetComponent(typeof(PlayerLogic));
-				hitPlayer.respawn();
+				if (!hitPlayer.isDefensivePlayer)
+					hitPlayer.respawn();
 			}
 			// Reflect back blocked fireballs
 			else

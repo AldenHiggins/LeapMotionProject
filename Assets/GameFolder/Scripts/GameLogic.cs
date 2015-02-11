@@ -33,7 +33,6 @@ public class GameLogic : MonoBehaviour
 	// RUNTIME GAME REPRESENTATION
 	private Dictionary<int, GameObject> projectiles;
 
-
 	// Initialize variables
 	void Start () 
 	{
@@ -46,6 +45,13 @@ public class GameLogic : MonoBehaviour
 		projectiles = new Dictionary<int, GameObject> ();
 		network = (Networking) gameObject.GetComponent (typeof(Networking));
 		playerLogic = (PlayerLogic) thisPlayer.GetComponent (typeof(PlayerLogic));
+		// Disable leap motion for defensive player
+		if (playerLogic.isDefensivePlayer)
+		{
+			HandController hand = (HandController) thisPlayer.transform.GetChild (1).GetChild (1).
+				GetChild (0).gameObject.GetComponent(typeof(HandController));
+			hand.enabled = false;
+		}
 	}
 	
 	// Control loop to check for player input
