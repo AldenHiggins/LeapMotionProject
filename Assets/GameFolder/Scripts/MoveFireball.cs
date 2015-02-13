@@ -45,8 +45,14 @@ public class MoveFireball : MonoBehaviour {
 	{
 
 		BasicEnemyController enemy = (BasicEnemyController) col.gameObject.GetComponent(typeof(BasicEnemyController));	
+		MoveFireball moveScript = (MoveFireball) col.gameObject.GetComponent ((typeof(MoveFireball)));
+		// Ignore collisions with other fireballs
+		if (moveScript != null)
+		{
+
+		}
 		// Ignore collisions with player's hands
-		if (col.gameObject.name == "palm" || col.gameObject.name == "bone1" || col.gameObject.name == "bone2")
+		else if (col.gameObject.name == "palm" || col.gameObject.name == "bone1" || col.gameObject.name == "bone2")
 		{
 
 		}

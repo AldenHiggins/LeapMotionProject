@@ -5,7 +5,10 @@ using System.Collections.Generic;
 public class EmitterBehavior : MonoBehaviour 
 {
 	public GameObject fireBall;
-	
+	public float emissionVelocity;
+	public float emissionFrequency;
+	public float attackRadius;
+	public bool multiAttack;
 
 	private int fireballTimer;
 	private int blockTimer;
@@ -24,7 +27,7 @@ public class EmitterBehavior : MonoBehaviour
 //		if (network.isServer)
 //		{
 		// Acquire the nearest target
-		Collider[] nearbyObjects = Physics.OverlapSphere (transform.position, 10);
+		Collider[] nearbyObjects = Physics.OverlapSphere (transform.position, attackRadius);
 		float minDistance = float.MaxValue;
 		BasicEnemyController nearestEnemy = null;
 		for (int i = 0; i < nearbyObjects.Length; i++)
@@ -52,13 +55,33 @@ public class EmitterBehavior : MonoBehaviour
 
 			// Launch fireball as long as an enemy is found
 			fireballTimer++;
-			if (fireballTimer > 100)
+			if (fireballTimer > emissionFrequency)
 			{
 				fireballTimer = 0;
 				Vector3 velocity = transform.forward.normalized;
 				Vector3 startPosition = transform.position + velocity * 1;
-				velocity *= .1f;
+				// Apply the correct velocity to the emission
+				velocity *= emissionVelocity;
 				createFireball(startPosition, transform.rotation, velocity, 0);
+
+				// Temporary fire three particles
+				if (multiAttack)
+				{
+					Quaternion newRotation = transform.rotation * Quaternion.Euler (15 * Vector3.up);
+					Vector3 newVelocity =  newRotation * Vector3.forward;
+					newVelocity.Normalize();
+					newVelocity *= emissionVelocity;
+					
+					createFireball(startPosition, Quaternion.identity, newVelocity, 0);
+
+					Quaternion rotation2 = transform.rotation * Quaternion.Euler (-15 * Vector3.up);
+					Vector3 secondVelocity =  rotation2 * Vector3.forward;
+					secondVelocity.Normalize();
+					secondVelocity *= emissionVelocity;
+					
+					createFireball(startPosition, Quaternion.identity, secondVelocity, 0);
+//					createFireball(startPosition, Quaternion.AngleAxis(yRotation + 15, Vector3.up), velocity, 0);
+				}
 				//			view.RPC ("makeFireballNetwork", RPCMode.Others, new Vector3(-4.6f, 76.75f, 1.8f), Quaternion.identity, new Vector3(0.0f, 0.0f, -0.1f), hash);
 			}
 		}
