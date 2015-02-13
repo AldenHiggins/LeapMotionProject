@@ -16,11 +16,6 @@ public class GameLogic : MonoBehaviour
 	// PLAYER ATTACKS
 	public GameObject fireBall;
 	public GameObject clapProjectile;
-	// TURRETS
-	public GameObject cTurret;
-	public GameObject turretPositions;
-	// OIL MATERIALS
-	public GameObject oilSlick;
 	// INTERNAL VARIABLES
 	private NetworkView view;
 	private bool fireballCharged;
@@ -29,10 +24,9 @@ public class GameLogic : MonoBehaviour
 	private int fireballTimer;
 	private Networking network;
 	private PlayerLogic playerLogic;
-	private bool previousTurretButtonPressed;
+	private DefensiveAbilities defensiveAbilities;
 
 	// GAME CONTROLLER VARIABLES
-	private bool previousXDown = false;
 
 	// RUNTIME GAME REPRESENTATION
 	private Dictionary<int, GameObject> projectiles;
@@ -40,15 +34,15 @@ public class GameLogic : MonoBehaviour
 	// Initialize variables
 	void Start () 
 	{
-		showHideTurretPositions (false);
 		view = gameObject.networkView;
 		fireballCharged = false;
 		isBlocking = false;
-		previousTurretButtonPressed = false;
 		fireballTimer = 0;
 		projectiles = new Dictionary<int, GameObject> ();
 		network = (Networking) gameObject.GetComponent (typeof(Networking));
 		playerLogic = (PlayerLogic) thisPlayer.GetComponent (typeof(PlayerLogic));
+		defensiveAbilities = (DefensiveAbilities)gameObject.GetComponent (typeof(DefensiveAbilities));
+		defensiveAbilities.showHideTurretPositions (false);
 		// Disable leap motion for defensive player
 		if (playerLogic.isDefensivePlayer)
 		{
@@ -115,85 +109,7 @@ public class GameLogic : MonoBehaviour
 
 		if (playerLogic.isDefensivePlayer) 
 		{
-			//<--------------------- CONTROLLER X TO DROP OIL SLICK ----------------------->
-			//OilSlick Projectile
-			bool xPressed = OVRGamepadController.GPC_GetButton (OVRGamepadController.Button.X);
-
-			// Create projectile
-			if (xPressed && !previousXDown) 
-			{
-				oilSlick = (GameObject)Instantiate (oilSlick);
-				// Animate projectile in front of player
-			}
-			else if (xPressed) 
-			{
-				RaycastHit hit = getRayHit ();
-				oilSlick.transform.position = hit.point;
-				//oilSlick.transform.rotation Quaternion.identity);
-			}
-			// Fire projectile
-			else if (!xPressed && previousXDown) 
-			{
-				RaycastHit hit = getRayHit ();
-				oilSlick.transform.position = hit.point;
-				OilSlick oilSlickScript = (OilSlick)oilSlick.GetComponent (typeof(OilSlick));
-				oilSlickScript.enabled = true;
-				print ("placed it at " + hit.point.y);
-			}
-
-			previousXDown = xPressed;
-
-
-			//<--------------------- X to create explosion ------------------------------->	
-			if (Input.GetKeyDown (KeyCode.X)) 
-			{
-				int maskOne = 1 << 10;
-				int maskTwo = 1 << 11;
-				int mask = maskOne | maskTwo;
-				Ray ray = new Ray (thisCamera.transform.position, thisCamera.transform.forward);
-				RaycastHit hit;
-				Physics.Raycast (ray, out hit, 100f, mask);
-				Instantiate (clapProjectile, hit.point + new Vector3 (0.0f, 2.0f, 0.0f), Quaternion.identity);
-			}
-
-			//<--------------------- C to place turret ------------------------------->
-			if (playerLogic.isDefensivePlayer && OVRGamepadController.GPC_GetButton (OVRGamepadController.Button.Y)) 
-			{
-				// Display prospective turret spots
-				showHideTurretPositions (true);
-			} 
-			else if (playerLogic.isDefensivePlayer && !OVRGamepadController.GPC_GetButton (OVRGamepadController.Button.Y) && previousTurretButtonPressed) 
-			{
-				showHideTurretPositions (false);
-
-				int mask = 1 << 10;
-				Ray ray = new Ray (thisCamera.transform.position, thisCamera.transform.forward);
-				RaycastHit hit;
-				Physics.Raycast (ray, out hit, 100f, mask);
-				float minDistance = float.MaxValue;
-				GameObject closestTurret = null;
-				for (int i = 0; i < turretPositions.transform.childCount; i++) 
-				{
-					GameObject turretPos = turretPositions.transform.GetChild (i).gameObject;
-					float distance = Vector3.Distance (turretPos.transform.position, hit.point);
-					if (distance < minDistance) 
-					{
-						minDistance = distance;
-						closestTurret = turretPos;
-					}
-				}
-
-				if (closestTurret != null) 
-				{
-					Instantiate (cTurret, closestTurret.transform.position, closestTurret.transform.rotation);
-					Destroy (closestTurret);
-				}
-				else 
-				{
-					print ("Could not place a turret, no more locations available!");
-				}
-			}
-			previousTurretButtonPressed = OVRGamepadController.GPC_GetButton (OVRGamepadController.Button.Y);
+			defensiveAbilities.controlCheck();
 		}
 	}
 
@@ -294,7 +210,6 @@ public class GameLogic : MonoBehaviour
 		randomPoint += position;
 
 		return randomPoint;
-	//		return new Vector3 (0,1,0);
 	}
 
 	private int generateProjectileHash()
@@ -308,7 +223,6 @@ public class GameLogic : MonoBehaviour
 		return fireballHash;
 	}
 
-
 	public GameObject getEnemyTarget()
 	{
 		if (playerLogic.isDefensivePlayer)
@@ -318,20 +232,11 @@ public class GameLogic : MonoBehaviour
 		return thisPlayer;
 	}
 
-	public void showHideTurretPositions(bool showOrHide)
+	public RaycastHit getRayHit()
 	{
-	// Don't display any of the turret positions
-		for (int i = 0; i < turretPositions.transform.childCount; i++)
-		{
-			GameObject turretPos = turretPositions.transform.GetChild (i).gameObject;
-			turretPos.transform.GetChild (0).gameObject.renderer.enabled = showOrHide;
-			turretPos.transform.GetChild (1).gameObject.renderer.enabled = showOrHide;
-		}
-	}
-
-	private RaycastHit getRayHit()
-	{
-		int mask = 1 << 10;
+		int maskOne = 1 << 10;
+		int maskTwo = 1 << 11;
+		int mask = maskOne | maskTwo;
 		Ray ray = new Ray (thisCamera.transform.position, thisCamera.transform.forward);
 		RaycastHit hit;
 		Physics.Raycast (ray, out hit, 100f, mask);

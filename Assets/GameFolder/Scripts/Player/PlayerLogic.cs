@@ -12,7 +12,8 @@ public class PlayerLogic : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
-		if (isDefensivePlayer) {
+		if (isDefensivePlayer) 
+		{
 			transform.position = new Vector3 (55f, 90f, 0f);
 			//transform.localScale += Vector3(0.1,0,0);
 		}
