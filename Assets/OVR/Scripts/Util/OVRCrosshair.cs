@@ -58,7 +58,12 @@ public class OVRCrosshair
 	#endregion
 	
 	#region Public Functions
-	
+
+	public void setEnabledOrNot(bool enabledOrNot)
+	{
+		DisplayCrosshair = enabledOrNot;
+	}
+
 	/// <summary>
 	/// Sets the crosshair texture.
 	/// </summary>
