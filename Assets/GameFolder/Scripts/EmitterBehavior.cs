@@ -49,19 +49,25 @@ public class EmitterBehavior : MonoBehaviour
 			// Turn to face the enemy
 			transform.rotation = Quaternion.LookRotation(nearestEnemy.transform.position - transform.position);
 			transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
+
+			// Launch fireball as long as an enemy is found
+			fireballTimer++;
+			if (fireballTimer > 100)
+			{
+				fireballTimer = 0;
+				Vector3 velocity = transform.forward.normalized;
+				Vector3 startPosition = transform.position + velocity * 1;
+				velocity *= .1f;
+				createFireball(startPosition, transform.rotation, velocity, 0);
+				//			view.RPC ("makeFireballNetwork", RPCMode.Others, new Vector3(-4.6f, 76.75f, 1.8f), Quaternion.identity, new Vector3(0.0f, 0.0f, -0.1f), hash);
+			}
+		}
+		else
+		{
+			transform.rotation = Quaternion.identity;
 		}
 
-		// Temp fireball launcher to test
-		fireballTimer++;
-		if (fireballTimer > 100)
-		{
-			fireballTimer = 0;
-			Vector3 velocity = transform.forward.normalized;
-			Vector3 startPosition = transform.position + velocity * 1;
-			velocity *= .1f;
-			createFireball(startPosition, transform.rotation, velocity, 0);
-//			view.RPC ("makeFireballNetwork", RPCMode.Others, new Vector3(-4.6f, 76.75f, 1.8f), Quaternion.identity, new Vector3(0.0f, 0.0f, -0.1f), hash);
-		}
+
 	}
 	
 //	[RPC]
