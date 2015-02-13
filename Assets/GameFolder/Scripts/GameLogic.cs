@@ -19,7 +19,8 @@ public class GameLogic : MonoBehaviour
 	// TURRETS
 	public GameObject cTurret;
 	public GameObject turretPositions;
-
+	// OIL MATERIALS
+	public GameObject oilSlick;
 	// INTERNAL VARIABLES
 	private NetworkView view;
 	private bool fireballCharged;
@@ -29,6 +30,9 @@ public class GameLogic : MonoBehaviour
 	private Networking network;
 	private PlayerLogic playerLogic;
 	private bool previousTurretButtonPressed;
+
+	// GAME CONTROLLER VARIABLES
+	private bool previousXDown = false;
 
 	// RUNTIME GAME REPRESENTATION
 	private Dictionary<int, GameObject> projectiles;
@@ -53,113 +57,119 @@ public class GameLogic : MonoBehaviour
 			hand.enabled = false;
 		}
 	}
-	
+
 	// Control loop to check for player input
 	void Update () 
 	{
-		HandModel[] hands = handController.GetAllGraphicsHands();
-		if (hands.Length == 1)
-		{
-			Vector3 direction0 = (hands[0].GetPalmPosition() - handController.transform.position).normalized;
-			Vector3 normal0 = hands[0].GetPalmNormal().normalized;
+		HandModel[] hands = handController.GetAllGraphicsHands ();
+		if (hands.Length == 1) {
+			Vector3 direction0 = (hands [0].GetPalmPosition () - handController.transform.position).normalized;
+			Vector3 normal0 = hands [0].GetPalmNormal ().normalized;
 
 			//  Charge a fireball, -.6 or less means the palm is facing the camera
-			if (Vector3.Dot (normal0, thisCamera.transform.forward) < -.6 && !fireballCharged)
-			{
+			if (Vector3.Dot (normal0, thisCamera.transform.forward) < -.6 && !fireballCharged) {
 				fireballCharged = true;
 			}
 
 			// Fire a fireball, .6 or more means the palm is facing away from the camera
-			if (Vector3.Dot (normal0, thisCamera.transform.forward) > .6 && fireballCharged)
-			{
+			if (Vector3.Dot (normal0, thisCamera.transform.forward) > .6 && fireballCharged) {
 				fireballCharged = false;
 				// First check if the player has enough energy
-				if (playerLogic.getEnergy() > 10)
-				{
-					playerCastFireball();
+				if (playerLogic.getEnergy () > 10) {
+					playerCastFireball ();
 				}
-			}
-		}
-		else if (hands.Length > 1)
-		{
-			Vector3 direction0 = (hands[0].GetPalmPosition() - handController.transform.position).normalized;
-			Vector3 normal0 = hands[0].GetPalmNormal().normalized;
 			
-			Vector3 direction1 = (hands[1].GetPalmPosition() - handController.transform.position).normalized;
-			Vector3 normal1 = hands[1].GetPalmNormal().normalized;
+			}
+		} else if (hands.Length > 1) {
+			Vector3 direction0 = (hands [0].GetPalmPosition () - handController.transform.position).normalized;
+			Vector3 normal0 = hands [0].GetPalmNormal ().normalized;
+			
+			Vector3 direction1 = (hands [1].GetPalmPosition () - handController.transform.position).normalized;
+			Vector3 normal1 = hands [1].GetPalmNormal ().normalized;
 			
 			//  Check for and perform a clap attack
-			if (Vector3.Dot (normal0, normal1) < -.6)
-			{
-				Vector3 distance = hands[0].GetPalmPosition() - hands[1].GetPalmPosition();
-				if (distance.magnitude < .09)
-				{
-					clapAttack (thisPlayer.transform.position + new Vector3(0.0f, 0.7f, 0.0f));
+			if (Vector3.Dot (normal0, normal1) < -.6) {
+				Vector3 distance = hands [0].GetPalmPosition () - hands [1].GetPalmPosition ();
+				if (distance.magnitude < .09) {
+					clapAttack (thisPlayer.transform.position + new Vector3 (0.0f, 0.7f, 0.0f));
 				}
 			}
 		}
 
-		
 		//<--------------------- Z to fire fireball ------------------------------->	
-		if (Input.GetKeyDown(KeyCode.Z)) 
-		{
-			playerCastFireball();
+		if (Input.GetKeyDown (KeyCode.Z)) {
+			playerCastFireball ();
 		}
 
-		//<--------------------- X to create explosion ------------------------------->	
-		if (Input.GetKeyDown(KeyCode.X)) 
-		{
-			int maskOne = 1 << 10;
-			int maskTwo = 1 << 11;
-			int mask = maskOne | maskTwo;
-			Ray ray = new Ray(thisCamera.transform.position,thisCamera.transform.forward);
-			RaycastHit hit;
-			Physics.Raycast(ray, out hit, 100f, mask);
-			Instantiate (clapProjectile, hit.point + new Vector3(0.0f, 2.0f, 0.0f), Quaternion.identity);
-		}
+		if (playerLogic.isDefensivePlayer) {
+			//<--------------------- CONTROLLER X TO DROP OIL SLICK ----------------------->
 
-	
-		//<--------------------- C to place turret ------------------------------->
-		if (playerLogic.isDefensivePlayer && Input.GetKey(KeyCode.V)) 
-		{
-			// Display prospective turret spots
-			showHideTurretPositions(true);
-		}
-		else if (playerLogic.isDefensivePlayer && !Input.GetKey(KeyCode.V) && previousTurretButtonPressed)
-		{
-			int maskOne = 1 << 10;
-			int maskTwo = 1 << 11;
-			int mask = maskOne | maskTwo;
-			showHideTurretPositions(false);
+			//OilSlick Projectile
+			bool xPressed = OVRGamepadController.GPC_GetButton (OVRGamepadController.Button.X);
 
-			Ray ray = new Ray(thisCamera.transform.position,thisCamera.transform.forward);
-			RaycastHit hit;
-			Physics.Raycast(ray, out hit, 100f, mask);
-			float minDistance = float.MaxValue;
-			GameObject closestTurret = null;
-			for (int i = 0; i < turretPositions.transform.childCount; i++)
-			{
-				GameObject turretPos = turretPositions.transform.GetChild (i).gameObject;
-				float distance = Vector3.Distance(turretPos.transform.position, hit.point);
-				if (distance < minDistance)
-				{
-					minDistance = distance;
-					closestTurret = turretPos;
+			// Create projectile
+			if (xPressed && !previousXDown) {
+				oilSlick = (GameObject)Instantiate (oilSlick);
+				// Animate projectile in front of player
+			}
+			else if (xPressed) {
+				RaycastHit hit = getRayHit ();
+				oilSlick.transform.position = hit.point;
+				//oilSlick.transform.rotation Quaternion.identity);
+			}
+			// Fire projectile
+			else if (!xPressed && previousXDown) {
+				RaycastHit hit = getRayHit ();
+				oilSlick.transform.position = hit.point;
+				OilSlick oilSlickScript = (OilSlick)oilSlick.GetComponent (typeof(OilSlick));
+				oilSlickScript.enabled = true;
+				print ("placed it at " + hit.point.y);
+			}
+
+			previousXDown = xPressed;
+			//<--------------------- X to create explosion ------------------------------->	
+			if (Input.GetKeyDown (KeyCode.X)) {
+				int maskOne = 1 << 10;
+				int maskTwo = 1 << 11;
+				int mask = maskOne | maskTwo;
+				Ray ray = new Ray (thisCamera.transform.position, thisCamera.transform.forward);
+				RaycastHit hit;
+				Physics.Raycast (ray, out hit, 100f, mask);
+				Instantiate (clapProjectile, hit.point + new Vector3 (0.0f, 2.0f, 0.0f), Quaternion.identity);
+			}
+
+			//<--------------------- C to place turret ------------------------------->
+			if (playerLogic.isDefensivePlayer && Input.GetKey (KeyCode.V)) {
+				// Display prospective turret spots
+				showHideTurretPositions (true);
+			} else if (playerLogic.isDefensivePlayer && !Input.GetKey (KeyCode.V) && previousTurretButtonPressed) {
+				showHideTurretPositions (false);
+
+				int mask = 1 << 10;
+				Ray ray = new Ray (thisCamera.transform.position, thisCamera.transform.forward);
+				RaycastHit hit;
+				Physics.Raycast (ray, out hit, 100f, mask);
+				float minDistance = float.MaxValue;
+				GameObject closestTurret = null;
+				for (int i = 0; i < turretPositions.transform.childCount; i++) {
+					GameObject turretPos = turretPositions.transform.GetChild (i).gameObject;
+					float distance = Vector3.Distance (turretPos.transform.position, hit.point);
+					if (distance < minDistance) {
+						minDistance = distance;
+						closestTurret = turretPos;
+					}
 				}
-			}
 
-			if (closestTurret != null)
-			{
-				Instantiate (cTurret, closestTurret.transform.position, closestTurret.transform.rotation);
-				Destroy (closestTurret);
-			}
-			else
-			{
-				print ("Could not place a turret, no more locations available!");
-			}
+				if (closestTurret != null) {
+					Instantiate (cTurret, closestTurret.transform.position, closestTurret.transform.rotation);
+					Destroy (closestTurret);
+				} else {
+					print ("Could not place a turret, no more locations available!");
+				}
 
+			}
+			previousTurretButtonPressed = Input.GetKey (KeyCode.V);
 		}
-		previousTurretButtonPressed = Input.GetKey (KeyCode.V);
 	}
 
 	public void clapAttack(Vector3 position)
@@ -197,7 +207,7 @@ public class GameLogic : MonoBehaviour
 		startingVelocity *= .2f;
 		// Generate a hash value for the fireball (for network synchronization)
 		int fireballHash = generateProjectileHash();
-		
+
 		createFireball(spawnPosition, thisCamera.transform.rotation, startingVelocity, fireballHash);
 		view.RPC ("makeFireballNetwork", RPCMode.Others, spawnPosition, thisCamera.transform.rotation, startingVelocity, fireballHash);
 	}
@@ -258,7 +268,7 @@ public class GameLogic : MonoBehaviour
 		randomPoint += position;
 
 		return randomPoint;
-//		return new Vector3 (0,1,0);
+	//		return new Vector3 (0,1,0);
 	}
 
 	private int generateProjectileHash()
@@ -284,12 +294,20 @@ public class GameLogic : MonoBehaviour
 
 	public void showHideTurretPositions(bool showOrHide)
 	{
-		// Don't display any of the turret positions
+	// Don't display any of the turret positions
 		for (int i = 0; i < turretPositions.transform.childCount; i++)
 		{
 			GameObject turretPos = turretPositions.transform.GetChild (i).gameObject;
 			turretPos.transform.GetChild (0).gameObject.renderer.enabled = showOrHide;
 			turretPos.transform.GetChild (1).gameObject.renderer.enabled = showOrHide;
 		}
+	}
+
+	private RaycastHit getRayHit(){
+		int mask = 1 << 10;
+		Ray ray = new Ray (thisCamera.transform.position, thisCamera.transform.forward);
+		RaycastHit hit;
+		Physics.Raycast (ray, out hit, 100f, mask);
+		return hit;
 	}
 }

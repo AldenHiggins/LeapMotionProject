@@ -16,7 +16,7 @@ public class Networking : MonoBehaviour
 		if (!isServer)
 		{
 			print ("Trying to connect!");
-			Network.Connect("10.96.10.42", 80);
+			Network.Connect("10.117.79.121", 80);
 		}
 		else
 		{
