@@ -13,7 +13,7 @@ public class PlayerLogic : MonoBehaviour
 	void Start () 
 	{
 		if (isDefensivePlayer) {
-			transform.position = new Vector3 (55f, 105f, 0f);
+			transform.position = new Vector3 (55f, 90f, 0f);
 			//transform.localScale += Vector3(0.1,0,0);
 		}
 			

@@ -55,6 +55,10 @@ public class GameLogic : MonoBehaviour
 			HandController hand = (HandController) thisPlayer.transform.GetChild (1).GetChild (1).
 				GetChild (0).gameObject.GetComponent(typeof(HandController));
 			hand.enabled = false;
+
+			// Make the player not use gravity if they are defensive
+			OVRPlayerController ovrController = (OVRPlayerController) thisPlayer.GetComponent(typeof(OVRPlayerController));
+//			ovrController.changeGravityUse(false);
 		}
 	}
 
@@ -62,17 +66,20 @@ public class GameLogic : MonoBehaviour
 	void Update () 
 	{
 		HandModel[] hands = handController.GetAllGraphicsHands ();
-		if (hands.Length == 1) {
+		if (hands.Length == 1) 
+		{
 			Vector3 direction0 = (hands [0].GetPalmPosition () - handController.transform.position).normalized;
 			Vector3 normal0 = hands [0].GetPalmNormal ().normalized;
 
 			//  Charge a fireball, -.6 or less means the palm is facing the camera
-			if (Vector3.Dot (normal0, thisCamera.transform.forward) < -.6 && !fireballCharged) {
+			if (Vector3.Dot (normal0, thisCamera.transform.forward) < -.6 && !fireballCharged) 
+			{
 				fireballCharged = true;
 			}
 
 			// Fire a fireball, .6 or more means the palm is facing away from the camera
-			if (Vector3.Dot (normal0, thisCamera.transform.forward) > .6 && fireballCharged) {
+			if (Vector3.Dot (normal0, thisCamera.transform.forward) > .6 && fireballCharged) 
+			{
 				fireballCharged = false;
 				// First check if the player has enough energy
 				if (playerLogic.getEnergy () > 10) {
@@ -80,7 +87,9 @@ public class GameLogic : MonoBehaviour
 				}
 			
 			}
-		} else if (hands.Length > 1) {
+		} 
+		else if (hands.Length > 1) 
+		{
 			Vector3 direction0 = (hands [0].GetPalmPosition () - handController.transform.position).normalized;
 			Vector3 normal0 = hands [0].GetPalmNormal ().normalized;
 			
@@ -88,37 +97,43 @@ public class GameLogic : MonoBehaviour
 			Vector3 normal1 = hands [1].GetPalmNormal ().normalized;
 			
 			//  Check for and perform a clap attack
-			if (Vector3.Dot (normal0, normal1) < -.6) {
+			if (Vector3.Dot (normal0, normal1) < -.6) 
+			{
 				Vector3 distance = hands [0].GetPalmPosition () - hands [1].GetPalmPosition ();
-				if (distance.magnitude < .09) {
+				if (distance.magnitude < .09) 
+				{
 					clapAttack (thisPlayer.transform.position + new Vector3 (0.0f, 0.7f, 0.0f));
 				}
 			}
 		}
 
 		//<--------------------- Z to fire fireball ------------------------------->	
-		if (Input.GetKeyDown (KeyCode.Z)) {
+		if (Input.GetKeyDown (KeyCode.Z)) 
+		{
 			playerCastFireball ();
 		}
 
-		if (playerLogic.isDefensivePlayer) {
+		if (playerLogic.isDefensivePlayer) 
+		{
 			//<--------------------- CONTROLLER X TO DROP OIL SLICK ----------------------->
-
 			//OilSlick Projectile
 			bool xPressed = OVRGamepadController.GPC_GetButton (OVRGamepadController.Button.X);
 
 			// Create projectile
-			if (xPressed && !previousXDown) {
+			if (xPressed && !previousXDown) 
+			{
 				oilSlick = (GameObject)Instantiate (oilSlick);
 				// Animate projectile in front of player
 			}
-			else if (xPressed) {
+			else if (xPressed) 
+			{
 				RaycastHit hit = getRayHit ();
 				oilSlick.transform.position = hit.point;
 				//oilSlick.transform.rotation Quaternion.identity);
 			}
 			// Fire projectile
-			else if (!xPressed && previousXDown) {
+			else if (!xPressed && previousXDown) 
+			{
 				RaycastHit hit = getRayHit ();
 				oilSlick.transform.position = hit.point;
 				OilSlick oilSlickScript = (OilSlick)oilSlick.GetComponent (typeof(OilSlick));
@@ -127,8 +142,11 @@ public class GameLogic : MonoBehaviour
 			}
 
 			previousXDown = xPressed;
+
+
 			//<--------------------- X to create explosion ------------------------------->	
-			if (Input.GetKeyDown (KeyCode.X)) {
+			if (Input.GetKeyDown (KeyCode.X)) 
+			{
 				int maskOne = 1 << 10;
 				int maskTwo = 1 << 11;
 				int mask = maskOne | maskTwo;
@@ -139,10 +157,13 @@ public class GameLogic : MonoBehaviour
 			}
 
 			//<--------------------- C to place turret ------------------------------->
-			if (playerLogic.isDefensivePlayer && Input.GetKey (KeyCode.V)) {
+			if (playerLogic.isDefensivePlayer && OVRGamepadController.GPC_GetButton (OVRGamepadController.Button.Y)) 
+			{
 				// Display prospective turret spots
 				showHideTurretPositions (true);
-			} else if (playerLogic.isDefensivePlayer && !Input.GetKey (KeyCode.V) && previousTurretButtonPressed) {
+			} 
+			else if (playerLogic.isDefensivePlayer && !OVRGamepadController.GPC_GetButton (OVRGamepadController.Button.Y) && previousTurretButtonPressed) 
+			{
 				showHideTurretPositions (false);
 
 				int mask = 1 << 10;
@@ -151,26 +172,31 @@ public class GameLogic : MonoBehaviour
 				Physics.Raycast (ray, out hit, 100f, mask);
 				float minDistance = float.MaxValue;
 				GameObject closestTurret = null;
-				for (int i = 0; i < turretPositions.transform.childCount; i++) {
+				for (int i = 0; i < turretPositions.transform.childCount; i++) 
+				{
 					GameObject turretPos = turretPositions.transform.GetChild (i).gameObject;
 					float distance = Vector3.Distance (turretPos.transform.position, hit.point);
-					if (distance < minDistance) {
+					if (distance < minDistance) 
+					{
 						minDistance = distance;
 						closestTurret = turretPos;
 					}
 				}
 
-				if (closestTurret != null) {
+				if (closestTurret != null) 
+				{
 					Instantiate (cTurret, closestTurret.transform.position, closestTurret.transform.rotation);
 					Destroy (closestTurret);
-				} else {
+				}
+				else 
+				{
 					print ("Could not place a turret, no more locations available!");
 				}
-
 			}
-			previousTurretButtonPressed = Input.GetKey (KeyCode.V);
+			previousTurretButtonPressed = OVRGamepadController.GPC_GetButton (OVRGamepadController.Button.Y);
 		}
 	}
+
 
 	public void clapAttack(Vector3 position)
 	{
@@ -303,7 +329,8 @@ public class GameLogic : MonoBehaviour
 		}
 	}
 
-	private RaycastHit getRayHit(){
+	private RaycastHit getRayHit()
+	{
 		int mask = 1 << 10;
 		Ray ray = new Ray (thisCamera.transform.position, thisCamera.transform.forward);
 		RaycastHit hit;
