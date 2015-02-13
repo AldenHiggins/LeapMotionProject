@@ -19,7 +19,8 @@ public class GameLogic : MonoBehaviour
 	// TURRETS
 	public GameObject cTurret;
 	public GameObject turretPositions;
-
+	// OIL MATERIALS
+	public GameObject oilSlick;
 	// INTERNAL VARIABLES
 	private NetworkView view;
 	private bool fireballCharged;
@@ -29,6 +30,9 @@ public class GameLogic : MonoBehaviour
 	private Networking network;
 	private PlayerLogic playerLogic;
 	private bool previousTurretButtonPressed;
+
+	// GAME CONTROLLER VARIABLES
+	private bool previousXDown = false;
 
 	// RUNTIME GAME REPRESENTATION
 	private Dictionary<int, GameObject> projectiles;
@@ -100,56 +104,86 @@ public class GameLogic : MonoBehaviour
 			playerCastFireball();
 		}
 
-		//<--------------------- X to create explosion ------------------------------->	
-		if (Input.GetKeyDown(KeyCode.X)) 
-		{
-			int mask = 1 << 10;
-			Ray ray = new Ray(thisCamera.transform.position,thisCamera.transform.forward);
-			RaycastHit hit;
-			Physics.Raycast(ray, out hit, 100f, mask);
-			Instantiate (clapProjectile, hit.point + new Vector3(0.0f, 2.0f, 0.0f), Quaternion.identity);
-		}
+		if(playerLogic.isDefensivePlayer){
+			//<--------------------- CONTROLLER X TO DROP OIL SLICK ----------------------->
 
-	
-		//<--------------------- C to place turret ------------------------------->
-		if (playerLogic.isDefensivePlayer && Input.GetKey(KeyCode.V)) 
-		{
-			// Display prospective turret spots
-			showHideTurretPositions(true);
-		}
-		else if (playerLogic.isDefensivePlayer && !Input.GetKey(KeyCode.V) && previousTurretButtonPressed)
-		{
-			showHideTurretPositions(false);
-
-			int mask = 1 << 10;
-			Ray ray = new Ray(thisCamera.transform.position,thisCamera.transform.forward);
-			RaycastHit hit;
-			Physics.Raycast(ray, out hit, 100f, mask);
-			float minDistance = float.MaxValue;
-			GameObject closestTurret = null;
-			for (int i = 0; i < turretPositions.transform.childCount; i++)
+			//Bomb Projectile
+			bool xPressed = OVRGamepadController.GPC_GetButton(OVRGamepadController.Button.X);
+			
+			// Create projectile
+			if (xPressed && !previousXDown)
 			{
-				GameObject turretPos = turretPositions.transform.GetChild (i).gameObject;
-				float distance = Vector3.Distance(turretPos.transform.position, hit.point);
-				if (distance < minDistance)
+				print("X is pressed");
+				oilSlick = (GameObject) Instantiate (oilSlick);
+			}
+			// Animate projectile in front of player
+			else if (xPressed)
+			{
+				RaycastHit hit = getRayHit();
+				oilSlick.transform.position = hit.point;
+				//oilSlick.transform.rotation Quaternion.identity);
+			}
+			// Fire projectile
+			else if (!xPressed && previousXDown)
+			{
+				RaycastHit hit = getRayHit();
+				oilSlick.transform.position = hit.point;
+				OilSlick oilSlickScript = (OilSlick) oilSlick.GetComponent(typeof(OilSlick));
+				oilSlickScript.enabled = true;
+				print ("placed it at " + hit.point.y);
+			}
+			
+			previousXDown = xPressed;
+
+
+			//<--------------------- X to create explosion ------------------------------->	
+			if (Input.GetKeyDown(KeyCode.X)) 
+			{
+				RaycastHit hit = getRayHit();
+				Instantiate (clapProjectile, hit.point + new Vector3(0.0f, 2.0f, 0.0f), Quaternion.identity);
+			}
+
+		
+			//<--------------------- C to place turret ------------------------------->
+			if (playerLogic.isDefensivePlayer && Input.GetKey(KeyCode.V)) 
+			{
+				// Display prospective turret spots
+				showHideTurretPositions(true);
+			}
+			else if (playerLogic.isDefensivePlayer && !Input.GetKey(KeyCode.V) && previousTurretButtonPressed)
+			{
+				showHideTurretPositions(false);
+
+				int mask = 1 << 10;
+				Ray ray = new Ray(thisCamera.transform.position,thisCamera.transform.forward);
+				RaycastHit hit;
+				Physics.Raycast(ray, out hit, 100f, mask);
+				float minDistance = float.MaxValue;
+				GameObject closestTurret = null;
+				for (int i = 0; i < turretPositions.transform.childCount; i++)
 				{
-					minDistance = distance;
-					closestTurret = turretPos;
+					GameObject turretPos = turretPositions.transform.GetChild (i).gameObject;
+					float distance = Vector3.Distance(turretPos.transform.position, hit.point);
+					if (distance < minDistance)
+					{
+						minDistance = distance;
+						closestTurret = turretPos;
+					}
 				}
-			}
 
-			if (closestTurret != null)
-			{
-				Instantiate (cTurret, closestTurret.transform.position, closestTurret.transform.rotation);
-				Destroy (closestTurret);
-			}
-			else
-			{
-				print ("Could not place a turret, no more locations available!");
-			}
+				if (closestTurret != null)
+				{
+					Instantiate (cTurret, closestTurret.transform.position, closestTurret.transform.rotation);
+					Destroy (closestTurret);
+				}
+				else
+				{
+					print ("Could not place a turret, no more locations available!");
+				}
 
+			}
+			previousTurretButtonPressed = Input.GetKey (KeyCode.V);
 		}
-		previousTurretButtonPressed = Input.GetKey (KeyCode.V);
 	}
 
 	public void clapAttack(Vector3 position)
@@ -281,5 +315,13 @@ public class GameLogic : MonoBehaviour
 			turretPos.transform.GetChild (0).gameObject.renderer.enabled = showOrHide;
 			turretPos.transform.GetChild (1).gameObject.renderer.enabled = showOrHide;
 		}
+	}
+
+	private RaycastHit getRayHit(){
+		int mask = 1 << 10;
+		Ray ray = new Ray (thisCamera.transform.position, thisCamera.transform.forward);
+		RaycastHit hit;
+		Physics.Raycast (ray, out hit, 100f, mask);
+		return hit;
 	}
 }
