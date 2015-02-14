@@ -12,12 +12,13 @@ public class PlayerLogic : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
-		if (isDefensivePlayer) 
+		// TODO: Change this weird logic
+		if (isDefensivePlayer)
 		{
-			transform.position = new Vector3 (55f, 90f, 0f);
-			//transform.localScale += Vector3(0.1,0,0);
+			isDefensivePlayer = false;
+			switchOffensiveDefensive ();
 		}
-			
+					
 		health = 100;
 		energy = 100;
 		energyCounter = 0;
@@ -70,5 +71,29 @@ public class PlayerLogic : MonoBehaviour
 	public int getEnergy()
 	{
 		return energy;
+	}
+
+	public void switchOffensiveDefensive()
+	{
+		if (!isDefensivePlayer)
+		{
+			isDefensivePlayer = true;
+			transform.position = new Vector3 (55f, 90f, 0f);
+			HandController hand = (HandController) transform.GetChild (1).GetChild (1).
+				GetChild (0).gameObject.GetComponent(typeof(HandController));
+			hand.enabled = false;
+			
+			// Make the player not use gravity if they are defensive
+			OVRPlayerController ovrController = (OVRPlayerController) GetComponent(typeof(OVRPlayerController));
+			//			ovrController.changeGravityUse(false);
+		}
+		else
+		{
+			respawn();
+			isDefensivePlayer = false;
+			HandController hand = (HandController) transform.GetChild (1).GetChild (1).
+				GetChild (0).gameObject.GetComponent(typeof(HandController));
+			hand.enabled = true;
+		}
 	}
 }

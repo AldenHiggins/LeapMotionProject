@@ -32,7 +32,7 @@ public class DefensiveAbilities : MonoBehaviour
 		game = (GameLogic) gameObject.GetComponent (typeof(GameLogic));
 	}
 	
-	// Update is called once per frame
+	// Check for input once a frame
 	public void controlCheck ()
 	{
 		oilSlickCheck ();

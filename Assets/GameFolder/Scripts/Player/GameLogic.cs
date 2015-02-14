@@ -25,6 +25,8 @@ public class GameLogic : MonoBehaviour
 	private Networking network;
 	private PlayerLogic playerLogic;
 	private DefensiveAbilities defensiveAbilities;
+	private OffensiveAbilities offensiveAbilities;
+	private bool previousSwitchPressed = false;
 
 	// GAME CONTROLLER VARIABLES
 
@@ -41,7 +43,8 @@ public class GameLogic : MonoBehaviour
 		projectiles = new Dictionary<int, GameObject> ();
 		network = (Networking) gameObject.GetComponent (typeof(Networking));
 		playerLogic = (PlayerLogic) thisPlayer.GetComponent (typeof(PlayerLogic));
-		defensiveAbilities = (DefensiveAbilities)gameObject.GetComponent (typeof(DefensiveAbilities));
+		offensiveAbilities = (OffensiveAbilities) gameObject.GetComponent (typeof(OffensiveAbilities));
+		defensiveAbilities = (DefensiveAbilities) gameObject.GetComponent (typeof(DefensiveAbilities));
 		defensiveAbilities.showHideTurretPositions (false);
 		// Disable leap motion for defensive player
 		if (playerLogic.isDefensivePlayer)
@@ -59,57 +62,32 @@ public class GameLogic : MonoBehaviour
 	// Control loop to check for player input
 	void Update () 
 	{
-		HandModel[] hands = handController.GetAllGraphicsHands ();
-		if (hands.Length == 1) 
+		if (!playerLogic.isDefensivePlayer)
 		{
-			Vector3 direction0 = (hands [0].GetPalmPosition () - handController.transform.position).normalized;
-			Vector3 normal0 = hands [0].GetPalmNormal ().normalized;
-
-			//  Charge a fireball, -.6 or less means the palm is facing the camera
-			if (Vector3.Dot (normal0, thisCamera.transform.forward) < -.6 && !fireballCharged) 
-			{
-				fireballCharged = true;
-			}
-
-			// Fire a fireball, .6 or more means the palm is facing away from the camera
-			if (Vector3.Dot (normal0, thisCamera.transform.forward) > .6 && fireballCharged) 
-			{
-				fireballCharged = false;
-				// First check if the player has enough energy
-				if (playerLogic.getEnergy () > 10) {
-					playerCastFireball ();
-				}
-			
-			}
-		} 
-		else if (hands.Length > 1) 
+			offensiveAbilities.controlCheck();
+		}
+		else
 		{
-			Vector3 direction0 = (hands [0].GetPalmPosition () - handController.transform.position).normalized;
-			Vector3 normal0 = hands [0].GetPalmNormal ().normalized;
-			
-			Vector3 direction1 = (hands [1].GetPalmPosition () - handController.transform.position).normalized;
-			Vector3 normal1 = hands [1].GetPalmNormal ().normalized;
-			
-			//  Check for and perform a clap attack
-			if (Vector3.Dot (normal0, normal1) < -.6) 
-			{
-				Vector3 distance = hands [0].GetPalmPosition () - hands [1].GetPalmPosition ();
-				if (distance.magnitude < .09) 
-				{
-					clapAttack (thisPlayer.transform.position + new Vector3 (0.0f, 0.7f, 0.0f));
-				}
-			}
+			defensiveAbilities.controlCheck();
 		}
 
+
+		// Shared abilities
+		bool switchButtonPressed = OVRGamepadController.GPC_GetButton (OVRGamepadController.Button.Back);
+
+		if (!switchButtonPressed && previousSwitchPressed)
+		{
+			print ("Switching is happening");
+			playerLogic.switchOffensiveDefensive ();
+		}
+
+		previousSwitchPressed = switchButtonPressed;
+
+		// Debugging abilities
 		//<--------------------- Z to fire fireball ------------------------------->	
 		if (Input.GetKeyDown (KeyCode.Z)) 
 		{
 			playerCastFireball ();
-		}
-
-		if (playerLogic.isDefensivePlayer) 
-		{
-			defensiveAbilities.controlCheck();
 		}
 	}
 
@@ -195,7 +173,6 @@ public class GameLogic : MonoBehaviour
 		avatar.hidePlayer ();	
 	}
 
-
 	public Vector3 RandomPointOnPlane()
 	{
 		Vector3 randomPoint;
@@ -229,7 +206,8 @@ public class GameLogic : MonoBehaviour
 		{
 			return goalPosition;
 		}
-		return thisPlayer;
+//		return thisPlayer;
+		return goalPosition;
 	}
 
 	public RaycastHit getRayHit()
