@@ -62,7 +62,9 @@ public class EmitterBehavior : MonoBehaviour
 				Vector3 startPosition = transform.position + velocity * 1;
 				// Apply the correct velocity to the emission
 				velocity *= emissionVelocity;
-				createFireball(startPosition, transform.rotation, velocity, 0);
+				GameObject newFireball = createFireball(startPosition, transform.rotation, velocity, 0);
+				MoveFireball fireball = (MoveFireball) newFireball.GetComponent(typeof(MoveFireball));
+				fireball.setTarget(nearestEnemy.gameObject);
 
 				// Fire three particles for a multi-attack
 				if (multiAttack)
@@ -97,7 +99,7 @@ public class EmitterBehavior : MonoBehaviour
 //		createFireball (position, rotation, velocity, hashValue);
 //	}
 	
-	public void createFireball(Vector3 position, Quaternion rotation, Vector3 velocity, int hashValue)
+	public GameObject createFireball(Vector3 position, Quaternion rotation, Vector3 velocity, int hashValue)
 	{
 		GameObject newFireball = (GameObject) Instantiate(fireBall, position, rotation);
 		MoveFireball moveThis = (MoveFireball) newFireball.GetComponent(typeof(MoveFireball));
@@ -107,6 +109,7 @@ public class EmitterBehavior : MonoBehaviour
 		// Also enable this particle's self destruct feature
 		ProjectileDestroy destroyThis = (ProjectileDestroy) newFireball.GetComponent (typeof(ProjectileDestroy));
 		destroyThis.enabled = true;
+		return newFireball;
 	}
 
 	public void highlight(bool highlightOrNot)

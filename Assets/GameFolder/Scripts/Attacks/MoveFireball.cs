@@ -8,6 +8,8 @@ public class MoveFireball : MonoBehaviour {
 
 	private Vector3 velocity;
 
+	private GameObject target;
+
 	private int hashValue;
 
 	// Use this for initialization
@@ -21,6 +23,14 @@ public class MoveFireball : MonoBehaviour {
 	{
 		if (velocity != null)
 		{
+			if (target != null)
+			{
+				Vector3 toTarget = target.transform.position - transform.position;
+				toTarget.Normalize();
+				toTarget *= .2f;
+				toTarget.y = 0;
+				velocity = toTarget;
+			}
 			gameObject.transform.position += velocity;
 		}
 	}
@@ -93,5 +103,10 @@ public class MoveFireball : MonoBehaviour {
 	public void reverseVelocity()
 	{
 		velocity *= -1.0f;
+	}
+
+	public void setTarget(GameObject newTarget)
+	{
+		target = newTarget;
 	}
 }
