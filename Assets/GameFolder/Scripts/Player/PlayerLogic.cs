@@ -6,6 +6,10 @@ public class PlayerLogic : MonoBehaviour
 	public GameLogic game;
 	public bool isDefensivePlayer;
 	public AudioClip grunt;
+
+	public SliderDemo healthSlider;
+	public SliderDemo manaSlider;
+
 	private int health;
 	private int energy;
 
@@ -29,6 +33,8 @@ public class PlayerLogic : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
+		healthSlider.SetWidgetValue (health / 100.0f);
+		manaSlider.SetWidgetValue (energy / 100.0f);
 		energyCounter++;
 		if (energyCounter > energyRefreshCount)
 		{
@@ -79,6 +85,7 @@ public class PlayerLogic : MonoBehaviour
 		{
 			isDefensivePlayer = true;
 			transform.position = new Vector3 (55f, 90f, 0f);
+			transform.rotation = Quaternion.Euler (0.0f, 260.0f, 0.0f);
 			HandController hand = (HandController) transform.GetChild (1).GetChild (1).
 				GetChild (0).gameObject.GetComponent(typeof(HandController));
 			hand.enabled = false;

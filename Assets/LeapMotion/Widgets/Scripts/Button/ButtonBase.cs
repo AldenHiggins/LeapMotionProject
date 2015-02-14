@@ -1,12 +1,16 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 namespace LMWidgets
 {
-  [RequireComponent(typeof(Rigidbody))]
-  public abstract class ButtonBase : MonoBehaviour
+  public abstract class ButtonBase : LeapPhysicsSpring, BinaryInteractionHandler<bool>
   {
-    public float spring = 1000.0f;
+    // Binary Interaction Handler - Fires when interaction with the widget starts.
+    public event EventHandler<LMWidgets.EventArg<bool>> StartHandler;
+    // Binary Interaction Handler - Fires when interaction with the widget ends.
+    public event EventHandler<LMWidgets.EventArg<bool>> EndHandler;
+
     public float triggerDistance = 0.025f;
     public float cushionThickness = 0.005f;
 
@@ -14,98 +18,102 @@ namespace LMWidgets
     protected float scaled_trigger_distance_;
     protected float scaled_cushion_thickness_;
 
-    protected bool is_pressed_;
     protected float min_distance_;
     protected float max_distance_;
 
-    public abstract void ButtonReleased();
-    public abstract void ButtonPressed();
+    protected float m_localTriggerDistance;
+    protected float m_localCushionThickness;
+    protected bool m_isPressed = false;
 
-    public float GetPercent()
+    protected virtual void buttonReleased ()
     {
-      return Mathf.Clamp(transform.localPosition.z / scaled_trigger_distance_, 0.0f, 1.0f);
+      FireButtonStart ();
     }
 
-    public Vector3 GetPosition()
+    protected virtual void buttonPressed ()
+    {
+      FireButtonEnd ();
+    }
+
+    protected void FireButtonStart (bool value = true)
+    {
+      EventHandler<LMWidgets.EventArg<bool>> handler = StartHandler;
+      if (handler != null) {
+        handler (this, new LMWidgets.EventArg<bool> (value));
+      }
+    }
+
+    protected void FireButtonEnd (bool value = false)
+    {
+      EventHandler<LMWidgets.EventArg<bool>> handler = EndHandler;
+      if (handler != null) {
+        handler (this, new LMWidgets.EventArg<bool> (value));
+      }
+    }
+
+
+    /// <summary>
+    /// Returns the fraction of position of the button between rest and trigger. 0.0 = At Rest. 1.0 = At Triggered Distance.
+    /// </summary>
+    /// <returns>fraction</returns>
+    public float GetFraction()
     {
       if (triggerDistance == 0.0f)
-        return Vector3.zero;
-
-      Vector3 position = transform.localPosition;
-      position.z = GetPercent() * scaled_trigger_distance_;
-      return position;
-    }
-
-    protected void SetMinDistance(float distance)
-    {
-      min_distance_ = distance;
-    }
-
-    protected void SetMaxDistance(float distance)
-    {
-      max_distance_ = distance;
-    }
-
-    protected virtual void ApplyConstraints()
-    {
-      Vector3 local_position = transform.localPosition;
-      local_position.x = 0.0f;
-      local_position.y = 0.0f;
-      local_position.z = Mathf.Clamp(local_position.z, min_distance_, max_distance_);
-      transform.localPosition = local_position;
-    }
-
-    protected void ApplySpring()
-    {
-      rigidbody.AddRelativeForce(new Vector3(0.0f, 0.0f, -scaled_spring_ * (transform.localPosition.z)));
-    }
-
-    protected void CheckTrigger()
-    {
-      if (is_pressed_ == false)
+        return 0.0f;
+      else
       {
-        if (transform.localPosition.z > scaled_trigger_distance_)
-        {
-          is_pressed_ = true;
-          ButtonPressed();
-        }
-      }
-      else if (is_pressed_ == true)
-      {
-        if (transform.localPosition.z < (scaled_trigger_distance_- scaled_cushion_thickness_))
-        {
-          is_pressed_ = false;
-          ButtonReleased();
-        }
+        float fraction = transform.localPosition.z / m_localTriggerDistance;
+        return Mathf.Clamp(fraction, 0.0f, 1.0f);
       }
     }
 
-    private void ScaleProperties()
+    /// <summary>
+    ///  Constrain the button to the z-axis
+    /// </summary>
+    protected override void ApplyConstraints()
+    {
+      Vector3 localPosition = transform.localPosition;
+      localPosition.x = 0.0f;
+      localPosition.y = 0.0f;
+      localPosition.z = Mathf.Max(localPosition.z, 0.0f);
+      transform.localPosition = localPosition;
+    }
+
+    /// <summary>
+    /// Check if the button is being pressed or not
+    /// </summary>
+    private void CheckTrigger()
     {
       float scale = transform.lossyScale.z;
-      scaled_spring_ = spring * scale;
-      scaled_trigger_distance_ = triggerDistance / scale;
-      scaled_cushion_thickness_ = Mathf.Clamp(cushionThickness / scale, 0.0f, scaled_trigger_distance_ - 0.001f);
-    }
-
-    public virtual void Awake()
-    {
-      if (GetComponent<Collider>() == null)
+      m_localTriggerDistance = triggerDistance / scale;
+      m_localCushionThickness = Mathf.Clamp(cushionThickness / scale, 0.0f, m_localTriggerDistance - 0.001f);
+      if (m_isPressed == false)
       {
-        Debug.LogWarning("This Widget lacks a collider. Will not function as expected");
+        if (transform.localPosition.z > m_localTriggerDistance)
+        {
+          m_isPressed = true;
+          buttonPressed();
+          FireButtonStart();
+        }
       }
-      is_pressed_ = false;
-      cushionThickness = Mathf.Clamp(cushionThickness, 0.0f, triggerDistance - 0.001f);
-      min_distance_ = 0.0f;
-      max_distance_ = float.MaxValue;
-      ScaleProperties();
+      else if (m_isPressed == true)
+      {
+        if (transform.localPosition.z < (m_localTriggerDistance - m_localCushionThickness))
+        {
+          m_isPressed = false;
+          buttonReleased();
+          FireButtonEnd();
+        }
+      }
     }
 
-    public virtual void FixedUpdate()
+    protected virtual void Start()
     {
-      ScaleProperties();
-      ApplySpring();
-      ApplyConstraints();
+      cushionThickness = Mathf.Clamp(cushionThickness, 0.0f, triggerDistance - 0.001f);
+    }
+
+    protected virtual void Update()
+    {
       CheckTrigger();
     }
   }

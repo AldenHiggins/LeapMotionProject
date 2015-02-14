@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -13,6 +14,7 @@ public class GameLogic : MonoBehaviour
 	public Vector3 normal = new Vector3(0f,1f,0f);
 	public float radius = 24.0f;
 	public HandController handController = null;
+	public int startingPlayerCurrency;
 	// PLAYER ATTACKS
 	public GameObject fireBall;
 	public GameObject clapProjectile;
@@ -27,6 +29,9 @@ public class GameLogic : MonoBehaviour
 	private DefensiveAbilities defensiveAbilities;
 	private OffensiveAbilities offensiveAbilities;
 	private bool previousSwitchPressed = false;
+	// PLAYER CURRENCY
+	public Text currencyText;
+	private int currentPlayerCurrency;
 
 	// GAME CONTROLLER VARIABLES
 
@@ -36,6 +41,7 @@ public class GameLogic : MonoBehaviour
 	// Initialize variables
 	void Start () 
 	{
+		currentPlayerCurrency = startingPlayerCurrency;
 		view = gameObject.networkView;
 		fireballCharged = false;
 		isBlocking = false;
@@ -80,6 +86,9 @@ public class GameLogic : MonoBehaviour
 			print ("Switching is happening");
 			playerLogic.switchOffensiveDefensive ();
 		}
+
+		// Update current currency gui value
+		currencyText.text = "" + currentPlayerCurrency;
 
 		previousSwitchPressed = switchButtonPressed;
 
@@ -219,5 +228,17 @@ public class GameLogic : MonoBehaviour
 		RaycastHit hit;
 		Physics.Raycast (ray, out hit, 100f, mask);
 		return hit;
+	}
+
+
+	// CURRENCY FUNCTIONALITY
+	public int getCurrencyValue()
+	{
+		return currentPlayerCurrency;
+	}
+
+	public void changeCurrency(int currencyChange)
+	{
+		currentPlayerCurrency += currencyChange;
 	}
 }

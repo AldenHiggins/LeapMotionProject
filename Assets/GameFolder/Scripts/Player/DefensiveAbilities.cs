@@ -128,6 +128,10 @@ public class DefensiveAbilities : MonoBehaviour
 		} 
 		else if (!turretPlaceButtonPressed && previousTurretButtonPressed) 
 		{
+			if (game.getCurrencyValue() < 500)
+				return;
+			game.changeCurrency(-500);
+
 			showHideTurretPositions (false);
 			
 			RaycastHit hit = game.getRayHit();

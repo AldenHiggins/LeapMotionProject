@@ -5,22 +5,31 @@ using LMWidgets;
 
 public class SliderDemo : SliderBase 
 {
+  // ASSUME: Active Bar is a transform-sibling of SliderDemo
   public GameObject activeBar = null;
+  // ASSUME: topLayer, midLayer & botLayer are transform-children of SliderDemo
   public SliderDemoGraphics topLayer = null;
   public SliderDemoGraphics midLayer = null;
   public SliderDemoGraphics botLayer = null;
   public GameObject dot = null;
   public int numberOfDots = 0;
-
+  
+  public Color BotLayerPressedColor = new Color(0.0f, 1.0f, 1.0f, 1.0f);
+  public Color BotLayerReleasedColor = new Color(0.0f, 0.25f, 0.25f, 0.5f);
+  public Color DotsOnColor = new Color(0.0f, 1.0f, 1.0f, 1.0f);
+  public Color DotsOffColor = new Color(0.0f, 0.25f, 0.25f, 0.5f);
+	
   private List<GameObject> dots = new List<GameObject>();
 
-  public override void SliderPressed()
+  protected override void sliderPressed()
   {
+    base.sliderPressed();
     PressedGraphics();
   }
 
-  public override void SliderReleased()
+  protected override void sliderReleased()
   {
+    base.sliderReleased();
     ReleasedGraphics();
   }
 
@@ -28,25 +37,34 @@ public class SliderDemo : SliderBase
   {
     topLayer.SetBloomGain(5.0f);
     botLayer.SetBloomGain(4.0f);
-    botLayer.SetColor(new Color(0.0f, 1.0f, 1.0f, 1.0f));
+	botLayer.SetColor(BotLayerPressedColor);
   }
 
   private void ReleasedGraphics()
   {
     topLayer.SetBloomGain(2.0f);
     botLayer.SetBloomGain(2.0f);
-    botLayer.SetColor(new Color(0.0f, 0.25f, 0.25f, 0.5f));
+	botLayer.SetColor(BotLayerReleasedColor);
   }
 
   // Updates the slider handle graphics
   private void UpdateGraphics()
   {
-    Vector3 position = GetPosition();
-    position.z -= (scaled_trigger_distance_ + 0.01f);
+    float handleFraction = GetHandleFraction();
+    Vector3 topPosition = transform.localPosition;
+    topPosition.x = 0f;
+    topPosition.y = 0f;
+    topPosition.z -= (1.0f - handleFraction) * 0.25f;
+    topPosition.z = Mathf.Min(topPosition.z, -0.003f); // -0.003 is so midLayer will never intersect with top or bot layer
+    topLayer.transform.localPosition = topPosition;
 
-    topLayer.transform.localPosition = position - new Vector3(0.0f, 0.0f, 0.01f + 0.25f * (1 - GetPercent()));
-    botLayer.transform.localPosition = position;
-    midLayer.transform.localPosition = (topLayer.transform.localPosition + botLayer.transform.localPosition) / 2.0f;
+    Vector3 botPosition = transform.localPosition;
+    botPosition.x = 0f;
+    topPosition.y = 0f;
+    botPosition.z = -0.001f;
+    botLayer.transform.localPosition = botPosition;
+
+    midLayer.transform.localPosition = (topPosition + botPosition) / 2.0f;
 
     if (activeBar)
     {
@@ -73,7 +91,7 @@ public class SliderDemo : SliderBase
       renderer.material.SetFloat("_Gain", 3.0f);
     }
 
-    if (GetPercent() > 99.0f)
+    if (GetSliderFraction() > 99.0f)
     {
       Renderer[] upper_limit_renderers = upperLimit.GetComponentsInChildren<Renderer>();
       foreach (Renderer renderer in upper_limit_renderers)
@@ -101,7 +119,7 @@ public class SliderDemo : SliderBase
         Renderer[] renderers = dots[i].GetComponentsInChildren<Renderer>();
         foreach (Renderer renderer in renderers)
         {
-          renderer.material.color = new Color(0.0f, 1.0f, 1.0f, 1.0f);
+		  renderer.material.color = DotsOnColor;
           renderer.material.SetFloat("_Gain", 3.0f);
         }
       }
@@ -110,14 +128,14 @@ public class SliderDemo : SliderBase
         Renderer[] renderers = dots[i].GetComponentsInChildren<Renderer>();
         foreach (Renderer renderer in renderers)
         {
-          renderer.material.color = new Color(0.0f, 0.25f, 0.25f, 0.5f);
+          renderer.material.color = DotsOffColor;
           renderer.material.SetFloat("_Gain", 1.0f);
         }
       }
     }
   }
 
-  public override void Awake()
+  protected override void Awake()
   {
     base.Awake();
     // Initiate the graphics for the handle
@@ -135,7 +153,8 @@ public class SliderDemo : SliderBase
       {
         GameObject new_dot = Instantiate(dot) as GameObject;
         new_dot.transform.parent = transform;
-        new_dot.transform.localPosition = new Vector3(x, 1.0f, -0.1f);
+        new_dot.transform.localPosition = new Vector3(x, 1.0f, m_localTriggerDistance);
+        new_dot.transform.localRotation = dot.transform.localRotation;
         new_dot.transform.localScale = Vector3.one;
         new_dot.transform.parent = transform.parent;
         dots.Add(new_dot);
@@ -151,7 +170,7 @@ public class SliderDemo : SliderBase
     }
   }
 
-  public override void FixedUpdate()
+  protected override void FixedUpdate()
   {
     base.FixedUpdate();
     UpdateGraphics();

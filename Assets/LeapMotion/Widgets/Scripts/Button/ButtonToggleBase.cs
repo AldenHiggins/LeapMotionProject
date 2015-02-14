@@ -3,41 +3,71 @@ using System.Collections;
 
 namespace LMWidgets
 {
-  public abstract class ButtonToggleBase : ButtonBase
-  {
-    public float onDistance = 0.0f;
-    public float offDistance = 0.0f;
+  public abstract class ButtonToggleBase : ButtonBase, BinaryInteractionHandler<bool>, IDataBoundWidget<ButtonToggleBase, bool> {
+    protected DataBinderToggle m_dataBinder;
 
-    protected bool toggle_state_;
+    protected bool m_toggleState = true;
 
     public abstract void ButtonTurnsOn();
     public abstract void ButtonTurnsOff();
 
-    public override void ButtonReleased()
-    {
-    }
 
-    public override void ButtonPressed()
-    {
-      if (toggle_state_ == false)
-      {
-        ButtonTurnsOn();
-        SetMinDistance(onDistance);
-        toggle_state_ = !toggle_state_;
-      } 
-      else
-      {
-        ButtonTurnsOff();
-        SetMinDistance(offDistance);
-        toggle_state_ = !toggle_state_;
+    protected override void Start() {
+      if ( m_dataBinder != null ) {
+        setButtonState(m_dataBinder.GetCurrentData(), true); // Initilize widget value
+      }
+      else {
+        setButtonState(false, true);
       }
     }
 
-    public override void Awake()
+    public void SetWidgetValue(bool value) {
+      if ( State == LeapPhysicsState.Interacting ) { return; } // Don't worry about state changes during interaction.
+      setButtonState (value);
+    }
+
+    // Stop listening to any previous data binder and start listening to the new one.
+    public void RegisterDataBinder(LMWidgets.DataBinder<LMWidgets.ButtonToggleBase, bool> dataBinder) {
+      if (dataBinder == null) {
+        return;
+      }
+      
+      UnregisterDataBinder ();
+      m_dataBinder = dataBinder as DataBinderToggle;
+      setButtonState(m_dataBinder.GetCurrentData());
+    }
+    
+    // Stop listening to any previous data binder.
+    public void UnregisterDataBinder() {
+      m_dataBinder = null;
+    }
+
+    protected virtual void setButtonState(bool toggleState, bool force = false) {
+      if ( toggleState == m_toggleState && !force ) { return; } // Don't do anything if there's no change
+      m_toggleState = toggleState;
+      if (m_toggleState == true)
+        ButtonTurnsOn();
+      else
+        ButtonTurnsOff();
+    }
+
+    protected override void buttonReleased()
     {
-      base.Awake();
-      onDistance = Mathf.Min(onDistance, triggerDistance - cushionThickness - 0.001f);
-      offDistance = Mathf.Min(offDistance, triggerDistance - cushionThickness - 0.001f);
+      base.FireButtonEnd(m_toggleState);
+      if ( m_dataBinder != null ) {
+        setButtonState(m_dataBinder.GetCurrentData()); // Update once we're done interacting
+      }
+    }
+
+    protected override void buttonPressed()
+    {
+      if (m_toggleState == false)
+        ButtonTurnsOn();
+      else
+        ButtonTurnsOff();
+      m_toggleState = !m_toggleState;
+      base.FireButtonStart(m_toggleState);
+      if ( m_dataBinder != null ) { m_dataBinder.SetCurrentData(m_toggleState); } // Update externally linked data
     }
   }
 }

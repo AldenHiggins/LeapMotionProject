@@ -6,6 +6,10 @@ public class MoveFireball : MonoBehaviour {
 
 	public GameObject explosion;
 
+	public int damage;
+
+	public bool shouldMoveEnemies;
+
 	private Vector3 velocity;
 
 	private GameObject target;
@@ -86,10 +90,10 @@ public class MoveFireball : MonoBehaviour {
 		// Collide with an enemy
 		else if (enemy != null)
 		{
-			print ("Hit this!");
-			print (velocity);
-			enemy.applyForce(velocity * 20 + new Vector3(0.0f, 10.0f, 0.0f));
-			enemy.dealDamage(10);
+			if (shouldMoveEnemies)
+				enemy.applyForce(velocity * 20 + new Vector3(0.0f, 10.0f, 0.0f));
+
+			enemy.dealDamage(damage);
 			Instantiate (explosion, transform.position, Quaternion.identity);
 			Destroy(gameObject);
 		}
