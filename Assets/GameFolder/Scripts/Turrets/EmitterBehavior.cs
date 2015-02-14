@@ -64,7 +64,7 @@ public class EmitterBehavior : MonoBehaviour
 				velocity *= emissionVelocity;
 				createFireball(startPosition, transform.rotation, velocity, 0);
 
-				// Temporary fire three particles
+				// Fire three particles for a multi-attack
 				if (multiAttack)
 				{
 					Quaternion newRotation = transform.rotation * Quaternion.Euler (15 * Vector3.up);
@@ -82,15 +82,13 @@ public class EmitterBehavior : MonoBehaviour
 					createFireball(startPosition, Quaternion.identity, secondVelocity, 0);
 //					createFireball(startPosition, Quaternion.AngleAxis(yRotation + 15, Vector3.up), velocity, 0);
 				}
-				//			view.RPC ("makeFireballNetwork", RPCMode.Others, new Vector3(-4.6f, 76.75f, 1.8f), Quaternion.identity, new Vector3(0.0f, 0.0f, -0.1f), hash);
+				//view.RPC ("makeFireballNetwork", RPCMode.Others, new Vector3(-4.6f, 76.75f, 1.8f), Quaternion.identity, new Vector3(0.0f, 0.0f, -0.1f), hash);
 			}
 		}
 		else
 		{
 			transform.rotation = Quaternion.identity;
 		}
-
-
 	}
 	
 //	[RPC]
@@ -109,5 +107,19 @@ public class EmitterBehavior : MonoBehaviour
 		// Also enable this particle's self destruct feature
 		ProjectileDestroy destroyThis = (ProjectileDestroy) newFireball.GetComponent (typeof(ProjectileDestroy));
 		destroyThis.enabled = true;
+	}
+
+	public void highlight(bool highlightOrNot)
+	{
+		// If highlighted show attack radius sphere
+		if (highlightOrNot)
+		{
+			gameObject.transform.GetChild (0).gameObject.renderer.enabled = true;
+		}
+		// Else hide attack radius sphere
+		else
+		{
+			gameObject.transform.GetChild (0).gameObject.renderer.enabled = false;
+		}
 	}
 }
