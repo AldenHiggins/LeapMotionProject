@@ -8,6 +8,8 @@ public class BasicEnemyController : MonoBehaviour
 	public int startingHealth;
 	public float attackRadius;
 	public int attackDamage;
+	public int currencyOnKill;
+	public int livesTakenOnGoalReached;
 
 	private Vector3 velocity;
 	private Animator anim;
@@ -139,6 +141,7 @@ public class BasicEnemyController : MonoBehaviour
 
 	IEnumerator kill()
 	{
+		game.changeCurrency (currencyOnKill);
 		anim.Play ("death");
 		while(!anim.GetCurrentAnimatorStateInfo(0).IsName("death"))
 		{
