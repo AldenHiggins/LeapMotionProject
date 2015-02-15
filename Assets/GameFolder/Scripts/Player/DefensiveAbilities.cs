@@ -13,6 +13,8 @@ public class DefensiveAbilities : MonoBehaviour
 	public GameObject turretTypes;
 	// OIL MATERIALS
 	public GameObject oilSlick;
+	// TURRET COST
+	public int turretCost;
 	// GAME CONTROLLER VARIABLES
 	private bool previousOilButtonPressed = false;
 	private bool previousTurretButtonPressed = false;
@@ -116,6 +118,8 @@ public class DefensiveAbilities : MonoBehaviour
 		previousAoEButtonPressed = explosionButtonPressed;
 	}
 
+
+	private GameObject highlightTurret;
 	void placeTurretCheck()
 	{
 		//<--------------------- Y to place turret ------------------------------->
@@ -125,28 +129,30 @@ public class DefensiveAbilities : MonoBehaviour
 		{
 			// Display prospective turret spots
 			showHideTurretPositions (true);
+
+			if (highlightTurret != null) 
+			{
+				TurretPlacementSpot placement = (TurretPlacementSpot) highlightTurret.GetComponent(typeof(TurretPlacementSpot));
+				placement.deSelect();
+			}
+
+			highlightTurret = getClosestTurret();
+			
+			if (highlightTurret != null) 
+			{
+				TurretPlacementSpot placement = (TurretPlacementSpot) highlightTurret.GetComponent(typeof(TurretPlacementSpot));
+				placement.select();
+			}
 		} 
 		else if (!turretPlaceButtonPressed && previousTurretButtonPressed) 
 		{
-			if (game.getCurrencyValue() < 500)
-				return;
-			game.changeCurrency(-500);
-
 			showHideTurretPositions (false);
+
+			if (game.getCurrencyValue() < turretCost)
+				return;
+			game.changeCurrency(-turretCost);
 			
-			RaycastHit hit = game.getRayHit();
-			float minDistance = float.MaxValue;
-			GameObject closestTurret = null;
-			for (int i = 0; i < turretPlacementPositions.transform.childCount; i++) 
-			{
-				GameObject turretPos = turretPlacementPositions.transform.GetChild (i).gameObject;
-				float distance = Vector3.Distance (turretPos.transform.position, hit.point);
-				if (distance < minDistance) 
-				{
-					minDistance = distance;
-					closestTurret = turretPos;
-				}
-			}
+			GameObject closestTurret = getClosestTurret();
 			
 			if (closestTurret != null) 
 			{
@@ -259,6 +265,25 @@ public class DefensiveAbilities : MonoBehaviour
 			turretPos.transform.GetChild (0).gameObject.renderer.enabled = showOrHide;
 			turretPos.transform.GetChild (1).gameObject.renderer.enabled = showOrHide;
 		}
+	}
+
+	public GameObject getClosestTurret()
+	{
+		RaycastHit hit = game.getRayHit();
+		float minDistance = float.MaxValue;
+		GameObject closestTurret = null;
+		for (int i = 0; i < turretPlacementPositions.transform.childCount; i++) 
+		{
+			GameObject turretPos = turretPlacementPositions.transform.GetChild (i).gameObject;
+			float distance = Vector3.Distance (turretPos.transform.position, hit.point);
+			if (distance < minDistance) 
+			{
+				minDistance = distance;
+				closestTurret = turretPos;
+			}
+		}
+
+		return closestTurret;
 	}
 }
 
