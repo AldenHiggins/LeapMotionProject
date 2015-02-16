@@ -101,11 +101,9 @@ public class BasicEnemyController : MonoBehaviour
 		// TEMP TEMP TEMP check remove after forces can affect enemies
 		if (anim == null)
 			return;
-		print ("Dealing damage, current health: " + health);
 		health -= damage;
 		if (health > 0)
 		{
-			print ("Wounding by : " + damage + " amount");	
 			anim.Play ("wound");
 		}
 		else

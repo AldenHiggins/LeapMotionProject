@@ -66,7 +66,7 @@ public class OffensiveAbilities : MonoBehaviour
 					game.playerCastFireball ();
 				}
 			}
-			print( checkFist (hands[0].GetLeapHand()));
+//			print( checkFist (hands[0].GetLeapHand()));
 		} else if (hands.Length > 1) {
 			Vector3 direction0 = (hands [0].GetPalmPosition () - handController.transform.position).normalized;
 			Vector3 normal0 = hands [0].GetPalmNormal ().normalized;
@@ -97,7 +97,7 @@ public class OffensiveAbilities : MonoBehaviour
 			sum += dProxiInter;
 		}
 		sum = sum/10;
-		print("sum = " + sum);
+//		print("sum = " + sum);
 		if(sum <= minVal && getExtendedFingers(hand)== 0){
 			return true;
 		}else{

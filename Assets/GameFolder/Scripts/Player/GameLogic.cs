@@ -18,6 +18,15 @@ public class GameLogic : MonoBehaviour
 	// PLAYER ATTACKS
 	public GameObject fireBall;
 	public GameObject clapProjectile;
+	// LEVEL ROUNDS
+	public int[] rounds;
+	public GameObject endRoundScreen;
+	private int currentRound = 0;
+	public GameObject winScreen;
+	public Text roundText;
+	// ENEMY SPAWNERS
+	public GameObject enemySpawners;
+	public GameObject spawnedEnemies;
 	// INTERNAL VARIABLES
 	private NetworkView view;
 	private bool fireballCharged;
@@ -63,6 +72,8 @@ public class GameLogic : MonoBehaviour
 			OVRPlayerController ovrController = (OVRPlayerController) thisPlayer.GetComponent(typeof(OVRPlayerController));
 //			ovrController.changeGravityUse(false);
 		}
+		// Start up the round timer
+		StartCoroutine (roundFunction());
 	}
 
 	// Control loop to check for player input
@@ -97,6 +108,64 @@ public class GameLogic : MonoBehaviour
 		if (Input.GetKeyDown (KeyCode.Z)) 
 		{
 			playerCastFireball ();
+		}		
+	}
+
+	IEnumerator roundFunction()
+	{
+		for (int i = 0; i < rounds.GetLength(0); i++)
+		{
+			roundText.text = "ROUND " + (i + 1);
+			enableDisableSpawners(true);
+
+
+			yield return new WaitForSeconds(rounds[i]);
+			print ("Round : " + i + " ended");
+			enableDisableSpawners(false);
+
+//			print ("Outside loop: " + spawnedEnemies.transform.childCount);
+			// Wait for all the enemies to be cleared
+			while (spawnedEnemies.transform.childCount > 0)
+			{
+//				print ("Inside loop: " + spawnedEnemies.transform.childCount);
+				yield return new WaitForSeconds(.3f);
+			}
+
+			if (i == rounds.GetLength(0) - 1)
+			{
+				// Display end game screen
+				winScreen.SetActive(true);
+				yield break;
+			}
+
+			endRoundScreen.SetActive(true);
+
+			// Now wait for the player to press space
+			while (!Input.GetKeyDown (KeyCode.V))
+			{
+				yield return new WaitForSeconds(.2f);
+			}
+
+			endRoundScreen.SetActive(false);
+		}
+
+		print ("Finished all rounds!!!");
+	}
+
+	public void enableDisableSpawners(bool enableOrDisable)
+	{
+		for (int i = 0; i < enemySpawners.transform.childCount; i++)
+		{
+			GameObject spawner = enemySpawners.transform.GetChild(i).gameObject;
+			EnemySpawner spawnScript = (EnemySpawner) spawner.GetComponent(typeof(EnemySpawner));
+			if (enableOrDisable)
+			{
+				spawnScript.startSpawning();
+			}
+			else
+			{
+				spawnScript.stopSpawning();
+			}
 		}
 	}
 
