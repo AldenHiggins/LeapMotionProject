@@ -27,6 +27,7 @@ public class GameLogic : MonoBehaviour
 	// ENEMY SPAWNERS
 	public GameObject enemySpawners;
 	public GameObject spawnedEnemies;
+	public GameObject clapFireball;
 	// INTERNAL VARIABLES
 	private NetworkView view;
 	private bool fireballCharged;
@@ -310,4 +311,22 @@ public class GameLogic : MonoBehaviour
 	{
 		currentPlayerCurrency += currencyChange;
 	}
+
+	public void fistProjectile(){
+
+		// Make sure the fireball spawns in front of the player at a reasonable distance
+		Vector3 spawnPosition = thisCamera.transform.position;
+		spawnPosition += new Vector3(thisCamera.transform.forward.normalized.x * .8f, thisCamera.transform.forward.normalized.y * .8f, thisCamera.transform.forward.normalized.z * .8f);
+		// Scale the fireball's velocity
+		Vector3 startingVelocity = thisCamera.transform.forward.normalized;
+		startingVelocity *= .2f;
+
+		GameObject newAttack = (GameObject) Instantiate(clapFireball, spawnPosition, Quaternion.identity);
+		MoveFireball moveThis = (MoveFireball) newAttack.GetComponent(typeof(MoveFireball));
+		moveThis.setVelocity(startingVelocity);
+		newAttack.renderer.enabled = true;
+
+			
+	}
+
 }
