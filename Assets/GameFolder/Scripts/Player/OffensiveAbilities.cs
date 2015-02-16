@@ -32,6 +32,7 @@ public class OffensiveAbilities : MonoBehaviour
 	// Check for input once a frame
 	public void controlCheck ()
 	{
+		// Code for Psychic (spin) gesture
 		if(controller.IsConnected) //controller is a Controller object
 		{
 			Frame currentFrame = controller.Frame(); //The latest frame
@@ -62,6 +63,7 @@ public class OffensiveAbilities : MonoBehaviour
 				isCircle = false;
 			}
 		}
+
 
 		HandModel[] hands = handController.GetAllGraphicsHands ();
 		if (hands.Length == 1) {
@@ -104,6 +106,11 @@ public class OffensiveAbilities : MonoBehaviour
 				if (distance.magnitude < .09) {
 					game.clapAttack (playerLogic.transform.position + new Vector3 (0.0f, 0.7f, 0.0f));
 				}
+			}
+
+			// Check for and perform push away attack
+			if (Mathf.Abs(Vector3.Dot (normal0, normal1)) > .8) {
+				// Do push attack
 			}
 		}
 	}
