@@ -13,6 +13,7 @@ public class OffensiveAbilities : MonoBehaviour
 	// INTERNAL VARIABLES
 	private Controller controller;
 	private bool fireballCharged = false;
+	private bool handWasFist = false;
 	private float minVal = 0.5f;
 
 	// Use this for initialization
@@ -68,7 +69,16 @@ public class OffensiveAbilities : MonoBehaviour
 					game.playerCastFireball ();
 				}
 			}
-			print( checkFist (hands[0].GetLeapHand()));
+
+			bool handIsFist = checkFist (hands[0].GetLeapHand());
+			if (handIsFist && !handWasFist)
+			{
+				game.fistProjectile();
+				handWasFist = true;
+			}
+
+			handWasFist = false;
+
 		} else if (hands.Length > 1) {
 			Vector3 direction0 = (hands [0].GetPalmPosition () - handController.transform.position).normalized;
 			Vector3 normal0 = hands [0].GetPalmNormal ().normalized;
@@ -120,34 +130,5 @@ public class OffensiveAbilities : MonoBehaviour
 		}
 		return extendedFingers;
 	}
-//		private int getExtendedFingers(Hand hand){
-//			int extendedFingers = 0;
-//			for(int i=0;i <hand.fingers.length;i++){
-//			{
-//				Finger finger = hand.Fingers[i];
-//				if(finger.IsExtended) extendedFingers++;
-//			}
-//			return extendedFingers;
-//		}
-		
-//		public bool checkFist(Hand h)
-//			for(int i=0;i<hand.fingers.length;i++){
-//				Finger finger =
-//				Vector meta = finger.bones[0].direction();
-//				Vector proxi = finger.bones[1].direction();
-//				Vector inter = finger.bones[2].direction();
-//				float dMetaProxi = meta.Dot(proxi);
-//					float dProxiInter = proxi.Dot(inter);
-//				sum += dProxiInter
-//			}
-//			sum = sum/10;
-//			
-//			if(sum <= minVal && getExtendedFingers(hand)==0){
-//				return true;
-//			}else{
-				//				return false;}
-				//}
 
-
-
-		}
+}
