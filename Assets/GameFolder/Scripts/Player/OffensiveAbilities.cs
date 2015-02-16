@@ -11,6 +11,7 @@ public class OffensiveAbilities : MonoBehaviour
 	// GAME LOGIC
 	private GameLogic game;
 	// INTERNAL VARIABLES
+	private Controller controller;
 	private bool fireballCharged = false;
 	private bool handWasFist = false;
 	private float minVal = 0.5f;
@@ -18,12 +19,36 @@ public class OffensiveAbilities : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-			game = (GameLogic)GetComponent (typeof(GameLogic));
+		game = (GameLogic)GetComponent (typeof(GameLogic));
+		controller = new Controller();
+		controller.EnableGesture(Gesture.GestureType.TYPE_CIRCLE);
 	}
 
 	// Check for input once a frame
 	public void controlCheck ()
 	{
+		if(controller.IsConnected) //controller is a Controller object
+		{
+			Frame currentFrame = controller.Frame(); //The latest frame
+			Frame previousFrame = controller.Frame(1); //The previous frame
+			
+			GestureList gesturesInFrame = currentFrame.Gestures(previousFrame);
+			
+			if (!currentFrame.Gestures(previousFrame).IsEmpty) 
+			{
+				for(int i = 0; i < currentFrame.Gestures(previousFrame).Count; i++) 
+				{
+					Gesture gesture = currentFrame.Gestures(previousFrame)[i];
+					
+					if(gesture.Type == Gesture.GestureType.TYPE_CIRCLE) 
+					{
+						CircleGesture circleGesture = new CircleGesture(gesture);
+						Debug.Log("Psychic Gesture Detected!!!");
+					}
+				}
+			}
+		}
+
 		HandModel[] hands = handController.GetAllGraphicsHands ();
 		if (hands.Length == 1) {
 			Vector3 direction0 = (hands [0].GetPalmPosition () - handController.transform.position).normalized;
