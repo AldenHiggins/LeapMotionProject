@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class GoalPosition : MonoBehaviour 
@@ -6,13 +7,16 @@ public class GoalPosition : MonoBehaviour
 	public GameObject monsterReachGoalParticle;
 	public GameObject playerHud;
 	public GameObject gameOver;
+	public Text livesText;
 	public int playerLives;
 
+	private int startingLives;
 
 	// Use this for initialization
 	void Start ()
 	{
-		
+		startingLives = playerLives;
+		livesText.text = "Lives: " + playerLives + " of " + playerLives;
 	}
 	
 	// Update is called once per frame
@@ -35,6 +39,11 @@ public class GoalPosition : MonoBehaviour
 			{
 				playerHud.SetActive(false);
 				gameOver.SetActive(true);
+			}
+			// Update the life counter
+			else
+			{
+				livesText.text = "Lives: " + playerLives + " of " + startingLives;
 			}
 		}
 	}
