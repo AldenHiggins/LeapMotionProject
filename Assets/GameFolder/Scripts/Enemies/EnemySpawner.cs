@@ -31,14 +31,19 @@ public class EnemySpawner : MonoBehaviour
 	public void startSpawning()
 	{
 		spawning = true;
+		StartCoroutine (spawnLoop ());
+
 	}
 
 	IEnumerator spawnLoop()
 	{
 		while(true)
 		{
+			print("Waiting to spawn");
+			print ("Value of spawning: " + spawning);
 			if (spawning)
 			{
+				print ("Spawning in the spawner script");
 				GameObject monster = (GameObject) Instantiate (spawnThis, transform.position, Quaternion.identity);
 				monster.transform.parent = spawnedEnemyList.transform;
 				BasicEnemyController enemy = (BasicEnemyController) monster.GetComponent(typeof(BasicEnemyController));
