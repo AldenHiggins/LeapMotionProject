@@ -10,9 +10,6 @@ public class GameLogic : MonoBehaviour
 	public GameObject thisPlayer;
 	public GameObject thisCamera;
 	public GameObject goalPosition;
-	public Vector3 position = new Vector3 (0f,1f,-5.0f);
-	public Vector3 normal = new Vector3(0f,1f,0f);
-	public float radius = 24.0f;
 	public HandController handController = null;
 	public int startingPlayerCurrency;
 	// PLAYER ATTACKS
@@ -305,22 +302,6 @@ public class GameLogic : MonoBehaviour
 		MoveAvatar avatar = (MoveAvatar) playerAvatar.GetComponent (typeof(MoveAvatar));
 		avatar.setPlayer (thisPlayer);
 		avatar.hidePlayer ();	
-	}
-
-	public Vector3 RandomPointOnPlane()
-	{
-		Vector3 randomPoint;
-
-		do
-		{
-			randomPoint = Vector3.Cross(Random.insideUnitSphere, normal);
-		} while (randomPoint == Vector3.zero);
-
-		randomPoint.Normalize();
-		randomPoint *= radius;
-		randomPoint += position;
-
-		return randomPoint;
 	}
 
 	private int generateProjectileHash()

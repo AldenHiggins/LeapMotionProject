@@ -10,6 +10,11 @@ public class BasicEnemyController : MonoBehaviour
 	public int attackDamage;
 	public int currencyOnKill;
 	public int livesTakenOnGoalReached;
+	public bool showNavMeshPath;
+
+	public GameObject pathLine;
+
+	private GameObject thisPathLine;
 
 	private Vector3 velocity;
 	private Animator anim;
@@ -26,6 +31,8 @@ public class BasicEnemyController : MonoBehaviour
 		health = startingHealth;
 		agent = gameObject.GetComponent<NavMeshAgent> ();
 		target = game.getEnemyTarget ();
+		if (showNavMeshPath)
+			thisPathLine = (GameObject) Instantiate (pathLine);
 	}
 	
 	// Update is called once per frame
@@ -69,6 +76,9 @@ public class BasicEnemyController : MonoBehaviour
 				StartCoroutine(attack());
 			}
 		}
+
+		if (showNavMeshPath)
+			displayNavMeshPath ();
 	}
 
 	IEnumerator attack()
@@ -149,5 +159,28 @@ public class BasicEnemyController : MonoBehaviour
 		Destroy (this.gameObject);
 	}
 
+	private void displayNavMeshPath()
+	{
+		// Show nav mesh paths
+		if (agent.hasPath)
+		{
+			NavMeshPath thisPath = agent.path;
+			Vector3[] pathVertices = thisPath.corners;
+			
+			LineRenderer lineRender;
+			
+			// Draw a line to show the player where they are aiming
+			lineRender = (LineRenderer) thisPathLine.renderer;
+			lineRender.enabled = true;
+			
+			lineRender.SetColors (Color.yellow, Color.yellow);
+			lineRender.SetVertexCount (pathVertices.Length);
+			//			print ("Path length: " + pathVertices.Length);
+			for (int i = 0; i < pathVertices.Length; i++)
+			{
+				lineRender.SetPosition (i, pathVertices[i]);
+			}
+		}
+	}
 
 }

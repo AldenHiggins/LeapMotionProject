@@ -6,6 +6,8 @@ public class PlayerLogic : MonoBehaviour
 	public GameLogic game;
 	public bool isDefensivePlayer;
 	public AudioClip grunt;
+	public GameObject defensivePlayerSpawnPosition;
+	public GameObject offensivePlayerSpawnPosition;
 
 	public SliderDemo healthSlider;
 	public SliderDemo manaSlider;
@@ -46,7 +48,8 @@ public class PlayerLogic : MonoBehaviour
 
 	public void respawn()
 	{
-		transform.position = game.RandomPointOnPlane();
+		transform.position = offensivePlayerSpawnPosition.transform.position;
+		transform.rotation = offensivePlayerSpawnPosition.transform.rotation;
 	}
 
 	public void dealDamage(int damageToDeal)
@@ -84,8 +87,8 @@ public class PlayerLogic : MonoBehaviour
 		if (!isDefensivePlayer)
 		{
 			isDefensivePlayer = true;
-			transform.position = new Vector3 (55f, 90f, 0f);
-			transform.rotation = Quaternion.Euler (0.0f, 260.0f, 0.0f);
+			transform.position = defensivePlayerSpawnPosition.transform.position;
+			transform.rotation = defensivePlayerSpawnPosition.transform.rotation;
 			HandController hand = (HandController) transform.GetChild (1).GetChild (1).
 				GetChild (0).gameObject.GetComponent(typeof(HandController));
 			hand.enabled = false;
