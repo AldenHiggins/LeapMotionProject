@@ -49,7 +49,7 @@ public class OffensiveAbilities : MonoBehaviour
 					if(gesture.Type == Gesture.GestureType.TYPE_CIRCLE) 
 					{
 						CircleGesture circleGesture = new CircleGesture(gesture);
-						Debug.Log("Psychic Gesture Detected!!!");
+//						Debug.Log("Psychic Gesture Detected!!!");
 						if (!isCircle)
 						{
 							isCircle = true;

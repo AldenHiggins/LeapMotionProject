@@ -10,9 +10,6 @@ public class GameLogic : MonoBehaviour
 	public GameObject thisPlayer;
 	public GameObject thisCamera;
 	public GameObject goalPosition;
-	public Vector3 position = new Vector3 (0f,1f,-5.0f);
-	public Vector3 normal = new Vector3(0f,1f,0f);
-	public float radius = 24.0f;
 	public HandController handController = null;
 	public int startingPlayerCurrency;
 	// PLAYER ATTACKS
@@ -20,10 +17,18 @@ public class GameLogic : MonoBehaviour
 	public GameObject clapProjectile;
 	// LEVEL ROUNDS
 	public int[] rounds;
-	public GameObject endRoundScreen;
+	public UIFollowPlayer endRoundScreen;
 	private int currentRound = 0;
 	public GameObject winScreen;
 	public Text roundText;
+	private bool nextRound = false;
+	public ButtonDemoGraphics roundButton;
+	private float currentRoundTime = 0;
+	private bool roundActive = false;
+	public Text roundTimerText;
+	public ButtonDemoToggle nextRoundButton;
+	// Player HUD
+	public GameObject playerHud;
 	// ENEMY SPAWNERS
 	public GameObject enemySpawners;
 	public GameObject spawnedEnemies;
@@ -80,15 +85,18 @@ public class GameLogic : MonoBehaviour
 	// Control loop to check for player input
 	void Update () 
 	{
-		if (!playerLogic.isDefensivePlayer)
+		// Check if round is active in order for players to use their abilities
+		if (roundActive)
 		{
-			offensiveAbilities.controlCheck();
+			if (!playerLogic.isDefensivePlayer)
+			{
+				offensiveAbilities.controlCheck();
+			}
+			else
+			{
+				defensiveAbilities.controlCheck();
+			}
 		}
-		else
-		{
-			defensiveAbilities.controlCheck();
-		}
-
 
 		// Shared abilities
 		bool switchButtonPressed = OVRGamepadController.GPC_GetButton (OVRGamepadController.Button.Back);
@@ -110,57 +118,101 @@ public class GameLogic : MonoBehaviour
 		{
 			playerCastFireball ();
 		}		
+
+
+		// Check for the new round button to be pressed
+		if (roundButton.isPressed() || Input.GetKeyDown (KeyCode.V))
+		{
+			nextRound = true;
+			nextRoundButton.ButtonTurnsOff();
+		}
+
+		// Update round timer
+		if (roundActive)
+		{
+			currentRoundTime -= Time.deltaTime;
+			if (currentRoundTime < 0)
+			{
+				roundTimerText.text = "0";
+			}
+			else
+			{
+				roundTimerText.text = "" + currentRoundTime.ToString("F2");
+			}
+		}
 	}
 
 	IEnumerator roundFunction()
 	{
 		for (int i = 0; i < rounds.GetLength(0); i++)
 		{
+			// Set the round text
 			roundText.text = "ROUND " + (i + 1);
-			enableDisableSpawners(true);
+			// Present start round screen and wait
+			playerHud.SetActive(false);
+			endRoundScreen.enableUI();
 
-
-			yield return new WaitForSeconds(rounds[i]);
-			print ("Round : " + i + " ended");
-			enableDisableSpawners(false);
-
-//			print ("Outside loop: " + spawnedEnemies.transform.childCount);
-			// Wait for all the enemies to be cleared
-			while (spawnedEnemies.transform.childCount > 0)
+			// Enable hand controller for defensive player
+			if (playerLogic.isDefensivePlayer)
 			{
-//				print ("Inside loop: " + spawnedEnemies.transform.childCount);
-				yield return new WaitForSeconds(.3f);
+				HandController hand = (HandController) thisPlayer.transform.GetChild (1).GetChild (1).
+					GetChild (0).gameObject.GetComponent(typeof(HandController));
+				hand.enabled = true;
 			}
 
-			if (i == rounds.GetLength(0) - 1)
-			{
-				// Display end game screen
-				winScreen.SetActive(true);
-				yield break;
-			}
-
-			endRoundScreen.SetActive(true);
-
-			// Now wait for the player to press space
-			while (!Input.GetKeyDown (KeyCode.V))
+			// Now wait for the player to press next round button
+			while (!nextRound)
 			{
 				yield return new WaitForSeconds(.2f);
 			}
 
-			endRoundScreen.SetActive(false);
+			// Disable hand controller for defensive player
+			if (playerLogic.isDefensivePlayer)
+			{
+				HandController hand = (HandController) thisPlayer.transform.GetChild (1).GetChild (1).
+					GetChild (0).gameObject.GetComponent(typeof(HandController));
+				hand.DestroyAllHands();
+				hand.enabled = false;
+			}
+
+			// Start the next round, spawn enemies, wait for the timer
+			nextRound = false;
+			roundActive = true;
+			currentRoundTime = rounds[i];
+			endRoundScreen.disableUI();
+			enableDisableSpawners(true);
+			// Enable the player HUD
+			playerHud.SetActive(true);
+
+			// Wait for the round to time out
+			yield return new WaitForSeconds(rounds[i]);
+
+			// Turn off spawners
+			enableDisableSpawners(false);
+
+			// Wait for all the enemies to be cleared
+			while (spawnedEnemies.transform.childCount > 0)
+			{
+				yield return new WaitForSeconds(.3f);
+			}
+
+			roundActive = false;
 		}
 
-		print ("Finished all rounds!!!");
+		// The game/map is over, display end game screen
+		winScreen.SetActive(true);
 	}
 
 	public void enableDisableSpawners(bool enableOrDisable)
 	{
 		for (int i = 0; i < enemySpawners.transform.childCount; i++)
 		{
+
 			GameObject spawner = enemySpawners.transform.GetChild(i).gameObject;
 			EnemySpawner spawnScript = (EnemySpawner) spawner.GetComponent(typeof(EnemySpawner));
 			if (enableOrDisable)
 			{
+				print ("Starting spawning in script");
 				spawnScript.startSpawning();
 			}
 			else
@@ -250,22 +302,6 @@ public class GameLogic : MonoBehaviour
 		MoveAvatar avatar = (MoveAvatar) playerAvatar.GetComponent (typeof(MoveAvatar));
 		avatar.setPlayer (thisPlayer);
 		avatar.hidePlayer ();	
-	}
-
-	public Vector3 RandomPointOnPlane()
-	{
-		Vector3 randomPoint;
-
-		do
-		{
-			randomPoint = Vector3.Cross(Random.insideUnitSphere, normal);
-		} while (randomPoint == Vector3.zero);
-
-		randomPoint.Normalize();
-		randomPoint *= radius;
-		randomPoint += position;
-
-		return randomPoint;
 	}
 
 	private int generateProjectileHash()
