@@ -90,9 +90,9 @@ public class OffensiveAbilities : MonoBehaviour
 				game.fistProjectile();
 				handWasFist = true;
 			}
-
-			handWasFist = false;
-
+			else if(!handIsFist && handWasFist){
+				handWasFist = false;
+			}
 		} else if (hands.Length > 1) {
 			Vector3 direction0 = (hands [0].GetPalmPosition () - handController.transform.position).normalized;
 			Vector3 normal0 = hands [0].GetPalmNormal ().normalized;
