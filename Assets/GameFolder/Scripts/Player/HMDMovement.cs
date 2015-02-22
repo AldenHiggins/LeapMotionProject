@@ -7,9 +7,12 @@ public class HMDMovement : MonoBehaviour
 
 	private Vector3 initialPosition;
 
+	private CharacterController controller;
+
 	// Use this for initialization
 	void Start ()
 	{
+		controller = gameObject.GetComponent<CharacterController> ();
 		initialPosition = camera.transform.localPosition;
 		StartCoroutine (delayedInitialPosition());
 	}
@@ -28,15 +31,16 @@ public class HMDMovement : MonoBehaviour
 		float totalDistance = Vector3.Distance (camera.transform.localPosition, initialPosition);
 
 
-		print ("Initial position: " + initialPosition);
-		print ("Distance from initial: " + vectorFromInitial);
-		print ("Total distance: " + totalDistance);
+//		print ("Initial position: " + initialPosition);
+//		print ("Distance from initial: " + vectorFromInitial);
+//		print ("Total distance: " + totalDistance);
 
-		if (totalDistance > .1)
+		if (totalDistance > .13)
 		{
 			vectorFromInitial.y = 0;
 			Vector3 playerSpeed = vectorFromInitial.normalized * .03f;
-			gameObject.transform.position += new Vector3(playerSpeed.z, 0.0f, -1.0f * playerSpeed.x);
+//			gameObject.transform.position += new Vector3(playerSpeed.z, 0.0f, -1.0f * playerSpeed.x);
+			controller.Move (new Vector3(playerSpeed.z, 0.0f, -1.0f * playerSpeed.x));
 		}
 	
 	}

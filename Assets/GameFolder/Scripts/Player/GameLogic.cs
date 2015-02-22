@@ -212,7 +212,6 @@ public class GameLogic : MonoBehaviour
 			EnemySpawner spawnScript = (EnemySpawner) spawner.GetComponent(typeof(EnemySpawner));
 			if (enableOrDisable)
 			{
-				print ("Starting spawning in script");
 				spawnScript.startSpawning();
 			}
 			else

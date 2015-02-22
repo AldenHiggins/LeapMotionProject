@@ -130,43 +130,46 @@ public class DefensiveAbilities : MonoBehaviour
 			// Display prospective turret spots
 			showHideTurretPositions (true);
 
-			if (highlightTurret != null) 
-			{
-				TurretPlacementSpot placement = (TurretPlacementSpot) highlightTurret.GetComponent(typeof(TurretPlacementSpot));
-				placement.deSelect();
-			}
+			highlightClosestTurretPlacementPosition();
 
-			highlightTurret = getClosestTurret();
-			
-			if (highlightTurret != null) 
-			{
-				TurretPlacementSpot placement = (TurretPlacementSpot) highlightTurret.GetComponent(typeof(TurretPlacementSpot));
-				placement.select();
-			}
+//			if (highlightTurret != null) 
+//			{
+//				TurretPlacementSpot placement = (TurretPlacementSpot) highlightTurret.GetComponent(typeof(TurretPlacementSpot));
+//				placement.deSelect();
+//			}
+//
+//			highlightTurret = getClosestTurret();
+//			
+//			if (highlightTurret != null) 
+//			{
+//				TurretPlacementSpot placement = (TurretPlacementSpot) highlightTurret.GetComponent(typeof(TurretPlacementSpot));
+//				placement.select();
+//			}
 		} 
 		else if (!turretPlaceButtonPressed && previousTurretButtonPressed) 
 		{
-			showHideTurretPositions (false);
-
-			if (game.getCurrencyValue() < turretCost)
-				return;
-			game.changeCurrency(-turretCost);
-			
-			GameObject closestTurret = getClosestTurret();
-			
-			if (closestTurret != null) 
-			{
-				GameObject newTurret = (GameObject) Instantiate (cTurret, closestTurret.transform.position, closestTurret.transform.rotation);
-				// Add this turret to the list of all turrets
-				newTurret.transform.parent = placedTurrets.transform;
-				// Enable this turret's script
-				((EmitterBehavior) newTurret.GetComponent(typeof(EmitterBehavior))).enabled = true;
-				Destroy (closestTurret);
-			}
-			else 
-			{
-				print ("Could not place a turret, no more locations available!");
-			}
+			placeClosestTurret();
+//			showHideTurretPositions (false);
+//
+//			if (game.getCurrencyValue() < turretCost)
+//				return;
+//			game.changeCurrency(-turretCost);
+//			
+//			GameObject closestTurret = getClosestTurret();
+//			
+//			if (closestTurret != null) 
+//			{
+//				GameObject newTurret = (GameObject) Instantiate (cTurret, closestTurret.transform.position, closestTurret.transform.rotation);
+//				// Add this turret to the list of all turrets
+//				newTurret.transform.parent = placedTurrets.transform;
+//				// Enable this turret's script
+//				((EmitterBehavior) newTurret.GetComponent(typeof(EmitterBehavior))).enabled = true;
+//				Destroy (closestTurret);
+//			}
+//			else 
+//			{
+//				print ("Could not place a turret, no more locations available!");
+//			}
 		}
 		
 		previousTurretButtonPressed = turretPlaceButtonPressed;
@@ -254,6 +257,59 @@ public class DefensiveAbilities : MonoBehaviour
 			EmitterBehavior turret = (EmitterBehavior) placedTurrets.transform.GetChild (i).gameObject.GetComponent(typeof(EmitterBehavior));
 			turret.highlight(false);
 		}
+	}
+
+	public void placeClosestTurret()
+	{
+		showHideTurretPositions (false);
+		
+		if (game.getCurrencyValue() < turretCost)
+			return;
+		game.changeCurrency(-turretCost);
+		
+		GameObject closestTurret = getClosestTurret();
+		
+		if (closestTurret != null) 
+		{
+			GameObject newTurret = (GameObject) Instantiate (cTurret, closestTurret.transform.position, closestTurret.transform.rotation);
+			// Add this turret to the list of all turrets
+			newTurret.transform.parent = placedTurrets.transform;
+			// Enable this turret's script
+			((EmitterBehavior) newTurret.GetComponent(typeof(EmitterBehavior))).enabled = true;
+			Destroy (closestTurret);
+		}
+		else 
+		{
+			print ("Could not place a turret, no more locations available!");
+		}
+	}
+
+	public void highlightClosestTurretPlacementPosition()
+	{
+		showHideTurretPositions (true);
+		if (highlightTurret != null) 
+		{
+			TurretPlacementSpot placement = (TurretPlacementSpot) highlightTurret.GetComponent(typeof(TurretPlacementSpot));
+			placement.deSelect();
+		}
+		
+		highlightTurret = getClosestTurret();
+		
+		if (highlightTurret != null) 
+		{
+			TurretPlacementSpot placement = (TurretPlacementSpot) highlightTurret.GetComponent(typeof(TurretPlacementSpot));
+			placement.select();
+		}
+	}
+
+	public void showTurretPositions()
+	{
+		showHideTurretPositions (true);
+	}
+
+	public void hideTurretPositions()
+	{
+		showHideTurretPositions (false);
 	}
 
 	public void showHideTurretPositions(bool showOrHide)
