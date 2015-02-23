@@ -189,6 +189,7 @@ public class OffensiveAbilities : MonoBehaviour
 						handFlipChargeFunction = testFunction;
 						handFlipNotChargingFunction = testFunction;
 						handFlipReleaseFunction = fireballFunction;
+						defense.hideTurretPositions();
 					}
 
 					// Switch the attacks that the player uses

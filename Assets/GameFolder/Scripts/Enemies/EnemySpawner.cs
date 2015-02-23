@@ -44,6 +44,8 @@ public class EnemySpawner : MonoBehaviour
 				monster.transform.parent = spawnedEnemyList.transform;
 				BasicEnemyController enemy = (BasicEnemyController) monster.GetComponent(typeof(BasicEnemyController));
 				enemy.enabled = true;
+				NavMeshAgent agent = monster.GetComponent<NavMeshAgent>();
+				agent.enabled = true;
 			}
 			yield return new WaitForSeconds(spawnFrequency);
 		}
