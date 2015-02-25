@@ -47,6 +47,8 @@ public class GameLogic : MonoBehaviour
 	// PLAYER CURRENCY
 	public Text currencyText;
 	private int currentPlayerCurrency;
+	// HEAD BASED MOVEMENT
+	private HMDMovement hmdMovement;
 
 	// GAME CONTROLLER VARIABLES
 
@@ -64,6 +66,7 @@ public class GameLogic : MonoBehaviour
 		projectiles = new Dictionary<int, GameObject> ();
 		network = (Networking) gameObject.GetComponent (typeof(Networking));
 		playerLogic = (PlayerLogic) thisPlayer.GetComponent (typeof(PlayerLogic));
+		hmdMovement = (HMDMovement)thisPlayer.GetComponent (typeof(HMDMovement));
 		offensiveAbilities = (OffensiveAbilities) gameObject.GetComponent (typeof(OffensiveAbilities));
 		defensiveAbilities = (DefensiveAbilities) gameObject.GetComponent (typeof(DefensiveAbilities));
 		defensiveAbilities.showHideTurretPositions (false);
@@ -183,6 +186,9 @@ public class GameLogic : MonoBehaviour
 			enableDisableSpawners(true);
 			// Enable the player HUD
 			playerHud.SetActive(true);
+			// Enable HMD movement and reset position
+			hmdMovement.enabled = true;
+			hmdMovement.resetPosition();
 
 			// Wait for the round to time out
 			yield return new WaitForSeconds(rounds[i]);

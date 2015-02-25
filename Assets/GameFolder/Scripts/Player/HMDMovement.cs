@@ -23,7 +23,7 @@ public class HMDMovement : MonoBehaviour
 		// Press button to "reset" base position
 		if (Input.GetKeyDown (KeyCode.R))
 		{
-			initialPosition = camera.transform.localPosition;
+			resetPosition();
 		}
 
 
@@ -45,11 +45,19 @@ public class HMDMovement : MonoBehaviour
 			Vector3 playerSpeed = vectorFromInitial.normalized * .03f;
 //			gameObject.transform.position += new Vector3(playerSpeed.z, 0.0f, -1.0f * playerSpeed.x);
 //			controller.Move (new Vector3(playerSpeed.z, 0.0f, -1.0f * playerSpeed.x));
-			Vector3 moveVector = playerSpeed.x * perpendicularVector;
-			moveVector += playerSpeed.z * cameraForward;
+//			Vector3 moveVector = playerSpeed.x * perpendicularVector;
+//			moveVector += playerSpeed.z * cameraForward;
+
+			Vector3 moveVector = Vector3.Dot (playerSpeed, perpendicularVector) * perpendicularVector;
+			moveVector += Vector3.Dot (playerSpeed, cameraForward) * cameraForward;
 			controller.Move (moveVector);
 		}
 	
+	}
+
+	public void resetPosition()
+	{
+		initialPosition = camera.transform.localPosition;
 	}
 
 	IEnumerator delayedInitialPosition()
