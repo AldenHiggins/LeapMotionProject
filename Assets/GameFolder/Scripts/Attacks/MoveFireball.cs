@@ -35,7 +35,7 @@ public class MoveFireball : MonoBehaviour {
 				toTarget.y = 0;
 				velocity = toTarget;
 			}
-			gameObject.transform.position += velocity;
+			//gameObject.transform.position += velocity;
 		}
 	}
 
@@ -54,38 +54,37 @@ public class MoveFireball : MonoBehaviour {
 		return hashValue;
 	}
 
-
-	void OnCollisionEnter (Collision col)
+	void OnParticleCollision(GameObject other) 
 	{
 
-		BasicEnemyController enemy = (BasicEnemyController) col.gameObject.GetComponent(typeof(BasicEnemyController));	
-		MoveFireball moveScript = (MoveFireball) col.gameObject.GetComponent ((typeof(MoveFireball)));
+		BasicEnemyController enemy = (BasicEnemyController) other.GetComponent(typeof(BasicEnemyController));	
+		MoveFireball moveScript = (MoveFireball) other.GetComponent ((typeof(MoveFireball)));
 		// Ignore collisions with other fireballs
 		if (moveScript != null)
 		{
 
 		}
 		// Ignore collisions with player's hands
-		else if (col.gameObject.name == "palm" || col.gameObject.name == "bone1" || col.gameObject.name == "bone2")
+		else if (other.name == "palm" || other.name == "bone1" || other.name == "bone2")
 		{
 
 		}
 		// Check if a player or their leap motion hands are hit
-		else if (col.gameObject.name == "LeapOVRPlayerController")
+		else if (other.name == "LeapOVRPlayerController")
 		{
-			if (!game.isPlayerBlocking())
-			{
-				Instantiate (explosion, transform.position, Quaternion.identity);
-				PlayerLogic hitPlayer = (PlayerLogic) col.gameObject.GetComponent(typeof(PlayerLogic));
-				if (!hitPlayer.isDefensivePlayer)
-					hitPlayer.respawn();
-			}
-			// Reflect back blocked fireballs
-			else
-			{
-				reverseVelocity();
-				game.reverseProjectileOnOtherClients(hashValue);
-			}
+//			if (!game.isPlayerBlocking())
+//			{
+//				Instantiate (explosion, transform.position, Quaternion.identity);
+//				PlayerLogic hitPlayer = (PlayerLogic) other.GetComponent(typeof(PlayerLogic));
+//				if (!hitPlayer.isDefensivePlayer)
+//					hitPlayer.respawn();
+//			}
+//			// Reflect back blocked fireballs
+//			else
+//			{
+//				reverseVelocity();
+//				game.reverseProjectileOnOtherClients(hashValue);
+//			}
 		}
 		// Collide with an enemy
 		else if (enemy != null)
@@ -99,8 +98,8 @@ public class MoveFireball : MonoBehaviour {
 		}
 		else
 		{
-			Instantiate (explosion, transform.position, Quaternion.identity);
-			Destroy(gameObject);
+//			Instantiate (explosion, transform.position, Quaternion.identity);
+//			Destroy(gameObject);
 		}
 	}
 

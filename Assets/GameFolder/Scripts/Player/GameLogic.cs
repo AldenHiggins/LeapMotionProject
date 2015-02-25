@@ -236,6 +236,7 @@ public class GameLogic : MonoBehaviour
 	public void createFireball(Vector3 position, Quaternion rotation, Vector3 velocity, int hashValue)
 	{
 		GameObject newFireball = (GameObject) Instantiate(fireBall, position, rotation);
+		newFireball.SetActive(true); 
 		MoveFireball moveThis = (MoveFireball) newFireball.GetComponent(typeof(MoveFireball));
 		moveThis.setVelocity(velocity);
 		newFireball.renderer.enabled = true;
