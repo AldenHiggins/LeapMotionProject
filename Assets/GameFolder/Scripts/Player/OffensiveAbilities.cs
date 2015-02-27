@@ -142,63 +142,63 @@ public class OffensiveAbilities : MonoBehaviour
 			}
 
 
-			//////////////////////////////////////////////////////////////
-			//////////////////////  DETECT A SWIPE  //////////////////////
-			//////////////////////////////////////////////////////////////
-			Vector3 relativeHandPosition = hands[0].GetPalmPosition() - thisCamera.transform.position;
-			Vector3 playerForward = thisCamera.transform.forward;
-			Vector3 perpendicularVector = new Vector3(playerForward.z, playerForward.y, -1 * playerForward.x);
-			// Take the dot product of the hand's position and the right vector (the vector pointing
-			// to the right side of the screen space) in order to get an amount that describes how far to the
-			// right the hand is.  The normal range is around .35 (furthest right) to -.2 (furthest left)
-			float amountHandIsOnRightSideOfScreen = Vector3.Dot(relativeHandPosition, perpendicularVector);
-			// Only accept swipes if the player's hand is low enough on the screen
-			if  ((amountHandIsOnRightSideOfScreen - previousAmountHandIsOnRightSideOfScreen < -.02) && relativeHandPosition.y < -.1)
-			{
-				if (!selectingAttack)
-				{
-					selectingAttack = true;
-					int attackSelection = attackSelector.selectNextAttack();
-
-					// For now hardcode all the options
-					// 0 is the regular fireball
-					if (attackSelection == 0)
-					{
-						handFlipChargeFunction = testFunction;
-						handFlipNotChargingFunction = testFunction;
-						handFlipReleaseFunction = fireballFunction;
-						defense.hideTurretPositions();
-					}
-					// 1 highlights and places a turret
-					else if (attackSelection == 1)
-					{
-						handFlipChargeFunction = defense.highlightClosestTurretPlacementPosition;
-						handFlipNotChargingFunction = defense.hideTurretPositions;
-						handFlipReleaseFunction = defense.placeClosestTurret;
-					}
-					// 2 placeholder
-					else if (attackSelection == 2)
-					{
-						handFlipChargeFunction = testFunction;
-						handFlipNotChargingFunction = testFunction;
-						handFlipReleaseFunction = fireballFunction;
-					}
-					// 3 placeholder
-					else
-					{
-						handFlipChargeFunction = testFunction;
-						handFlipNotChargingFunction = testFunction;
-						handFlipReleaseFunction = fireballFunction;
-						defense.hideTurretPositions();
-					}
-
-					// Switch the attacks that the player uses
-					StartCoroutine(attackSelectionCooldown());
-				}
-				print ("Swiping Left");
-			}
-
-			previousAmountHandIsOnRightSideOfScreen = amountHandIsOnRightSideOfScreen;
+//			//////////////////////////////////////////////////////////////
+//			//////////////////////  DETECT A SWIPE  //////////////////////
+//			//////////////////////////////////////////////////////////////
+//			Vector3 relativeHandPosition = hands[0].GetPalmPosition() - thisCamera.transform.position;
+//			Vector3 playerForward = thisCamera.transform.forward;
+//			Vector3 perpendicularVector = new Vector3(playerForward.z, playerForward.y, -1 * playerForward.x);
+//			// Take the dot product of the hand's position and the right vector (the vector pointing
+//			// to the right side of the screen space) in order to get an amount that describes how far to the
+//			// right the hand is.  The normal range is around .35 (furthest right) to -.2 (furthest left)
+//			float amountHandIsOnRightSideOfScreen = Vector3.Dot(relativeHandPosition, perpendicularVector);
+//			// Only accept swipes if the player's hand is low enough on the screen
+//			if  ((amountHandIsOnRightSideOfScreen - previousAmountHandIsOnRightSideOfScreen < -.02) && relativeHandPosition.y < -.1)
+//			{
+//				if (!selectingAttack)
+//				{
+//					selectingAttack = true;
+//					int attackSelection = attackSelector.selectNextAttack();
+//
+//					// For now hardcode all the options
+//					// 0 is the regular fireball
+//					if (attackSelection == 0)
+//					{
+//						handFlipChargeFunction = testFunction;
+//						handFlipNotChargingFunction = testFunction;
+//						handFlipReleaseFunction = fireballFunction;
+//						defense.hideTurretPositions();
+//					}
+//					// 1 highlights and places a turret
+//					else if (attackSelection == 1)
+//					{
+//						handFlipChargeFunction = defense.highlightClosestTurretPlacementPosition;
+//						handFlipNotChargingFunction = defense.hideTurretPositions;
+//						handFlipReleaseFunction = defense.placeClosestTurret;
+//					}
+//					// 2 placeholder
+//					else if (attackSelection == 2)
+//					{
+//						handFlipChargeFunction = testFunction;
+//						handFlipNotChargingFunction = testFunction;
+//						handFlipReleaseFunction = fireballFunction;
+//					}
+//					// 3 placeholder
+//					else
+//					{
+//						handFlipChargeFunction = testFunction;
+//						handFlipNotChargingFunction = testFunction;
+//						handFlipReleaseFunction = fireballFunction;
+//						defense.hideTurretPositions();
+//					}
+//
+//					// Switch the attacks that the player uses
+//					StartCoroutine(attackSelectionCooldown());
+//				}
+//				print ("Swiping Left");
+//			}
+//
+//			previousAmountHandIsOnRightSideOfScreen = amountHandIsOnRightSideOfScreen;
 
 		}
 		else if (hands.Length > 1) 

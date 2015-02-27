@@ -49,26 +49,29 @@ public class BasicEnemyController : MonoBehaviour
 		// If the enemy is outside melee range keep coming forward
 		if (velocity.magnitude > attackRadius)
 		{
-//			print("Running");
 			if (attacking == false)
 			{
-				anim.SetBool ("Running", true);
+//				anim.SetBool ("Running", true);
 				velocity.Normalize ();
 				velocity *= speed;
-				if (agent.enabled == true)
+				if (agent.enabled == true && !agent.hasPath)
+				{
+					print ("Set dest");
 					agent.SetDestination (target.transform.position);
+				}
+					
 //				transform.position += velocity;
 //				rigidbody.AddForce (velocity, ForceMode.VelocityChange);
 
 				// Face the target as well
-				transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position);
-				transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
+//				transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position);
+//				transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
 			}
 		}
 		// If the player is in range attack him
 		else
 		{
-			anim.SetBool ("Running", false);
+//			anim.SetBool ("Running", false);
 			if (attacking == false)
 			{
 				attacking = true;
@@ -126,6 +129,7 @@ public class BasicEnemyController : MonoBehaviour
 	{
 		rigidbody.AddForce (force, ForceMode.Impulse);
 		agent.enabled = false;
+		rigidbody.isKinematic = false;
 		StartCoroutine (restartAgent ());
 	}
 
@@ -133,6 +137,7 @@ public class BasicEnemyController : MonoBehaviour
 	{
 		rigidbody.AddExplosionForce (force, position, radius, 20.0f, ForceMode.Impulse);
 		agent.enabled = false;
+		rigidbody.isKinematic = false;
 		StartCoroutine (restartAgent ());
 	}
 
@@ -144,6 +149,7 @@ public class BasicEnemyController : MonoBehaviour
 		}
 		print ("Restarting agent");
 		agent.enabled = true;
+//		rigidbody.isKinematic = true;
 	}
 
 
