@@ -51,7 +51,7 @@ public class BasicEnemyController : MonoBehaviour
 		{
 			if (attacking == false)
 			{
-//				anim.SetBool ("Running", true);
+				anim.SetBool ("Running", true);
 				velocity.Normalize ();
 				velocity *= speed;
 				if (agent.enabled == true && !agent.hasPath)
@@ -64,14 +64,14 @@ public class BasicEnemyController : MonoBehaviour
 //				rigidbody.AddForce (velocity, ForceMode.VelocityChange);
 
 				// Face the target as well
-//				transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position);
-//				transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
+				transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position);
+				transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
 			}
 		}
 		// If the player is in range attack him
 		else
 		{
-//			anim.SetBool ("Running", false);
+			anim.SetBool ("Running", false);
 			if (attacking == false)
 			{
 				attacking = true;
@@ -155,6 +155,7 @@ public class BasicEnemyController : MonoBehaviour
 
 	IEnumerator kill()
 	{
+		agent.Stop ();
 		game.changeCurrency (currencyOnKill);
 		anim.Play ("death");
 		while(!anim.GetCurrentAnimatorStateInfo(0).IsName("death"))
