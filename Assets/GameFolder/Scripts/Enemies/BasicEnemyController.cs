@@ -56,7 +56,6 @@ public class BasicEnemyController : MonoBehaviour
 				velocity *= speed;
 				if (agent.enabled == true && !agent.hasPath)
 				{
-					print ("Set dest");
 					agent.SetDestination (target.transform.position);
 				}
 					
@@ -155,7 +154,10 @@ public class BasicEnemyController : MonoBehaviour
 
 	IEnumerator kill()
 	{
-		agent.Stop ();
+		if (agent.enabled)
+		{
+			agent.enabled = false;
+		}
 		game.changeCurrency (currencyOnKill);
 		anim.Play ("death");
 		while(!anim.GetCurrentAnimatorStateInfo(0).IsName("death"))

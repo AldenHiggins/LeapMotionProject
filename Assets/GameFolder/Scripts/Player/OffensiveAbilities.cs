@@ -10,7 +10,8 @@ public class OffensiveAbilities : MonoBehaviour
 	public HandController handController = null;
 	// PARTICLES
 	public GameObject psychicParticle;
-
+	// FLAMETHROWER
+	public GameObject flameThrowerParticle;
 	// GAME LOGIC
 	private GameLogic game;
 	// INTERNAL VARIABLES
@@ -28,9 +29,11 @@ public class OffensiveAbilities : MonoBehaviour
 	private AttackFunction handFlipChargeFunction;
 	private AttackFunction handFlipNotChargingFunction;
 	private AttackFunction handFlipReleaseFunction;
+	private AttackFunction handFlipFacingAwayFunction;
 	// DEFENSIVE ABILITIES
 	private DefensiveAbilities defense;
-
+	// HANDS
+	private HandModel[] hands;
 
 	// Use this for initialization
 	void Start ()
@@ -38,10 +41,39 @@ public class OffensiveAbilities : MonoBehaviour
 		game = (GameLogic)GetComponent (typeof(GameLogic));
 		controller = new Controller();
 		controller.EnableGesture(Gesture.GestureType.TYPE_CIRCLE);
-		handFlipChargeFunction = testFunction;
-		handFlipReleaseFunction = fireballFunction;
+		handFlipChargeFunction = deactivateFlameThrower;
+		handFlipReleaseFunction = activateFlameThrower;
 		handFlipNotChargingFunction = testFunction;
+		handFlipFacingAwayFunction = flameThrower;
 		defense = (DefensiveAbilities)GetComponent (typeof(DefensiveAbilities));
+	}
+
+	private void flameThrower()
+	{
+		if (hands.Length > 0)
+		{
+			if (!flameThrowerParticle.activeSelf)
+			{
+				print ("Flamethrower not active!");
+			}
+			flameThrowerParticle.transform.position = hands[0].GetPalmPosition();
+			flameThrowerParticle.transform.rotation = Quaternion.LookRotation(hands[0].GetPalmNormal());
+		}
+
+	}
+
+	private void activateFlameThrower()
+	{
+		flameThrowerParticle.SetActive (true);
+		MoveFireball fireball = (MoveFireball) flameThrowerParticle.GetComponent (typeof(MoveFireball));
+		fireball.startPeriodicDamage();
+	}
+
+	private void deactivateFlameThrower()
+	{
+		MoveFireball fireball = (MoveFireball) flameThrowerParticle.GetComponent (typeof(MoveFireball));
+		fireball.stopPeriodicDamage();
+		flameThrowerParticle.SetActive (false);
 	}
 
 	private void testFunction()
@@ -60,42 +92,43 @@ public class OffensiveAbilities : MonoBehaviour
 	// Check for input once a frame
 	public void controlCheck ()
 	{
-		//////////////////////////////////////////////////////////////
-		//////////////////////  DETECT HAND SPIN  ////////////////////
-		//////////////////////////////////////////////////////////////
-		if(controller.IsConnected) //controller is a Controller object
-		{
-			Frame currentFrame = controller.Frame(); //The latest frame
-			Frame previousFrame = controller.Frame(1); //The previous frame
-			
-			GestureList gesturesInFrame = currentFrame.Gestures(previousFrame);
-			
-			if (!currentFrame.Gestures(previousFrame).IsEmpty) 
-			{
-				for(int i = 0; i < currentFrame.Gestures(previousFrame).Count; i++) 
-				{
-					Gesture gesture = currentFrame.Gestures(previousFrame)[i];
-					
-					if(gesture.Type == Gesture.GestureType.TYPE_CIRCLE) 
-					{
-						CircleGesture circleGesture = new CircleGesture(gesture);
-						// Limit the radius to prevent accidental gesture recognition
-						if (!isCircle && circleGesture.Radius > 50)
-						{
-							isCircle = true;
-							Instantiate (psychicParticle, playerLogic.transform.position, playerLogic.transform.rotation);
-						}
-					}
-				}
-			}
-			else
-			{
-				isCircle = false;
-			}
-		}
+//		//////////////////////////////////////////////////////////////
+//		//////////////////////  DETECT HAND SPIN  ////////////////////
+//		//////////////////////////////////////////////////////////////
+//		if(controller.IsConnected) //controller is a Controller object
+//		{
+//			Frame currentFrame = controller.Frame(); //The latest frame
+//			Frame previousFrame = controller.Frame(1); //The previous frame
+//			
+//			GestureList gesturesInFrame = currentFrame.Gestures(previousFrame);
+//
+//			currentFrame.Gestures
+//			if (!currentFrame.Gestures(previousFrame).IsEmpty) 
+//			{
+//				for(int i = 0; i < currentFrame.Gestures(previousFrame).Count; i++) 
+//				{
+//					Gesture gesture = currentFrame.Gestures(previousFrame)[i];
+//					
+//					if(gesture.Type == Gesture.GestureType.TYPE_CIRCLE) 
+//					{
+//						CircleGesture circleGesture = new CircleGesture(gesture);
+//						// Limit the radius to prevent accidental gesture recognition
+//						if (!isCircle && circleGesture.Radius > 50)
+//						{
+//							isCircle = true;
+//							Instantiate (psychicParticle, playerLogic.transform.position, playerLogic.transform.rotation);
+//						}
+//					}
+//				}
+//			}
+//			else
+//			{
+//				isCircle = false;
+//			}
+//		}
 
 
-		HandModel[] hands = handController.GetAllGraphicsHands ();
+		hands = handController.GetAllGraphicsHands ();
 		if (hands.Length == 1) 
 		{
 			Vector3 direction0 = (hands [0].GetPalmPosition () - handController.transform.position).normalized;
@@ -117,15 +150,20 @@ public class OffensiveAbilities : MonoBehaviour
 				handFlipNotChargingFunction();
 			}
 		
+
 			// Fire a fireball, .6 or more means the palm is facing away from the camera
-			if (Vector3.Dot (normal0, thisCamera.transform.forward) > .6 && fireballCharged) 
+			if (Vector3.Dot (normal0, thisCamera.transform.forward) > .6) 
 			{
-				fireballCharged = false;
-				// First check if the player has enough energy
-				if (playerLogic.getEnergy () > 10)
+				if (fireballCharged)
 				{
-					handFlipReleaseFunction();
+					fireballCharged = false;
+					// First check if the player has enough energy
+					if (playerLogic.getEnergy () > 10)
+					{
+						handFlipReleaseFunction();
+					}
 				}
+				handFlipFacingAwayFunction();
 			}
 
 			//////////////////////////////////////////////////////////////

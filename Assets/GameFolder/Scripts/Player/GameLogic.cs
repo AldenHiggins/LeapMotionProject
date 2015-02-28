@@ -363,7 +363,8 @@ public class GameLogic : MonoBehaviour
 		Vector3 startingVelocity = thisCamera.transform.forward.normalized;
 		startingVelocity *= .2f;
 
-		GameObject newAttack = (GameObject) Instantiate(clapFireball, spawnPosition, Quaternion.identity);
+		GameObject newAttack = (GameObject) Instantiate(clapFireball, spawnPosition, thisCamera.transform.rotation);
+		newAttack.SetActive (true);
 		MoveFireball moveThis = (MoveFireball) newAttack.GetComponent(typeof(MoveFireball));
 		moveThis.setVelocity(startingVelocity);
 		newAttack.renderer.enabled = true;
