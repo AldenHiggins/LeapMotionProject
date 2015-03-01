@@ -6,12 +6,15 @@ public class OffensiveAbilities : MonoBehaviour
 {
 	// PLAYER OBJECTS
 	public PlayerLogic playerLogic;
-	// GAME LOGIC
-	private GameLogic game;
-	// PARTICLES
-	public GameObject psychicParticle;
 	public GameObject thisCamera;
 	public HandController handController = null;
+
+	// PARTICLES
+	public GameObject psychicParticle;
+	// FLAMETHROWER
+	public GameObject flameThrowerParticle;
+	// GAME LOGIC
+	private GameLogic game;
 	// INTERNAL VARIABLES
 	private Controller controller;
 	// SWIPE DETECTION
@@ -25,6 +28,7 @@ public class OffensiveAbilities : MonoBehaviour
 	private AttackFunction handFlipChargeFunction;
 	private AttackFunction handFlipNotChargingFunction;
 	private AttackFunction handFlipReleaseFunction;
+	private AttackFunction handFlipFacingAwayFunction;
 	// DEFENSIVE ABILITIES
 	private DefensiveAbilities defense;
 
@@ -32,7 +36,10 @@ public class OffensiveAbilities : MonoBehaviour
 	private bool handWasFist = false;
 	private bool selectingAttack = false;
 	private bool isChargingAttack = false;
+	private bool isCircle = false;
 
+	// HANDS
+	private HandModel[] hands;
 
 	// Use this for initialization
 	void Start ()
@@ -40,10 +47,39 @@ public class OffensiveAbilities : MonoBehaviour
 		game = (GameLogic)GetComponent (typeof(GameLogic));
 		controller = new Controller();
 		controller.EnableGesture(Gesture.GestureType.TYPE_CIRCLE);
-		handFlipChargeFunction = testFunction;
-		handFlipReleaseFunction = fireballFunction;
+		handFlipChargeFunction = deactivateFlameThrower;
+		handFlipReleaseFunction = activateFlameThrower;
 		handFlipNotChargingFunction = testFunction;
+		handFlipFacingAwayFunction = flameThrower;
 		defense = (DefensiveAbilities)GetComponent (typeof(DefensiveAbilities));
+	}
+
+	private void flameThrower()
+	{
+		if (hands.Length > 0)
+		{
+			if (!flameThrowerParticle.activeSelf)
+			{
+				print ("Flamethrower not active!");
+			}
+			flameThrowerParticle.transform.position = hands[0].GetPalmPosition();
+			flameThrowerParticle.transform.rotation = Quaternion.LookRotation(hands[0].GetPalmNormal());
+		}
+
+	}
+
+	private void activateFlameThrower()
+	{
+		flameThrowerParticle.SetActive (true);
+		MoveFireball fireball = (MoveFireball) flameThrowerParticle.GetComponent (typeof(MoveFireball));
+		fireball.startPeriodicDamage();
+	}
+
+	private void deactivateFlameThrower()
+	{
+		MoveFireball fireball = (MoveFireball) flameThrowerParticle.GetComponent (typeof(MoveFireball));
+		fireball.stopPeriodicDamage();
+		flameThrowerParticle.SetActive (false);
 	}
 
 	private void testFunction()
@@ -57,47 +93,46 @@ public class OffensiveAbilities : MonoBehaviour
 		game.playerCastFireball ();
 	}
 
-	private bool isCircle = false;
-
 	// Check for input once a frame
 	public void controlCheck ()
 	{
-		//////////////////////////////////////////////////////////////
-		//////////////////////  DETECT HAND SPIN  ////////////////////
-		//////////////////////////////////////////////////////////////
-		if(controller.IsConnected) //controller is a Controller object
-		{
-			Frame currentFrame = controller.Frame(); //The latest frame
-			Frame previousFrame = controller.Frame(1); //The previous frame
-			
-			GestureList gesturesInFrame = currentFrame.Gestures(previousFrame);
-			
-			if (!currentFrame.Gestures(previousFrame).IsEmpty) 
-			{
-				for(int i = 0; i < currentFrame.Gestures(previousFrame).Count; i++) 
-				{
-					Gesture gesture = currentFrame.Gestures(previousFrame)[i];
-					
-					if(gesture.Type == Gesture.GestureType.TYPE_CIRCLE) 
-					{
-						CircleGesture circleGesture = new CircleGesture(gesture);
-						// Limit the radius to prevent accidental gesture recognition
-						if (!isCircle && circleGesture.Radius > 50)
-						{
-							isCircle = true;
-							Instantiate (psychicParticle, playerLogic.transform.position, playerLogic.transform.rotation);
-						}
-					}
-				}
-			}
-			else
-			{
-				isCircle = false;
-			}
-		}
+//		//////////////////////////////////////////////////////////////
+//		//////////////////////  DETECT HAND SPIN  ////////////////////
+//		//////////////////////////////////////////////////////////////
+//		if(controller.IsConnected) //controller is a Controller object
+//		{
+//			Frame currentFrame = controller.Frame(); //The latest frame
+//			Frame previousFrame = controller.Frame(1); //The previous frame
+//			
+//			GestureList gesturesInFrame = currentFrame.Gestures(previousFrame);
+//
+//			currentFrame.Gestures
+//			if (!currentFrame.Gestures(previousFrame).IsEmpty) 
+//			{
+//				for(int i = 0; i < currentFrame.Gestures(previousFrame).Count; i++) 
+//				{
+//					Gesture gesture = currentFrame.Gestures(previousFrame)[i];
+//					
+//					if(gesture.Type == Gesture.GestureType.TYPE_CIRCLE) 
+//					{
+//						CircleGesture circleGesture = new CircleGesture(gesture);
+//						// Limit the radius to prevent accidental gesture recognition
+//						if (!isCircle && circleGesture.Radius > 50)
+//						{
+//							isCircle = true;
+//							Instantiate (psychicParticle, playerLogic.transform.position, playerLogic.transform.rotation);
+//						}
+//					}
+//				}
+//			}
+//			else
+//			{
+//				isCircle = false;
+//			}
+//		}
 
 
-		HandModel[] hands = handController.GetAllGraphicsHands ();
+		hands = handController.GetAllGraphicsHands ();
 		if (hands.Length == 1) {
 			Vector3 direction0 = (hands [0].GetPalmPosition () - handController.transform.position).normalized;
 			Vector3 normal0 = hands [0].GetPalmNormal ().normalized;
@@ -117,6 +152,7 @@ public class OffensiveAbilities : MonoBehaviour
 				handFlipNotChargingFunction ();
 			}
 		
+
 			// Fire a fireball, .6 or more means the palm is facing away from the camera
 			if (Vector3.Dot (normal0, thisCamera.transform.forward) > .6 && fireballCharged) {
 				fireballCharged = false;
@@ -125,6 +161,16 @@ public class OffensiveAbilities : MonoBehaviour
 				if (playerLogic.getEnergy () > 10) {
 					handFlipReleaseFunction ();
 				}
+			}
+			if (Vector3.Dot (normal0, thisCamera.transform.forward) > .6) {
+				if (fireballCharged) {
+					fireballCharged = false;
+					// First check if the player has enough energy
+					if (playerLogic.getEnergy () > 10) {
+						handFlipReleaseFunction ();
+					}
+				}
+				handFlipFacingAwayFunction ();
 			}
 
 			//////////////////////////////////////////////////////////////
@@ -190,8 +236,65 @@ public class OffensiveAbilities : MonoBehaviour
 				}
 				print ("Swiping Left");
 			}
-
 			previousAmountHandIsOnRightSideOfScreen = amountHandIsOnRightSideOfScreen;
+		
+//			//////////////////////////////////////////////////////////////
+//			//////////////////////  DETECT A SWIPE  //////////////////////
+//			//////////////////////////////////////////////////////////////
+//			Vector3 relativeHandPosition = hands[0].GetPalmPosition() - thisCamera.transform.position;
+//			Vector3 playerForward = thisCamera.transform.forward;
+//			Vector3 perpendicularVector = new Vector3(playerForward.z, playerForward.y, -1 * playerForward.x);
+//			// Take the dot product of the hand's position and the right vector (the vector pointing
+//			// to the right side of the screen space) in order to get an amount that describes how far to the
+//			// right the hand is.  The normal range is around .35 (furthest right) to -.2 (furthest left)
+//			float amountHandIsOnRightSideOfScreen = Vector3.Dot(relativeHandPosition, perpendicularVector);
+//			// Only accept swipes if the player's hand is low enough on the screen
+//			if  ((amountHandIsOnRightSideOfScreen - previousAmountHandIsOnRightSideOfScreen < -.02) && relativeHandPosition.y < -.1)
+//			{
+//				if (!selectingAttack)
+//				{
+//					selectingAttack = true;
+//					int attackSelection = attackSelector.selectNextAttack();
+//
+//					// For now hardcode all the options
+//					// 0 is the regular fireball
+//					if (attackSelection == 0)
+//					{
+//						handFlipChargeFunction = testFunction;
+//						handFlipNotChargingFunction = testFunction;
+//						handFlipReleaseFunction = fireballFunction;
+//						defense.hideTurretPositions();
+//					}
+//					// 1 highlights and places a turret
+//					else if (attackSelection == 1)
+//					{
+//						handFlipChargeFunction = defense.highlightClosestTurretPlacementPosition;
+//						handFlipNotChargingFunction = defense.hideTurretPositions;
+//						handFlipReleaseFunction = defense.placeClosestTurret;
+//					}
+//					// 2 placeholder
+//					else if (attackSelection == 2)
+//					{
+//						handFlipChargeFunction = testFunction;
+//						handFlipNotChargingFunction = testFunction;
+//						handFlipReleaseFunction = fireballFunction;
+//					}
+//					// 3 placeholder
+//					else
+//					{
+//						handFlipChargeFunction = testFunction;
+//						handFlipNotChargingFunction = testFunction;
+//						handFlipReleaseFunction = fireballFunction;
+//						defense.hideTurretPositions();
+//					}
+//
+//					// Switch the attacks that the player uses
+//					StartCoroutine(attackSelectionCooldown());
+//				}
+//				print ("Swiping Left");
+//			}
+//
+//			previousAmountHandIsOnRightSideOfScreen = amountHandIsOnRightSideOfScreen;
 
 		} else if (hands.Length > 1) {
 			Vector3 direction0 = (hands [0].GetPalmPosition () - handController.transform.position).normalized;
@@ -216,11 +319,13 @@ public class OffensiveAbilities : MonoBehaviour
 			//////////////////////////////////////////////////////////////
 			if (Mathf.Abs (Vector3.Dot (normal0, normal1)) > .8) {
 				// Do push attack
+
+			} else {
+				isChargingAttack = false;
 			}
-		} else {
-			isChargingAttack = false;
 		}
 	}
+
 
 	IEnumerator attackSelectionCooldown()
 	{
@@ -269,7 +374,5 @@ public class OffensiveAbilities : MonoBehaviour
 		}
 		return extendedFingers;
 	}
-
-
 
 }

@@ -27,7 +27,7 @@ public class GoalPosition : MonoBehaviour
 
 	void OnTriggerEnter(Collider collider)
 	{
-		print ("Collision");
+		print ("Enemy entered goal position");
 		BasicEnemyController enemy = (BasicEnemyController) collider.gameObject.GetComponent(typeof(BasicEnemyController));
 		if (enemy != null)
 		{

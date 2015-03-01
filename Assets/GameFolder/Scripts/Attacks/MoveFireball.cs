@@ -10,6 +10,14 @@ public class MoveFireball : MonoBehaviour {
 
 	public bool shouldMoveEnemies;
 
+	public float damageInterval;
+
+	public int damageAmount;
+
+	private CapsuleCollider damageCapsule;
+
+	private bool dealingAreaDamage = false;
+
 	private Vector3 velocity;
 
 	private GameObject target;
@@ -17,9 +25,14 @@ public class MoveFireball : MonoBehaviour {
 	private int hashValue;
 
 	// Use this for initialization
-	void Awake () 
+	void Start () 
 	{
 		hashValue = 0; // Default hash value
+		damageCapsule = gameObject.GetComponent<CapsuleCollider> ();
+		if (damageCapsule != null)
+		{
+			startPeriodicDamage();
+		}
 	}
 	
 	// Update is called once per frame
@@ -37,6 +50,52 @@ public class MoveFireball : MonoBehaviour {
 			}
 			//gameObject.transform.position += velocity;
 		}
+		
+	}
+
+	public void startPeriodicDamage()
+	{
+		StartCoroutine(periodicDamageInCapsule());
+	}
+
+	public void stopPeriodicDamage()
+	{
+		StopCoroutine (periodicDamageInCapsule ());
+	}
+
+	IEnumerator periodicDamageInCapsule()
+	{
+		while (true)
+		{
+			yield return new WaitForSeconds(damageInterval);
+			print ("Dealing capsule damage");
+			checkToDealDamageInCapsule();
+		}
+	}
+
+	public void checkToDealDamageInCapsule()
+	{
+		float radius = damageCapsule.radius;
+
+		Vector3 point1 = transform.GetChild(0).position;
+		Vector3 point2 = transform.GetChild (1).position;
+
+		float distance = damageCapsule.height;
+		Vector3 capsuleDirection = transform.rotation * new Vector3 (0.0f, 0.0f, 1.0f);
+		print ("Capsule direction: " + capsuleDirection);
+
+		RaycastHit[] hits = Physics.CapsuleCastAll(point1, point2, radius, capsuleDirection);
+		print ("Hits length: " + hits.Length);
+		for (int i = 0; i < hits.Length; i++)
+		{
+			// Check for enemies in hit
+			BasicEnemyController enemy = (BasicEnemyController) hits[i].collider.gameObject.GetComponent(typeof(BasicEnemyController));
+			if (enemy != null)
+			{
+				enemy.dealDamage(damageAmount);
+			}
+		}
+	
 	}
 
 	public void setVelocity(Vector3 newVelocity)
@@ -53,6 +112,8 @@ public class MoveFireball : MonoBehaviour {
 	{
 		return hashValue;
 	}
+
+	private ParticleSystem.CollisionEvent[] collisionEvents = new ParticleSystem.CollisionEvent[16];
 
 	void OnParticleCollision(GameObject other) 
 	{
@@ -93,7 +154,18 @@ public class MoveFireball : MonoBehaviour {
 				enemy.applyForce(velocity * 20 + new Vector3(0.0f, 10.0f, 0.0f));
 
 			enemy.dealDamage(damage);
-			Instantiate (explosion, transform.position, Quaternion.identity);
+			// Find out where the collision point was 
+			// Resize collision array if you have to
+			int safeLength = particleSystem.safeCollisionEventSize;
+			if (collisionEvents.Length < safeLength)
+				collisionEvents = new ParticleSystem.CollisionEvent[safeLength];
+			
+			particleSystem.GetCollisionEvents(other, collisionEvents);
+
+
+				
+
+			Instantiate (explosion, collisionEvents[0].intersection, Quaternion.LookRotation (collisionEvents[0].normal.normalized));
 			Destroy(gameObject);
 		}
 		else

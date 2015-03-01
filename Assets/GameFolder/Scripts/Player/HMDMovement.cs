@@ -31,13 +31,8 @@ public class HMDMovement : MonoBehaviour
 		float totalDistance = Vector3.Distance (camera.transform.localPosition, initialPosition);
 
 
-		print ("Initial position: " + initialPosition);
-		print ("Distance from initial: " + vectorFromInitial);
-		print ("Camera normal: " + camera.transform.forward);
 		Vector3 cameraForward = camera.transform.forward;
 		Vector3 perpendicularVector = new Vector3(cameraForward.z, cameraForward.y, -1 * cameraForward.x);
-		print ("Camera right: " + perpendicularVector);
-//		print ("Total distance: " + totalDistance);
 
 		if (totalDistance > .13)
 		{
