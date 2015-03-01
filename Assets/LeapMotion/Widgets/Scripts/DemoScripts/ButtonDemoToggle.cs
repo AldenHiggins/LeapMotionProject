@@ -16,10 +16,17 @@ public class ButtonDemoToggle : ButtonToggleBase
 
 	private bool isToggled = false;
 
+	private AttackSelection attackSelector = null;
+
 
 	public override void ButtonTurnsOn()
 	{
 		TurnsOnGraphics();
+
+		if (attackSelector != null)
+		{
+			attackSelector.highlightAttackChoice(this);
+		}
 	}
 
 	public override void ButtonTurnsOff()
@@ -60,6 +67,10 @@ public class ButtonDemoToggle : ButtonToggleBase
 	protected override void Start()
 	{
 		base.Start();
+		if (transform.parent != null)
+			if (transform.parent.parent != null)
+				if (transform.parent.parent.parent != null)
+					attackSelector = (AttackSelection) transform.parent.parent.parent.gameObject.GetComponent(typeof(AttackSelection));
 	}
 
 	protected override void FixedUpdate()

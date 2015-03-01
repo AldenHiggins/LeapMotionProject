@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MoveFireball : MonoBehaviour {
+public class MoveFireball : MonoBehaviour 
+{
 	public GameLogic game;
 
 	public GameObject explosion;
@@ -68,7 +69,6 @@ public class MoveFireball : MonoBehaviour {
 		while (true)
 		{
 			yield return new WaitForSeconds(damageInterval);
-			print ("Dealing capsule damage");
 			checkToDealDamageInCapsule();
 		}
 	}
@@ -82,10 +82,8 @@ public class MoveFireball : MonoBehaviour {
 
 		float distance = damageCapsule.height;
 		Vector3 capsuleDirection = transform.rotation * new Vector3 (0.0f, 0.0f, 1.0f);
-		print ("Capsule direction: " + capsuleDirection);
 
 		RaycastHit[] hits = Physics.CapsuleCastAll(point1, point2, radius, capsuleDirection);
-		print ("Hits length: " + hits.Length);
 		for (int i = 0; i < hits.Length; i++)
 		{
 			// Check for enemies in hit

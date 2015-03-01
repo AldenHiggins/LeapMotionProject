@@ -10,8 +10,6 @@ public class OffensiveAbilities : MonoBehaviour
 	public HandController handController = null;
 	// PARTICLES
 	public GameObject psychicParticle;
-	// FLAMETHROWER
-	public GameObject flameThrowerParticle;
 	// GAME LOGIC
 	private GameLogic game;
 	// INTERNAL VARIABLES
@@ -22,18 +20,15 @@ public class OffensiveAbilities : MonoBehaviour
 	// SWIPE DETECTION
 	private float previousAmountHandIsOnRightSideOfScreen = 0;
 	// ATTACK SELECTION
-	public AttackSelection attackSelector;
+	public AttackSelection attackSelector;		
 	private bool selectingAttack = false;
 	// ATTACK CALLBACKS
-	private delegate void AttackFunction();
-	private AttackFunction handFlipChargeFunction;
-	private AttackFunction handFlipNotChargingFunction;
-	private AttackFunction handFlipReleaseFunction;
-	private AttackFunction handFlipFacingAwayFunction;
+	public AAttack handFlipAttack;
+	public AAttack fistAttack;
 	// DEFENSIVE ABILITIES
 	private DefensiveAbilities defense;
 	// HANDS
-	private HandModel[] hands;
+	private HandModel[] hands; 
 
 	// Use this for initialization
 	void Start ()
@@ -41,50 +36,7 @@ public class OffensiveAbilities : MonoBehaviour
 		game = (GameLogic)GetComponent (typeof(GameLogic));
 		controller = new Controller();
 		controller.EnableGesture(Gesture.GestureType.TYPE_CIRCLE);
-		handFlipChargeFunction = deactivateFlameThrower;
-		handFlipReleaseFunction = activateFlameThrower;
-		handFlipNotChargingFunction = testFunction;
-		handFlipFacingAwayFunction = flameThrower;
 		defense = (DefensiveAbilities)GetComponent (typeof(DefensiveAbilities));
-	}
-
-	private void flameThrower()
-	{
-		if (hands.Length > 0)
-		{
-			if (!flameThrowerParticle.activeSelf)
-			{
-				print ("Flamethrower not active!");
-			}
-			flameThrowerParticle.transform.position = hands[0].GetPalmPosition();
-			flameThrowerParticle.transform.rotation = Quaternion.LookRotation(hands[0].GetPalmNormal());
-		}
-
-	}
-
-	private void activateFlameThrower()
-	{
-		flameThrowerParticle.SetActive (true);
-		MoveFireball fireball = (MoveFireball) flameThrowerParticle.GetComponent (typeof(MoveFireball));
-		fireball.startPeriodicDamage();
-	}
-
-	private void deactivateFlameThrower()
-	{
-		MoveFireball fireball = (MoveFireball) flameThrowerParticle.GetComponent (typeof(MoveFireball));
-		fireball.stopPeriodicDamage();
-		flameThrowerParticle.SetActive (false);
-	}
-
-	private void testFunction()
-	{
-//		print ("Charging the fireball!");
-	}
-
-	private void fireballFunction()
-	{
-		print ("Throwing fireball");
-		game.playerCastFireball ();
 	}
 
 	private bool isCircle = false;
@@ -141,13 +93,16 @@ public class OffensiveAbilities : MonoBehaviour
 			//  Charge a fireball, -.6 or less means the palm is facing the camera
 			if (Vector3.Dot (normal0, thisCamera.transform.forward) < -.6) 
 			{
-				handFlipChargeFunction();
+				handFlipAttack.chargingFunction(hands);
 				if (!fireballCharged)
+				{
 					fireballCharged = true;
+					handFlipAttack.chargedFunction(hands);
+				}
 			}
 			else
 			{
-				handFlipNotChargingFunction();
+//				handFlipNotChargingFunction();
 			}
 		
 
@@ -160,25 +115,41 @@ public class OffensiveAbilities : MonoBehaviour
 					// First check if the player has enough energy
 					if (playerLogic.getEnergy () > 10)
 					{
-						handFlipReleaseFunction();
+						handFlipAttack.releaseFunction(hands);
 					}
 				}
-				handFlipFacingAwayFunction();
+				handFlipAttack.holdGestureFunction(hands);
 			}
 
 			//////////////////////////////////////////////////////////////
 			//////////////////////  DETECT A FIST  ///////////////////////
 			//////////////////////////////////////////////////////////////
 			bool handIsFist = checkFist (hands[0].GetLeapHand());
-			if (handIsFist && !handWasFist)
+			if (handIsFist)
 			{
-				game.fistProjectile();
-				handWasFist = true;
+				if (!handWasFist)
+				{
+					handWasFist = true;
+					fistAttack.chargedFunction(hands);
+//					game.fistProjectile();
+				}
+				fistAttack.holdGestureFunction(hands);
 			}
-			else if(!handIsFist && handWasFist){
+			else if (!handIsFist && handWasFist)
+			{
 				handWasFist = false;
+				fistAttack.inactiveFunction(hands);
 			}
-
+//			if (handIsFist && !handWasFist)
+//			{
+//				fistAttack.releaseFunction();
+//				game.fistProjectile();
+//				handWasFist = true;
+//			}
+//			else if(!handIsFist && handWasFist){
+//				handWasFist = false;
+//				fistAttack.inactiveFunction();
+//			}
 
 //			//////////////////////////////////////////////////////////////
 //			//////////////////////  DETECT A SWIPE  //////////////////////
