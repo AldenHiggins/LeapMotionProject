@@ -8,25 +8,32 @@ public class OffensiveAbilities : MonoBehaviour
 	public PlayerLogic playerLogic;
 	public GameObject thisCamera;
 	public HandController handController = null;
+
 	// PARTICLES
 	public GameObject psychicParticle;
 	// GAME LOGIC
 	private GameLogic game;
 	// INTERNAL VARIABLES
 	private Controller controller;
-	private bool fireballCharged = false;
-	private bool handWasFist = false;
-	private float minVal = 0.5f;
 	// SWIPE DETECTION
 	private float previousAmountHandIsOnRightSideOfScreen = 0;
+	// Min value for the fist dot product
+	private float minVal = 0.5f;
 	// ATTACK SELECTION
 	public AttackSelection attackSelector;		
 	private bool selectingAttack = false;
+
 	// ATTACK CALLBACKS
 	public AAttack handFlipAttack;
 	public AAttack fistAttack;
 	// DEFENSIVE ABILITIES
 	private DefensiveAbilities defense;
+
+	private bool fireballCharged = false;
+	private bool handWasFist = false;
+	private bool isChargingAttack = false;
+	private bool isCircle = false;
+
 	// HANDS
 	private HandModel[] hands; 
 
@@ -39,7 +46,6 @@ public class OffensiveAbilities : MonoBehaviour
 		defense = (DefensiveAbilities)GetComponent (typeof(DefensiveAbilities));
 	}
 
-	private bool isCircle = false;
 
 	// Check for input once a frame
 	public void controlCheck ()
@@ -81,8 +87,7 @@ public class OffensiveAbilities : MonoBehaviour
 
 
 		hands = handController.GetAllGraphicsHands ();
-		if (hands.Length == 1) 
-		{
+		if (hands.Length == 1) {
 			Vector3 direction0 = (hands [0].GetPalmPosition () - handController.transform.position).normalized;
 			Vector3 normal0 = hands [0].GetPalmNormal ().normalized;
 		
@@ -107,10 +112,8 @@ public class OffensiveAbilities : MonoBehaviour
 		
 
 			// Fire a fireball, .6 or more means the palm is facing away from the camera
-			if (Vector3.Dot (normal0, thisCamera.transform.forward) > .6) 
-			{
-				if (fireballCharged)
-				{
+			if (Vector3.Dot (normal0, thisCamera.transform.forward) > .6) {
+				if (fireballCharged) {
 					fireballCharged = false;
 					// First check if the player has enough energy
 					if (playerLogic.getEnergy () > 10)
@@ -150,6 +153,7 @@ public class OffensiveAbilities : MonoBehaviour
 //				handWasFist = false;
 //				fistAttack.inactiveFunction();
 //			}
+
 
 //			//////////////////////////////////////////////////////////////
 //			//////////////////////  DETECT A SWIPE  //////////////////////
@@ -209,7 +213,7 @@ public class OffensiveAbilities : MonoBehaviour
 //
 //			previousAmountHandIsOnRightSideOfScreen = amountHandIsOnRightSideOfScreen;
 
-		}
+		} 
 		else if (hands.Length > 1) 
 		{
 			Vector3 direction0 = (hands [0].GetPalmPosition () - handController.transform.position).normalized;
@@ -217,12 +221,12 @@ public class OffensiveAbilities : MonoBehaviour
 	
 			Vector3 direction1 = (hands [1].GetPalmPosition () - handController.transform.position).normalized;
 			Vector3 normal1 = hands [1].GetPalmNormal ().normalized;
-	
+			isChargingAttack = true;
 
 			//////////////////////////////////////////////////////////////
 			//////////////////////  DETECT A CLAP  ///////////////////////
 			//////////////////////////////////////////////////////////////
-			if (Vector3.Dot (normal0, normal1) < -.6)
+			if (Vector3.Dot (normal0, normal1) < -.6) 
 			{
 				Vector3 distance = hands [0].GetPalmPosition () - hands [1].GetPalmPosition ();
 				if (distance.magnitude < .09) 
@@ -234,12 +238,18 @@ public class OffensiveAbilities : MonoBehaviour
 			//////////////////////////////////////////////////////////////
 			//////////////////////  DETECT A PUSH AWAY  //////////////////
 			//////////////////////////////////////////////////////////////
-			if (Mathf.Abs(Vector3.Dot (normal0, normal1)) > .8)
+			if (Mathf.Abs (Vector3.Dot (normal0, normal1)) > .8) 
 			{
 				// Do push attack
+
+			}
+			else
+			{
+				isChargingAttack = false;
 			}
 		}
 	}
+
 
 	IEnumerator attackSelectionCooldown()
 	{
@@ -288,7 +298,5 @@ public class OffensiveAbilities : MonoBehaviour
 		}
 		return extendedFingers;
 	}
-
-
 
 }
