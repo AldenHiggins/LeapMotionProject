@@ -6,23 +6,20 @@ public class OffensiveAbilities : MonoBehaviour
 {
 	// PLAYER OBJECTS
 	public PlayerLogic playerLogic;
-	public GameObject thisCamera;
-	public HandController handController = null;
-	// PARTICLES
-	public GameObject psychicParticle;
-
 	// GAME LOGIC
 	private GameLogic game;
+	// PARTICLES
+	public GameObject psychicParticle;
+	public GameObject thisCamera;
+	public HandController handController = null;
 	// INTERNAL VARIABLES
 	private Controller controller;
-	private bool fireballCharged = false;
-	private bool handWasFist = false;
-	private float minVal = 0.5f;
 	// SWIPE DETECTION
 	private float previousAmountHandIsOnRightSideOfScreen = 0;
+	// Min value for the fist dot product
+	private float minVal = 0.5f;
 	// ATTACK SELECTION
 	public AttackSelection attackSelector;
-	private bool selectingAttack = false;
 	// ATTACK CALLBACKS
 	private delegate void AttackFunction();
 	private AttackFunction handFlipChargeFunction;
@@ -30,6 +27,11 @@ public class OffensiveAbilities : MonoBehaviour
 	private AttackFunction handFlipReleaseFunction;
 	// DEFENSIVE ABILITIES
 	private DefensiveAbilities defense;
+
+	private bool fireballCharged = false;
+	private bool handWasFist = false;
+	private bool selectingAttack = false;
+	private bool isChargingAttack = false;
 
 
 	// Use this for initialization
@@ -96,8 +98,7 @@ public class OffensiveAbilities : MonoBehaviour
 
 
 		HandModel[] hands = handController.GetAllGraphicsHands ();
-		if (hands.Length == 1) 
-		{
+		if (hands.Length == 1) {
 			Vector3 direction0 = (hands [0].GetPalmPosition () - handController.transform.position).normalized;
 			Vector3 normal0 = hands [0].GetPalmNormal ().normalized;
 		
@@ -106,118 +107,106 @@ public class OffensiveAbilities : MonoBehaviour
 			//////////////////////////////////////////////////////////////
 
 			//  Charge a fireball, -.6 or less means the palm is facing the camera
-			if (Vector3.Dot (normal0, thisCamera.transform.forward) < -.6) 
-			{
-				handFlipChargeFunction();
-				if (!fireballCharged)
+			if (Vector3.Dot (normal0, thisCamera.transform.forward) < -.6) {
+				handFlipChargeFunction ();
+				if (!fireballCharged) {
 					fireballCharged = true;
-			}
-			else
-			{
-				handFlipNotChargingFunction();
+					isChargingAttack = true;
+				}
+			} else {
+				handFlipNotChargingFunction ();
 			}
 		
 			// Fire a fireball, .6 or more means the palm is facing away from the camera
-			if (Vector3.Dot (normal0, thisCamera.transform.forward) > .6 && fireballCharged) 
-			{
+			if (Vector3.Dot (normal0, thisCamera.transform.forward) > .6 && fireballCharged) {
 				fireballCharged = false;
+				isChargingAttack = false;
 				// First check if the player has enough energy
-				if (playerLogic.getEnergy () > 10)
-				{
-					handFlipReleaseFunction();
+				if (playerLogic.getEnergy () > 10) {
+					handFlipReleaseFunction ();
 				}
 			}
 
 			//////////////////////////////////////////////////////////////
 			//////////////////////  DETECT A FIST  ///////////////////////
 			//////////////////////////////////////////////////////////////
-			bool handIsFist = checkFist (hands[0].GetLeapHand());
-			if (handIsFist && !handWasFist)
-			{
-				game.fistProjectile();
+			bool handIsFist = checkFist (hands [0].GetLeapHand ());
+			if (handIsFist && !handWasFist) {
+				game.fistProjectile ();
 				handWasFist = true;
-			}
-			else if(!handIsFist && handWasFist){
+				isChargingAttack = true;
+			} else if (!handIsFist && handWasFist) {
 				handWasFist = false;
+				isChargingAttack = false;
 			}
 
 
 			//////////////////////////////////////////////////////////////
 			//////////////////////  DETECT A SWIPE  //////////////////////
 			//////////////////////////////////////////////////////////////
-			Vector3 relativeHandPosition = hands[0].GetPalmPosition() - thisCamera.transform.position;
+			Vector3 relativeHandPosition = hands [0].GetPalmPosition () - thisCamera.transform.position;
 			Vector3 playerForward = thisCamera.transform.forward;
-			Vector3 perpendicularVector = new Vector3(playerForward.z, playerForward.y, -1 * playerForward.x);
+			Vector3 perpendicularVector = new Vector3 (playerForward.z, playerForward.y, -1 * playerForward.x);
 			// Take the dot product of the hand's position and the right vector (the vector pointing
 			// to the right side of the screen space) in order to get an amount that describes how far to the
 			// right the hand is.  The normal range is around .35 (furthest right) to -.2 (furthest left)
-			float amountHandIsOnRightSideOfScreen = Vector3.Dot(relativeHandPosition, perpendicularVector);
+			float amountHandIsOnRightSideOfScreen = Vector3.Dot (relativeHandPosition, perpendicularVector);
 			// Only accept swipes if the player's hand is low enough on the screen
-			if  ((amountHandIsOnRightSideOfScreen - previousAmountHandIsOnRightSideOfScreen < -.02) && relativeHandPosition.y < -.1)
-			{
-				if (!selectingAttack)
-				{
+			if ((amountHandIsOnRightSideOfScreen - previousAmountHandIsOnRightSideOfScreen < -.02) && relativeHandPosition.y < -.1) {
+				if (!selectingAttack) {
 					selectingAttack = true;
-					int attackSelection = attackSelector.selectNextAttack();
+					int attackSelection = attackSelector.selectNextAttack ();
 
 					// For now hardcode all the options
 					// 0 is the regular fireball
-					if (attackSelection == 0)
-					{
+					if (attackSelection == 0) {
 						handFlipChargeFunction = testFunction;
 						handFlipNotChargingFunction = testFunction;
 						handFlipReleaseFunction = fireballFunction;
-						defense.hideTurretPositions();
+						defense.hideTurretPositions ();
 					}
 					// 1 highlights and places a turret
-					else if (attackSelection == 1)
-					{
+					else if (attackSelection == 1) {
 						handFlipChargeFunction = defense.highlightClosestTurretPlacementPosition;
 						handFlipNotChargingFunction = defense.hideTurretPositions;
 						handFlipReleaseFunction = defense.placeClosestTurret;
 					}
 					// 2 placeholder
-					else if (attackSelection == 2)
-					{
+					else if (attackSelection == 2) {
 						handFlipChargeFunction = testFunction;
 						handFlipNotChargingFunction = testFunction;
 						handFlipReleaseFunction = fireballFunction;
 					}
 					// 3 placeholder
-					else
-					{
+					else {
 						handFlipChargeFunction = testFunction;
 						handFlipNotChargingFunction = testFunction;
 						handFlipReleaseFunction = fireballFunction;
-						defense.hideTurretPositions();
+						defense.hideTurretPositions ();
 					}
 
 					// Switch the attacks that the player uses
-					StartCoroutine(attackSelectionCooldown());
+					StartCoroutine (attackSelectionCooldown ());
 				}
 				print ("Swiping Left");
 			}
 
 			previousAmountHandIsOnRightSideOfScreen = amountHandIsOnRightSideOfScreen;
 
-		}
-		else if (hands.Length > 1) 
-		{
+		} else if (hands.Length > 1) {
 			Vector3 direction0 = (hands [0].GetPalmPosition () - handController.transform.position).normalized;
 			Vector3 normal0 = hands [0].GetPalmNormal ().normalized;
 	
 			Vector3 direction1 = (hands [1].GetPalmPosition () - handController.transform.position).normalized;
 			Vector3 normal1 = hands [1].GetPalmNormal ().normalized;
-	
+			isChargingAttack = true;
 
 			//////////////////////////////////////////////////////////////
 			//////////////////////  DETECT A CLAP  ///////////////////////
 			//////////////////////////////////////////////////////////////
-			if (Vector3.Dot (normal0, normal1) < -.6)
-			{
+			if (Vector3.Dot (normal0, normal1) < -.6) {
 				Vector3 distance = hands [0].GetPalmPosition () - hands [1].GetPalmPosition ();
-				if (distance.magnitude < .09) 
-				{
+				if (distance.magnitude < .09) {
 					game.clapAttack (playerLogic.transform.position + new Vector3 (0.0f, 0.7f, 0.0f));
 				}
 			}
@@ -225,10 +214,11 @@ public class OffensiveAbilities : MonoBehaviour
 			//////////////////////////////////////////////////////////////
 			//////////////////////  DETECT A PUSH AWAY  //////////////////
 			//////////////////////////////////////////////////////////////
-			if (Mathf.Abs(Vector3.Dot (normal0, normal1)) > .8)
-			{
+			if (Mathf.Abs (Vector3.Dot (normal0, normal1)) > .8) {
 				// Do push attack
 			}
+		} else {
+			isChargingAttack = false;
 		}
 	}
 
