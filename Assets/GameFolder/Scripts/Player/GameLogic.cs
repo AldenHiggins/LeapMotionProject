@@ -10,47 +10,54 @@ public class GameLogic : MonoBehaviour
 	public GameObject thisPlayer;
 	public GameObject thisCamera;
 	public GameObject goalPosition;
-	public HandController handController = null;
-	public int startingPlayerCurrency;
-	// PLAYER ATTACKS
-	public GameObject fireBall;
-	public GameObject clapProjectile;
-	// LEVEL ROUNDS
-	public int[] rounds;
-	public UIFollowPlayer endRoundScreen;
-	private int currentRound = 0;
-	public GameObject winScreen;
-	public Text roundText;
-	private bool nextRound = false;
-	public ButtonDemoGraphics roundButton;
-	private float currentRoundTime = 0;
-	private bool roundActive = false;
-	public Text roundTimerText;
-	public ButtonDemoToggle nextRoundButton;
 	// Player HUD
 	public GameObject playerHud;
 	// ENEMY SPAWNERS
 	public GameObject enemySpawners;
 	public GameObject spawnedEnemies;
 	public GameObject clapFireball;
+	// PLAYER ATTACKS
+	public GameObject fireBall;
+	public GameObject clapProjectile;
+	public HandController handController = null;
+	public int startingPlayerCurrency;
+
+	// TURRET PLACEMENT HUD
+	public GameObject turretHud;
+	public ButtonDemoGraphics callForWaveButtonGraphic;
+	public ButtonDemoToggle callForWaveButton;
+
+	// LEVEL ROUNDS
+	public ButtonDemoGraphics roundButton;
+	public ButtonDemoToggle nextRoundButton;
+	public UIFollowPlayer endRoundScreen;
+	public GameObject winScreen;
+	private float currentRoundTime = 0;
+	public int[] rounds;
+	private int currentRound = 0;
+	public Text roundTimerText;
+	public Text roundText;
+	private bool nextRound = false;
+	private bool roundActive = false;
+
 	// INTERNAL VARIABLES
-	private NetworkView view;
-	private bool fireballCharged;
-	private bool isBlocking;
 	private GameObject playerAvatar;
-	private int fireballTimer;
+	private NetworkView view;
 	private Networking network;
 	private PlayerLogic playerLogic;
 	private DefensiveAbilities defensiveAbilities;
 	private OffensiveAbilities offensiveAbilities;
+	// GAME CONTROLLER VARIABLES
 	private bool previousSwitchPressed = false;
+	private bool fireballCharged;
+	private bool isBlocking;
 	// PLAYER CURRENCY
 	public Text currencyText;
 	private int currentPlayerCurrency;
+	// FIreball timing variable.
+	private int fireballTimer;
 	// HEAD BASED MOVEMENT
 	private HMDMovement hmdMovement;
-
-	// GAME CONTROLLER VARIABLES
 
 	// RUNTIME GAME REPRESENTATION
 	private Dictionary<int, GameObject> projectiles;
@@ -178,11 +185,18 @@ public class GameLogic : MonoBehaviour
 				hand.enabled = false;
 			}
 
+			endRoundScreen.disableUI();
+			turretHud.SetActive(true);
+			while (!callForWaveButtonGraphic.isPressed()) {
+				yield return new WaitForSeconds(.2f);
+			}
+			callForWaveButton.ButtonTurnsOff();
+			turretHud.SetActive(false);
+
 			// Start the next round, spawn enemies, wait for the timer
 			nextRound = false;
 			roundActive = true;
 			currentRoundTime = rounds[i];
-			endRoundScreen.disableUI();
 			enableDisableSpawners(true);
 			// Enable the player HUD
 			playerHud.SetActive(true);
