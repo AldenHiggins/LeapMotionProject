@@ -22,7 +22,10 @@ public class BasicEnemyController : MonoBehaviour
 	private bool attacking;
 	private NavMeshAgent agent;
 	private GameObject target;
-
+	// AUDIO
+	private AudioSource source;
+	public AudioClip woundSound;
+	public AudioClip killSound;
 	// Use this for initialization
 	void Start () 
 	{
@@ -33,6 +36,7 @@ public class BasicEnemyController : MonoBehaviour
 		target = game.getEnemyTarget ();
 		if (showNavMeshPath)
 			thisPathLine = (GameObject) Instantiate (pathLine);
+		source = GetComponent<AudioSource> ();
 	}
 	
 	// Update is called once per frame
@@ -117,9 +121,11 @@ public class BasicEnemyController : MonoBehaviour
 		if (health > 0)
 		{
 			anim.Play ("wound");
+			source.PlayOneShot(woundSound);
 		}
 		else
 		{
+			source.PlayOneShot(killSound);
 			StartCoroutine(kill());
 		}
 	}

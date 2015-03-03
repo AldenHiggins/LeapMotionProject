@@ -10,6 +10,11 @@ public class AttackSelection : MonoBehaviour
 	private ButtonDemoToggle attackChoice;
 	private int currentAttackIndex = 0;
 
+	// The in game attacks to be used
+	public GameObject inGameAttackBarUI;
+	// Offensive abilities where the attacks will be registered
+	public OffensiveAbilities offense;
+
 	// Use this for initialization
 	void Start () 
 	{
@@ -73,8 +78,46 @@ public class AttackSelection : MonoBehaviour
 
 				copiedNewAttack.transform.localPosition = oldAttack.transform.localPosition;
 
-				copiedNewAttack.transform.localScale = oldAttack.transform.localScale;
-				
+				copiedNewAttack.transform.localScale = newAttack.transform.localScale;
+
+				// Find out which attack to change, as of right now:
+				// 0 is the hand flip
+				// 1 is the fist
+				// 2 is the hand circle motion
+				// 3 is the clap
+				int modifiedAttackIndex = 0;
+				for (int i = 0; i < chosenAttacks.Length; i++)
+				{
+					if (chosenAttacks[i] == pressedAttackButton)
+					{
+						modifiedAttackIndex = i;
+					}
+				}
+
+				// Now change the respsective attack in offensive abilities
+				if (modifiedAttackIndex == 0)
+				{
+					offense.handFlipAttack = (AAttack) copiedNewAttack.GetComponent(typeof(AAttack));
+				}
+				else if (modifiedAttackIndex == 1)
+				{
+					offense.fistAttack = (AAttack) copiedNewAttack.GetComponent(typeof(AAttack));
+				}
+				else if (modifiedAttackIndex == 2)
+				{
+					offense.circularHandAttack = (AAttack) copiedNewAttack.GetComponent(typeof(AAttack));
+				}
+
+				// Now change the icon in the in game UI
+				GameObject oldAttackIcon = inGameAttackBarUI.transform.GetChild(modifiedAttackIndex).GetChild(0).gameObject;
+				GameObject newAttackIcon = (GameObject) Instantiate(newAttack);
+//				newAttack.transform.parent = inGameAttackBarUI.transform.GetChild(modifiedAttackIndex);
+				newAttackIcon.transform.parent = inGameAttackBarUI.transform.GetChild(modifiedAttackIndex);
+				newAttackIcon.transform.localPosition = oldAttackIcon.transform.localPosition;
+
+				Destroy (oldAttackIcon);
+
+
 				Destroy (oldAttack);
 
 				pressedAttackButton.ButtonTurnsOff();
