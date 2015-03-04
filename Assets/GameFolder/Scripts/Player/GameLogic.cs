@@ -39,7 +39,9 @@ public class GameLogic : MonoBehaviour
 	public Text roundText;
 	private bool nextRound = false;
 	private bool roundActive = false;
-
+	// MONSTER WAVES
+	public GameObject waveContainer;
+	private MonsterWave[] enemyWaves;
 	// INTERNAL VARIABLES
 	private GameObject playerAvatar;
 	private NetworkView view;
@@ -88,6 +90,13 @@ public class GameLogic : MonoBehaviour
 			OVRPlayerController ovrController = (OVRPlayerController) thisPlayer.GetComponent(typeof(OVRPlayerController));
 //			ovrController.changeGravityUse(false);
 		}
+
+		// Initialize waves
+		enemyWaves = new MonsterWave[waveContainer.transform.childCount];
+		for (int i = 0; i < waveContainer.transform.childCount; i++)
+		{
+			enemyWaves[i] = (MonsterWave) waveContainer.transform.GetChild(i).gameObject.GetComponent(typeof(MonsterWave));
+		}
 		// Start up the round timer
 		StartCoroutine (roundFunction());
 	}
@@ -135,6 +144,8 @@ public class GameLogic : MonoBehaviour
 		{
 			nextRound = true;
 			nextRoundButton.ButtonTurnsOff();
+			// Temporarily skip turret placement phase
+			callForWaveButton.ButtonTurnsOn();
 		}
 
 		// Update round timer
@@ -154,7 +165,7 @@ public class GameLogic : MonoBehaviour
 
 	IEnumerator roundFunction()
 	{
-		for (int i = 0; i < rounds.GetLength(0); i++)
+		for (int i = 0; i < enemyWaves.Length; i++)
 		{
 			// Set the round text
 			roundText.text = "ROUND " + (i + 1);
@@ -196,19 +207,21 @@ public class GameLogic : MonoBehaviour
 			// Start the next round, spawn enemies, wait for the timer
 			nextRound = false;
 			roundActive = true;
-			currentRoundTime = rounds[i];
-			enableDisableSpawners(true);
+//			currentRoundTime = rounds[i];
+			currentRoundTime = enemyWaves[i].roundTime;
+//			enableDisableSpawners(true);
 			// Enable the player HUD
 			playerHud.SetActive(true);
 			// Enable HMD movement and reset position
 			hmdMovement.enabled = true;
 			hmdMovement.resetPosition();
-
+			// Start the enemy spawners
+			enemyWaves[i].startWave ();
 			// Wait for the round to time out
 			yield return new WaitForSeconds(rounds[i]);
 
 			// Turn off spawners
-			enableDisableSpawners(false);
+//			enableDisableSpawners(false);
 
 			// Wait for all the enemies to be cleared
 			while (spawnedEnemies.transform.childCount > 0)
@@ -225,20 +238,20 @@ public class GameLogic : MonoBehaviour
 
 	public void enableDisableSpawners(bool enableOrDisable)
 	{
-		for (int i = 0; i < enemySpawners.transform.childCount; i++)
-		{
-
-			GameObject spawner = enemySpawners.transform.GetChild(i).gameObject;
-			EnemySpawner spawnScript = (EnemySpawner) spawner.GetComponent(typeof(EnemySpawner));
-			if (enableOrDisable)
-			{
-				spawnScript.startSpawning();
-			}
-			else
-			{
-				spawnScript.stopSpawning();
-			}
-		}
+//		for (int i = 0; i < enemySpawners.transform.childCount; i++)
+//		{
+//
+//			GameObject spawner = enemySpawners.transform.GetChild(i).gameObject;
+//			EnemySpawner spawnScript = (EnemySpawner) spawner.GetComponent(typeof(EnemySpawner));
+//			if (enableOrDisable)
+//			{
+//				spawnScript.startSpawning();
+//			}
+//			else
+//			{
+//				spawnScript.stopSpawning();
+//			}
+//		}
 	}
 
 
