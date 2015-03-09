@@ -14,7 +14,7 @@ public class EnemySpawner : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
-		StartCoroutine (spawnLoop ());
+//		StartCoroutine (spawnLoop ());
 	}
 	
 	// Update is called once per frame
@@ -50,5 +50,17 @@ public class EnemySpawner : MonoBehaviour
 			yield return new WaitForSeconds(spawnFrequency);
 		}
 	}
+
+	public void spawnEnemy(GameObject enemyToSpawn)
+	{
+		GameObject monster = (GameObject) Instantiate (enemyToSpawn, transform.position, Quaternion.identity);
+		monster.transform.parent = spawnedEnemyList.transform;
+		BasicEnemyController enemy = (BasicEnemyController) monster.GetComponent(typeof(BasicEnemyController));
+		enemy.enabled = true;
+		NavMeshAgent agent = monster.GetComponent<NavMeshAgent>();
+		agent.enabled = true;
+	}
+
+
 }
 

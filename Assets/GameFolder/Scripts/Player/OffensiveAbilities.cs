@@ -26,6 +26,7 @@ public class OffensiveAbilities : MonoBehaviour
 	// ATTACK CALLBACKS
 	public AAttack handFlipAttack;
 	public AAttack fistAttack;
+	public AAttack circularHandAttack;
 	// DEFENSIVE ABILITIES
 	private DefensiveAbilities defense;
 
@@ -50,46 +51,47 @@ public class OffensiveAbilities : MonoBehaviour
 	// Check for input once a frame
 	public void controlCheck ()
 	{
-//		//////////////////////////////////////////////////////////////
-//		//////////////////////  DETECT HAND SPIN  ////////////////////
-//		//////////////////////////////////////////////////////////////
-//		if(controller.IsConnected) //controller is a Controller object
-//		{
-//			Frame currentFrame = controller.Frame(); //The latest frame
-//			Frame previousFrame = controller.Frame(1); //The previous frame
-//			
-//			GestureList gesturesInFrame = currentFrame.Gestures(previousFrame);
-//
-//			currentFrame.Gestures
-//			if (!currentFrame.Gestures(previousFrame).IsEmpty) 
-//			{
-//				for(int i = 0; i < currentFrame.Gestures(previousFrame).Count; i++) 
-//				{
-//					Gesture gesture = currentFrame.Gestures(previousFrame)[i];
-//					
-//					if(gesture.Type == Gesture.GestureType.TYPE_CIRCLE) 
-//					{
-//						CircleGesture circleGesture = new CircleGesture(gesture);
-//						// Limit the radius to prevent accidental gesture recognition
-//						if (!isCircle && circleGesture.Radius > 50)
-//						{
-//							isCircle = true;
-//							Instantiate (psychicParticle, playerLogic.transform.position, playerLogic.transform.rotation);
-//						}
-//					}
-//				}
-//			}
-//			else
-//			{
-//				isCircle = false;
-//			}
-//		}
-
-
 		hands = handController.GetAllGraphicsHands ();
 		if (hands.Length == 1) {
 			Vector3 direction0 = (hands [0].GetPalmPosition () - handController.transform.position).normalized;
 			Vector3 normal0 = hands [0].GetPalmNormal ().normalized;
+
+			//////////////////////////////////////////////////////////////
+			//////////////////////  DETECT HAND SPIN  ////////////////////
+			//////////////////////////////////////////////////////////////
+			if(controller.IsConnected) //controller is a Controller object
+			{
+				Frame currentFrame = controller.Frame(); //The latest frame
+				Frame previousFrame = controller.Frame(1); //The previous frame
+				
+				GestureList gesturesInFrame = currentFrame.Gestures(previousFrame);
+	
+//				currentFrame.Gestures
+				if (!currentFrame.Gestures(previousFrame).IsEmpty) 
+				{
+					for(int i = 0; i < currentFrame.Gestures(previousFrame).Count; i++) 
+					{
+						Gesture gesture = currentFrame.Gestures(previousFrame)[i];
+						
+						if(gesture.Type == Gesture.GestureType.TYPE_CIRCLE) 
+						{
+							CircleGesture circleGesture = new CircleGesture(gesture);
+							// Limit the radius to prevent accidental gesture recognition
+							if (!isCircle && circleGesture.Radius > 50)
+							{
+								isCircle = true;
+
+								circularHandAttack.releaseFunction(hands);
+//								Instantiate (psychicParticle, playerLogic.transform.position, playerLogic.transform.rotation);
+							}
+						}
+					}
+				}
+				else
+				{
+					isCircle = false;
+				}
+			}
 		
 			//////////////////////////////////////////////////////////////
 			//////////////////////  DETECT HAND FLIP  ////////////////////
@@ -141,6 +143,7 @@ public class OffensiveAbilities : MonoBehaviour
 			else if (!handIsFist && handWasFist)
 			{
 				handWasFist = false;
+				fistAttack.releaseFunction(hands);
 				fistAttack.inactiveFunction(hands);
 			}
 //			if (handIsFist && !handWasFist)
