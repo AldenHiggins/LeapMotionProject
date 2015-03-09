@@ -187,6 +187,7 @@ public class GameLogic : MonoBehaviour
 
 			endRoundScreen.disableUI();
 			turretHud.SetActive(true);
+			offensiveAbilities.handFlipAttack = new 
 			while (!callForWaveButtonGraphic.isPressed()) {
 				yield return new WaitForSeconds(.2f);
 			}
