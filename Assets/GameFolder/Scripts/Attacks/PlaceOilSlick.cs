@@ -1,15 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlaceOilSlick : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
+public class PlaceOilSlick : AAttack
+{
+	public override void chargingFunction(HandModel[] hands){}
 	
-	}
+	public override void chargedFunction(HandModel[] hands){}
 	
-	// Update is called once per frame
-	void Update () {
+	public override void releaseFunction(HandModel[] hands){}
 	
-	}
+	public override void holdGestureFunction(HandModel[] hands){}
+	
+	public override void inactiveFunction(HandModel[] hands){}
 }
+	
