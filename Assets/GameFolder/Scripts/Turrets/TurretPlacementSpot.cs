@@ -8,13 +8,13 @@ public class TurretPlacementSpot : MonoBehaviour
 
 	public void select()
 	{
-		transform.GetChild (0).gameObject.renderer.material = highlightMaterial;
-		transform.GetChild (1).gameObject.renderer.material = highlightMaterial;
+		transform.GetChild (0).gameObject.GetComponent<Renderer>().material = highlightMaterial;
+		transform.GetChild (1).gameObject.GetComponent<Renderer>().material = highlightMaterial;
 	}
 
 	public void deSelect()
 	{
-		transform.GetChild (0).gameObject.renderer.material = normalMaterial;
-		transform.GetChild (1).gameObject.renderer.material = normalMaterial;
+		transform.GetChild (0).gameObject.GetComponent<Renderer>().material = normalMaterial;
+		transform.GetChild (1).gameObject.GetComponent<Renderer>().material = normalMaterial;
 	}
 }

@@ -96,7 +96,7 @@ public class BasicEnemyController : MonoBehaviour
 			yield return new WaitForSeconds(.01f);
 		}
 //		print ("Animation time: " + anim.GetCurrentAnimationClipState (0) [0].clip.length);
-		yield return new WaitForSeconds (anim.GetCurrentAnimationClipState(0)[0].clip.length - .1f);
+		yield return new WaitForSeconds (anim.GetCurrentAnimatorClipInfo(0)[0].clip.length - .1f);
 
 		Vector3 distance = target.transform.position - transform.position;
 		distance.y = 0.0f;
@@ -132,23 +132,23 @@ public class BasicEnemyController : MonoBehaviour
 
 	public void applyForce(Vector3 force)
 	{
-		rigidbody.AddForce (force, ForceMode.Impulse);
+		GetComponent<Rigidbody>().AddForce (force, ForceMode.Impulse);
 		agent.enabled = false;
-		rigidbody.isKinematic = false;
+		GetComponent<Rigidbody>().isKinematic = false;
 		StartCoroutine (restartAgent ());
 	}
 
 	public void applyExplosiveForce(float force, Vector3 position, float radius)
 	{
-		rigidbody.AddExplosionForce (force, position, radius, 20.0f, ForceMode.Impulse);
+		GetComponent<Rigidbody>().AddExplosionForce (force, position, radius, 20.0f, ForceMode.Impulse);
 		agent.enabled = false;
-		rigidbody.isKinematic = false;
+		GetComponent<Rigidbody>().isKinematic = false;
 		StartCoroutine (restartAgent ());
 	}
 
 	IEnumerator restartAgent ()
 	{
-		while (rigidbody.velocity.magnitude > 0.1)
+		while (GetComponent<Rigidbody>().velocity.magnitude > 0.1)
 		{
 			yield return new WaitForSeconds(.1f);
 		}
@@ -170,7 +170,7 @@ public class BasicEnemyController : MonoBehaviour
 		{
 			yield return new WaitForSeconds(.1f);
 		}
-		yield return new WaitForSeconds (anim.GetCurrentAnimationClipState(0)[0].clip.length);
+		yield return new WaitForSeconds (anim.GetCurrentAnimatorClipInfo(0)[0].clip.length);
 		Destroy (this.gameObject);
 	}
 
@@ -185,7 +185,7 @@ public class BasicEnemyController : MonoBehaviour
 			LineRenderer lineRender;
 			
 			// Draw a line to show the player where they are aiming
-			lineRender = (LineRenderer) thisPathLine.renderer;
+			lineRender = (LineRenderer) thisPathLine.GetComponent<Renderer>();
 			lineRender.enabled = true;
 			
 			lineRender.SetColors (Color.yellow, Color.yellow);

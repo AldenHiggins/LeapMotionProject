@@ -111,7 +111,7 @@ public class MoveFireball : MonoBehaviour
 		return hashValue;
 	}
 
-	private ParticleSystem.CollisionEvent[] collisionEvents = new ParticleSystem.CollisionEvent[16];
+//	private ParticleSystem.CollisionEvent[] collisionEvents = new ParticleSystem.CollisionEvent[16];
 
 	void OnParticleCollision(GameObject other) 
 	{
@@ -154,17 +154,17 @@ public class MoveFireball : MonoBehaviour
 			enemy.dealDamage(damage);
 			// Find out where the collision point was 
 			// Resize collision array if you have to
-			int safeLength = particleSystem.safeCollisionEventSize;
-			if (collisionEvents.Length < safeLength)
-				collisionEvents = new ParticleSystem.CollisionEvent[safeLength];
-			
-			particleSystem.GetCollisionEvents(other, collisionEvents);
+//			int safeLength = particleSystem.safeCollisionEventSize;
+//			if (collisionEvents.Length < safeLength)
+//				collisionEvents = new ParticleSystem.CollisionEvent[safeLength];
+//			
+//			particleSystem.GetCollisionEvents(other, collisionEvents);
 
 
 				
-
-			Instantiate (explosion, collisionEvents[0].intersection, Quaternion.LookRotation (collisionEvents[0].normal.normalized));
-			Destroy(gameObject);
+//
+//			Instantiate (explosion, collisionEvents[0].intersection, Quaternion.LookRotation (collisionEvents[0].normal.normalized));
+//			Destroy(gameObject);
 		}
 		else
 		{

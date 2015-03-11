@@ -247,7 +247,7 @@ public class OVRMainMenu : MonoBehaviour
 #if (UNITY_5_0)
 			// TODO: Unity 5.0b11 has an older version of the new GUI being developed in Unity 4.6.
 			// Remove this once Unity 5 has a more recent merge of Unity 4.6.
-	        c.renderMode = RenderMode.World;
+	        c.renderMode = RenderMode.WorldSpace;
 #else
 	        c.renderMode = RenderMode.WorldSpace;
 #endif
@@ -353,11 +353,7 @@ public class OVRMainMenu : MonoBehaviour
 		Crosshair.SetCrosshairTexture(ref CrosshairImage);
 		Crosshair.SetOVRCameraController (ref CameraController);
 		Crosshair.SetOVRPlayerController(ref PlayerController);
-		PlayerLogic player = (PlayerLogic)GetComponent (typeof(PlayerLogic));
-		if (player != null)
-			if (player.isDefensivePlayer)
-				Crosshair.setEnabledOrNot (true);
-
+		
 		// Check for HMD and sensor
         CheckIfRiftPresent();
 
@@ -970,7 +966,7 @@ public class OVRMainMenu : MonoBehaviour
 #if UNITY_5_0
 		// TODO: Unity 5.0b11 has an older version of the new GUI being developed in Unity 4.6.
 	   	// Remove this once Unity 5 has a more recent merge of Unity 4.6.
-		c.renderMode = RenderMode.World;
+		c.renderMode = RenderMode.WorldSpace;
 #else
 		c.renderMode = RenderMode.WorldSpace;
 #endif

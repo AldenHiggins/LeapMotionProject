@@ -105,7 +105,7 @@ namespace LMWidgets
         {
           m_isPressed = false;
           scrollReleased();
-          content.rigidbody2D.velocity = new Vector2(m_scrollVelocity.X, m_scrollVelocity.Y);
+          content.GetComponent<Rigidbody2D>().velocity = new Vector2(m_scrollVelocity.X, m_scrollVelocity.Y);
         }
       }
     }
@@ -127,7 +127,7 @@ namespace LMWidgets
       // Set content velocity to zero once it's bouncing from the edges (ScrollRect vel > 0)
       if (Mathf.Abs(content.transform.parent.GetComponent<ScrollRect>().velocity.y) > 0.001f)
       {
-        content.rigidbody2D.velocity = Vector2.zero;
+        content.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
       }
     }
 

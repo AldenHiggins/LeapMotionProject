@@ -77,8 +77,6 @@ public class OVRPlayerController : MonoBehaviour
 	private Vector3 MoveThrottle = Vector3.zero;
 	private float FallSpeed = 0.0f;	
 	private OVRPose? InitialPose;
-
-	private bool shouldUseGravity = true;
 	
 	/// <summary>
 	/// If true, each OVRPlayerController will use the player's physical height.
@@ -163,11 +161,6 @@ public class OVRPlayerController : MonoBehaviour
 			FallSpeed = ((Physics.gravity.y * (GravityModifier * 0.002f)));
 		else
 			FallSpeed += ((Physics.gravity.y * (GravityModifier * 0.002f)) * SimulationRate * Time.deltaTime);
-
-
-		// If the player is defensive don't make it affected by gravity
-		if (!shouldUseGravity)
-			FallSpeed = 0;
 
 		moveDirection.y += FallSpeed * SimulationRate * Time.deltaTime;
 
@@ -407,11 +400,6 @@ public class OVRPlayerController : MonoBehaviour
 		Vector3 euler = transform.rotation.eulerAngles;
 		euler.y = YRotation;
 		transform.rotation = Quaternion.Euler(euler);
-	}
-
-	public void changeGravityUse(bool newGravityUse)
-	{
-		shouldUseGravity = newGravityUse;
 	}
 }
 

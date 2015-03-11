@@ -28,7 +28,7 @@ public class MoveAvatar : MonoBehaviour
 
 	public void hidePlayer()
 	{
-		transform.GetChild (0).renderer.enabled = false;
-		transform.GetChild (1).renderer.enabled = false;
+		transform.GetChild (0).GetComponent<Renderer>().enabled = false;
+		transform.GetChild (1).GetComponent<Renderer>().enabled = false;
 	}
 }

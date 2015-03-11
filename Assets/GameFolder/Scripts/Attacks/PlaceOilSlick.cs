@@ -1,15 +1,32 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlaceOilSlick : MonoBehaviour {
+public class PlaceOilSlick : AAttack
+{
+	public DefensiveAbilities defense;
+	private GameLogic game;
+	private GameObject oilSlick;
 
-	// Use this for initialization
-	void Start () {
-	
+
+	public override void chargingFunction(HandModel[] hands){
+		oilSlick = (GameObject)Instantiate (defense.oilSlick);
 	}
 	
-	// Update is called once per frame
-	void Update () {
+	public override void chargedFunction(HandModel[] hands){}
 	
+	public override void releaseFunction(HandModel[] hands){
+	}
+	
+	public override void holdGestureFunction(HandModel[] hands){
+		RaycastHit hit = game.getRayHit();
+		oilSlick.transform.position = hit.point;
+	}
+	
+	public override void inactiveFunction(HandModel[] hands){
+		RaycastHit hit = game.getRayHit();
+		oilSlick.transform.position = hit.point;
+		OilSlick oilSlickScript = (OilSlick)oilSlick.GetComponent (typeof(OilSlick));
+		oilSlickScript.enabled = true;
 	}
 }
+	

@@ -3,11 +3,19 @@ using System.Collections;
 
 public class PlaceTurret : AAttack
 {
-	public override void chargingFunction(HandModel[] hands){}
+	public DefensiveAbilities defense;
+
+	public override void chargingFunction(HandModel[] hands){
+		// Display prospective turret spots
+		defense.showHideTurretPositions (true);
+		defense.highlightClosestTurretPlacementPosition();
+	}
 	
 	public override void chargedFunction(HandModel[] hands){}
 	
-	public override void releaseFunction(HandModel[] hands){}
+	public override void releaseFunction(HandModel[] hands){
+		defense.placeClosestTurret ();
+	}
 	
 	public override void holdGestureFunction(HandModel[] hands){}
 	

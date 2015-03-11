@@ -104,7 +104,7 @@ public class EmitterBehavior : MonoBehaviour
 		GameObject newFireball = (GameObject) Instantiate(fireBall, position, rotation);
 		MoveFireball moveThis = (MoveFireball) newFireball.GetComponent(typeof(MoveFireball));
 		moveThis.setVelocity(velocity);
-		newFireball.renderer.enabled = true;
+		newFireball.GetComponent<Renderer>().enabled = true;
 		moveThis.setHash (hashValue);
 		// Also enable this particle's self destruct feature
 		ProjectileDestroy destroyThis = (ProjectileDestroy) newFireball.GetComponent (typeof(ProjectileDestroy));
@@ -117,12 +117,12 @@ public class EmitterBehavior : MonoBehaviour
 		// If highlighted show attack radius sphere
 		if (highlightOrNot)
 		{
-			gameObject.transform.GetChild (0).gameObject.renderer.enabled = true;
+			gameObject.transform.GetChild (0).gameObject.GetComponent<Renderer>().enabled = true;
 		}
 		// Else hide attack radius sphere
 		else
 		{
-			gameObject.transform.GetChild (0).gameObject.renderer.enabled = false;
+			gameObject.transform.GetChild (0).gameObject.GetComponent<Renderer>().enabled = false;
 		}
 	}
 }

@@ -318,8 +318,8 @@ public class DefensiveAbilities : MonoBehaviour
 		for (int i = 0; i < turretPlacementPositions.transform.childCount; i++)
 		{
 			GameObject turretPos = turretPlacementPositions.transform.GetChild (i).gameObject;
-			turretPos.transform.GetChild (0).gameObject.renderer.enabled = showOrHide;
-			turretPos.transform.GetChild (1).gameObject.renderer.enabled = showOrHide;
+			turretPos.transform.GetChild (0).gameObject.GetComponent<Renderer>().enabled = showOrHide;
+			turretPos.transform.GetChild (1).gameObject.GetComponent<Renderer>().enabled = showOrHide;
 		}
 	}
 

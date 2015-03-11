@@ -68,7 +68,7 @@ public class GameLogic : MonoBehaviour
 	void Start () 
 	{
 		currentPlayerCurrency = startingPlayerCurrency;
-		view = gameObject.networkView;
+		view = gameObject.GetComponent<NetworkView>();
 		fireballCharged = false;
 		isBlocking = false;
 		fireballTimer = 0;
@@ -198,7 +198,8 @@ public class GameLogic : MonoBehaviour
 
 			endRoundScreen.disableUI();
 			turretHud.SetActive(true);
-			while (!callForWaveButtonGraphic.isPressed()) {
+//			offensiveAbilities.handFlipAttack = new;
+			while (!callForWaveButtonGraphic.isPressed() ) {
 				yield return new WaitForSeconds(.2f);
 			}
 			callForWaveButton.ButtonTurnsOff();
@@ -272,7 +273,7 @@ public class GameLogic : MonoBehaviour
 		newFireball.SetActive(true); 
 		MoveFireball moveThis = (MoveFireball) newFireball.GetComponent(typeof(MoveFireball));
 		moveThis.setVelocity(velocity);
-		newFireball.renderer.enabled = true;
+		newFireball.GetComponent<Renderer>().enabled = true;
 		moveThis.setHash (hashValue);
 
 		// Now add newly generated fireball to projectiles dictionary
@@ -394,7 +395,7 @@ public class GameLogic : MonoBehaviour
 		newAttack.SetActive (true);
 		MoveFireball moveThis = (MoveFireball) newAttack.GetComponent(typeof(MoveFireball));
 		moveThis.setVelocity(startingVelocity);
-		newAttack.renderer.enabled = true;
+		newAttack.GetComponent<Renderer>().enabled = true;
 
 			
 	}

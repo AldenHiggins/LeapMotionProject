@@ -14,7 +14,7 @@ public class CrazyFireball : MonoBehaviour {
 	}
 
 	void OnParticleCollision(GameObject other) {
-		Rigidbody body = other.rigidbody;
+		Rigidbody body = other.GetComponent<Rigidbody>();
 		if (body) {
 
 		}
