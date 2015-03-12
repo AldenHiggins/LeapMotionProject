@@ -43,8 +43,8 @@ public class HMDMovement : MonoBehaviour
 //			Vector3 moveVector = playerSpeed.x * perpendicularVector;
 //			moveVector += playerSpeed.z * cameraForward;
 
-			Vector3 moveVector = Vector3.Dot (playerSpeed, perpendicularVector) * perpendicularVector;
-			moveVector += Vector3.Dot (playerSpeed, cameraForward) * cameraForward;
+			Vector3 moveVector = -1 * Vector3.Dot (playerSpeed, perpendicularVector) * perpendicularVector;
+			moveVector -= Vector3.Dot (playerSpeed, cameraForward) * cameraForward;
 			controller.Move (moveVector);
 		}
 	
