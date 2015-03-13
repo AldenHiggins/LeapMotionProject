@@ -115,7 +115,15 @@ public class MoveFireball : MonoBehaviour
 
 	void OnParticleCollision(GameObject other) 
 	{
+		print ("other name: " + other.name);
 
+		if (other.name == "OilSlickCollider")
+		{
+			OilSlick oil = (OilSlick) other.transform.parent.gameObject.GetComponent(typeof(OilSlick));
+			oil.blowUp();
+			Destroy (gameObject);
+		}
+		
 		BasicEnemyController enemy = (BasicEnemyController) other.GetComponent(typeof(BasicEnemyController));	
 		MoveFireball moveScript = (MoveFireball) other.GetComponent ((typeof(MoveFireball)));
 		// Ignore collisions with other fireballs

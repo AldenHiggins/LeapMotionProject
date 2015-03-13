@@ -9,20 +9,29 @@ public class OilSlick : MonoBehaviour {
 	void Start () {
 	}
 
-	void OnTriggerEnter(Collider other) {
-		BasicEnemyController enemy = (BasicEnemyController) other.gameObject.GetComponent(typeof(BasicEnemyController));
+	void OnTriggerEnter(Collider other) 
+	{
 		print(other.name + " collided with oil slick.");
-		if (other.name == "CrazyFireball(Clone)") {
-			print("EXPLOSION!");
-			Vector3 boomPos = transform.position + new Vector3(0f,1f,0f);
-			Instantiate (boom, boomPos, Quaternion.identity);
-			Destroy(gameObject);
-		}
+		BasicEnemyController enemy = (BasicEnemyController) other.gameObject.GetComponent(typeof(BasicEnemyController));
+//		if (other.name == "CrazyFireball(Clone)") {
+//			print("EXPLOSION!");
+//			Vector3 boomPos = transform.position + new Vector3(0f,1f,0f);
+//			Instantiate (boom, boomPos, Quaternion.identity);
+//			Destroy(gameObject);
+//		}
 		if ( enemy!= null ){
 			NavMeshAgent agent = (NavMeshAgent) other.gameObject.GetComponent(typeof(NavMeshAgent));
 			print("speed is " + agent.speed);
 			agent.speed -= agent.speed *(0.5f);
 		}
 
+	}
+
+	public void blowUp()
+	{
+		//print("EXPLOSION!");
+		Vector3 boomPos = transform.position + new Vector3(0f,1f,0f);
+		Instantiate (boom, boomPos, Quaternion.identity);
+		Destroy(gameObject);
 	}
 }

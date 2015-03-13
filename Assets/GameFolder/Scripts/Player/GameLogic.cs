@@ -242,6 +242,10 @@ public class GameLogic : MonoBehaviour
 			}else{
 				hmdMovement.enabled = false;
 			}
+			else
+			{
+				hmdMovement.enabled = false;
+			}
 			// Start the enemy spawners
 			enemyWaves[i].startWave ();
 			// Wait for the round to time out
