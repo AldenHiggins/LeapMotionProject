@@ -10,6 +10,7 @@ public class GameLogic : MonoBehaviour
 	public GameObject thisPlayer;
 	public GameObject thisCamera;
 	public GameObject goalPosition;
+	public bool disableMovement;
 	// Player HUD
 	public GameObject playerHud;
 	// ENEMY SPAWNERS
@@ -64,6 +65,17 @@ public class GameLogic : MonoBehaviour
 	// RUNTIME GAME REPRESENTATION
 	private Dictionary<int, GameObject> projectiles;
 
+	// DEFENSIVE STAGE
+	private bool isDefensiveStageActive = false;
+
+	// ALL THE ATTACKS
+	public AAttack placeTurretAttack;
+	public AAttack placeOilSlickAttack;
+	public AAttack fireballAttack;
+	public AAttack tornadoAttack;
+	public AAttack flameThrowerAttack;
+
+
 	// Initialize variables
 	void Start () 
 	{
@@ -105,16 +117,16 @@ public class GameLogic : MonoBehaviour
 	void Update () 
 	{
 		// Check if round is active in order for players to use their abilities
-		if (roundActive)
+		if (roundActive || isDefensiveStageActive)
 		{
 			if (!playerLogic.isDefensivePlayer)
 			{
 				offensiveAbilities.controlCheck();
 			}
-			else
-			{
-				defensiveAbilities.controlCheck();
-			}
+//			else
+//			{
+//				defensiveAbilities.controlCheck();
+//			}
 		}
 
 		// Shared abilities
@@ -145,7 +157,7 @@ public class GameLogic : MonoBehaviour
 			nextRound = true;
 			nextRoundButton.ButtonTurnsOff();
 			// Temporarily skip turret placement phase
-			callForWaveButton.ButtonTurnsOn();
+			// callForWaveButton.ButtonTurnsOn();
 		}
 
 		// Update round timer
@@ -197,13 +209,23 @@ public class GameLogic : MonoBehaviour
 			}
 
 			endRoundScreen.disableUI();
+
+			isDefensiveStageActive = true;
 			turretHud.SetActive(true);
-//			offensiveAbilities.handFlipAttack = new;
+			defensiveAbilities.showHideTurretPositions(true);
+			offensiveAbilities.handFlipAttack = placeTurretAttack;
+			offensiveAbilities.fistAttack = placeOilSlickAttack;
 			while (!callForWaveButtonGraphic.isPressed() ) {
 				yield return new WaitForSeconds(.2f);
 			}
 			callForWaveButton.ButtonTurnsOff();
+			defensiveAbilities.showHideTurretPositions(false);
 			turretHud.SetActive(false);
+			isDefensiveStageActive = false;
+
+			// Change the hand flip attack to fireball
+			offensiveAbilities.handFlipAttack = fireballAttack;
+			offensiveAbilities.fistAttack = fireballAttack;
 
 			// Start the next round, spawn enemies, wait for the timer
 			nextRound = false;
@@ -214,8 +236,10 @@ public class GameLogic : MonoBehaviour
 			// Enable the player HUD
 			playerHud.SetActive(true);
 			// Enable HMD movement and reset position
-			hmdMovement.enabled = true;
-			hmdMovement.resetPosition();
+			if(!disableMovement){
+				hmdMovement.enabled = true;
+				hmdMovement.resetPosition();
+			}
 			// Start the enemy spawners
 			enemyWaves[i].startWave ();
 			// Wait for the round to time out
@@ -271,10 +295,10 @@ public class GameLogic : MonoBehaviour
 	{
 		GameObject newFireball = (GameObject) Instantiate(fireBall, position, rotation);
 		newFireball.SetActive(true); 
-		MoveFireball moveThis = (MoveFireball) newFireball.GetComponent(typeof(MoveFireball));
-		moveThis.setVelocity(velocity);
-		newFireball.GetComponent<Renderer>().enabled = true;
-		moveThis.setHash (hashValue);
+//		MoveFireball moveThis = (MoveFireball) newFireball.GetComponent(typeof(MoveFireball));
+//		moveThis.setVelocity(velocity);
+//		newFireball.GetComponent<Renderer>().enabled = true;
+//		moveThis.setHash (hashValue);
 
 		// Now add newly generated fireball to projectiles dictionary
 		projectiles.Add (hashValue, newFireball);

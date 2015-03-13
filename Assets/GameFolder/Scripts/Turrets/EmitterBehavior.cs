@@ -101,15 +101,15 @@ public class EmitterBehavior : MonoBehaviour
 	
 	public GameObject createFireball(Vector3 position, Quaternion rotation, Vector3 velocity, int hashValue)
 	{
-		GameObject newFireball = (GameObject) Instantiate(fireBall, position, rotation);
-		MoveFireball moveThis = (MoveFireball) newFireball.GetComponent(typeof(MoveFireball));
-		moveThis.setVelocity(velocity);
-		newFireball.GetComponent<Renderer>().enabled = true;
-		moveThis.setHash (hashValue);
-		// Also enable this particle's self destruct feature
-		ProjectileDestroy destroyThis = (ProjectileDestroy) newFireball.GetComponent (typeof(ProjectileDestroy));
-		destroyThis.enabled = true;
-		return newFireball;
+		return (GameObject) Instantiate(fireBall, position, rotation);
+//		MoveFireball moveThis = (MoveFireball) newFireball.GetComponent(typeof(MoveFireball));
+//		moveThis.setVelocity(velocity);
+//		newFireball.GetComponent<Renderer>().enabled = true;
+//		moveThis.setHash (hashValue);
+//		// Also enable this particle's self destruct feature
+//		ProjectileDestroy destroyThis = (ProjectileDestroy) newFireball.GetComponent (typeof(ProjectileDestroy));
+//		destroyThis.enabled = true;
+		//return newFireball;
 	}
 
 	public void highlight(bool highlightOrNot)
