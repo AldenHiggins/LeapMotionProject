@@ -239,6 +239,8 @@ public class GameLogic : MonoBehaviour
 			if(!disableMovement){
 				hmdMovement.enabled = true;
 				hmdMovement.resetPosition();
+			}else{
+				hmdMovement.enabled = false;
 			}
 			// Start the enemy spawners
 			enemyWaves[i].startWave ();
