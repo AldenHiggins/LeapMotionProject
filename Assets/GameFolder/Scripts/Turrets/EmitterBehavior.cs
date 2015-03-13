@@ -101,7 +101,15 @@ public class EmitterBehavior : MonoBehaviour
 	
 	public GameObject createFireball(Vector3 position, Quaternion rotation, Vector3 velocity, int hashValue)
 	{
-		return (GameObject) Instantiate(fireBall, position, rotation);
+		GameObject newFireball = (GameObject) Instantiate(fireBall, position, rotation);
+
+		newFireball.SetActive(true); 
+		MoveFireball moveThis = (MoveFireball) newFireball.GetComponent(typeof(MoveFireball));
+		moveThis.setVelocity(velocity);
+		newFireball.GetComponent<Renderer>().enabled = true;
+		moveThis.setHash (0);
+
+		return newFireball;
 //		MoveFireball moveThis = (MoveFireball) newFireball.GetComponent(typeof(MoveFireball));
 //		moveThis.setVelocity(velocity);
 //		newFireball.GetComponent<Renderer>().enabled = true;

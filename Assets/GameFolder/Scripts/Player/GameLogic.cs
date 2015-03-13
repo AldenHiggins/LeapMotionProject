@@ -240,6 +240,10 @@ public class GameLogic : MonoBehaviour
 				hmdMovement.enabled = true;
 				hmdMovement.resetPosition();
 			}
+			else
+			{
+				hmdMovement.enabled = false;
+			}
 			// Start the enemy spawners
 			enemyWaves[i].startWave ();
 			// Wait for the round to time out
