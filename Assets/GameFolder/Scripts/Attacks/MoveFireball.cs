@@ -125,6 +125,7 @@ public class MoveFireball : MonoBehaviour
 		}
 		
 		BasicEnemyController enemy = (BasicEnemyController) other.GetComponent(typeof(BasicEnemyController));	
+		TutorialEnemyController tutorialEnemy = (TutorialEnemyController)other.GetComponent (typeof(TutorialEnemyController));
 		MoveFireball moveScript = (MoveFireball) other.GetComponent ((typeof(MoveFireball)));
 		// Ignore collisions with other fireballs
 		if (moveScript != null)
@@ -173,6 +174,13 @@ public class MoveFireball : MonoBehaviour
 //
 //			Instantiate (explosion, collisionEvents[0].intersection, Quaternion.LookRotation (collisionEvents[0].normal.normalized));
 //			Destroy(gameObject);
+		}
+		else if (tutorialEnemy != null)
+		{
+			if (shouldMoveEnemies)
+				tutorialEnemy.applyForce(velocity * 20 + new Vector3(0.0f, 10.0f, 0.0f));
+			
+			tutorialEnemy.dealDamage(damage);
 		}
 		else
 		{

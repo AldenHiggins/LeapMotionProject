@@ -5,7 +5,8 @@ using System.Collections;
 public class TutorialGestureMessage : MonoBehaviour 
 {
 	public GameObject gesture;
-	public HandController handController;
+
+	public bool activateOffense;
 
 	public Text displayMessage;
 	public float firstMessageTime;
@@ -26,7 +27,8 @@ public class TutorialGestureMessage : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
-		gesture.SetActive (true);
+		if (gesture != null)
+			gesture.SetActive (true);
 		StartCoroutine (messageFunction ());
 	}
 	
@@ -42,7 +44,8 @@ public class TutorialGestureMessage : MonoBehaviour
 		displayMessage.text = secondMessage.Replace("lineline","\n");
 		yield return new WaitForSeconds (secondMessageTime);
 		displayMessage.text = thirdMessage.Replace("lineline","\n");
-		StartCoroutine (activateOffensiveAbilities ());
+		if (activateOffense)
+			StartCoroutine (activateOffensiveAbilities ());
 		yield return new WaitForSeconds (thirdMessageTime);
 		displayMessage.text = fourthMessage.Replace("lineline","\n");
 		enemyToSpawn.SetActive (true);
