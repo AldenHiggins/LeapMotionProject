@@ -199,25 +199,34 @@ public class GameLogic : MonoBehaviour
 				yield return new WaitForSeconds(.2f);
 			}
 
-			// Disable hand controller for defensive player
-			if (playerLogic.isDefensivePlayer)
-			{
-				HandController hand = (HandController) thisPlayer.transform.GetChild (1).GetChild (1).
-					GetChild (0).gameObject.GetComponent(typeof(HandController));
-				hand.DestroyAllHands();
-				hand.enabled = false;
-			}
-
+			// Remove attack selection screen
 			endRoundScreen.disableUI();
 
+			// Start defensive setup phase
 			isDefensiveStageActive = true;
 			turretHud.SetActive(true);
 			defensiveAbilities.showHideTurretPositions(true);
 			offensiveAbilities.handFlipAttack = placeTurretAttack;
 			offensiveAbilities.fistAttack = placeOilSlickAttack;
-			while (!callForWaveButtonGraphic.isPressed() ) {
+
+			// Enable HMD movement and reset position if enabled
+			if(!disableMovement)
+			{
+				hmdMovement.enabled = true;
+				hmdMovement.resetPosition();
+			}
+			else
+			{
+				hmdMovement.enabled = false;
+			}
+
+			// Wait for player to end defensive setup phase
+			while (!callForWaveButtonGraphic.isPressed()) 
+			{
 				yield return new WaitForSeconds(.2f);
 			}
+
+			// Clean up defensive setup stuff
 			callForWaveButton.ButtonTurnsOff();
 			defensiveAbilities.showHideTurretPositions(false);
 			turretHud.SetActive(false);
@@ -230,20 +239,11 @@ public class GameLogic : MonoBehaviour
 			// Start the next round, spawn enemies, wait for the timer
 			nextRound = false;
 			roundActive = true;
-//			currentRoundTime = rounds[i];
 			currentRoundTime = enemyWaves[i].roundTime;
-//			enableDisableSpawners(true);
 			// Enable the player HUD
 			playerHud.SetActive(true);
-			// Enable HMD movement and reset position
-			if(!disableMovement){
-				hmdMovement.enabled = true;
-				hmdMovement.resetPosition();
-			}
-			else
-			{
-				hmdMovement.enabled = false;
-			}
+
+		
 			// Start the enemy spawners
 			enemyWaves[i].startWave ();
 			// Wait for the round to time out
@@ -258,7 +258,9 @@ public class GameLogic : MonoBehaviour
 				yield return new WaitForSeconds(.3f);
 			}
 
+			// Deactivate round
 			roundActive = false;
+			hmdMovement.enabled = false;
 		}
 
 		// The game/map is over, display end game screen

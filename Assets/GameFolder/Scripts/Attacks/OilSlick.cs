@@ -7,7 +7,6 @@ public class OilSlick : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		print ("Oil started");
 	}
 
 	void OnTriggerEnter(Collider other) 
@@ -30,7 +29,7 @@ public class OilSlick : MonoBehaviour {
 
 	public void blowUp()
 	{
-		print("EXPLOSION!");
+		//print("EXPLOSION!");
 		Vector3 boomPos = transform.position + new Vector3(0f,1f,0f);
 		Instantiate (boom, boomPos, Quaternion.identity);
 		Destroy(gameObject);
