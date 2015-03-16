@@ -26,6 +26,14 @@ public class BasicEnemyController : MonoBehaviour
 	private AudioSource source;
 	public AudioClip woundSound;
 	public AudioClip killSound;
+	// HEALTH BARS
+	public bool showHealthBar;
+	public GameObject greenHealthBar;
+	public GameObject redHealthBar;
+	public float healthBarVerticalOffset;
+	private GameObject greenHealth;
+	private GameObject redHealth;
+	private float startingHealthScale;
 	// Use this for initialization
 	void Start () 
 	{
@@ -37,6 +45,17 @@ public class BasicEnemyController : MonoBehaviour
 		if (showNavMeshPath)
 			thisPathLine = (GameObject) Instantiate (pathLine);
 		source = GetComponent<AudioSource> ();
+
+		if (showHealthBar)
+		{
+			greenHealth = (GameObject) Instantiate(greenHealthBar);
+			redHealth = (GameObject) Instantiate(redHealthBar);
+			greenHealth.transform.parent = gameObject.transform;
+			redHealth.transform.parent = gameObject.transform;
+			greenHealth.transform.localPosition = new Vector3(0.0f, healthBarVerticalOffset, 0.0f);
+			redHealth.transform.localPosition = new Vector3(0.0f, healthBarVerticalOffset, 0.0f);
+			startingHealthScale = greenHealth.transform.localScale.y;
+		}
 	}
 	
 	// Update is called once per frame
@@ -44,7 +63,7 @@ public class BasicEnemyController : MonoBehaviour
 	{
 		if (health < 0)
 			return;
-
+	
 
 //		print ("Current velocity: " + rigidbody.velocity);
 
@@ -118,13 +137,17 @@ public class BasicEnemyController : MonoBehaviour
 		if (anim == null)
 			return;
 		health -= damage;
+
 		if (health > 0)
 		{
+			greenHealth.transform.localScale = new Vector3(greenHealth.transform.localScale.x, (((float)health / startingHealth) * startingHealthScale), greenHealth.transform.localScale.z);
 			anim.Play ("wound");
 			source.PlayOneShot(woundSound);
 		}
 		else
 		{
+			Destroy (greenHealth);
+			Destroy (redHealth);
 			source.PlayOneShot(killSound);
 			StartCoroutine(kill());
 		}
