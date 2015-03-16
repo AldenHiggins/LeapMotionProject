@@ -17,22 +17,27 @@ public class PlaceOilSlick : AAttack
 	public override void chargedFunction(HandModel[] hands){}
 	
 	public override void releaseFunction(HandModel[] hands){
-		RaycastHit hit = game.getRayHit();
-		GameObject oilSlickFinal = (GameObject)Instantiate (oilSlick);
-		oilSlickFinal.transform.position = hit.point;
-		Destroy (createdOilSlick);
-		OilSlick oilSlickScript = (OilSlick)oilSlickFinal.GetComponent (typeof(OilSlick));
-		oilSlickScript.enabled = true;
-		isInstantiated = false;
+		if (game.getNumSlicksLeft () > 0) {
+			RaycastHit hit = game.getRayHit ();
+			GameObject oilSlickFinal = (GameObject)Instantiate (oilSlick);
+			oilSlickFinal.transform.position = hit.point;
+			Destroy (createdOilSlick);
+			OilSlick oilSlickScript = (OilSlick)oilSlickFinal.GetComponent (typeof(OilSlick));
+			oilSlickScript.enabled = true;
+			isInstantiated = false;
+			game.slickUsed();
+		}
 	}
 	
 	public override void holdGestureFunction(HandModel[] hands){
-		if (!isInstantiated) {
-			createdOilSlick = (GameObject)Instantiate (oilSlickPending);
-			isInstantiated = true;
+		if (game.getNumSlicksLeft () > 0) {
+			if (!isInstantiated) {
+				createdOilSlick = (GameObject)Instantiate (oilSlickPending);
+				isInstantiated = true;
+			}
+			RaycastHit hit = game.getRayHit ();
+			createdOilSlick.transform.position = hit.point;
 		}
-		RaycastHit hit = game.getRayHit();
-		createdOilSlick.transform.position = hit.point;
 	}
 	
 	public override void inactiveFunction(HandModel[] hands){
