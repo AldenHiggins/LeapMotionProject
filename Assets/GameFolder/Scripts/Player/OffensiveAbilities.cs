@@ -27,6 +27,7 @@ public class OffensiveAbilities : MonoBehaviour
 	public AAttack handFlipAttack;
 	public AAttack fistAttack;
 	public AAttack circularHandAttack;
+	public AAttack clapAttack;
 	// DEFENSIVE ABILITIES
 	private DefensiveAbilities defense;
 
@@ -235,6 +236,7 @@ public class OffensiveAbilities : MonoBehaviour
 				if (distance.magnitude < .09) 
 				{
 //					game.clapAttack (playerLogic.transform.position + new Vector3 (0.0f, 0.7f, 0.0f));
+					clapAttack.releaseFunction(hands);
 				}
 			}
 
