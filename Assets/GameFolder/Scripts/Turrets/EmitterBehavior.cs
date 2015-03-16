@@ -30,11 +30,13 @@ public class EmitterBehavior : MonoBehaviour
 		Collider[] nearbyObjects = Physics.OverlapSphere (transform.position, attackRadius);
 		float minDistance = float.MaxValue;
 		BasicEnemyController nearestEnemy = null;
+		TutorialEnemyController nearestTutEnemy = null;
 		for (int i = 0; i < nearbyObjects.Length; i++)
 		{
 			if (nearbyObjects[i].transform.childCount > 0)
 			{
 				BasicEnemyController enemy = (BasicEnemyController) nearbyObjects[i].gameObject.GetComponent(typeof(BasicEnemyController));
+				TutorialEnemyController enemyTut = (TutorialEnemyController) nearbyObjects[i].gameObject.GetComponent(typeof(TutorialEnemyController));
 				if (enemy != null)
 				{
 					float distance = Vector3.Distance (transform.position, enemy.transform.position);
@@ -42,6 +44,16 @@ public class EmitterBehavior : MonoBehaviour
 					{
 						minDistance = distance;
 						nearestEnemy = enemy;
+					}
+				}
+
+				if (enemyTut != null)
+				{
+					float distance = Vector3.Distance (transform.position, enemyTut.transform.position);
+					if (distance < minDistance)
+					{
+						minDistance = distance;
+						nearestTutEnemy = enemyTut;
 					}
 				}
 			}
@@ -83,6 +95,47 @@ public class EmitterBehavior : MonoBehaviour
 					
 					createFireball(startPosition, Quaternion.identity, secondVelocity, 0);
 //					createFireball(startPosition, Quaternion.AngleAxis(yRotation + 15, Vector3.up), velocity, 0);
+				}
+				//view.RPC ("makeFireballNetwork", RPCMode.Others, new Vector3(-4.6f, 76.75f, 1.8f), Quaternion.identity, new Vector3(0.0f, 0.0f, -0.1f), hash);
+			}
+		}
+		// TODO: CHANGE THIS
+		else if (nearestTutEnemy != null)
+		{
+			// Turn to face the enemy
+			transform.rotation = Quaternion.LookRotation(nearestTutEnemy.transform.position - transform.position);
+			transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
+			
+			// Launch fireball as long as an enemy is found
+			fireballTimer++;
+			if (fireballTimer > emissionFrequency)
+			{
+				fireballTimer = 0;
+				Vector3 velocity = transform.forward.normalized;
+				Vector3 startPosition = transform.position + velocity * 1;
+				// Apply the correct velocity to the emission
+				velocity *= emissionVelocity;
+				GameObject newFireball = createFireball(startPosition, transform.rotation, velocity, 0);
+				MoveFireball fireball = (MoveFireball) newFireball.GetComponent(typeof(MoveFireball));
+				fireball.setTarget(nearestTutEnemy.gameObject);
+				
+				// Fire three particles for a multi-attack
+				if (multiAttack)
+				{
+					Quaternion newRotation = transform.rotation * Quaternion.Euler (15 * Vector3.up);
+					Vector3 newVelocity =  newRotation * Vector3.forward;
+					newVelocity.Normalize();
+					newVelocity *= emissionVelocity;
+					
+					createFireball(startPosition, Quaternion.identity, newVelocity, 0);
+					
+					Quaternion rotation2 = transform.rotation * Quaternion.Euler (-15 * Vector3.up);
+					Vector3 secondVelocity =  rotation2 * Vector3.forward;
+					secondVelocity.Normalize();
+					secondVelocity *= emissionVelocity;
+					
+					createFireball(startPosition, Quaternion.identity, secondVelocity, 0);
+					//					createFireball(startPosition, Quaternion.AngleAxis(yRotation + 15, Vector3.up), velocity, 0);
 				}
 				//view.RPC ("makeFireballNetwork", RPCMode.Others, new Vector3(-4.6f, 76.75f, 1.8f), Quaternion.identity, new Vector3(0.0f, 0.0f, -0.1f), hash);
 			}
