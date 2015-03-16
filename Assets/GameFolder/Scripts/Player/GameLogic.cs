@@ -16,10 +16,8 @@ public class GameLogic : MonoBehaviour
 	// ENEMY SPAWNERS
 	public GameObject enemySpawners;
 	public GameObject spawnedEnemies;
-	public GameObject clapFireball;
 	// PLAYER ATTACKS
 	public GameObject fireBall;
-	public GameObject clapProjectile;
 	public HandController handController = null;
 	public int startingPlayerCurrency;
 
@@ -34,7 +32,6 @@ public class GameLogic : MonoBehaviour
 	public UIFollowPlayer endRoundScreen;
 	public GameObject winScreen;
 	private float currentRoundTime = 0;
-	public int[] rounds;
 	private int currentRound = 0;
 	public Text roundTimerText;
 	public Text roundText;
@@ -74,6 +71,7 @@ public class GameLogic : MonoBehaviour
 	public AAttack fireballAttack;
 	public AAttack tornadoAttack;
 	public AAttack flameThrowerAttack;
+	public AAttack iceBallAttack;
 
 
 	// Initialize variables
@@ -234,7 +232,7 @@ public class GameLogic : MonoBehaviour
 
 			// Change the hand flip attack to fireball
 			offensiveAbilities.handFlipAttack = fireballAttack;
-			offensiveAbilities.fistAttack = fireballAttack;
+			offensiveAbilities.fistAttack = iceBallAttack;
 
 			// Start the next round, spawn enemies, wait for the timer
 			nextRound = false;
@@ -283,12 +281,6 @@ public class GameLogic : MonoBehaviour
 //				spawnScript.stopSpawning();
 //			}
 //		}
-	}
-
-
-	public void clapAttack(Vector3 position)
-	{
-		Instantiate (clapProjectile, position, Quaternion.identity);
 	}
 
 	[RPC]
@@ -412,22 +404,5 @@ public class GameLogic : MonoBehaviour
 		currentPlayerCurrency += currencyChange;
 	}
 
-	public void fistProjectile(){
-
-		// Make sure the fireball spawns in front of the player at a reasonable distance
-		Vector3 spawnPosition = thisCamera.transform.position;
-		spawnPosition += new Vector3(thisCamera.transform.forward.normalized.x * .8f, thisCamera.transform.forward.normalized.y * .8f, thisCamera.transform.forward.normalized.z * .8f);
-		// Scale the fireball's velocity
-		Vector3 startingVelocity = thisCamera.transform.forward.normalized;
-		startingVelocity *= .2f;
-
-		GameObject newAttack = (GameObject) Instantiate(clapFireball, spawnPosition, thisCamera.transform.rotation);
-		newAttack.SetActive (true);
-		MoveFireball moveThis = (MoveFireball) newAttack.GetComponent(typeof(MoveFireball));
-		moveThis.setVelocity(startingVelocity);
-		newAttack.GetComponent<Renderer>().enabled = true;
-
-			
-	}
 
 }

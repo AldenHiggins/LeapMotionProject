@@ -234,7 +234,7 @@ public class OffensiveAbilities : MonoBehaviour
 				Vector3 distance = hands [0].GetPalmPosition () - hands [1].GetPalmPosition ();
 				if (distance.magnitude < .09) 
 				{
-					game.clapAttack (playerLogic.transform.position + new Vector3 (0.0f, 0.7f, 0.0f));
+//					game.clapAttack (playerLogic.transform.position + new Vector3 (0.0f, 0.7f, 0.0f));
 				}
 			}
 
