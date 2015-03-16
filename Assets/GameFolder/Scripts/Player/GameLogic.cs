@@ -247,7 +247,7 @@ public class GameLogic : MonoBehaviour
 			// Start the enemy spawners
 			enemyWaves[i].startWave ();
 			// Wait for the round to time out
-			yield return new WaitForSeconds(rounds[i]);
+			yield return new WaitForSeconds(currentRoundTime);
 
 			// Turn off spawners
 //			enableDisableSpawners(false);
