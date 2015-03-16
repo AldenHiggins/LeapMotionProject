@@ -25,6 +25,8 @@ public class MoveFireball : MonoBehaviour
 
 	private int hashValue;
 
+	public bool explodeOnContact;
+
 	// Use this for initialization
 	void Start () 
 	{
@@ -123,6 +125,8 @@ public class MoveFireball : MonoBehaviour
 			oil.blowUp();
 			Destroy (gameObject);
 		}
+
+
 		
 		BasicEnemyController enemy = (BasicEnemyController) other.GetComponent(typeof(BasicEnemyController));	
 		TutorialEnemyController tutorialEnemy = (TutorialEnemyController)other.GetComponent (typeof(TutorialEnemyController));
@@ -157,6 +161,11 @@ public class MoveFireball : MonoBehaviour
 		// Collide with an enemy
 		else if (enemy != null)
 		{
+			if (explodeOnContact)
+			{
+				Instantiate (explosion, other.transform.position, Quaternion.identity);
+			}
+
 			if (shouldMoveEnemies)
 				enemy.applyForce(velocity * 20 + new Vector3(0.0f, 10.0f, 0.0f));
 
