@@ -7,6 +7,7 @@ public class PlaceTurret : AAttack
 
 	public override void chargingFunction(HandModel[] hands){
 		// Display prospective turret spots
+		// defense.showHideTurretPositions (true);
 		defense.highlightClosestTurretPlacementPosition();
 		//print ("Place Turret is charging!");
 	}
