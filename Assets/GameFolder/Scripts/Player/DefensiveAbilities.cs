@@ -266,7 +266,7 @@ public class DefensiveAbilities : MonoBehaviour
 		if (game.getCurrencyValue() < turretCost)
 			return;
 		game.changeCurrency(-turretCost);
-		
+		game.updateTurretsLeftText ();
 		GameObject closestTurret = getClosestTurret();
 		
 		if (closestTurret != null) 
