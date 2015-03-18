@@ -63,7 +63,11 @@ public class GameLogic : MonoBehaviour
 	private Dictionary<int, GameObject> projectiles;
 
 	// DEFENSIVE STAGE
+	public Text oilSlicksLeft;
+	public Text TurretsLeft;
 	private bool isDefensiveStageActive = false;
+	private int numSlicks = 2;
+
 
 	// ALL THE ATTACKS
 	public AAttack placeTurretAttack;
@@ -206,6 +210,8 @@ public class GameLogic : MonoBehaviour
 			defensiveAbilities.showHideTurretPositions(true);
 			offensiveAbilities.handFlipAttack = placeTurretAttack;
 			offensiveAbilities.fistAttack = placeOilSlickAttack;
+			numSlicks = 2;
+			updateOilSlicksLeftText();
 
 			// Enable HMD movement and reset position if enabled
 			if(!disableMovement)
@@ -404,5 +410,22 @@ public class GameLogic : MonoBehaviour
 		currentPlayerCurrency += currencyChange;
 	}
 
+	// OILSLICK LIMITER
+	public int getNumSlicksLeft(){
+		return numSlicks;
+	}
 
+	public void slickUsed(){
+		numSlicks--;
+		updateOilSlicksLeftText ();
+	}
+
+	private void updateOilSlicksLeftText ()
+	{
+		oilSlicksLeft.text = numSlicks + " Left";
+	}
+
+	public void updateTurretsLeftText(){
+		TurretsLeft.text =  Mathf.Floor(getCurrencyValue() / defensiveAbilities.turretCost) + " Left";
+	}
 }

@@ -309,7 +309,7 @@ public class DefensiveAbilities : MonoBehaviour
 
 	public void highlightClosestTurretPlacementPosition()
 	{
-		showHideTurretPositions (true);
+		//showHideTurretPositions (true);
 		if (highlightTurret != null) 
 		{
 			TurretPlacementSpot placement = (TurretPlacementSpot) highlightTurret.GetComponent(typeof(TurretPlacementSpot));
