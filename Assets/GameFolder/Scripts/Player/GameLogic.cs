@@ -19,7 +19,6 @@ public class GameLogic : MonoBehaviour
 	// PLAYER ATTACKS
 	public GameObject fireBall;
 	public HandController handController = null;
-	public int startingPlayerCurrency;
 
 	// TURRET PLACEMENT HUD
 	public GameObject turretHud;
@@ -51,9 +50,7 @@ public class GameLogic : MonoBehaviour
 	private bool previousSwitchPressed = false;
 	private bool fireballCharged;
 	private bool isBlocking;
-	// PLAYER CURRENCY
-	public Text currencyText;
-	private int currentPlayerCurrency;
+
 	// FIreball timing variable.
 	private int fireballTimer;
 	// HEAD BASED MOVEMENT
@@ -63,10 +60,7 @@ public class GameLogic : MonoBehaviour
 	private Dictionary<int, GameObject> projectiles;
 
 	// DEFENSIVE STAGE
-	public Text oilSlicksLeft;
-	public Text TurretsLeft;
 	private bool isDefensiveStageActive = false;
-	private int numSlicks = 2;
 
 
 	// ALL THE ATTACKS
@@ -77,11 +71,9 @@ public class GameLogic : MonoBehaviour
 	public AAttack flameThrowerAttack;
 	public AAttack iceBallAttack;
 
-
 	// Initialize variables
 	void Start () 
 	{
-		currentPlayerCurrency = startingPlayerCurrency;
 		view = gameObject.GetComponent<NetworkView>();
 		fireballCharged = false;
 		isBlocking = false;
@@ -139,9 +131,6 @@ public class GameLogic : MonoBehaviour
 			print ("Switching is happening");
 			playerLogic.switchOffensiveDefensive ();
 		}
-
-		// Update current currency gui value
-		currencyText.text = "" + currentPlayerCurrency;
 
 		previousSwitchPressed = switchButtonPressed;
 
@@ -210,8 +199,6 @@ public class GameLogic : MonoBehaviour
 			defensiveAbilities.showHideTurretPositions(true);
 			offensiveAbilities.handFlipAttack = placeTurretAttack;
 			offensiveAbilities.fistAttack = placeOilSlickAttack;
-			numSlicks = 2;
-			updateOilSlicksLeftText();
 
 			// Enable HMD movement and reset position if enabled
 			if(!disableMovement)
@@ -399,33 +386,6 @@ public class GameLogic : MonoBehaviour
 	}
 
 
-	// CURRENCY FUNCTIONALITY
-	public int getCurrencyValue()
-	{
-		return currentPlayerCurrency;
-	}
 
-	public void changeCurrency(int currencyChange)
-	{
-		currentPlayerCurrency += currencyChange;
-	}
 
-	// OILSLICK LIMITER
-	public int getNumSlicksLeft(){
-		return numSlicks;
-	}
-
-	public void slickUsed(){
-		numSlicks--;
-		updateOilSlicksLeftText ();
-	}
-
-	private void updateOilSlicksLeftText ()
-	{
-		oilSlicksLeft.text = numSlicks + " Left";
-	}
-
-	public void updateTurretsLeftText(){
-		TurretsLeft.text =  Mathf.Floor(getCurrencyValue() / defensiveAbilities.turretCost) + " Left";
-	}
 }

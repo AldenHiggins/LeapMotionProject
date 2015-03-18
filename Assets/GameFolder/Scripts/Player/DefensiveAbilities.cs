@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class DefensiveAbilities : MonoBehaviour
 {
+	// PLAYER OBJECT
+	private PlayerLogic player;
 	// ATTACKS
 	public GameObject clapProjectile;
 	public AAttack placeOilSlickAttack;
@@ -17,6 +20,8 @@ public class DefensiveAbilities : MonoBehaviour
 	public GameObject oilSlick;
 	// TURRET COST
 	public int turretCost;
+	// OILSLICK COST
+	public int oilSlickCost;
 	// GAME CONTROLLER VARIABLES
 	private bool previousOilButtonPressed = false;
 	private bool previousTurretButtonPressed = false;
@@ -29,6 +34,10 @@ public class DefensiveAbilities : MonoBehaviour
 	// CURRENTLY SELECTED TURRET
 	private EmitterBehavior selectedTurret = null;
 	private int turretTypeIndex = 0;
+
+	// DEFENSIVE STAGE
+	public Text oilSlicksLeft;
+	public Text TurretsLeft;
 
 	// Use this for initialization
 	void Start () 
@@ -265,10 +274,10 @@ public class DefensiveAbilities : MonoBehaviour
 	{
 		showHideTurretPositions (false);
 		
-		if (game.getCurrencyValue() < turretCost)
+		if (player.getCurrencyValue() < turretCost)
 			return;
-		game.changeCurrency(-turretCost);
-		game.updateTurretsLeftText ();
+		player.changeCurrency(-turretCost);
+		updateTurretsLeftText ();
 		GameObject closestTurret = getClosestTurret();
 		
 		if (closestTurret != null) 
@@ -364,7 +373,25 @@ public class DefensiveAbilities : MonoBehaviour
 
 		return closestTurret;
 	}
+
+
+	public int getNumSlicksLeft(){
+		return (int) Mathf.Floor(player.getCurrencyValue() / oilSlickCost);
+	}
+	public void slickUsed(){
+		updateOilSlicksLeftText ();
+	}
+	
+	private void updateOilSlicksLeftText ()
+	{
+		oilSlicksLeft.text =  getNumSlicksLeft() + " Left";
+	}
+	
+	public void updateTurretsLeftText(){
+		TurretsLeft.text =  Mathf.Floor(player.getCurrencyValue() / turretCost) + " Left";
+	}
 }
+
 
 
 

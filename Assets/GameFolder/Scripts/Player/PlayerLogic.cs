@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class PlayerLogic : MonoBehaviour 
@@ -15,6 +16,11 @@ public class PlayerLogic : MonoBehaviour
 	private int health;
 	private int energy;
 
+	// PLAYER CURRENCY
+	public Text currencyText;
+	private int currentPlayerCurrency;
+	public int startingPlayerCurrency;
+
 	// Use this for initialization
 	void Start () 
 	{
@@ -28,6 +34,7 @@ public class PlayerLogic : MonoBehaviour
 		health = 100;
 		energy = 100;
 		energyCounter = 0;
+		currentPlayerCurrency = startingPlayerCurrency;
 	}
 
 	private int energyRefreshCount = 100;
@@ -35,6 +42,9 @@ public class PlayerLogic : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
+		// Update current currency gui value
+		//currencyText.text = "" + currentPlayerCurrency;
+		
 		healthSlider.SetWidgetValue (health / 100.0f);
 		manaSlider.SetWidgetValue (energy / 100.0f);
 		energyCounter++;
@@ -105,5 +115,16 @@ public class PlayerLogic : MonoBehaviour
 				GetChild (0).gameObject.GetComponent(typeof(HandController));
 			hand.enabled = true;
 		}
+	}
+
+	// CURRENCY FUNCTIONALITY
+	public int getCurrencyValue()
+	{
+		return currentPlayerCurrency;
+	}
+	
+	public void changeCurrency(int currencyChange)
+	{
+		currentPlayerCurrency += currencyChange;
 	}
 }

@@ -4,6 +4,7 @@ using System.Collections;
 public class BasicEnemyController : MonoBehaviour 
 {
 	public GameLogic game;
+	public PlayerLogic player;
 	public float speed;
 	public int startingHealth;
 	public float attackRadius;
@@ -187,7 +188,7 @@ public class BasicEnemyController : MonoBehaviour
 		{
 			agent.enabled = false;
 		}
-		game.changeCurrency (currencyOnKill);
+		player.changeCurrency (currencyOnKill);
 		anim.Play ("death");
 		while(!anim.GetCurrentAnimatorStateInfo(0).IsName("death"))
 		{
