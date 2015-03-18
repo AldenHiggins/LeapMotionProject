@@ -6,6 +6,8 @@ public class DefensiveAbilities : MonoBehaviour
 {
 	// ATTACKS
 	public GameObject clapProjectile;
+	public AAttack placeOilSlickAttack;
+	public AAttack placeTurretAttack;
 	// TURRETS
 	public GameObject cTurret;
 	public GameObject turretPlacementPositions;
@@ -267,6 +269,27 @@ public class DefensiveAbilities : MonoBehaviour
 			return;
 		game.changeCurrency(-turretCost);
 		game.updateTurretsLeftText ();
+		GameObject closestTurret = getClosestTurret();
+		
+		if (closestTurret != null) 
+		{
+			GameObject newTurret = (GameObject) Instantiate (cTurret, closestTurret.transform.position, closestTurret.transform.rotation);
+			// Add this turret to the list of all turrets
+			newTurret.transform.parent = placedTurrets.transform;
+			// Enable this turret's script
+			((EmitterBehavior) newTurret.GetComponent(typeof(EmitterBehavior))).enabled = true;
+			Destroy (closestTurret);
+		}
+		else 
+		{
+			print ("Could not place a turret, no more locations available!");
+		}
+	}
+
+	public void tutorialPlaceClosestTurret()
+	{
+		showHideTurretPositions (false);
+		
 		GameObject closestTurret = getClosestTurret();
 		
 		if (closestTurret != null) 

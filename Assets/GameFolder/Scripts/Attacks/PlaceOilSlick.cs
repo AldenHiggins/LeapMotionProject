@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PlaceOilSlick : AAttack
 {
-	public GameLogic game;
+	public GameObject thisCamera;
 	public GameObject oilSlick;
 	public GameObject oilSlickPending;
 	private bool isInstantiated = false;
@@ -17,30 +17,41 @@ public class PlaceOilSlick : AAttack
 	public override void chargedFunction(HandModel[] hands){}
 	
 	public override void releaseFunction(HandModel[] hands){
-		if (game.getNumSlicksLeft () > 0) {
-			RaycastHit hit = game.getRayHit ();
+//		if (game.getNumSlicksLeft () > 0) {
+			RaycastHit hit = getRayHit ();
 			GameObject oilSlickFinal = (GameObject)Instantiate (oilSlick);
 			oilSlickFinal.transform.position = hit.point;
 			Destroy (createdOilSlick);
 			OilSlick oilSlickScript = (OilSlick)oilSlickFinal.GetComponent (typeof(OilSlick));
 			oilSlickScript.enabled = true;
 			isInstantiated = false;
-			game.slickUsed();
-		}
+//			game.slickUsed();
+//		}
 	}
 	
 	public override void holdGestureFunction(HandModel[] hands){
-		if (game.getNumSlicksLeft () > 0) {
+//		if (game.getNumSlicksLeft () > 0) {
 			if (!isInstantiated) {
 				createdOilSlick = (GameObject)Instantiate (oilSlickPending);
 				isInstantiated = true;
 			}
-			RaycastHit hit = game.getRayHit ();
+			RaycastHit hit = getRayHit ();
 			createdOilSlick.transform.position = hit.point;
-		}
+//		}
 	}
 	
 	public override void inactiveFunction(HandModel[] hands){
+	}
+
+	private RaycastHit getRayHit()
+	{
+		int maskOne = 1 << 10;
+		int maskTwo = 1 << 11;
+		int mask = maskOne | maskTwo;
+		Ray ray = new Ray (thisCamera.transform.position, thisCamera.transform.forward);
+		RaycastHit hit;
+		Physics.Raycast (ray, out hit, 100f, mask);
+		return hit;
 	}
 }
 	

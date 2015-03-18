@@ -5,6 +5,11 @@ using System.Collections;
 public class TutorialGameplayIntro : MonoBehaviour 
 {
 	public bool activateOffense;
+	public bool enableTurretPlacementSpots;
+	public bool activateOilSlicks;
+
+	public GameObject turretPlacementSpoots;
+
 	public GameObject disableGesture;
 
 	public GameObject newGesture;
@@ -26,6 +31,7 @@ public class TutorialGameplayIntro : MonoBehaviour
 	public bool switchToFist;
 
 	public OffensiveAbilities offense;
+	public DefensiveAbilities defense;
 
 	public GameObject spawner;
 	public GameObject goalPosition;
@@ -73,18 +79,31 @@ public class TutorialGameplayIntro : MonoBehaviour
 		spawn.startSpawning ();
 		goalPosition.SetActive (true);
 
+		if (enableTurretPlacementSpots)
+		{
+			offense.handFlipAttack = defense.placeTurretAttack;
+			turretPlacementSpoots.SetActive(true);
+		}
+
+		if (activateOilSlicks)
+		{
+			offense.fistAttack = defense.placeOilSlickAttack;
+		}
+
 		yield return new WaitForSeconds (thirdMessageTime);
 		displayMessage.text = fourthMessage.Replace("lineline","\n");
 
 		yield return new WaitForSeconds (timeToKillEnemies);
 
 		if (loadNextLevelAfter)
-			Application.LoadLevel (1);
+			Application.LoadLevel (2);
 
 		spawner.SetActive (false);
 		goalPosition.SetActive (false);
 		nextGestureMessage.SetActive (true);
 		gameObject.SetActive (false);
+
+
 
 
 	}
