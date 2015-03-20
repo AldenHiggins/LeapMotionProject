@@ -8,7 +8,7 @@ public class PlaceOilSlick : AAttack
 	public GameObject oilSlickPending;
 	private bool isInstantiated = false;
 	private GameObject createdOilSlick;
-	private DefensiveAbilities defense;
+	public DefensiveAbilities defense;
 
 
 	public override void chargingFunction(HandModel[] hands){

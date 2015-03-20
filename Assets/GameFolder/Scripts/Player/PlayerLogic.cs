@@ -35,6 +35,7 @@ public class PlayerLogic : MonoBehaviour
 		energy = 100;
 		energyCounter = 0;
 		currentPlayerCurrency = startingPlayerCurrency;
+		currencyText.text = "" + startingPlayerCurrency;
 	}
 
 	private int energyRefreshCount = 100;
@@ -126,5 +127,6 @@ public class PlayerLogic : MonoBehaviour
 	public void changeCurrency(int currencyChange)
 	{
 		currentPlayerCurrency += currencyChange;
+		currencyText.text = "" + currentPlayerCurrency;
 	}
 }

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class DefensiveAbilities : MonoBehaviour
 {
 	// PLAYER OBJECT
-	private PlayerLogic player;
+	public PlayerLogic player;
 	// ATTACKS
 	public GameObject clapProjectile;
 	public AAttack placeOilSlickAttack;
@@ -36,13 +36,15 @@ public class DefensiveAbilities : MonoBehaviour
 	private int turretTypeIndex = 0;
 
 	// DEFENSIVE STAGE
-	public Text oilSlicksLeft;
-	public Text TurretsLeft;
+	public Text oilSlickCostText;
+	public Text turretCostText;
 
 	// Use this for initialization
 	void Start () 
 	{
 		game = (GameLogic) gameObject.GetComponent (typeof(GameLogic));
+		oilSlickCostText.text = "" + oilSlickCost;
+		turretCostText.text = "" + turretCost;
 	}
 	
 	// Check for input once a frame
@@ -277,7 +279,7 @@ public class DefensiveAbilities : MonoBehaviour
 		if (player.getCurrencyValue() < turretCost)
 			return;
 		player.changeCurrency(-turretCost);
-		updateTurretsLeftText ();
+		updateDefencesCostText ();
 		GameObject closestTurret = getClosestTurret();
 		
 		if (closestTurret != null) 
@@ -293,6 +295,7 @@ public class DefensiveAbilities : MonoBehaviour
 		{
 			print ("Could not place a turret, no more locations available!");
 		}
+		updateDefencesCostText ();
 	}
 
 	public void tutorialPlaceClosestTurret()
@@ -375,21 +378,31 @@ public class DefensiveAbilities : MonoBehaviour
 	}
 
 
-	public int getNumSlicksLeft(){
+	public int getNumSlicksLeft()
+	{
 		return (int) Mathf.Floor(player.getCurrencyValue() / oilSlickCost);
 	}
+
 	public void slickUsed(){
-		updateOilSlicksLeftText ();
+		player.changeCurrency (-1 * oilSlickCost);
+		updateDefencesCostText ();
 	}
 	
-	private void updateOilSlicksLeftText ()
+	private void updateDefencesCostText ()
 	{
-		oilSlicksLeft.text =  getNumSlicksLeft() + " Left";
+//		oilSlicksLeft.text =  getNumSlicksLeft() + " Left";
+		if (player.getCurrencyValue () < oilSlickCost) {
+			oilSlickCostText.color = Color.red;		
+		} else {
+			oilSlickCostText.color = Color.green;	
+		}
+		if (player.getCurrencyValue () < turretCost) {
+			turretCostText.color = Color.red;		
+		} else {
+			turretCostText.color = Color.green;	
+		}
 	}
-	
-	public void updateTurretsLeftText(){
-		TurretsLeft.text =  Mathf.Floor(player.getCurrencyValue() / turretCost) + " Left";
-	}
+
 }
 
 
