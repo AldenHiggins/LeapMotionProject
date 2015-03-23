@@ -276,12 +276,6 @@ public class GameLogic : MonoBehaviour
 //		}
 	}
 
-	[RPC]
-	public void makeFireballNetwork(Vector3 position, Quaternion rotation, Vector3 velocity, int hashValue)
-	{
-		createFireball (position, rotation, velocity, hashValue);
-	}
-
 	public void createFireball(Vector3 position, Quaternion rotation, Vector3 velocity, int hashValue)
 	{
 		GameObject newFireball = (GameObject) Instantiate(fireBall, position, rotation);
@@ -312,56 +306,9 @@ public class GameLogic : MonoBehaviour
 		view.RPC ("makeFireballNetwork", RPCMode.Others, spawnPosition, thisCamera.transform.rotation, startingVelocity, fireballHash);
 	}
 
-	public void reverseProjectileOnOtherClients(int hashValue)
-	{
-		view.RPC ("reverseFireball", RPCMode.Others, hashValue);
-	}
-
-	[RPC]
-	public void reverseFireball(int fireballHash)
-	{
-		GameObject fireball = projectiles [fireballHash];
-		print ("Got fireball: " + fireball.gameObject.name);
-		MoveFireball fireballScript = (MoveFireball) fireball.GetComponent(typeof(MoveFireball));
-		fireballScript.reverseVelocity ();
-	}
-
 	public bool isPlayerBlocking ()
 	{
 		return isBlocking;
-	}
-
-
-	public void createNewPlayer ()
-	{
-		view.RPC ("makePlayerOnClient", RPCMode.Others);
-	}
-
-	[RPC]
-	public void makePlayerOnClient ()
-	{
-		print ("Remote procedure called!");
-		makePlayerOnClientHelper ();
-	}
-
-	public void makePlayerOnClientHelper()
-	{
-		// previously was Network.Instantiate
-		playerAvatar = (GameObject) Network.Instantiate (avatarPrefab, thisPlayer.transform.position, thisPlayer.transform.rotation, 1);
-		MoveAvatar avatar = (MoveAvatar) playerAvatar.GetComponent (typeof(MoveAvatar));
-		avatar.setPlayer (thisPlayer);
-		avatar.hidePlayer ();	
-	}
-
-	private int generateProjectileHash()
-	{
-		int fireballHash = 0;
-		do
-		{
-			fireballHash = Random.Range(0, 10000);
-		} while(projectiles.ContainsKey(fireballHash));
-
-		return fireballHash;
 	}
 
 	public GameObject getEnemyTarget()
@@ -385,7 +332,57 @@ public class GameLogic : MonoBehaviour
 		return hit;
 	}
 
-
-
+	[RPC]
+	public void makeFireballNetwork(Vector3 position, Quaternion rotation, Vector3 velocity, int hashValue)
+	{
+		createFireball (position, rotation, velocity, hashValue);
+	}
+	private int generateProjectileHash()
+	{
+		int fireballHash = 0;
+		do
+		{
+			fireballHash = Random.Range(0, 10000);
+		} while(projectiles.ContainsKey(fireballHash));
+		
+		return fireballHash;
+	}
 
 }
+
+	/*
+	[RPC]
+	public void makePlayerOnClient ()
+	{
+		print ("Remote procedure called!");
+		makePlayerOnClientHelper ();
+	}
+	
+	public void makePlayerOnClientHelper()
+	{
+		// previously was Network.Instantiate
+		playerAvatar = (GameObject) Network.Instantiate (avatarPrefab, thisPlayer.transform.position, thisPlayer.transform.rotation, 1);
+		MoveAvatar avatar = (MoveAvatar) playerAvatar.GetComponent (typeof(MoveAvatar));
+		avatar.setPlayer (thisPlayer);
+		avatar.hidePlayer ();	
+	}
+	public void createNewPlayer ()
+	{
+		view.RPC ("makePlayerOnClient", RPCMode.Others);
+	}
+	[RPC]
+	public void reverseFireball(int fireballHash)
+	{
+		GameObject fireball = projectiles [fireballHash];
+		print ("Got fireball: " + fireball.gameObject.name);
+		MoveFireball fireballScript = (MoveFireball) fireball.GetComponent(typeof(MoveFireball));
+		fireballScript.reverseVelocity ();
+	}
+
+	public void reverseProjectileOnOtherClients(int hashValue)
+	{
+		view.RPC ("reverseFireball", RPCMode.Others, hashValue);
+	}
+
+}
+*/
