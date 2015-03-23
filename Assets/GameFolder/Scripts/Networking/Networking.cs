@@ -27,7 +27,7 @@ public class Networking : MonoBehaviour
 //			print ("Server IP: " + Network.natFacilitatorIP);
 //			print ("Server port: " + Network.natFacilitatorPort);
 			// Make the server's avatar
-			gameLogic.makePlayerOnClientHelper();
+//			gameLogic.makePlayerOnClientHelper();
 		}
 	}
 
@@ -42,7 +42,7 @@ public class Networking : MonoBehaviour
 	{
 		print ("Player has connected to the server!");
 		// Create a new avatar for this client
-		gameLogic.createNewPlayer ();
+//		gameLogic.createNewPlayer ();
 	}
 
 	void OnConnectedToServer()
