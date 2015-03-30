@@ -27,7 +27,7 @@ public class PlaceTurret : AAttack
 	public override void chargedFunction(HandModel[] hands){}
 	
 	public override void releaseFunction(HandModel[] hands){
-		if (defense.getNumSlicksLeft () > 0) {
+		if (defense.getNumTurretsLeft () > 0) {
 			GameObject turretFinal = (GameObject)Instantiate (turret);
 			turretFinal.transform.position = defense.getRayHit().point + new Vector3(0,1f,0);
 			Destroy (createdturret);

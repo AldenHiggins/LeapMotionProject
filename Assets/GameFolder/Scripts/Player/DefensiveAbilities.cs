@@ -23,6 +23,8 @@ public class DefensiveAbilities : MonoBehaviour
 	public int turretCost;
 	// OILSLICK COST
 	public int oilSlickCost;
+	// BALLISTA COST
+	public int ballistaCost;
 	// GAME CONTROLLER VARIABLES
 	private bool previousOilButtonPressed = false;
 	private bool previousTurretButtonPressed = false;
@@ -39,6 +41,7 @@ public class DefensiveAbilities : MonoBehaviour
 	// DEFENSIVE STAGE
 	public Text oilSlickCostText;
 	public Text turretCostText;
+
 
 	// Use this for initialization
 	void Start () 
@@ -387,6 +390,11 @@ public class DefensiveAbilities : MonoBehaviour
 		return (int) Mathf.Floor(player.getCurrencyValue() / oilSlickCost);
 	}
 
+	public int getNumBallistasLeft()
+	{
+		return (int) Mathf.Floor(player.getCurrencyValue() / ballistaCost);
+	}
+
 	public void slickUsed(){
 		player.changeCurrency (-1 * oilSlickCost);
 		updateDefencesCostText ();
@@ -397,6 +405,11 @@ public class DefensiveAbilities : MonoBehaviour
 		updateDefencesCostText ();
 	}
 
+	public void ballistaUsed()
+	{
+		player.changeCurrency (-1 * ballistaCost);
+		updateDefencesCostText ();
+	}
 	private void updateDefencesCostText ()
 	{
 //		oilSlicksLeft.text =  getNumSlicksLeft() + " Left";
