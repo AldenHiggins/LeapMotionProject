@@ -11,7 +11,8 @@ public class PlaceBallista : AAttack
 	private GameObject createdballista;
 	
 	
-	public override void chargingFunction(HandModel[] hands){
+	public override void chargingFunction(HandModel[] hands)
+	{
 		// Display prospective ballista spots
 		// defense.showHideballistaPositions (true);
 		//defense.highlightClosestballistaPlacementPosition();
@@ -26,18 +27,21 @@ public class PlaceBallista : AAttack
 	
 	public override void chargedFunction(HandModel[] hands){}
 	
-	public override void releaseFunction(HandModel[] hands){
-			GameObject ballistaFinal = (GameObject)Instantiate (ballista);
-			ballistaFinal.transform.position = defense.getRayHit().point ;
-			Destroy (createdballista);
-			((EmitterBehaviorBallista) ballistaHead.GetComponent(typeof(EmitterBehaviorBallista))).enabled = true;
-			isInstantiated = false;
-			//defense.ballistaUsed();
+	public override void releaseFunction(HandModel[] hands)
+	{
+		GameObject ballistaFinal = (GameObject)Instantiate (ballista);
+		ballistaFinal.SetActive (true);
+		ballistaFinal.transform.position = defense.getRayHit().point ;
+		Destroy (createdballista);
+		((EmitterBehaviorBallista) ballistaHead.GetComponent(typeof(EmitterBehaviorBallista))).enabled = true;
+		isInstantiated = false;
+		//defense.ballistaUsed();
 	}
 	
 	public override void holdGestureFunction(HandModel[] hands){}
 	
-	public override void inactiveFunction(HandModel[] hands){
+	public override void inactiveFunction(HandModel[] hands)
+	{
 		if (isInstantiated) {
 			Destroy(createdballista);
 			isInstantiated = false;

@@ -4,14 +4,7 @@ using System.Collections;
 public class MoveBolt : MonoBehaviour 
 {
 	public GameLogic game;
-	public GameObject explosion;
 	public int damage;
-	public bool shouldMoveEnemies;
-	public float damageInterval;
-	public int damageAmount;
-	public bool explodeOnContact;
-	private CapsuleCollider damageCapsule;
-	private bool dealingAreaDamage = false;
 	private Vector3 velocity;
 	private GameObject target;
 	private int hashValue;
@@ -21,11 +14,6 @@ public class MoveBolt : MonoBehaviour
 	void Start () 
 	{
 		hashValue = 0; // Default hash value
-		damageCapsule = gameObject.GetComponent<CapsuleCollider> ();
-		if (damageCapsule != null)
-		{
-			startPeriodicDamage();
-		}
 	}
 	
 	// Update is called once per frame
@@ -46,47 +34,6 @@ public class MoveBolt : MonoBehaviour
 		
 	}
 
-	public void startPeriodicDamage()
-	{
-		StartCoroutine(periodicDamageInCapsule());
-	}
-
-	public void stopPeriodicDamage()
-	{
-		StopCoroutine (periodicDamageInCapsule ());
-	}
-
-	IEnumerator periodicDamageInCapsule()
-	{
-		while (true)
-		{
-			yield return new WaitForSeconds(damageInterval);
-			checkToDealDamageInCapsule();
-		}
-	}
-
-	public void checkToDealDamageInCapsule()
-	{
-		float radius = damageCapsule.radius;
-
-		Vector3 point1 = transform.GetChild(0).position;
-		Vector3 point2 = transform.GetChild (1).position;
-
-		float distance = damageCapsule.height;
-		Vector3 capsuleDirection = transform.rotation * new Vector3 (0.0f, 0.0f, 1.0f);
-
-		RaycastHit[] hits = Physics.CapsuleCastAll(point1, point2, radius, capsuleDirection);
-		for (int i = 0; i < hits.Length; i++)
-		{
-			// Check for enemies in hit
-			BasicEnemyController enemy = (BasicEnemyController) hits[i].collider.gameObject.GetComponent(typeof(BasicEnemyController));
-			if (enemy != null)
-			{
-				enemy.dealDamage(damageAmount);
-			}
-		}
-	
-	}
 
 	public void setVelocity(Vector3 newVelocity)
 	{
@@ -105,8 +52,17 @@ public class MoveBolt : MonoBehaviour
 
 //	private ParticleSystem.CollisionEvent[] collisionEvents = new ParticleSystem.CollisionEvent[16];
 
-	void OnParticleCollision(GameObject other) 
+	void OnCollisionEnter(Collision collision) 
 	{
+		print ("Ballista collision!");
+		if (collision.gameObject == null) 
+		{
+			print ("No game object!");
+			return;
+		}
+
+		GameObject other = collision.gameObject;
+
 		print ("other name: " + other.name);
 
 		if (other.name == "OilSlickCollider")
@@ -116,15 +72,13 @@ public class MoveBolt : MonoBehaviour
 			Destroy (gameObject);
 		}
 
-
-		
 		BasicEnemyController enemy = (BasicEnemyController) other.GetComponent(typeof(BasicEnemyController));	
 		TutorialEnemyController tutorialEnemy = (TutorialEnemyController)other.GetComponent (typeof(TutorialEnemyController));
 		MoveBolt moveScript = (MoveBolt) other.GetComponent ((typeof(MoveBolt)));
 		// Ignore collisions with other bolts
 		if (moveScript != null)
 		{
-
+			print ("Colliding with another bolt");
 		}
 		// Ignore collisions with player's hands
 		else if (other.name == "palm" || other.name == "bone1" || other.name == "bone2")
@@ -151,14 +105,7 @@ public class MoveBolt : MonoBehaviour
 		// Collide with an enemy
 		else if (enemy != null)
 		{
-			if (explodeOnContact)
-			{
-				Instantiate (explosion, other.transform.position, Quaternion.identity);
-			}
-
-			if (shouldMoveEnemies)
-				enemy.applyForce(velocity * 20 + new Vector3(0.0f, 10.0f, 0.0f));
-
+			print ("Got here, should deal damage to enemies!");
 			enemy.dealDamage(damage);
 			// Find out where the collision point was 
 			// Resize collision array if you have to
@@ -168,7 +115,7 @@ public class MoveBolt : MonoBehaviour
 //			
 //			particleSystem.GetCollisionEvents(other, collisionEvents);
 
-
+			Destroy (gameObject);
 				
 //
 //			Instantiate (explosion, collisionEvents[0].intersection, Quaternion.LookRotation (collisionEvents[0].normal.normalized));
@@ -176,9 +123,6 @@ public class MoveBolt : MonoBehaviour
 		}
 		else if (tutorialEnemy != null)
 		{
-			if (shouldMoveEnemies)
-				tutorialEnemy.applyForce(velocity * 20 + new Vector3(0.0f, 10.0f, 0.0f));
-			
 			tutorialEnemy.dealDamage(damage);
 		}
 		else

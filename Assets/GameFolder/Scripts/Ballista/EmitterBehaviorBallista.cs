@@ -165,8 +165,9 @@ public class EmitterBehaviorBallista : MonoBehaviour
 
 		newbolt.SetActive(true); 
 		MoveBolt moveThis = (MoveBolt) newbolt.GetComponent(typeof(MoveBolt));
+		moveThis.enabled = true;
 		moveThis.setVelocity(velocity);
-		newbolt.GetComponent<Renderer>().enabled = true;
+//		newbolt.GetComponent<Renderer>().enabled = true;
 		moveThis.setHash (0);
 
 		return newbolt;
