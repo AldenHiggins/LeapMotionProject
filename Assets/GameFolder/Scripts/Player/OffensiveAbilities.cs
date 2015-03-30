@@ -60,36 +60,29 @@ public class OffensiveAbilities : MonoBehaviour
 			//////////////////////////////////////////////////////////////
 			//////////////////////  DETECT HAND SPIN  ////////////////////
 			//////////////////////////////////////////////////////////////
-			if(controller.IsConnected) //controller is a Controller object
-			{
-				Frame currentFrame = controller.Frame(); //The latest frame
-				Frame previousFrame = controller.Frame(1); //The previous frame
+			if (controller.IsConnected) { //controller is a Controller object
+				Frame currentFrame = controller.Frame (); //The latest frame
+				Frame previousFrame = controller.Frame (1); //The previous frame
 				
-				GestureList gesturesInFrame = currentFrame.Gestures(previousFrame);
+				GestureList gesturesInFrame = currentFrame.Gestures (previousFrame);
 	
 //				currentFrame.Gestures
-				if (!currentFrame.Gestures(previousFrame).IsEmpty) 
-				{
-					for(int i = 0; i < currentFrame.Gestures(previousFrame).Count; i++) 
-					{
-						Gesture gesture = currentFrame.Gestures(previousFrame)[i];
+				if (!currentFrame.Gestures (previousFrame).IsEmpty) {
+					for (int i = 0; i < currentFrame.Gestures(previousFrame).Count; i++) {
+						Gesture gesture = currentFrame.Gestures (previousFrame) [i];
 						
-						if(gesture.Type == Gesture.GestureType.TYPE_CIRCLE) 
-						{
-							CircleGesture circleGesture = new CircleGesture(gesture);
+						if (gesture.Type == Gesture.GestureType.TYPE_CIRCLE) {
+							CircleGesture circleGesture = new CircleGesture (gesture);
 							// Limit the radius to prevent accidental gesture recognition
-							if (!isCircle && circleGesture.Radius > 50)
-							{
+							if (!isCircle && circleGesture.Radius > 50) {
 								isCircle = true;
 
-								circularHandAttack.releaseFunction(hands);
+								circularHandAttack.releaseFunction (hands);
 //								Instantiate (psychicParticle, playerLogic.transform.position, playerLogic.transform.rotation);
 							}
 						}
 					}
-				}
-				else
-				{
+				} else {
 					isCircle = false;
 				}
 			}
@@ -99,17 +92,13 @@ public class OffensiveAbilities : MonoBehaviour
 			//////////////////////////////////////////////////////////////
 
 			//  Charge a fireball, -.6 or less means the palm is facing the camera
-			if (Vector3.Dot (normal0, thisCamera.transform.forward) < -.6) 
-			{
-				handFlipAttack.chargingFunction(hands);
-				if (!fireballCharged)
-				{
+			if (Vector3.Dot (normal0, thisCamera.transform.forward) < -.6) {
+				handFlipAttack.chargingFunction (hands);
+				if (!fireballCharged) {
 					fireballCharged = true;
-					handFlipAttack.chargedFunction(hands);
+					handFlipAttack.chargedFunction (hands);
 				}
-			}
-			else
-			{
+			} else {
 //				handFlipNotChargingFunction();
 			}
 		
@@ -119,35 +108,29 @@ public class OffensiveAbilities : MonoBehaviour
 				if (fireballCharged) {
 					fireballCharged = false;
 					// First check if the player has enough energy
-					if (playerLogic.getEnergy () > 10)
-					{
-						handFlipAttack.releaseFunction(hands);
+					if (playerLogic.getEnergy () > 10) {
+						handFlipAttack.releaseFunction (hands);
 					}
 				}
-				handFlipAttack.holdGestureFunction(hands);
+				handFlipAttack.holdGestureFunction (hands);
 			}
 
 			//////////////////////////////////////////////////////////////
 			//////////////////////  DETECT A FIST  ///////////////////////
 			//////////////////////////////////////////////////////////////
-			bool handIsFist = checkFist (hands[0].GetLeapHand());
-			if (handIsFist)
-			{
-				if (!handWasFist)
-				{
+			bool handIsFist = checkFist (hands [0].GetLeapHand ());
+			if (handIsFist) {
+				if (!handWasFist) {
 					handWasFist = true;
-					fistAttack.chargedFunction(hands);
+					fistAttack.chargedFunction (hands);
 //					game.fistProjectile();
 				}
-				fistAttack.holdGestureFunction(hands);
-			}
-			else if (!handIsFist && handWasFist)
-			{
+				fistAttack.holdGestureFunction (hands);
+			} else if (!handIsFist && handWasFist) {
 				handWasFist = false;
-				fistAttack.releaseFunction(hands);
-			}
-			else if (!handIsFist && !handWasFist) {
-				fistAttack.inactiveFunction(hands);	
+				fistAttack.releaseFunction (hands);
+			} else if (!handIsFist && !handWasFist) {
+				fistAttack.inactiveFunction (hands);	
 			}
 //			if (handIsFist && !handWasFist)
 //			{
@@ -219,9 +202,7 @@ public class OffensiveAbilities : MonoBehaviour
 //
 //			previousAmountHandIsOnRightSideOfScreen = amountHandIsOnRightSideOfScreen;
 
-		} 
-		else if (hands.Length > 1) 
-		{
+		} else if (hands.Length > 1) {
 			Vector3 direction0 = (hands [0].GetPalmPosition () - handController.transform.position).normalized;
 			Vector3 normal0 = hands [0].GetPalmNormal ().normalized;
 	
@@ -232,28 +213,27 @@ public class OffensiveAbilities : MonoBehaviour
 			//////////////////////////////////////////////////////////////
 			//////////////////////  DETECT A CLAP  ///////////////////////
 			//////////////////////////////////////////////////////////////
-			if (Vector3.Dot (normal0, normal1) < -.6) 
-			{
+			if (Vector3.Dot (normal0, normal1) < -.6) {
 				Vector3 distance = hands [0].GetPalmPosition () - hands [1].GetPalmPosition ();
-				if (distance.magnitude < .09) 
-				{
+				if (distance.magnitude < .09) {
 //					game.clapAttack (playerLogic.transform.position + new Vector3 (0.0f, 0.7f, 0.0f));
-					clapAttack.releaseFunction(hands);
+					clapAttack.releaseFunction (hands);
 				}
 			}
 
 			//////////////////////////////////////////////////////////////
 			//////////////////////  DETECT A PUSH AWAY  //////////////////
 			//////////////////////////////////////////////////////////////
-			if (Mathf.Abs (Vector3.Dot (normal0, normal1)) > .8) 
-			{
+			if (Mathf.Abs (Vector3.Dot (normal0, normal1)) > .8) {
 				// Do push attack
 
-			}
-			else
-			{
+			} else {
 				isChargingAttack = false;
 			}
+		} else {
+			clapAttack.inactiveFunction(hands);
+			handFlipAttack.inactiveFunction(hands);
+			fistAttack.inactiveFunction(hands);
 		}
 	}
 

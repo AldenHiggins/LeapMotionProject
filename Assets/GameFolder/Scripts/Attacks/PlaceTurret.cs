@@ -39,5 +39,10 @@ public class PlaceTurret : AAttack
 	
 	public override void holdGestureFunction(HandModel[] hands){}
 	
-	public override void inactiveFunction(HandModel[] hands){}
+	public override void inactiveFunction(HandModel[] hands){
+		if (isInstantiated) {
+			Destroy(createdturret);
+			isInstantiated = false;
+		}
+	}
 }

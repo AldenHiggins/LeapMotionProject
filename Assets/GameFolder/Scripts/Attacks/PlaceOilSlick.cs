@@ -39,8 +39,10 @@ public class PlaceOilSlick : AAttack
 	}
 	
 	public override void inactiveFunction(HandModel[] hands){
-		isInstantiated = false;
-		Destroy (createdOilSlick);
+		if (isInstantiated){
+			isInstantiated = false;
+			Destroy (createdOilSlick);
+		}
 	}
 }
 	
