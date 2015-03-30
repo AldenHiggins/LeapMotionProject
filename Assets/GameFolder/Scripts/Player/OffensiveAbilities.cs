@@ -145,7 +145,9 @@ public class OffensiveAbilities : MonoBehaviour
 			{
 				handWasFist = false;
 				fistAttack.releaseFunction(hands);
-				fistAttack.inactiveFunction(hands);
+			}
+			else if (!handIsFist && !handWasFist) {
+				fistAttack.inactiveFunction(hands);	
 			}
 //			if (handIsFist && !handWasFist)
 //			{

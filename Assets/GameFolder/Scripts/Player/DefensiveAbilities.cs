@@ -7,6 +7,7 @@ public class DefensiveAbilities : MonoBehaviour
 {
 	// PLAYER OBJECT
 	public PlayerLogic player;
+	public GameObject thisCamera;
 	// ATTACKS
 	public GameObject clapProjectile;
 	public AAttack placeOilSlickAttack;
@@ -377,6 +378,9 @@ public class DefensiveAbilities : MonoBehaviour
 		return closestTurret;
 	}
 
+	public int getNumTurretsLeft(){
+		return (int) Mathf.Floor(player.getCurrencyValue() / turretCost);
+	}
 
 	public int getNumSlicksLeft()
 	{
@@ -387,7 +391,12 @@ public class DefensiveAbilities : MonoBehaviour
 		player.changeCurrency (-1 * oilSlickCost);
 		updateDefencesCostText ();
 	}
-	
+
+	public void turretUsed(){
+		player.changeCurrency (-1 * turretCost);
+		updateDefencesCostText ();
+	}
+
 	private void updateDefencesCostText ()
 	{
 //		oilSlicksLeft.text =  getNumSlicksLeft() + " Left";
@@ -401,6 +410,17 @@ public class DefensiveAbilities : MonoBehaviour
 		} else {
 			turretCostText.color = Color.green;	
 		}
+	}
+
+	public RaycastHit getRayHit()
+	{
+		int maskOne = 1 << 10;
+		int maskTwo = 1 << 11;
+		int mask = maskOne | maskTwo;
+		Ray ray = new Ray (thisCamera.transform.position, thisCamera.transform.forward);
+		RaycastHit hit;
+		Physics.Raycast (ray, out hit, 100f, mask);
+		return hit;
 	}
 
 }
