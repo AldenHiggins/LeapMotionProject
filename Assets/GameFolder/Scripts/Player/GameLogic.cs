@@ -65,6 +65,7 @@ public class GameLogic : MonoBehaviour
 
 	// ALL THE ATTACKS
 	public AAttack placeTurretAttack;
+	public AAttack placeBallistaAttack;
 	public AAttack placeOilSlickAttack;
 	public AAttack fireballAttack;
 	public AAttack tornadoAttack;
@@ -197,7 +198,7 @@ public class GameLogic : MonoBehaviour
 			isDefensiveStageActive = true;
 			turretHud.SetActive(true);
 			defensiveAbilities.showHideTurretPositions(true);
-			offensiveAbilities.handFlipAttack = placeTurretAttack;
+			offensiveAbilities.handFlipAttack = placeBallistaAttack;
 			offensiveAbilities.fistAttack = placeOilSlickAttack;
 
 			// Enable HMD movement and reset position if enabled

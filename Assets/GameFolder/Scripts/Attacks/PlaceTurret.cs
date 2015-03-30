@@ -20,9 +20,7 @@ public class PlaceTurret : AAttack
 				createdturret = (GameObject)Instantiate (turretPending);
 				isInstantiated = true;
 			}
-			createdturret.transform.position = defense.getRayHit().point + new Vector3(0,2f,0);
-			Destroy(createdturret);
-			isInstantiated = false;
+			createdturret.transform.position = defense.getRayHit().point + new Vector3(0,1f,0);
 		}
 	}
 	
@@ -31,7 +29,7 @@ public class PlaceTurret : AAttack
 	public override void releaseFunction(HandModel[] hands){
 		if (defense.getNumSlicksLeft () > 0) {
 			GameObject turretFinal = (GameObject)Instantiate (turret);
-			turretFinal.transform.position = defense.getRayHit().point + new Vector3(0,2f,0);
+			turretFinal.transform.position = defense.getRayHit().point + new Vector3(0,1f,0);
 			Destroy (createdturret);
 			((EmitterBehavior) turretFinal.GetComponent(typeof(EmitterBehavior))).enabled = true;
 			isInstantiated = false;
