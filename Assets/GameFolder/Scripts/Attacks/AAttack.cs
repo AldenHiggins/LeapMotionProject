@@ -11,7 +11,7 @@ public abstract class AAttack : MonoBehaviour
 
 	abstract public void holdGestureFunction(HandModel[] hands);
 
-	abstract public void inactiveFunction(HandModel[] hands);
+	abstract public void inactiveFunction();
 }
 
 

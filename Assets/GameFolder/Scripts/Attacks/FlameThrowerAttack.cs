@@ -20,7 +20,7 @@ public class FlameThrowerAttack : AAttack
 
 	public override void chargingFunction(HandModel[] hands)
 	{
-		inactiveFunction (hands);
+		inactiveFunction ();
 	}
 	
 	public override void chargedFunction(HandModel[] hands)
@@ -52,7 +52,7 @@ public class FlameThrowerAttack : AAttack
 
 	}
 	
-	public override void inactiveFunction(HandModel[] hands)
+	public override void inactiveFunction()
 	{
 		MoveFireball fireball = (MoveFireball) flameThrowerParticle.GetComponent (typeof(MoveFireball));
 		fireball.stopPeriodicDamage();

@@ -123,6 +123,7 @@ public class OffensiveAbilities : MonoBehaviour
 				if (!handWasFist) {
 					handWasFist = true;
 					fistAttack.chargedFunction (hands);
+					handFlipAttack.inactiveFunction();
 //					game.fistProjectile();
 				}
 				fistAttack.holdGestureFunction (hands);
@@ -130,7 +131,7 @@ public class OffensiveAbilities : MonoBehaviour
 				handWasFist = false;
 				fistAttack.releaseFunction (hands);
 			} else if (!handIsFist && !handWasFist) {
-				fistAttack.inactiveFunction (hands);	
+				fistAttack.inactiveFunction ();	
 			}
 //			if (handIsFist && !handWasFist)
 //			{
@@ -231,9 +232,9 @@ public class OffensiveAbilities : MonoBehaviour
 				isChargingAttack = false;
 			}
 		} else {
-			clapAttack.inactiveFunction(hands);
-			handFlipAttack.inactiveFunction(hands);
-			fistAttack.inactiveFunction(hands);
+			clapAttack.inactiveFunction();
+			handFlipAttack.inactiveFunction();
+			fistAttack.inactiveFunction();
 		}
 	}
 

@@ -25,7 +25,7 @@ public class ClapAttack : AAttack
 		
 	}
 	
-	public override void inactiveFunction(HandModel[] hands)
+	public override void inactiveFunction()
 	{
 		
 	}

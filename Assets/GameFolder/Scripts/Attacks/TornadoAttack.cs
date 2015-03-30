@@ -37,7 +37,7 @@ public class TornadoAttack : AAttack
 		
 	}
 	
-	public override void inactiveFunction(HandModel[] hands)
+	public override void inactiveFunction()
 	{
 		
 	}

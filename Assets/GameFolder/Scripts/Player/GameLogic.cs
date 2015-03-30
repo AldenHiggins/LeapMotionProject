@@ -197,7 +197,7 @@ public class GameLogic : MonoBehaviour
 			// Start defensive setup phase
 			isDefensiveStageActive = true;
 			turretHud.SetActive(true);
-			defensiveAbilities.showHideTurretPositions(true);
+			//defensiveAbilities.showHideTurretPositions(true);
 			offensiveAbilities.handFlipAttack = placeBallistaAttack;
 			offensiveAbilities.fistAttack = placeOilSlickAttack;
 
@@ -218,9 +218,11 @@ public class GameLogic : MonoBehaviour
 				yield return new WaitForSeconds(.2f);
 			}
 
+			offensiveAbilities.handFlipAttack.inactiveFunction();
+			offensiveAbilities.fistAttack.inactiveFunction();
 			// Clean up defensive setup stuff
 			callForWaveButton.ButtonTurnsOff();
-			defensiveAbilities.showHideTurretPositions(false);
+			//defensiveAbilities.showHideTurretPositions(false);
 			turretHud.SetActive(false);
 			isDefensiveStageActive = false;
 

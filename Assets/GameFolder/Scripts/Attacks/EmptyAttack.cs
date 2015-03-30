@@ -11,5 +11,5 @@ public class EmptyAttack : AAttack
 	
 	public override void holdGestureFunction(HandModel[] hands){}
 	
-	public override void inactiveFunction(HandModel[] hands){}
+	public override void inactiveFunction(){}
 }

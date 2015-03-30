@@ -46,7 +46,7 @@ public class BasicFireballAttack : AAttack
 		
 	}
 	
-	public override void inactiveFunction(HandModel[] hands)
+	public override void inactiveFunction()
 	{
 
 	}
