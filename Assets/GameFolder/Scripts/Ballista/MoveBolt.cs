@@ -41,7 +41,7 @@ public class MoveBolt : MonoBehaviour
 				toTarget.y = 0;
 				velocity = toTarget;
 			}
-			//gameObject.transform.position += velocity;
+			gameObject.transform.position += velocity;
 		}
 		
 	}

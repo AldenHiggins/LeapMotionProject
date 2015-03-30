@@ -9,14 +9,17 @@ public class EmitterBehaviorBallista : MonoBehaviour
 	public float emissionFrequency;
 	public float attackRadius;
 	public bool multiAttack;
-
+	private Animator anim;
 	private int boltTimer;
 	private int blockTimer;
+	public Vector3 boltHeightOffset;
 
 	// Use this for initialization
 	void Start () 
 	{
 		boltTimer = 0;
+		anim = GetComponent<Animator> ();
+		print ("Anim found: " + anim.name);
 	}
 	
 	// Update is called once per frame
@@ -95,6 +98,10 @@ public class EmitterBehaviorBallista : MonoBehaviour
 					
 					createbolt(startPosition, Quaternion.identity, secondVelocity, 0);
 //					createbolt(startPosition, Quaternion.AngleAxis(yRotation + 15, Vector3.up), velocity, 0);
+
+					// Play ballista animation
+					// Create Coroutine to stop firing after playing the animation once
+					StartCoroutine (shootBolt());
 				}
 				//view.RPC ("makeboltNetwork", RPCMode.Others, new Vector3(-4.6f, 76.75f, 1.8f), Quaternion.identity, new Vector3(0.0f, 0.0f, -0.1f), hash);
 			}
@@ -154,7 +161,7 @@ public class EmitterBehaviorBallista : MonoBehaviour
 	
 	public GameObject createbolt(Vector3 position, Quaternion rotation, Vector3 velocity, int hashValue)
 	{
-		GameObject newbolt = (GameObject) Instantiate(bolt, position, rotation);
+		GameObject newbolt = (GameObject) Instantiate(bolt, position - boltHeightOffset, rotation);
 
 		newbolt.SetActive(true); 
 		MoveBolt moveThis = (MoveBolt) newbolt.GetComponent(typeof(MoveBolt));
@@ -185,5 +192,19 @@ public class EmitterBehaviorBallista : MonoBehaviour
 		{
 			gameObject.transform.GetChild (0).gameObject.GetComponent<Renderer>().enabled = false;
 		}
+	}
+
+	IEnumerator shootBolt()
+	{
+		//		print ("Attacking");
+		anim.SetBool ("Firing", true);
+//		while(!anim.GetCurrentAnimatorStateInfo(0).IsName("BallistaFire"))
+//		{
+			yield return new WaitForSeconds(1.5f);
+//		}
+		//		print ("Animation time: " + anim.GetCurrentAnimationClipState (0) [0].clip.length);
+//		yield return new WaitForSeconds (anim.GetCurrentAnimatorClipInfo(0)[0].clip.length - .1f);
+
+		anim.SetBool ("Firing", false);
 	}
 }
