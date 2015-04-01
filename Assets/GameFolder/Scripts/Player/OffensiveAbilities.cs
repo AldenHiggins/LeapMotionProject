@@ -97,9 +97,11 @@ public class OffensiveAbilities : MonoBehaviour
 				if (!fireballCharged) {
 					fireballCharged = true;
 					handFlipAttack.chargedFunction (hands);
+					fistAttack.inactiveFunction();
 				}
 			} else {
 //				handFlipNotChargingFunction();
+				handFlipAttack.inactiveFunction();
 			}
 		
 
