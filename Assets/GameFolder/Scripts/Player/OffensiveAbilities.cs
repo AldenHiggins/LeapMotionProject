@@ -100,6 +100,7 @@ public class OffensiveAbilities : MonoBehaviour
 				}
 			} else {
 //				handFlipNotChargingFunction();
+				handFlipAttack.inactiveFunction();
 			}
 		
 

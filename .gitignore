@@ -50,7 +50,7 @@ Temporary Items
  #
  # !!! WARNING !!!
  #
- # … you MUST convert Unity to using Metafiles *before* you start using this
+ # ï¿½ you MUST convert Unity to using Metafiles *before* you start using this
  #  .gitignore file, or you WILL lose data!
  #
  
@@ -72,3 +72,22 @@ Temporary Items
 # Ignores that we added
 
 demo1withalden_Data
+*.exe
+Tutorial_Data/
+Multiplayer_Data/
+CastleCourtyard.app/
+Assembly-CSharp-Editor-vs.csproj
+Assembly-CSharp-Editor.csproj
+Assembly-CSharp-firstpass-vs.csproj
+Assembly-CSharp-firstpass.csproj
+Assembly-CSharp-vs.csproj
+Assembly-CSharp.csproj
+Assembly-UnityScript-firstpass-vs.unityproj
+Assembly-UnityScript-firstpass.unityproj
+Assembly-UnityScript-vs.unityproj
+Assembly-UnityScript.unityproj
+2015-03-07_234944/crash.dmp
+2015-03-07_234944/error.log
+2015-03-07_234944/output_log.txt
+2015-03-07_234944/report.ini
+CastleCourtyard_Data/
