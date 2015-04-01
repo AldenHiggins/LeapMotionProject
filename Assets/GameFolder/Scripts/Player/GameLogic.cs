@@ -197,6 +197,7 @@ public class GameLogic : MonoBehaviour
 			// Start defensive setup phase
 			isDefensiveStageActive = true;
 			turretHud.SetActive(true);
+			defensiveAbilities.updateDefencesCostText();
 			//defensiveAbilities.showHideTurretPositions(true);
 			offensiveAbilities.handFlipAttack = placeBallistaAttack;
 			offensiveAbilities.fistAttack = placeOilSlickAttack;

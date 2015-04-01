@@ -410,7 +410,7 @@ public class DefensiveAbilities : MonoBehaviour
 		player.changeCurrency (-1 * ballistaCost);
 		updateDefencesCostText ();
 	}
-	private void updateDefencesCostText ()
+	public void updateDefencesCostText ()
 	{
 //		oilSlicksLeft.text =  getNumSlicksLeft() + " Left";
 		if (player.getCurrencyValue () < oilSlickCost) {
