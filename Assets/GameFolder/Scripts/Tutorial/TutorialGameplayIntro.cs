@@ -96,11 +96,12 @@ public class TutorialGameplayIntro : MonoBehaviour
 		yield return new WaitForSeconds (timeToKillEnemies);
 
 		if (loadNextLevelAfter)
-			Application.LoadLevel (2);
+			Application.LoadLevel(Application.loadedLevel);
 
 		spawner.SetActive (false);
 		goalPosition.SetActive (false);
-		nextGestureMessage.SetActive (true);
+		if (nextGestureMessage != null) 
+			nextGestureMessage.SetActive (true);
 		gameObject.SetActive (false);
 
 
