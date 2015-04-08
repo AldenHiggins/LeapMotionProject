@@ -170,6 +170,7 @@ public class MoveFireball : MonoBehaviour
 				enemy.applyForce(velocity * 20 + new Vector3(0.0f, 10.0f, 0.0f));
 
 			enemy.dealDamage(damage);
+			Destroy(gameObject);
 			// Find out where the collision point was 
 			// Resize collision array if you have to
 //			int safeLength = particleSystem.safeCollisionEventSize;
@@ -190,6 +191,7 @@ public class MoveFireball : MonoBehaviour
 				tutorialEnemy.applyForce(velocity * 20 + new Vector3(0.0f, 10.0f, 0.0f));
 			
 			tutorialEnemy.dealDamage(damage);
+			Destroy(gameObject);
 		}
 		else
 		{
