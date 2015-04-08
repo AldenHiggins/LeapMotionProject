@@ -42,7 +42,8 @@ public class BasicEnemyController : MonoBehaviour
 		anim = transform.GetChild (0).gameObject.GetComponent<Animator> ();
 		health = startingHealth;
 		agent = gameObject.GetComponent<NavMeshAgent> ();
-		target = game.getEnemyTarget ();
+//		target = game.getEnemyTarget ();
+		target = player.gameObject;
 		if (showNavMeshPath)
 			thisPathLine = (GameObject) Instantiate (pathLine);
 		source = GetComponent<AudioSource> ();

@@ -428,8 +428,8 @@ public class DefensiveAbilities : MonoBehaviour
 	public RaycastHit getRayHit()
 	{
 		int maskOne = 1 << 10;
-		int maskTwo = 1 << 11;
-		int mask = maskOne | maskTwo;
+//		int maskTwo = 1 << 11;
+		int mask = maskOne;
 		Ray ray = new Ray (thisCamera.transform.position, thisCamera.transform.forward);
 		RaycastHit hit;
 		Physics.Raycast (ray, out hit, 100f, mask);
