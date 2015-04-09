@@ -23,6 +23,11 @@ public class TutorialGestureMessage : MonoBehaviour
 
 	public OffensiveAbilities offense;
 
+	public AudioClip handFlipAudio;
+	public AudioClip fireballAudio;
+	public AudioClip fireballZombieAudio;
+	public AudioSource audio;
+
 
 	// Use this for initialization
 	void Start () 
@@ -40,14 +45,28 @@ public class TutorialGestureMessage : MonoBehaviour
 
 	IEnumerator messageFunction()
 	{
-		yield return new WaitForSeconds (firstMessageTime);
+		audio.clip = handFlipAudio;
+		audio.Play();
+		yield return new WaitForSeconds(audio.clip.length/2);
+		//yield return new WaitForSeconds (firstMessageTime);
 		displayMessage.text = secondMessage.Replace("lineline","\n");
-		yield return new WaitForSeconds (secondMessageTime);
+
+		yield return new WaitForSeconds(audio.clip.length/2);
+
+		audio.clip = fireballAudio;
+		audio.Play();
 		displayMessage.text = thirdMessage.Replace("lineline","\n");
+
 		if (activateOffense)
 			StartCoroutine (activateOffensiveAbilities ());
-		yield return new WaitForSeconds (thirdMessageTime);
+
+		yield return new WaitForSeconds(audio.clip.length + 4);
+
 		displayMessage.text = fourthMessage.Replace("lineline","\n");
+		audio.clip = fireballZombieAudio;
+		audio.Play();
+		yield return new WaitForSeconds (audio.clip.length);
+
 		enemyToSpawn.SetActive (true);
 	}
 

@@ -28,6 +28,7 @@ public class OffensiveAbilities : MonoBehaviour
 	public AAttack fistAttack;
 	public AAttack circularHandAttack;
 	public AAttack clapAttack;
+	public AAttack emptyAttack;
 	// DEFENSIVE ABILITIES
 	private DefensiveAbilities defense;
 
