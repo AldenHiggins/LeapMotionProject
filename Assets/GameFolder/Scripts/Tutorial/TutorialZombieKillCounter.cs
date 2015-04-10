@@ -21,10 +21,7 @@ public class TutorialZombieKillCounter : MonoBehaviour {
 	{
 		if (isOffense)
 			tutorialObject.GetComponent<TutorialOffensiveScript> ().killedZombie ();
-		
-//		if (isDefense)
-//			tutorialObject.GetComponent<TutorialOffensiveScript> ().handFistZombieKilled ();
-//		
+
 		Destroy (gameObject);
 	}
 }

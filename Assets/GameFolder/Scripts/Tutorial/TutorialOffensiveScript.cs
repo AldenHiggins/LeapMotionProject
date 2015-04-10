@@ -11,7 +11,7 @@ public class TutorialOffensiveScript : MonoBehaviour
 
 	public GameObject flipEnemy;
 	public GameObject fistEnemy;
-	
+	public GameObject zombie;
 	
 	public OffensiveAbilities offense;
 	
@@ -174,6 +174,7 @@ public class TutorialOffensiveScript : MonoBehaviour
 
 		if (this.zombiesKilled >= 3)
 		{
+			zombie.GetComponent<TutorialZombieKillCounter>().isOffense = false;
 			StartCoroutine (endTutorial ());
 
 		}

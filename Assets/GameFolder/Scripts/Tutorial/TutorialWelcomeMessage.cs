@@ -9,6 +9,7 @@ public class TutorialWelcomeMessage : MonoBehaviour
 	public Text textBox;
 	public TutorialLogic tutorial;
 	public AudioClip welcomeClip;
+	public AudioClip tutorialChoices;
 	public AudioSource audio;
 
 	public GameObject offensiveButton;
@@ -34,15 +35,17 @@ public class TutorialWelcomeMessage : MonoBehaviour
 	{
 		audio.clip = welcomeClip;
 		audio.Play();
-		yield return new WaitForSeconds(audio.clip.length);
+		yield return new WaitForSeconds(6.6f);
 		readyForHand = true;
 	}
 
 	IEnumerator presentChoices() 
 	{
+		audio.clip = tutorialChoices;
+		audio.Play ();
 		textBox.text = "Now reach out and \n touch your selection to start\n the appropriate tutorial.";
 
-		yield return new WaitForSeconds(3);
+		yield return new WaitForSeconds(3.9f);
 
 		offensiveButton.SetActive(true);
 		defensiveButton.SetActive(true);
