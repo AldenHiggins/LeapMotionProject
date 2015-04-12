@@ -35,6 +35,11 @@ public class BasicEnemyController : MonoBehaviour
 	private GameObject greenHealth;
 	private GameObject redHealth;
 	private float startingHealthScale;
+	// RAGDOLL
+	public float ragdollTime;
+	public float ragdollForceFactor;
+	public GameObject ragDollCenterObject;
+
 	// Use this for initialization
 	void Start () 
 	{
@@ -151,7 +156,8 @@ public class BasicEnemyController : MonoBehaviour
 			Destroy (greenHealth);
 			Destroy (redHealth);
 			source.PlayOneShot(killSound);
-			StartCoroutine(kill());
+//			StartCoroutine(kill());
+			StartCoroutine(ragdollKill());
 		}
 	}
 
@@ -197,6 +203,19 @@ public class BasicEnemyController : MonoBehaviour
 		}
 		yield return new WaitForSeconds (anim.GetCurrentAnimatorClipInfo(0)[0].clip.length);
 		Destroy (this.gameObject);
+	}
+
+	IEnumerator ragdollKill()
+	{
+		agent.enabled = false;
+		anim.enabled = false;
+		print ("Made ragdoll");
+		BoxCollider collider = gameObject.GetComponent<BoxCollider> ();
+		collider.enabled = false;
+		Rigidbody ragDollRigidBody = ragDollCenterObject.GetComponent<Rigidbody> ();
+		ragDollRigidBody.AddForce (new Vector3 (0, 10 * ragdollForceFactor, -10 * ragdollForceFactor), ForceMode.Impulse);
+		yield return new WaitForSeconds (ragdollTime);
+		Destroy (gameObject);
 	}
 
 	private void displayNavMeshPath()
