@@ -5,6 +5,8 @@ public class OilSlick : MonoBehaviour {
 
 	public GameObject boom;
 
+	public bool isForTutorial;
+
 	// Use this for initialization
 	void Start () {
 	}
@@ -32,6 +34,10 @@ public class OilSlick : MonoBehaviour {
 		//print("EXPLOSION!");
 		Vector3 boomPos = transform.position + new Vector3(0f,1f,0f);
 		Instantiate (boom, boomPos, Quaternion.identity);
+
+		if (isForTutorial) {
+			gameObject.GetComponent<TutorialOilSlick>().hasBlownUp();
+		}
 		Destroy(gameObject);
 	}
 }

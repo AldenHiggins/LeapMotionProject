@@ -3,8 +3,7 @@ using System.Collections;
 
 public class LoadTutorialChoiceButton : MonoBehaviour
 {
-
-	public GameObject tutorialStart;
+	
 	public GameObject firstMessage;
 	public ButtonDemoGraphics button;
 	public GameObject otherButton;
@@ -16,8 +15,7 @@ public class LoadTutorialChoiceButton : MonoBehaviour
 		if (button.isPressed ()) {
 			otherButton.SetActive (false);
 			gameObject.SetActive (false);
-			tutorialStart.GetComponent<TutorialWelcomeMessage>().setNextMessage(firstMessage);
-			tutorialStart.SetActive (true);
+			firstMessage.SetActive(true);
 		}
 	}
 }

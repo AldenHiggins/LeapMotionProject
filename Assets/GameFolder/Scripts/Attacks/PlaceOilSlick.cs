@@ -9,7 +9,6 @@ public class PlaceOilSlick : AAttack
 	private GameObject createdOilSlick;
 	public DefensiveAbilities defense;
 
-
 	public override void chargingFunction(HandModel[] hands){
 
 	}
@@ -19,10 +18,12 @@ public class PlaceOilSlick : AAttack
 	public override void releaseFunction(HandModel[] hands){
 		if (defense.getNumSlicksLeft () > 0) {
 			GameObject oilSlickFinal = (GameObject)Instantiate (oilSlick);
-			oilSlickFinal.transform.position = defense.getRayHit().point;
+			oilSlickFinal.transform.position = defense.getRayHit().point + new Vector3(0.0f, 0.1f, 0.0f);
 			Destroy (createdOilSlick);
+
 			OilSlick oilSlickScript = (OilSlick)oilSlickFinal.GetComponent (typeof(OilSlick));
 			oilSlickScript.enabled = true;
+
 			isInstantiated = false;
 			defense.slickUsed();
 		}
@@ -34,7 +35,7 @@ public class PlaceOilSlick : AAttack
 				createdOilSlick = (GameObject)Instantiate (oilSlickPending);
 				isInstantiated = true;
 			}
-			createdOilSlick.transform.position = defense.getRayHit().point;
+			createdOilSlick.transform.position = defense.getRayHit().point + new Vector3(0.0f, 0.1f, 0.0f);
 		}
 	}
 	

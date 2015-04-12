@@ -3,27 +3,21 @@ using System.Collections;
 
 public class TutorialOneHitZombie : MonoBehaviour
 {
-	public GameObject oldMessage;
-	public GameObject newMessage;
+	public GameObject tutorialObject;
+	public bool handFlipZombie;
+	public bool handFistZombie;
 
-
-//	void OnCollisionEnter(Collision coll)
-//	{
-//		print ("On this end");
-//
-//		print (coll.collider.name);
-//		if (coll.collider.name == "Roof")
-//		{
-//			return;
-//		}
-//
-//	}
 
 	void OnParticleCollision(GameObject other)
 	{
-		oldMessage.SetActive (false);
-		newMessage.SetActive (true);
-		
+		if (handFlipZombie) {
+			print("Hand Flip Zombie Killed");
+			tutorialObject.GetComponent<TutorialOffensiveScript> ().handFlipZombieKilled ();
+		}
+
+		if (handFistZombie)
+			tutorialObject.GetComponent<TutorialOffensiveScript> ().handFistZombieKilled ();
+
 		Destroy (gameObject);
 	}
 }
