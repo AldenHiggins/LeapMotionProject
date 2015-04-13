@@ -208,4 +208,27 @@ public class EmitterBehaviorBallista : MonoBehaviour
 
 		anim.SetBool ("Firing", false);
 	}
+
+	void OnTriggerEnter(Collider other) 
+	{
+		print(other.name + " collided with Ballista.");
+		BasicEnemyController enemy = (BasicEnemyController) other.gameObject.GetComponent(typeof(BasicEnemyController));
+		//		if (other.name == "CrazyFireball(Clone)") {
+		//			print("EXPLOSION!");
+		//			Vector3 boomPos = transform.position + new Vector3(0f,1f,0f);
+		//			Instantiate (boom, boomPos, Quaternion.identity);
+		//			Destroy(gameObject);
+		//		}
+		if (enemy != null) 
+		{
+			StartCoroutine( WaitForAnimation ());
+		}
+	}
+
+	private IEnumerator WaitForAnimation ()
+	{
+		anim.SetBool("Breaking", true);
+		yield return new WaitForSeconds (4);
+		Destroy (gameObject.transform.parent.gameObject);
+	}
 }
