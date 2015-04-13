@@ -1,0 +1,16 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument=".gitignore">
+    <Files>
+      <File FileName="Assets\GameFolder\Scripts\Player\PlayerLogic.cs" Line="38" Column="1" />
+      <File FileName="Assets\GameFolder\Scripts\Player\DefensiveAbilities.cs" Line="1" Column="1" />
+      <File FileName="Assets\GameFolder\Scripts\Enemies\BasicEnemyController.cs" Line="1" Column="1" />
+      <File FileName="Assets\GameFolder\Scripts\Defenses\OilSlick.cs" Line="1" Column="1" />
+      <File FileName=".gitignore" Line="96" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
