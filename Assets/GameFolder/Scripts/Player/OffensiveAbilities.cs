@@ -18,7 +18,7 @@ public class OffensiveAbilities : MonoBehaviour
 	// SWIPE DETECTION
 	private float previousAmountHandIsOnRightSideOfScreen = 0;
 	// Min value for the fist dot product
-	private float minVal = 0.5f;
+	private float minVal = 0.65f;
 	// ATTACK SELECTION
 	public AttackSelection attackSelector;		
 	private bool selectingAttack = false;
@@ -28,6 +28,7 @@ public class OffensiveAbilities : MonoBehaviour
 	public AAttack fistAttack;
 	public AAttack circularHandAttack;
 	public AAttack clapAttack;
+	public AAttack emptyAttack;
 	// DEFENSIVE ABILITIES
 	private DefensiveAbilities defense;
 
@@ -258,6 +259,7 @@ public class OffensiveAbilities : MonoBehaviour
 		for (int i = 0; i < hand.Fingers.Count; i++) 
 		{
 			Finger f = hand.Fingers[i];
+			if (f.Type() == Finger.FingerType.TYPE_THUMB) continue;
 			Vector meta = f.Bone(Bone.BoneType.TYPE_METACARPAL).Direction;
 			Vector proxi = f.Bone(Bone.BoneType.TYPE_PROXIMAL).Direction;
 			Vector inter = f.Bone(Bone.BoneType.TYPE_INTERMEDIATE).Direction;
@@ -266,7 +268,7 @@ public class OffensiveAbilities : MonoBehaviour
 			sum += dMetaProxi;
 			sum += dProxiInter;
 		}
-		sum = sum/10;
+		sum = sum/8;
 //		print("sum = " + sum);
 		if(sum <= minVal && getExtendedFingers(hand)== 0)
 		{
@@ -284,6 +286,7 @@ public class OffensiveAbilities : MonoBehaviour
 		for(int i=0;i <h.Fingers.Count;i++)
 		{
 			Finger finger = h.Fingers[i];
+			if(finger.Type() == Finger.FingerType.TYPE_THUMB) continue;
 			if(finger.IsExtended) extendedFingers++;
 		}
 		return extendedFingers;

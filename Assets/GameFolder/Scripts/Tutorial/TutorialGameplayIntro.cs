@@ -82,7 +82,7 @@ public class TutorialGameplayIntro : MonoBehaviour
 		if (enableTurretPlacementSpots)
 		{
 			offense.handFlipAttack = defense.placeTurretAttack;
-			turretPlacementSpoots.SetActive(true);
+			//turretPlacementSpoots.SetActive(true);
 		}
 
 		if (activateOilSlicks)
