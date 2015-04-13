@@ -4,6 +4,7 @@ using System.Collections;
 public class FlameThrowerAttack : AAttack
 {
 	public GameObject flameThrowerParticle;
+	public float positionOffset;
 
 	// Use this for initialization
 	void Start () 
@@ -20,7 +21,9 @@ public class FlameThrowerAttack : AAttack
 
 	public override void chargingFunction(HandModel[] hands)
 	{
-		inactiveFunction ();
+		MoveFireball fireball = (MoveFireball) flameThrowerParticle.GetComponent (typeof(MoveFireball));
+		fireball.stopPeriodicDamage();
+		flameThrowerParticle.SetActive (false);
 	}
 	
 	public override void chargedFunction(HandModel[] hands)
@@ -47,6 +50,7 @@ public class FlameThrowerAttack : AAttack
 				print ("Flamethrower not active!");
 			}
 			flameThrowerParticle.transform.position = hands[0].GetPalmPosition();
+			flameThrowerParticle.transform.position -= (positionOffset * hands[0].GetPalmNormal());
 			flameThrowerParticle.transform.rotation = Quaternion.LookRotation(hands[0].GetPalmNormal());
 		}
 
@@ -54,8 +58,8 @@ public class FlameThrowerAttack : AAttack
 	
 	public override void inactiveFunction()
 	{
-		MoveFireball fireball = (MoveFireball) flameThrowerParticle.GetComponent (typeof(MoveFireball));
-		fireball.stopPeriodicDamage();
-		flameThrowerParticle.SetActive (false);
+//		MoveFireball fireball = (MoveFireball) flameThrowerParticle.GetComponent (typeof(MoveFireball));
+//		fireball.stopPeriodicDamage();
+//		flameThrowerParticle.SetActive (false);
 	}
 }
