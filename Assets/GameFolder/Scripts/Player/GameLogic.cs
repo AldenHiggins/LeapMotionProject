@@ -255,6 +255,7 @@ public class GameLogic : MonoBehaviour
 
 			// Deactivate round
 			roundActive = false;
+			playerLogic.changeCurrency(700);
 			hmdMovement.enabled = false;
 		}
 
