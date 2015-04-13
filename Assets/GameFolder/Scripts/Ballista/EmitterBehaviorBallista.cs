@@ -227,8 +227,10 @@ public class EmitterBehaviorBallista : MonoBehaviour
 
 	private IEnumerator WaitForAnimation ()
 	{
+		print ("Playing the Animation.");
 		anim.SetBool("Breaking", true);
 		yield return new WaitForSeconds (4);
+		print ("Wait for 4 seconds.");
 		Destroy (gameObject.transform.parent.gameObject);
 	}
 }
