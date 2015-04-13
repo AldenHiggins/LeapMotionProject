@@ -81,6 +81,9 @@ public class EmitterBehaviorBallista : MonoBehaviour
 				MoveBolt bolt = (MoveBolt) newbolt.GetComponent(typeof(MoveBolt));
 				bolt.setTarget(nearestEnemy.gameObject);
 
+				// Create Coroutine to stop firing after playing the animation once
+				StartCoroutine (shootBolt());
+
 				// Fire three particles for a multi-attack
 				if (multiAttack)
 				{
@@ -100,8 +103,7 @@ public class EmitterBehaviorBallista : MonoBehaviour
 //					createbolt(startPosition, Quaternion.AngleAxis(yRotation + 15, Vector3.up), velocity, 0);
 
 					// Play ballista animation
-					// Create Coroutine to stop firing after playing the animation once
-					StartCoroutine (shootBolt());
+
 				}
 				//view.RPC ("makeboltNetwork", RPCMode.Others, new Vector3(-4.6f, 76.75f, 1.8f), Quaternion.identity, new Vector3(0.0f, 0.0f, -0.1f), hash);
 			}
@@ -197,11 +199,11 @@ public class EmitterBehaviorBallista : MonoBehaviour
 
 	IEnumerator shootBolt()
 	{
-		//		print ("Attacking");
+		print ("Shooting bolt");
 		anim.SetBool ("Firing", true);
 //		while(!anim.GetCurrentAnimatorStateInfo(0).IsName("BallistaFire"))
 //		{
-			yield return new WaitForSeconds(1.5f);
+		yield return new WaitForSeconds(1.5f);
 //		}
 		//		print ("Animation time: " + anim.GetCurrentAnimationClipState (0) [0].clip.length);
 //		yield return new WaitForSeconds (anim.GetCurrentAnimatorClipInfo(0)[0].clip.length - .1f);
