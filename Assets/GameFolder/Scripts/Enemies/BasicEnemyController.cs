@@ -17,12 +17,17 @@ public class BasicEnemyController : MonoBehaviour
 
 	private GameObject thisPathLine;
 
-	private Vector3 velocity;
+
 	private Animator anim;
 	private int health;
 	private bool attacking;
+
+	// MOVEMENT
 	private NavMeshAgent agent;
 	private GameObject target;
+	private Vector3 velocity;
+	public int waitToMove;
+	private int startingMoveCounter;
 	// AUDIO
 	private AudioSource source;
 	public AudioClip woundSound;
@@ -44,7 +49,8 @@ public class BasicEnemyController : MonoBehaviour
 	void Start () 
 	{
 		attacking = false;
-		anim = transform.GetChild (0).gameObject.GetComponent<Animator> ();
+//		anim = transform.GetChild (0).gameObject.GetComponent<Animator> ();
+		anim = gameObject.GetComponent<Animator> ();
 		health = startingHealth;
 		agent = gameObject.GetComponent<NavMeshAgent> ();
 //		target = game.getEnemyTarget ();
@@ -52,6 +58,7 @@ public class BasicEnemyController : MonoBehaviour
 		if (showNavMeshPath)
 			thisPathLine = (GameObject) Instantiate (pathLine);
 		source = GetComponent<AudioSource> ();
+		startingMoveCounter = 0;
 
 		if (showHealthBar)
 		{
@@ -64,14 +71,16 @@ public class BasicEnemyController : MonoBehaviour
 			startingHealthScale = greenHealth.transform.localScale.y;
 		}
 	}
-	
+
+
+
 	// Update is called once per frame
 	void Update () 
 	{
 		if (health < 0)
 			return;
 	
-
+		startingMoveCounter++;
 //		print ("Current velocity: " + rigidbody.velocity);
 
 		velocity = target.transform.position - transform.position;
@@ -84,10 +93,18 @@ public class BasicEnemyController : MonoBehaviour
 				anim.SetBool ("Running", true);
 				velocity.Normalize ();
 				velocity *= speed;
-				if (agent.enabled == true && !agent.hasPath)
+				// Get this objects position based on this gameobject's child (i.e. the gameobject of the zombie that's being animated)
+				if (startingMoveCounter > waitToMove)
 				{
-					agent.SetDestination (target.transform.position);
+//					print ("Adding this position: " + gameObject.transform.GetChild(0).localPosition);
+//					gameObject.transform.position += gameObject.transform.GetChild(0).localPosition;
+//					gameObject.transform.GetChild(0).localPosition = new Vector3(0,0,0);
+//					gameObject.transform.GetChild(0).rotation = Quaternion.identity;
 				}
+//				if (agent.enabled == true && !agent.hasPath)
+//				{
+//					agent.SetDestination (target.transform.position);
+//				}
 					
 //				transform.position += velocity;
 //				rigidbody.AddForce (velocity, ForceMode.VelocityChange);
@@ -104,7 +121,7 @@ public class BasicEnemyController : MonoBehaviour
 			if (attacking == false)
 			{
 				attacking = true;
-				agent.Stop();
+//				agent.Stop();
 				StartCoroutine(attack());
 			}
 		}
@@ -164,7 +181,7 @@ public class BasicEnemyController : MonoBehaviour
 	public void applyForce(Vector3 force)
 	{
 		GetComponent<Rigidbody>().AddForce (force, ForceMode.Impulse);
-		agent.enabled = false;
+//		agent.enabled = false;
 		GetComponent<Rigidbody>().isKinematic = false;
 		StartCoroutine (restartAgent ());
 	}
@@ -172,7 +189,7 @@ public class BasicEnemyController : MonoBehaviour
 	public void applyExplosiveForce(float force, Vector3 position, float radius)
 	{
 		GetComponent<Rigidbody>().AddExplosionForce (force, position, radius, 20.0f, ForceMode.Impulse);
-		agent.enabled = false;
+//		agent.enabled = false;
 		GetComponent<Rigidbody>().isKinematic = false;
 		StartCoroutine (restartAgent ());
 	}
@@ -207,7 +224,7 @@ public class BasicEnemyController : MonoBehaviour
 
 	IEnumerator ragdollKill()
 	{
-		agent.enabled = false;
+//		agent.enabled = false;
 		anim.enabled = false;
 		print ("Made ragdoll");
 		BoxCollider collider = gameObject.GetComponent<BoxCollider> ();
@@ -215,7 +232,7 @@ public class BasicEnemyController : MonoBehaviour
 		Rigidbody ragDollRigidBody = ragDollCenterObject.GetComponent<Rigidbody> ();
 		ragDollRigidBody.AddForce (new Vector3 (0, 10 * ragdollForceFactor, -10 * ragdollForceFactor), ForceMode.Impulse);
 		yield return new WaitForSeconds (ragdollTime);
-		Destroy (gameObject);
+		Destroy (transform.parent.gameObject);
 	}
 
 	private void displayNavMeshPath()
