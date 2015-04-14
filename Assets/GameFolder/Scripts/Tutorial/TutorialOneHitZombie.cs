@@ -7,7 +7,6 @@ public class TutorialOneHitZombie : MonoBehaviour
 	public bool handFlipZombie;
 	public bool handFistZombie;
 
-
 	void OnParticleCollision(GameObject other)
 	{
 		if (handFlipZombie) {
@@ -18,6 +17,13 @@ public class TutorialOneHitZombie : MonoBehaviour
 		if (handFistZombie)
 			tutorialObject.GetComponent<TutorialOffensiveScript> ().handFistZombieKilled ();
 
+		StartCoroutine (ZombieDeath ());
+	}
+
+	IEnumerator ZombieDeath()
+	{
+		gameObject.transform.GetChild (0).gameObject.GetComponent<Animator> ().SetBool ("Dead", true);
+		yield return new WaitForSeconds (2.0f);
 		Destroy (gameObject);
 	}
 }

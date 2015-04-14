@@ -3,13 +3,16 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class TutorialDefensiveScript : MonoBehaviour {
-	
+
+	public GameObject offensiveButton;
+	public GameObject defensiveButton;
+
 	public GameObject handFlipGesture;
-	
 	public GameObject handFistGesture;
 	
 	public Text displayMessage;
 
+	public PlayerLogic player;
 	public OffensiveAbilities offense;
 	public DefensiveAbilities defense;
 	
@@ -24,6 +27,7 @@ public class TutorialDefensiveScript : MonoBehaviour {
 
 	public AudioSource audio;
 
+
 	private bool ballistaHasKilled = false;
 	private bool oilSlickHasSlowed = false;
 	private bool oilSlickHasExploded = false;
@@ -31,8 +35,7 @@ public class TutorialDefensiveScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
-		StartCoroutine (startTutorial ());
-		StartCoroutine (activateOffensiveAbilities ());
+
 	}
 	
 	// Update is called once per frame
@@ -40,14 +43,26 @@ public class TutorialDefensiveScript : MonoBehaviour {
 	{
 		
 	}
+
+	public void activateTutorial() 
+	{
+		StartCoroutine (startTutorial ());
+		StartCoroutine (activateOffensiveAbilities ());
+
+		handFlipGesture.SetActive (false);
+		handFistGesture.SetActive (false);
+	}
 	
 	IEnumerator startTutorial()
 	{
+		offense.handFlipAttack = offense.emptyAttack;
+		offense.fistAttack = offense.emptyAttack;
+
 		displayMessage.text = "Now we will introduce the \n defensive phase. \n Use the hand flip attack \n to place a turret";
 		audio.clip = ballistasAudio;
 		audio.Play ();
 
-		yield return new WaitForSeconds (6.0f);
+		yield return new WaitForSeconds (12.0f);
 
 		displayMessage.text = "Look at where you want to \n place your turret and \n perform the hand flip!";
 		
@@ -57,8 +72,17 @@ public class TutorialDefensiveScript : MonoBehaviour {
 
 		displayMessage.text = "Look at where you want to \n place your turret and \n perform the hand flip!";
 
-		offense.circularHandAttack = offense.handFlipAttack;
+		//offense.circularHandAttack = offense.handFlipAttack;
 		offense.handFlipAttack = defense.placeTurretAttack;
+
+		while (true) {
+			GameObject[] placedBallistas = GameObject.FindGameObjectsWithTag("Ballista");
+			if (placedBallistas.Length > 0) {
+				print("Found a ballista in defensive ballista training");
+				break;
+			}
+			yield return new WaitForSeconds(1.0f);
+		}
 
 		spawner.SetActive (true);
 		TutorialSpawning spawn = (TutorialSpawning) spawner.GetComponent (typeof(TutorialSpawning));
@@ -79,8 +103,16 @@ public class TutorialDefensiveScript : MonoBehaviour {
 
 	IEnumerator beginOilSlickTutorial()
 	{
+		yield return new WaitForSeconds(2.0f);
+		
+		GameObject[] spawnedZombies = GameObject.FindGameObjectsWithTag("Zombie");
+		foreach (GameObject toDestroy in spawnedZombies) {
+			if (toDestroy.name != "Zombie(Clone)") continue;
+			GameObject.Destroy(toDestroy);
+		}
+
+		player.changeCurrency (5);
 		handFlipGesture.SetActive (false);
-		offense.handFlipAttack = offense.emptyAttack;
 		spawner.SetActive (false);
 		goalPosition.SetActive (false);
 
@@ -88,17 +120,28 @@ public class TutorialDefensiveScript : MonoBehaviour {
 		audio.clip = oilSlicksAudio;
 		audio.Play ();
 
-		yield return new WaitForSeconds (audio.clip.length/2.0f);
+		yield return new WaitForSeconds (5.0f);
 
 		handFistGesture.SetActive (true);
-		displayMessage.text = "The oil will slow down enemies";
+		displayMessage.text = "The oil will slow down enemies \n and also explode when hit \n with one of your fireballs.";
 
-		yield return new WaitForSeconds (audio.clip.length/2.0f);
+		yield return new WaitForSeconds (5.0f);
 
-		displayMessage.text = "Try slowing down the enemies";
-		
-		
+		displayMessage.text = "First, close your hand \n into a fist and look where \n you want to place the \n oil slick.";
 		offense.fistAttack = defense.placeOilSlickAttack;
+
+		yield return new WaitForSeconds (5.0f);
+
+		displayMessage.text = "Now open your fist \n to place it. Try placing some \n in the enemies' path.";
+
+		while (true) {
+			GameObject[] placedOilSlicks = GameObject.FindGameObjectsWithTag("OilSlick");
+			if (placedOilSlicks.Length > 0) {
+				print("Found a ballista in defensive ballista training");
+				break;
+			}
+			yield return new WaitForSeconds(1.0f);
+		}
 
 		spawner.SetActive (true);
 		TutorialSpawning spawn = (TutorialSpawning) spawner.GetComponent (typeof(TutorialSpawning));
@@ -112,46 +155,60 @@ public class TutorialDefensiveScript : MonoBehaviour {
 	{
 		spawner.SetActive (false);
 		goalPosition.SetActive (false);
-
-		GameObject[] spawnedZombies = GameObject.FindGameObjectsWithTag("Zombie");
-		foreach (GameObject toDestroy in spawnedZombies) {
-			GameObject.Destroy(toDestroy);
-		}
 		
 		displayMessage.text = "Now, place another oil slick \n and use the fireball attack \n to set it on fire!";
+
+		offense.fistAttack = defense.placeOilSlickAttack;
+		offense.handFlipAttack = offense.alwaysFireballAttack;
+
 		audio.clip = explodeOilSlicksAudio;
 		audio.Play ();
 		
 		yield return new WaitForSeconds (audio.clip.length);
-		
-		offense.fistAttack = defense.placeOilSlickAttack;
-		offense.handFlipAttack = offense.circularHandAttack;
-		
+
+		GameObject[] spawnedZombies = GameObject.FindGameObjectsWithTag("Zombie");
+		foreach (GameObject toDestroy in spawnedZombies) {
+			if (toDestroy.name != "Zombie(Clone)") continue;
+			GameObject.Destroy(toDestroy);
+		}
+
 	}
 
 	IEnumerator endTutorial()
 	{
-		
+		yield return new WaitForSeconds (3.0f);
+
 		displayMessage.text = "Great Job!";
 		audio.clip = congratulationsAudio;
 		audio.Play();
 		
 		yield return new WaitForSeconds (audio.clip.length);
-		
+
+		GameObject[] placedSlicks = GameObject.FindGameObjectsWithTag("OilSlick");
+		foreach (GameObject toDestroy in placedSlicks) {
+			if (toDestroy.name != "OilSlick(Clone)") continue;
+			GameObject.Destroy(toDestroy);
+		}
+
+		offensiveButton.SetActive (true);
+		defensiveButton.SetActive (true);
+
 		gameObject.SetActive (false);
-		
-		Application.LoadLevel(Application.loadedLevel);
-		
+
 	}
 
 	public void ballistaKilledZombie()
 	{
+		print ("ballistaKilledZombie() function called.");
 		if (ballistaHasKilled == false) {
 			ballistaHasKilled = true;
+			offense.handFlipAttack = offense.emptyAttack;
 			GameObject[] placedBallistas = GameObject.FindGameObjectsWithTag("Ballista");
 			foreach (GameObject toDestroy in placedBallistas) {
+				if (toDestroy.name != "BallistaComplete(Clone)") continue;
 				GameObject.Destroy(toDestroy);
 			}
+
 			StartCoroutine (beginOilSlickTutorial ());
 		}
 	}

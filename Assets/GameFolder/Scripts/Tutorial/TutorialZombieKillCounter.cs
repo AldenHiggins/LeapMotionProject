@@ -22,6 +22,13 @@ public class TutorialZombieKillCounter : MonoBehaviour {
 		if (isOffense)
 			tutorialObject.GetComponent<TutorialOffensiveScript> ().killedZombie ();
 
+		StartCoroutine (ZombieDeath ());
+	}
+
+	IEnumerator ZombieDeath()
+	{
+		gameObject.transform.GetChild (0).gameObject.GetComponent<Animator> ().SetBool ("Dead", true);
+		yield return new WaitForSeconds (2.0f);
 		Destroy (gameObject);
 	}
 }
