@@ -4,6 +4,9 @@ using System.Collections;
 
 public class TutorialOffensiveScript : MonoBehaviour 
 {	
+	public GameObject offensiveButton;
+	public GameObject defensiveButton;
+
 	public GameObject handFlipGesture;
 	public GameObject handFistGesture;
 	
@@ -34,14 +37,22 @@ public class TutorialOffensiveScript : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
-		StartCoroutine (beginTutorial ());
-		StartCoroutine (activateOffensiveAbilities ());
+
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
 		
+	}
+
+	public void activateTutorial() 
+	{
+		StartCoroutine (beginTutorial ());
+		StartCoroutine (activateOffensiveAbilities ());
+
+		handFlipGesture.SetActive (false);
+		handFistGesture.SetActive (false);
 	}
 	
 	IEnumerator beginTutorial()
@@ -151,10 +162,13 @@ public class TutorialOffensiveScript : MonoBehaviour
 		
 		yield return new WaitForSeconds (audio.clip.length);
 
-		gameObject.SetActive (false);
+		offense.handFlipAttack = offense.emptyAttack;
+		offense.fistAttack = offense.emptyAttack;
 
-		Application.LoadLevel(Application.loadedLevel);
-		
+		offensiveButton.SetActive (true);
+		defensiveButton.SetActive (true);
+
+		gameObject.SetActive (false);
 	}
 
 

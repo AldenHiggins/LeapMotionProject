@@ -29,6 +29,7 @@ public class OffensiveAbilities : MonoBehaviour
 	public AAttack circularHandAttack;
 	public AAttack clapAttack;
 	public AAttack emptyAttack;
+	public AAttack alwaysFireballAttack;
 	// DEFENSIVE ABILITIES
 	private DefensiveAbilities defense;
 
@@ -36,6 +37,8 @@ public class OffensiveAbilities : MonoBehaviour
 	private bool handWasFist = false;
 	private bool isChargingAttack = false;
 	private bool isCircle = false;
+
+	private bool makingAFist = false; 
 
 	// HANDS
 	private HandModel[] hands; 
@@ -95,7 +98,7 @@ public class OffensiveAbilities : MonoBehaviour
 			//  Charge a fireball, -.6 or less means the palm is facing the camera
 			if (Vector3.Dot (normal0, thisCamera.transform.forward) < -.6) {
 				handFlipAttack.chargingFunction (hands);
-				if (!fireballCharged) {
+				if (!fireballCharged && !makingAFist) {
 					fireballCharged = true;
 					handFlipAttack.chargedFunction (hands);
 					fistAttack.inactiveFunction();
@@ -126,12 +129,14 @@ public class OffensiveAbilities : MonoBehaviour
 				if (!handWasFist) {
 					handWasFist = true;
 					fistAttack.chargedFunction (hands);
+					makingAFist = true;
 					handFlipAttack.inactiveFunction();
 //					game.fistProjectile();
 				}
 				fistAttack.holdGestureFunction (hands);
 			} else if (!handIsFist && handWasFist) {
 				handWasFist = false;
+				makingAFist = false;
 				fistAttack.releaseFunction (hands);
 			} else if (!handIsFist && !handWasFist) {
 				fistAttack.inactiveFunction ();	

@@ -45,6 +45,7 @@ public class BasicEnemyController : MonoBehaviour
 	public float ragdollForceFactor;
 	public GameObject ragDollCenterObject;
 
+
 	// Use this for initialization
 	void Start () 
 	{
@@ -258,5 +259,18 @@ public class BasicEnemyController : MonoBehaviour
 			}
 		}
 	}
+
+//	void OnAnimatorMove ()
+//	{
+//		//only perform if walking
+//		if (anim.GetCurrentAnimatorStateInfo(0).IsName("run"))
+//		{
+//			//set the navAgent's velocity to the velocity of the animation clip currently playing
+//			agent.velocity = anim.deltaPosition / Time.deltaTime;
+//			
+//			//set the rotation in the direction of movement
+//			transform.rotation = Quaternion.LookRotation(agent.desiredVelocity);
+//		}
+//	}
 
 }
