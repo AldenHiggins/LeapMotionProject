@@ -12,7 +12,7 @@ public class TutorialDefensiveCollisionNotifier : MonoBehaviour {
 	void OnCollisionEnter(Collision collision)
 	{
 		if (isBallista) {
-			print("Hand Flip Zombie Killed");
+			print("Ballista Bolt Collided");
 			tutorialObject.GetComponent<TutorialDefensiveScript> ().ballistaKilledZombie();
 
 			Destroy(gameObject);
@@ -33,7 +33,7 @@ public class TutorialDefensiveCollisionNotifier : MonoBehaviour {
 	{
 
 		if (isOilSlick) {
-			print ("Hand Fist Zombie Killed");
+			print ("Oil Slick Stopped Zombie");
 			tutorialObject.GetComponent<TutorialDefensiveScript> ().oilSlickStoppedZombie ();
 		}
 
