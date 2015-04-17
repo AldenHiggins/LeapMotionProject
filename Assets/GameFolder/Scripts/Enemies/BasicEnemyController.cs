@@ -28,6 +28,7 @@ public class BasicEnemyController : MonoBehaviour
 	private Vector3 velocity;
 	public int waitToMove;
 	private int startingMoveCounter;
+	public bool usesRootMotion;
 	// AUDIO
 	private AudioSource source;
 	public AudioClip woundSound;
@@ -44,14 +45,22 @@ public class BasicEnemyController : MonoBehaviour
 	public float ragdollTime;
 	public float ragdollForceFactor;
 	public GameObject ragDollCenterObject;
+	public bool usesRagdoll;
 
 
 	// Use this for initialization
 	void Start () 
 	{
 		attacking = false;
-//		anim = transform.GetChild (0).gameObject.GetComponent<Animator> ();
-		anim = gameObject.GetComponent<Animator> ();
+		if (usesRootMotion)
+		{
+			anim = gameObject.GetComponent<Animator> ();
+		}
+		else
+		{
+			anim = transform.GetChild (0).gameObject.GetComponent<Animator> ();
+		}
+
 		health = startingHealth;
 		agent = gameObject.GetComponent<NavMeshAgent> ();
 //		target = game.getEnemyTarget ();
@@ -102,10 +111,15 @@ public class BasicEnemyController : MonoBehaviour
 //					gameObject.transform.GetChild(0).localPosition = new Vector3(0,0,0);
 //					gameObject.transform.GetChild(0).rotation = Quaternion.identity;
 				}
-//				if (agent.enabled == true && !agent.hasPath)
-//				{
-//					agent.SetDestination (target.transform.position);
-//				}
+
+				if (!usesRootMotion)
+				{
+					if (agent.enabled == true && !agent.hasPath)
+					{
+						agent.SetDestination (target.transform.position);
+					}
+				}
+
 					
 //				transform.position += velocity;
 //				rigidbody.AddForce (velocity, ForceMode.VelocityChange);
@@ -122,7 +136,10 @@ public class BasicEnemyController : MonoBehaviour
 			if (attacking == false)
 			{
 				attacking = true;
-//				agent.Stop();
+				if (!usesRootMotion)
+				{
+					agent.Stop();
+				}
 				StartCoroutine(attack());
 			}
 		}
@@ -174,8 +191,14 @@ public class BasicEnemyController : MonoBehaviour
 			Destroy (greenHealth);
 			Destroy (redHealth);
 			source.PlayOneShot(killSound);
-//			StartCoroutine(kill());
-			StartCoroutine(ragdollKill());
+			if (usesRagdoll)
+			{
+				StartCoroutine(ragdollKill());
+			}
+			else
+			{
+				StartCoroutine(kill());
+			}
 		}
 	}
 
@@ -231,7 +254,7 @@ public class BasicEnemyController : MonoBehaviour
 		BoxCollider collider = gameObject.GetComponent<BoxCollider> ();
 		collider.enabled = false;
 		Rigidbody ragDollRigidBody = ragDollCenterObject.GetComponent<Rigidbody> ();
-		ragDollRigidBody.AddForce (new Vector3 (0, 10 * ragdollForceFactor, -10 * ragdollForceFactor), ForceMode.Impulse);
+		ragDollRigidBody.AddForce (new Vector3 (0, 5 * ragdollForceFactor, -10 * ragdollForceFactor), ForceMode.Impulse);
 		yield return new WaitForSeconds (ragdollTime);
 		Destroy (transform.parent.gameObject);
 	}
