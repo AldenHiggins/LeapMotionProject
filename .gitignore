@@ -98,3 +98,6 @@ LeapMotionProject-csharp.sln
 LeapMotionProject.sln
 LeapMotionProject.userprefs
 NewBuild_Data/
+TutorialCompleteDEMO_Data/
+Assets/Editor.meta
+Assets/Editor/
