@@ -28,6 +28,7 @@ public class TutorialZombieKillCounter : MonoBehaviour {
 	IEnumerator ZombieDeath()
 	{
 		gameObject.transform.GetChild (0).gameObject.GetComponent<Animator> ().SetBool ("Dead", true);
+		gameObject.GetComponent<TutorialEnemyController> ().speed = 0.0f;
 		yield return new WaitForSeconds (2.0f);
 		Destroy (gameObject);
 	}

@@ -24,6 +24,7 @@ public class TutorialOneHitZombie : MonoBehaviour
 	{
 		gameObject.transform.GetChild (0).gameObject.GetComponent<Animator> ().SetBool ("Dead", true);
 		yield return new WaitForSeconds (2.0f);
-		Destroy (gameObject);
+		gameObject.transform.GetChild (0).gameObject.GetComponent<Animator> ().SetBool ("Dead", false);
+		gameObject.SetActive (false);
 	}
 }

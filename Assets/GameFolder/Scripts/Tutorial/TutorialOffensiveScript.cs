@@ -31,6 +31,8 @@ public class TutorialOffensiveScript : MonoBehaviour
 	public GameObject spawner;
 	public GameObject goalPosition;
 
+	private bool flipZombieKilled = false;
+	private bool fistZombieKilled = false;
 	private int zombiesKilled = 0;
 	
 	
@@ -48,11 +50,17 @@ public class TutorialOffensiveScript : MonoBehaviour
 
 	public void activateTutorial() 
 	{
-		StartCoroutine (beginTutorial ());
-		StartCoroutine (activateOffensiveAbilities ());
-
 		handFlipGesture.SetActive (false);
 		handFistGesture.SetActive (false);
+
+		zombie.GetComponent<TutorialZombieKillCounter>().isOffense = true;
+		zombiesKilled = 0;
+		flipZombieKilled = false;
+		fistZombieKilled = false;
+
+		StartCoroutine (beginTutorial ());
+		StartCoroutine (activateOffensiveAbilities ());
+	
 	}
 	
 	IEnumerator beginTutorial()
@@ -62,6 +70,8 @@ public class TutorialOffensiveScript : MonoBehaviour
 		audio.clip = handFlipAudio;
 		audio.Play();
 		yield return new WaitForSeconds(audio.clip.length/2);
+
+		offense.handFlipAttack = offense.alwaysFireballAttack;
 
 		displayMessage.text = "Keep your hand in one place \n and rotate it \n just like the example.";
 		
@@ -98,8 +108,7 @@ public class TutorialOffensiveScript : MonoBehaviour
 	IEnumerator beginFistTutorial()
 	{
 		offense.fistAttack = offense.clapAttack;
-		offense.clapAttack = offense.handFlipAttack;
-		offense.handFlipAttack = offense.circularHandAttack;
+		offense.handFlipAttack = offense.emptyAttack;;
 		
 		handFlipGesture.SetActive (false);
 		handFistGesture.SetActive (true);
@@ -124,20 +133,20 @@ public class TutorialOffensiveScript : MonoBehaviour
 
 	IEnumerator beginEnemiesTutorial()
 	{
-		offense.handFlipAttack = offense.clapAttack;
+		offense.handFlipAttack = offense.alwaysFireballAttack;;
 		
 		handFlipGesture.SetActive (false);
 		handFistGesture.SetActive (false);
 		
-		displayMessage.text = "During the game enemies \n will try and reach a goal. \n Fire your fireball at them \n before they can reach it!";
+		displayMessage.text = "During the game enemies \n will try and reach a goal.";
 		audio.clip = enemiesAudio;
 		audio.Play();
 		
-		yield return new WaitForSeconds (7.0f);
+		yield return new WaitForSeconds (5.0f);
 		
-		displayMessage.text = "Try and kill the zombies \n before they get \n to the other side";
+		displayMessage.text = "Use your attacks on them \n before they reach the \n other side to stop them";
 		
-		yield return new WaitForSeconds (3.0f);
+		yield return new WaitForSeconds (4.0f);
 		
 		displayMessage.text = "Kill three zombies! \n Remember not to move \n your hand, only rotate or close it!";
 		
@@ -153,6 +162,8 @@ public class TutorialOffensiveScript : MonoBehaviour
 
 	IEnumerator endTutorial()
 	{
+		TutorialSpawning spawn = (TutorialSpawning) spawner.GetComponent (typeof(TutorialSpawning));
+		spawn.stopSpawning ();
 		spawner.SetActive (false);
 		goalPosition.SetActive (false);
 
@@ -165,6 +176,12 @@ public class TutorialOffensiveScript : MonoBehaviour
 		offense.handFlipAttack = offense.emptyAttack;
 		offense.fistAttack = offense.emptyAttack;
 
+		GameObject[] spawnedZombies = GameObject.FindGameObjectsWithTag("Zombie");
+		foreach (GameObject toDestroy in spawnedZombies) {
+			if (toDestroy.name != "Zombie(Clone)") continue;
+			GameObject.Destroy(toDestroy);
+		}
+
 		offensiveButton.SetActive (true);
 		defensiveButton.SetActive (true);
 
@@ -174,23 +191,28 @@ public class TutorialOffensiveScript : MonoBehaviour
 
 	public void handFlipZombieKilled()
 	{
-		StartCoroutine (beginFistTutorial ());
+		if (flipZombieKilled == false) {
+			flipZombieKilled = true;
+			StartCoroutine (beginFistTutorial ());
+		}
 	}
 
 	public void handFistZombieKilled()
 	{
-		StartCoroutine (beginEnemiesTutorial ());
+		if (fistZombieKilled == false) {
+			fistZombieKilled = true;
+			StartCoroutine (beginEnemiesTutorial ());
+		}
 	}
 
 	public void killedZombie() 
 	{
-		this.zombiesKilled++;
+		zombiesKilled++;
 
-		if (this.zombiesKilled >= 3)
+		if (zombiesKilled >= 3)
 		{
 			zombie.GetComponent<TutorialZombieKillCounter>().isOffense = false;
 			StartCoroutine (endTutorial ());
-
 		}
 
 	}

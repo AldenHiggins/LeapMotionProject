@@ -1,8 +1,8 @@
 <?xml version="1.0" standalone="no" ?>
 <!DOCTYPE project PUBLIC "-//audacityproject-1.3.0//DTD//EN" "http://audacity.sourceforge.net/xml/audacityproject-1.3.0.dtd" >
-<project xmlns="http://audacity.sourceforge.net/xml/" projname="Raw Files_data" version="1.3.0" audacityversion="2.1.0" sel0="11.4822675737" sel1="11.4822675737" vpos="0" h="0.0000000000" zoom="86.1328125000" rate="44100.0" snapto="off" selectionformat="hh:mm:ss + milliseconds">
+<project xmlns="http://audacity.sourceforge.net/xml/" projname="Raw Files_data" version="1.3.0" audacityversion="2.1.0" sel0="0.0000000000" sel1="0.0000000000" vpos="1408" h="0.0000000000" zoom="86.1328125000" rate="44100.0" snapto="off" selectionformat="hh:mm:ss + milliseconds">
 	<tags/>
-	<wavetrack name="Welcome" channel="2" linked="0" mute="0" solo="0" height="150" minimized="0" isSelected="0" rate="44100" gain="1.0" pan="0.0">
+	<wavetrack name="Welcome" channel="2" linked="0" mute="0" solo="0" height="155" minimized="0" isSelected="0" rate="44100" gain="1.0" pan="0.0">
 		<waveclip offset="0.00000000">
 			<sequence maxsamples="262144" sampleformat="262159" numsamples="291328">
 				<waveblock start="0">
@@ -113,23 +113,15 @@
 	</wavetrack>
 	<wavetrack name="Oil Slicks" channel="2" linked="0" mute="0" solo="0" height="150" minimized="0" isSelected="0" rate="44100" gain="1.0" pan="0.0">
 		<waveclip offset="-0.13000000">
-			<sequence maxsamples="262144" sampleformat="262159" numsamples="598629">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="735333">
 				<waveblock start="0">
-					<simpleblockfile filename="e00004c1.au" len="262144" min="-0.517395" max="0.451874" rms="0.066547"/>
+					<simpleblockfile filename="e00007ad.au" len="262144" min="-0.600098" max="0.562561" rms="0.082595"/>
 				</waveblock>
 				<waveblock start="262144">
-					<simpleblockfile filename="e0000566.au" len="169778" min="-0.523895" max="0.393036" rms="0.057821"/>
+					<simpleblockfile filename="e000059a.au" len="262144" min="-0.523071" max="0.467194" rms="0.068773"/>
 				</waveblock>
-				<waveblock start="431922">
-					<simpleblockfile filename="e00009b6.au" len="166707" min="-0.56665" max="0.384735" rms="0.06483"/>
-				</waveblock>
-			</sequence>
-			<envelope numpoints="0"/>
-		</waveclip>
-		<waveclip offset="13.47689343">
-			<sequence maxsamples="262144" sampleformat="262159" numsamples="176229">
-				<waveblock start="0">
-					<simpleblockfile filename="e0000ff0.au" len="176229" min="-0.269501" max="0.194275" rms="0.036167"/>
+				<waveblock start="524288">
+					<simpleblockfile filename="e00008ae.au" len="211045" min="-0.445221" max="0.302948" rms="0.046847"/>
 				</waveblock>
 			</sequence>
 			<envelope numpoints="0"/>
@@ -145,16 +137,6 @@
 			<envelope numpoints="0"/>
 		</waveclip>
 	</wavetrack>
-	<wavetrack name="Congratulations Defensive" channel="2" linked="0" mute="0" solo="0" height="150" minimized="0" isSelected="0" rate="44100" gain="1.0" pan="0.0">
-		<waveclip offset="-0.13000000">
-			<sequence maxsamples="262144" sampleformat="262159" numsamples="219520">
-				<waveblock start="0">
-					<simpleblockfile filename="e0000a75.au" len="219520" min="-0.866089" max="0.651428" rms="0.08838"/>
-				</waveblock>
-			</sequence>
-			<envelope numpoints="0"/>
-		</waveclip>
-	</wavetrack>
 	<wavetrack name="Choose Tutorial" channel="2" linked="0" mute="0" solo="0" height="150" minimized="0" isSelected="0" rate="44100" gain="1.0" pan="0.0">
 		<waveclip offset="-0.13000000">
 			<sequence maxsamples="262144" sampleformat="262159" numsamples="172133">
@@ -165,24 +147,34 @@
 			<envelope numpoints="0"/>
 		</waveclip>
 	</wavetrack>
-	<wavetrack name="Explode Oil Slick" channel="2" linked="0" mute="0" solo="0" height="150" minimized="0" isSelected="0" rate="44100" gain="1.0" pan="0.0">
+	<wavetrack name="Flamethrower" channel="2" linked="0" mute="0" solo="0" height="136" minimized="0" isSelected="0" rate="44100" gain="1.0" pan="0.0">
 		<waveclip offset="-0.13000000">
-			<sequence maxsamples="262144" sampleformat="262159" numsamples="311909">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="186880">
 				<waveblock start="0">
-					<simpleblockfile filename="e000021c.au" len="163122" min="-0.545105" max="0.636261" rms="0.068127"/>
-				</waveblock>
-				<waveblock start="163122">
-					<simpleblockfile filename="e0000b0a.au" len="148787" min="-0.558472" max="0.490112" rms="0.069067"/>
+					<simpleblockfile filename="e0000988.au" len="186880" min="-0.7052" max="0.776123" rms="0.097864"/>
 				</waveblock>
 			</sequence>
 			<envelope numpoints="0"/>
 		</waveclip>
 	</wavetrack>
-	<wavetrack name="Flamethrower" channel="2" linked="0" mute="0" solo="0" height="150" minimized="0" isSelected="0" rate="44100" gain="1.0" pan="0.0">
-		<waveclip offset="-0.13000000">
-			<sequence maxsamples="262144" sampleformat="262159" numsamples="186880">
+	<wavetrack name="Explode Oil" channel="2" linked="0" mute="0" solo="0" height="150" minimized="0" isSelected="0" rate="44100" gain="1.0" pan="0.0">
+		<waveclip offset="0.06736961">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="335360">
 				<waveblock start="0">
-					<simpleblockfile filename="e0000988.au" len="186880" min="-0.7052" max="0.776123" rms="0.097864"/>
+					<simpleblockfile filename="e0000d2a.au" len="262144" min="-0.56424" max="0.576324" rms="0.082417"/>
+				</waveblock>
+				<waveblock start="262144">
+					<simpleblockfile filename="e0000646.au" len="73216" min="-0.438141" max="0.402557" rms="0.052099"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="Congratulations Defensive" channel="2" linked="0" mute="0" solo="0" height="150" minimized="0" isSelected="0" rate="44100" gain="1.0" pan="0.0">
+		<waveclip offset="-0.13000000">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="207360">
+				<waveblock start="0">
+					<simpleblockfile filename="e00009b9.au" len="207360" min="-0.688232" max="0.416016" rms="0.089457"/>
 				</waveblock>
 			</sequence>
 			<envelope numpoints="0"/>

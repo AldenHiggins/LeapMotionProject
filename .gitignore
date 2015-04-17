@@ -97,3 +97,8 @@ test_Data/
 LeapMotionProject-csharp.sln
 LeapMotionProject.sln
 LeapMotionProject.userprefs
+Assets/Editor.meta
+Assets/Editor/CrossPlatformInput.meta
+Assets/Editor/CrossPlatformInput/CrossPlatformInputInitialize.cs
+Assets/Editor/CrossPlatformInput/CrossPlatformInputInitialize.cs.meta
+TutorialCompleteDEMO_Data/
