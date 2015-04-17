@@ -17,17 +17,18 @@ public class TutorialDefensiveCollisionNotifier : MonoBehaviour {
 
 			Destroy(gameObject);
 		}
-	
+
+		collision.gameObject.transform.GetChild (0).gameObject.GetComponent<Animator> ().SetBool ("Dead", true);
 	}
 
-	void OnParticleCollision(GameObject other)
-	{
-		if (isOilSlick) {
-			print("Oil Slick Exploded - Particle Collsion Detected");
-			tutorialObject.GetComponent<TutorialDefensiveScript> ().oilSlickExploded();
-		}
-	}
-	
+//	void OnParticleCollision(GameObject other)
+//	{
+//		if (isOilSlick) {
+//			print("Oil Slick Exploded - Particle Collsion Detected");
+//			tutorialObject.GetComponent<TutorialDefensiveScript> ().oilSlickExploded();
+//		}
+//	}
+//	
 
 	void OnTriggerEnter(Collider other) 
 	{
