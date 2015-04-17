@@ -69,7 +69,7 @@ public class PlayerLogic : MonoBehaviour
 		// Player is dead
 		if (health < 0)
 		{
-			respawn ();
+			endGame();
 		}
 		// Player just takes damage
 		else
@@ -128,5 +128,10 @@ public class PlayerLogic : MonoBehaviour
 	{
 		currentPlayerCurrency += currencyChange;
 		currencyText.text = "" + currentPlayerCurrency;
+	}
+
+	void endGame ()
+	{
+	// Here we want to move to another end game screen! MATT IMPLEMENT THIS.		
 	}
 }

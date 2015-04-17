@@ -63,9 +63,21 @@ public class EnemySpawner : MonoBehaviour
 		GameObject monster = (GameObject) Instantiate (enemyToSpawn, transform.position, Quaternion.identity);
 		monster.transform.parent = spawnedEnemyList.transform;
 
-		BasicEnemyController enemy = (BasicEnemyController)monster.transform.GetChild (0).GetComponent (typeof(BasicEnemyController));
-		enemy.enabled = true;
+		
+		BasicEnemyController enemy = (BasicEnemyController) monster.GetComponent(typeof(BasicEnemyController));
 
+		if (enemy == null)
+		{
+			enemy = (BasicEnemyController)monster.transform.GetChild (0).GetComponent (typeof(BasicEnemyController));
+		}
+		else
+		{
+			NavMeshAgent agent = monster.GetComponent<NavMeshAgent>();
+			agent.enabled = true;
+		}
+
+
+		enemy.enabled = true;
 
 
 	}

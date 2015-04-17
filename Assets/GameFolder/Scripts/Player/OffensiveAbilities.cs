@@ -98,10 +98,19 @@ public class OffensiveAbilities : MonoBehaviour
 			//  Charge a fireball, -.6 or less means the palm is facing the camera
 			if (Vector3.Dot (normal0, thisCamera.transform.forward) < -.6) {
 				handFlipAttack.chargingFunction (hands);
-				if (!fireballCharged && !makingAFist) {
-					fireballCharged = true;
-					handFlipAttack.chargedFunction (hands);
-					fistAttack.inactiveFunction();
+
+				if (!makingAFist)
+				{
+					if (!fireballCharged)
+					{
+						fireballCharged = true;
+						handFlipAttack.chargedFunction (hands);
+						fistAttack.inactiveFunction();
+					}
+				}
+				else
+				{
+					handFlipAttack.inactiveFunction();
 				}
 			} else {
 //				handFlipNotChargingFunction();

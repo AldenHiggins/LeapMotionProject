@@ -13,6 +13,7 @@ public class EmitterBehaviorBallista : MonoBehaviour
 	private int boltTimer;
 	private int blockTimer;
 	public Vector3 boltHeightOffset;
+	private bool firing;
 
 	// Use this for initialization
 	void Start () 
@@ -20,6 +21,7 @@ public class EmitterBehaviorBallista : MonoBehaviour
 		boltTimer = 0;
 		anim = GetComponent<Animator> ();
 		print ("Anim found: " + anim.name);
+		firing = false;
 	}
 	
 	// Update is called once per frame
@@ -70,7 +72,7 @@ public class EmitterBehaviorBallista : MonoBehaviour
 
 			// Launch bolt as long as an enemy is found
 			boltTimer++;
-			if (boltTimer > emissionFrequency)
+			if (boltTimer > emissionFrequency && !firing)
 			{
 				boltTimer = 0;
 				Vector3 velocity = transform.forward.normalized;
@@ -83,29 +85,6 @@ public class EmitterBehaviorBallista : MonoBehaviour
 
 				// Create Coroutine to stop firing after playing the animation once
 				StartCoroutine (shootBolt());
-
-				// Fire three particles for a multi-attack
-				if (multiAttack)
-				{
-					Quaternion newRotation = transform.rotation * Quaternion.Euler (15 * Vector3.up);
-					Vector3 newVelocity =  newRotation * Vector3.forward;
-					newVelocity.Normalize();
-					newVelocity *= emissionVelocity;
-					
-					createbolt(startPosition, Quaternion.identity, newVelocity, 0);
-
-					Quaternion rotation2 = transform.rotation * Quaternion.Euler (-15 * Vector3.up);
-					Vector3 secondVelocity =  rotation2 * Vector3.forward;
-					secondVelocity.Normalize();
-					secondVelocity *= emissionVelocity;
-					
-					createbolt(startPosition, Quaternion.identity, secondVelocity, 0);
-//					createbolt(startPosition, Quaternion.AngleAxis(yRotation + 15, Vector3.up), velocity, 0);
-
-					// Play ballista animation
-
-				}
-				//view.RPC ("makeboltNetwork", RPCMode.Others, new Vector3(-4.6f, 76.75f, 1.8f), Quaternion.identity, new Vector3(0.0f, 0.0f, -0.1f), hash);
 			}
 		}
 		// TODO: CHANGE THIS
@@ -127,26 +106,9 @@ public class EmitterBehaviorBallista : MonoBehaviour
 				GameObject newbolt = createbolt(startPosition, transform.rotation, velocity, 0);
 				MoveBolt bolt = (MoveBolt) newbolt.GetComponent(typeof(MoveBolt));
 				bolt.setTarget(nearestTutEnemy.gameObject);
-				
-				// Fire three particles for a multi-attack
-				if (multiAttack)
-				{
-					Quaternion newRotation = transform.rotation * Quaternion.Euler (15 * Vector3.up);
-					Vector3 newVelocity =  newRotation * Vector3.forward;
-					newVelocity.Normalize();
-					newVelocity *= emissionVelocity;
-					
-					createbolt(startPosition, Quaternion.identity, newVelocity, 0);
-					
-					Quaternion rotation2 = transform.rotation * Quaternion.Euler (-15 * Vector3.up);
-					Vector3 secondVelocity =  rotation2 * Vector3.forward;
-					secondVelocity.Normalize();
-					secondVelocity *= emissionVelocity;
-					
-					createbolt(startPosition, Quaternion.identity, secondVelocity, 0);
-					//					createbolt(startPosition, Quaternion.AngleAxis(yRotation + 15, Vector3.up), velocity, 0);
-				}
-				//view.RPC ("makeboltNetwork", RPCMode.Others, new Vector3(-4.6f, 76.75f, 1.8f), Quaternion.identity, new Vector3(0.0f, 0.0f, -0.1f), hash);
+
+				// Create Coroutine to stop firing after playing the animation once
+				StartCoroutine (shootBolt());
 			}
 		}
 		else
@@ -201,14 +163,17 @@ public class EmitterBehaviorBallista : MonoBehaviour
 	{
 		print ("Shooting bolt");
 		anim.SetBool ("Firing", true);
+		firing = true;
 //		while(!anim.GetCurrentAnimatorStateInfo(0).IsName("BallistaFire"))
 //		{
-		yield return new WaitForSeconds(1.5f);
+//		print ("Length of shoot: " + anim.GetCurrentAnimatorClipInfo(0)[0].clip.length);
+		yield return new WaitForSeconds(1.0f);
 //		}
 		//		print ("Animation time: " + anim.GetCurrentAnimationClipState (0) [0].clip.length);
 //		yield return new WaitForSeconds (anim.GetCurrentAnimatorClipInfo(0)[0].clip.length - .1f);
 
 		anim.SetBool ("Firing", false);
+		firing = false;
 	}
 
 	void OnTriggerEnter(Collider other) 
