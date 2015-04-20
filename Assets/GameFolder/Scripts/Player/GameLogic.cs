@@ -191,6 +191,8 @@ public class GameLogic : MonoBehaviour
 				yield return new WaitForSeconds(.2f);
 			}
 
+			print ("Activating the next round");
+
 			// Remove attack selection screen
 			endRoundScreen.disableUI();
 
