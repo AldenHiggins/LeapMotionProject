@@ -172,7 +172,7 @@ public class GameLogic : MonoBehaviour
 		for (int i = 0; i < enemyWaves.Length; i++)
 		{
 			// Set the round text
-			roundText.text = "ROUND " + (i + 2);
+			roundText.text = "ROUND " + (i + 1);
 			// Present start round screen and wait
 			playerHud.SetActive(false);
 			endRoundScreen.enableUI();
@@ -199,6 +199,9 @@ public class GameLogic : MonoBehaviour
 			// Start defensive setup phase
 			isDefensiveStageActive = true;
 			turretHud.SetActive(true);
+			// Wait a couple of seconds for the player to readjust.
+			yield return new WaitForSeconds(1f);
+
 			defensiveAbilities.updateDefencesCostText();
 			//defensiveAbilities.showHideTurretPositions(true);
 			offensiveAbilities.handFlipAttack = placeBallistaAttack;
