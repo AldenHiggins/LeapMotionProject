@@ -199,6 +199,9 @@ public class GameLogic : MonoBehaviour
 			// Start defensive setup phase
 			isDefensiveStageActive = true;
 			turretHud.SetActive(true);
+			// Wait a couple of seconds for the player to readjust.
+			yield return new WaitForSeconds(1f);
+
 			defensiveAbilities.updateDefencesCostText();
 			//defensiveAbilities.showHideTurretPositions(true);
 			offensiveAbilities.handFlipAttack = placeBallistaAttack;
