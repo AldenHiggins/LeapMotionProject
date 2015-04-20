@@ -119,7 +119,7 @@ public class TutorialDefensiveScript : MonoBehaviour {
 		
 		GameObject[] spawnedZombies = GameObject.FindGameObjectsWithTag("Zombie");
 		foreach (GameObject toDestroy in spawnedZombies) {
-			if (toDestroy.name != "Zombie(Clone)") continue;
+			if (toDestroy.name != "RootMotionZombie(Clone)") continue;
 			GameObject.Destroy(toDestroy);
 		}
 
@@ -213,7 +213,7 @@ public class TutorialDefensiveScript : MonoBehaviour {
 
 		GameObject[] spawnedZombies = GameObject.FindGameObjectsWithTag("Zombie");
 		foreach (GameObject toDestroy in spawnedZombies) {
-			if (toDestroy.name != "Zombie(Clone)") continue;
+			if (toDestroy.name != "RootMotionZombie(Clone)") continue;
 			GameObject.Destroy(toDestroy);
 		}
 

@@ -47,6 +47,9 @@ public class BasicEnemyController : MonoBehaviour
 	public GameObject ragDollCenterObject;
 	public bool usesRagdoll;
 
+	public bool isTutorial;
+	public GameObject tutorialGoalTarget;
+
 
 	// Use this for initialization
 	void Start () 
@@ -64,7 +67,8 @@ public class BasicEnemyController : MonoBehaviour
 		health = startingHealth;
 		agent = gameObject.GetComponent<NavMeshAgent> ();
 //		target = game.getEnemyTarget ();
-		target = player.gameObject;
+		if (isTutorial) target = tutorialGoalTarget;
+		else target = player.gameObject;
 		if (showNavMeshPath)
 			thisPathLine = (GameObject) Instantiate (pathLine);
 		source = GetComponent<AudioSource> ();
