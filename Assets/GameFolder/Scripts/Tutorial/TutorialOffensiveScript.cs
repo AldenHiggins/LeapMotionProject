@@ -53,7 +53,7 @@ public class TutorialOffensiveScript : MonoBehaviour
 		handFlipGesture.SetActive (false);
 		handFistGesture.SetActive (false);
 
-		zombie.GetComponent<TutorialZombieKillCounter>().isOffense = true;
+		zombie.GetComponentInChildren<TutorialZombieKillCounter>().isOffense = true;
 		zombiesKilled = 0;
 		flipZombieKilled = false;
 		fistZombieKilled = false;
@@ -107,7 +107,7 @@ public class TutorialOffensiveScript : MonoBehaviour
 
 	IEnumerator beginFistTutorial()
 	{
-		offense.fistAttack = offense.clapAttack;
+		offense.fistAttack = offense.alwaysIceballAttack;
 		offense.handFlipAttack = offense.emptyAttack;;
 		
 		handFlipGesture.SetActive (false);
@@ -211,7 +211,7 @@ public class TutorialOffensiveScript : MonoBehaviour
 
 		if (zombiesKilled >= 3)
 		{
-			zombie.GetComponent<TutorialZombieKillCounter>().isOffense = false;
+			zombie.GetComponentInChildren<TutorialZombieKillCounter>().isOffense = false;
 			StartCoroutine (endTutorial ());
 		}
 

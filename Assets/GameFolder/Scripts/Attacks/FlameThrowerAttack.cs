@@ -59,9 +59,8 @@ public class FlameThrowerAttack : AAttack
 			
 			for(int i = 0; i < hands.Length && i < 2; i++) 
 			{
-
 				flamethrowers[i].transform.position = hands[i].GetPalmPosition();
-				flamethrowers[i].transform.position -= (positionOffset * hands[i].GetPalmNormal());
+				flamethrowers[i].transform.position += (positionOffset * hands[i].GetPalmNormal());
 				flamethrowers[i].transform.rotation = Quaternion.LookRotation(hands[i].GetPalmNormal());
 			}
 		}		
@@ -69,8 +68,10 @@ public class FlameThrowerAttack : AAttack
 	
 	public override void inactiveFunction()
 	{
-//		MoveFireball fireball = (MoveFireball) flameThrowerParticle.GetComponent (typeof(MoveFireball));
-//		fireball.stopPeriodicDamage();
+		MoveFireball fireball1 = (MoveFireball) flamethrowers[0].GetComponent (typeof(MoveFireball));
+		MoveFireball fireball2 = (MoveFireball) flamethrowers[1].GetComponent (typeof(MoveFireball));
+		fireball1.stopPeriodicDamage();
+		fireball2.stopPeriodicDamage();
 		flamethrowers[0].SetActive (false);
 		flamethrowers[1].SetActive (false);
 	}

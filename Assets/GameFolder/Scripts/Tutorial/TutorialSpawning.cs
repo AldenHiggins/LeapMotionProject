@@ -44,9 +44,9 @@ public class TutorialSpawning : MonoBehaviour
 			{
 				GameObject monster = (GameObject) Instantiate (spawnThis, transform.position, Quaternion.identity);
 				monster.transform.parent = spawnedEnemyList.transform;
-				TutorialEnemyController enemy = (TutorialEnemyController) monster.GetComponent(typeof(TutorialEnemyController));
+				TutorialEnemyController enemy = (TutorialEnemyController) monster.GetComponentInChildren(typeof(TutorialEnemyController));
 				enemy.enabled = true;
-				NavMeshAgent agent = monster.GetComponent<NavMeshAgent>();
+				NavMeshAgent agent = monster.GetComponentInChildren<NavMeshAgent>();
 				agent.enabled = true;
 			}
 			yield return new WaitForSeconds(spawnFrequency);

@@ -30,6 +30,7 @@ public class OffensiveAbilities : MonoBehaviour
 	public AAttack clapAttack;
 	public AAttack emptyAttack;
 	public AAttack alwaysFireballAttack;
+	public AAttack alwaysIceballAttack;
 	// DEFENSIVE ABILITIES
 	private DefensiveAbilities defense;
 
@@ -40,6 +41,9 @@ public class OffensiveAbilities : MonoBehaviour
 
 	private bool makingAFist = false; 
 	private bool flamethrowersActive = false;
+	private int flamethrowerChargeLevel = 0;
+	public int numFireballsForFlamethrower = 10;
+	public float flamethrowerTimeframe = 6.0f;
 
 	// HANDS
 	private HandModel[] hands; 
@@ -126,6 +130,11 @@ public class OffensiveAbilities : MonoBehaviour
 					// First check if the player has enough energy
 					if (playerLogic.getEnergy () > 10) {
 						handFlipAttack.releaseFunction (hands);
+						flamethrowerChargeLevel++;
+						if (flamethrowerChargeLevel == numFireballsForFlamethrower) {
+							AudioSource source = (AudioSource) clapAttack.gameObject.GetComponent<AudioSource>();
+							if (source != null) source.Play();
+						}
 					}
 				}
 				handFlipAttack.holdGestureFunction (hands);
@@ -234,9 +243,10 @@ public class OffensiveAbilities : MonoBehaviour
 			//////////////////////////////////////////////////////////////
 			if (Vector3.Dot (normal0, normal1) < -.6) {
 				Vector3 distance = hands [0].GetPalmPosition () - hands [1].GetPalmPosition ();
-				if (distance.magnitude < .09) {
+				if (distance.magnitude < .09 && flamethrowerChargeLevel >= numFireballsForFlamethrower) {
 //					game.clapAttack (playerLogic.transform.position + new Vector3 (0.0f, 0.7f, 0.0f));
 					flamethrowersActive = true;
+					StartCoroutine(flamethrowerCooldown());
 					clapAttack.releaseFunction (hands);
 				}
 			}
@@ -256,6 +266,14 @@ public class OffensiveAbilities : MonoBehaviour
 			handFlipAttack.inactiveFunction();
 			fistAttack.inactiveFunction();
 		}
+	}
+
+	IEnumerator flamethrowerCooldown()
+	{
+		yield return new WaitForSeconds (flamethrowerTimeframe);
+		flamethrowersActive = false;
+		clapAttack.inactiveFunction ();
+		flamethrowerChargeLevel = 0;
 	}
 
 

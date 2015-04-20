@@ -29,7 +29,8 @@ public class TutorialEnemyController : MonoBehaviour
 	void Start () 
 	{
 		attacking = false;
-		anim = transform.GetChild (0).gameObject.GetComponent<Animator> ();
+		//anim = transform.GetChild (0).gameObject.GetComponent<Animator> ();
+		anim = gameObject.GetComponent<Animator> ();
 		health = startingHealth;
 		agent = gameObject.GetComponent<NavMeshAgent> ();
 		if (showNavMeshPath)
