@@ -54,16 +54,16 @@ public class MoveBolt : MonoBehaviour
 
 	void OnCollisionEnter(Collision collision) 
 	{
-		print ("Ballista collision!");
+		//print ("Ballista collision!");
 		if (collision.gameObject == null) 
 		{
-			print ("No game object!");
+			//print ("No game object!");
 			return;
 		}
 
 		GameObject other = collision.gameObject;
 
-		print ("other name: " + other.name);
+		//print ("other name: " + other.name);
 
 		if (other.name == "OilSlickCollider")
 		{
@@ -78,7 +78,7 @@ public class MoveBolt : MonoBehaviour
 		// Ignore collisions with other bolts
 		if (moveScript != null)
 		{
-			print ("Colliding with another bolt");
+			//print ("Colliding with another bolt");
 		}
 		// Ignore collisions with player's hands
 		else if (other.name == "palm" || other.name == "bone1" || other.name == "bone2")
@@ -128,7 +128,7 @@ public class MoveBolt : MonoBehaviour
 		else
 		{
 //			Instantiate (explosion, transform.position, Quaternion.identity);
-//			Destroy(gameObject);
+			Destroy(gameObject);
 		}
 	}
 

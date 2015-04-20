@@ -172,7 +172,7 @@ public class GameLogic : MonoBehaviour
 		for (int i = 0; i < enemyWaves.Length; i++)
 		{
 			// Set the round text
-			roundText.text = "ROUND " + (i + 1);
+			roundText.text = "ROUND " + (i + 2);
 			// Present start round screen and wait
 			playerHud.SetActive(false);
 			endRoundScreen.enableUI();
