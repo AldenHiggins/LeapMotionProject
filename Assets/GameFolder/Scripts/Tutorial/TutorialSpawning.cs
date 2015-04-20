@@ -44,6 +44,8 @@ public class TutorialSpawning : MonoBehaviour
 			{
 				GameObject monster = (GameObject) Instantiate (spawnThis, transform.position, Quaternion.identity);
 				monster.transform.parent = spawnedEnemyList.transform;
+
+				monster.transform.GetChild(0).transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
 				BasicEnemyController enemy = (BasicEnemyController) monster.GetComponentInChildren(typeof(BasicEnemyController));
 				enemy.enabled = true;
 				//NavMeshAgent agent = monster.GetComponentInChildren<NavMeshAgent>();
