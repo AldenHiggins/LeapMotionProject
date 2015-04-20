@@ -68,7 +68,7 @@ public class GameLogic : MonoBehaviour
 	public AAttack placeBallistaAttack;
 	public AAttack placeOilSlickAttack;
 	public AAttack fireballAttack;
-	public AAttack tornadoAttack;
+	public AAttack emptyAttack;
 	public AAttack flameThrowerAttack;
 	public AAttack iceBallAttack;
 
@@ -199,10 +199,13 @@ public class GameLogic : MonoBehaviour
 			// Start defensive setup phase
 			isDefensiveStageActive = true;
 			turretHud.SetActive(true);
-			// Wait a couple of seconds for the player to readjust.
-			yield return new WaitForSeconds(1f);
 
+			offensiveAbilities.handFlipAttack = emptyAttack;
+			offensiveAbilities.fistAttack = emptyAttack;
 			defensiveAbilities.updateDefencesCostText();
+			// Wait a couple of seconds for the player to readjust.
+			yield return new WaitForSeconds(1.5f);
+	
 			//defensiveAbilities.showHideTurretPositions(true);
 			offensiveAbilities.handFlipAttack = placeBallistaAttack;
 			offensiveAbilities.fistAttack = placeOilSlickAttack;

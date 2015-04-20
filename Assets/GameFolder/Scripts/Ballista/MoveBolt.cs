@@ -65,13 +65,6 @@ public class MoveBolt : MonoBehaviour
 
 		//print ("other name: " + other.name);
 
-		if (other.name == "OilSlickCollider")
-		{
-			OilSlick oil = (OilSlick) other.transform.parent.gameObject.GetComponent(typeof(OilSlick));
-			oil.blowUp();
-			Destroy (gameObject);
-		}
-
 		BasicEnemyController enemy = (BasicEnemyController) other.GetComponent(typeof(BasicEnemyController));	
 		TutorialEnemyController tutorialEnemy = (TutorialEnemyController)other.GetComponent (typeof(TutorialEnemyController));
 		MoveBolt moveScript = (MoveBolt) other.GetComponent ((typeof(MoveBolt)));
