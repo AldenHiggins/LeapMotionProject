@@ -40,8 +40,8 @@ public class FlameThrowerAttack : AAttack
 	
 	public override void releaseFunction(HandModel[] hands)
 	{
-//		if (flamethrowers [0] == null || flamethrowers[1] == null)
-//			return;
+		if (flamethrowers [0] == null || flamethrowers[1] == null)
+			return;
 
 		flamethrowers[0].SetActive (true);
 		flamethrowers[1].SetActive (true);
@@ -59,7 +59,7 @@ public class FlameThrowerAttack : AAttack
 		{
 			if (!flameThrowerParticle.activeSelf)
 			{
-				print ("Flamethrower not active!");
+				//print ("Flamethrower not active!");
 			}
 			
 			for(int i = 0; i < hands.Length && i < 2; i++) 
@@ -78,12 +78,18 @@ public class FlameThrowerAttack : AAttack
 		MoveFireball fireball2 = (MoveFireball) flamethrowers[1].GetComponent (typeof(MoveFireball));
 		fireball1.stopPeriodicDamage();
 		fireball2.stopPeriodicDamage();
+<<<<<<< HEAD
 
+=======
+>>>>>>> 89ce3e4f32694766eee8e156d57c529698cdd737
 		if (flamethrowers [0] == null || flamethrowers[1] == null)
 			return;
 //		MoveFireball fireball = (MoveFireball) flameThrowerParticle.GetComponent (typeof(MoveFireball));
 //		fireball.stopPeriodicDamage();
+<<<<<<< HEAD
 
+=======
+>>>>>>> 89ce3e4f32694766eee8e156d57c529698cdd737
 		flamethrowers[0].SetActive (false);
 		flamethrowers[1].SetActive (false);
 	}

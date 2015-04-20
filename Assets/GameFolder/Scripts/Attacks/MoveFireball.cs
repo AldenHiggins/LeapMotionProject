@@ -120,7 +120,7 @@ public class MoveFireball : MonoBehaviour
 	{
 		print ("other name: " + other.name);
 
-		if (other.name == "OilSlickCollider")
+		if ((other.name == "OilSlickCollider")&&(gameObject.name == "CrazyFireball(Clone)"))
 		{
 			OilSlick oil = (OilSlick) other.transform.parent.gameObject.GetComponent(typeof(OilSlick));
 			oil.blowUp();
