@@ -7,6 +7,7 @@ public class PlayerLogic : MonoBehaviour
 	public GameLogic game;
 	public bool isDefensivePlayer;
 	public AudioClip grunt;
+	private AudioSource audioSource;
 	public GameObject defensivePlayerSpawnPosition;
 	public GameObject offensivePlayerSpawnPosition;
 
@@ -36,6 +37,7 @@ public class PlayerLogic : MonoBehaviour
 		energyCounter = 0;
 		currentPlayerCurrency = startingPlayerCurrency;
 		currencyText.text = "" + startingPlayerCurrency;
+		audioSource = gameObject.GetComponent<AudioSource> ();
 	}
 
 	private int energyRefreshCount = 100;
@@ -74,7 +76,7 @@ public class PlayerLogic : MonoBehaviour
 		// Player just takes damage
 		else
 		{
-			AudioSource.PlayClipAtPoint(grunt,transform.position);
+			audioSource.PlayOneShot(grunt);
 		}
 	}
 
