@@ -129,7 +129,8 @@ public class MoveFireball : MonoBehaviour
 
 
 		
-		BasicEnemyController enemy = (BasicEnemyController) other.GetComponent(typeof(BasicEnemyController));	
+		BasicEnemyController enemy = (BasicEnemyController) other.GetComponent(typeof(BasicEnemyController));
+		if (enemy == null) enemy = (BasicEnemyController) other.GetComponentInChildren(typeof(BasicEnemyController));	
 		TutorialEnemyController tutorialEnemy = (TutorialEnemyController)other.GetComponent (typeof(TutorialEnemyController));
 		MoveFireball moveScript = (MoveFireball) other.GetComponent ((typeof(MoveFireball)));
 		// Ignore collisions with other fireballs

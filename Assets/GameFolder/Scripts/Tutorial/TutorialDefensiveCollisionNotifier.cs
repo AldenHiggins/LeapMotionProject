@@ -18,9 +18,8 @@ public class TutorialDefensiveCollisionNotifier : MonoBehaviour {
 			Destroy(gameObject);
 		}
 
-		collision.gameObject.GetComponent<Animator> ().SetBool ("Dead", true);
-		collision.gameObject.GetComponent<NavMeshAgent> ().Stop ();
-		collision.gameObject.GetComponent<NavMeshAgent> ().enabled = false;
+		collision.gameObject.GetComponentInChildren<Animator> ().SetBool ("Dead", true);
+		collision.gameObject.GetComponentInChildren<NavMeshAgent> ().enabled = false;
 	}
 
 //	void OnParticleCollision(GameObject other)
