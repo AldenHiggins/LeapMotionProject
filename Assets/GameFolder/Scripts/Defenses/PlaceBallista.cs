@@ -7,10 +7,16 @@ public class PlaceBallista : AAttack
 	public GameObject ballista;
 	public GameObject ballistaHead;
 	public GameObject ballistaPending;
+	public AudioClip placeBallistaSound;
 	private bool isInstantiated = false;
 	private GameObject createdballista;
-	
-	
+	private AudioSource source;
+
+	void start()
+	{
+		source = GetComponent<AudioSource> ();
+	}
+
 	public override void chargingFunction(HandModel[] hands)
 	{
 		// Display prospective ballista spots
@@ -34,6 +40,7 @@ public class PlaceBallista : AAttack
 			GameObject ballistaFinal = (GameObject)Instantiate (ballista);
 			ballistaFinal.SetActive (true);
 			ballistaFinal.transform.position = defense.getRayHit ().point;
+			source.PlayOneShot(placeBallistaSound);
 			Destroy (createdballista);
 			((EmitterBehaviorBallista)ballistaHead.GetComponent (typeof(EmitterBehaviorBallista))).enabled = true;
 			isInstantiated = false;

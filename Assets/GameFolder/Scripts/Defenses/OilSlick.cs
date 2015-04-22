@@ -4,11 +4,13 @@ using System.Collections;
 public class OilSlick : MonoBehaviour {
 
 	public GameObject boom;
-
 	public bool isForTutorial;
+	private AudioSource source;
+	public AudioClip explosionSound;
 
 	// Use this for initialization
 	void Start () {
+		source = GetComponent<AudioSource> ();
 	}
 
 	void OnTriggerEnter(Collider other) 
@@ -49,7 +51,7 @@ public class OilSlick : MonoBehaviour {
 		//print("EXPLOSION!");
 		Vector3 boomPos = transform.position + new Vector3(0f,1f,0f);
 		Instantiate (boom, boomPos, Quaternion.identity);
-
+		source.PlayOneShot (explosionSound);
 		if (isForTutorial) {
 			gameObject.GetComponent<TutorialOilSlick>().hasBlownUp();
 		}

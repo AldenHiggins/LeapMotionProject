@@ -13,7 +13,9 @@ public class EmitterBehaviorBallista : MonoBehaviour
 	private int boltTimer;
 	private int blockTimer;
 	public Vector3 boltHeightOffset;
+	public AudioClip arrowFire;
 	private bool firing;
+	private AudioSource source;
 
 	// Use this for initialization
 	void Start () 
@@ -22,6 +24,7 @@ public class EmitterBehaviorBallista : MonoBehaviour
 		anim = GetComponent<Animator> ();
 		print ("Anim found: " + anim.name);
 		firing = false;
+		source = GetComponent<AudioSource> ();
 	}
 	
 	// Update is called once per frame
@@ -163,6 +166,7 @@ public class EmitterBehaviorBallista : MonoBehaviour
 	{
 		print ("Shooting bolt");
 		anim.SetBool ("Firing", true);
+		source.PlayOneShot (arrowFire);
 		firing = true;
 //		while(!anim.GetCurrentAnimatorStateInfo(0).IsName("BallistaFire"))
 //		{
