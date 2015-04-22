@@ -20,6 +20,10 @@ public class GameLogic : MonoBehaviour
 	public GameObject fireBall;
 	public HandController handController = null;
 
+	// AUDIO CLIPS
+	public AudioSource mainGameMusic;
+	public AudioSource defensivePhaseMusic;
+
 	// TURRET PLACEMENT HUD
 	public GameObject turretHud;
 	public ButtonDemoGraphics callForWaveButtonGraphic;
@@ -176,6 +180,7 @@ public class GameLogic : MonoBehaviour
 			// Present start round screen and wait
 			playerHud.SetActive(false);
 			endRoundScreen.enableUI();
+			defensivePhaseMusic.Play();
 
 			// Enable hand controller for defensive player
 			if (playerLogic.isDefensivePlayer)
@@ -240,6 +245,8 @@ public class GameLogic : MonoBehaviour
 			offensiveAbilities.fistAttack = iceBallAttack;
 
 			// Start the next round, spawn enemies, wait for the timer
+			defensivePhaseMusic.Pause();
+			mainGameMusic.Play();
 			nextRound = false;
 			roundActive = true;
 			currentRoundTime = enemyWaves[i].roundTime;
@@ -265,6 +272,7 @@ public class GameLogic : MonoBehaviour
 			roundActive = false;
 			playerLogic.changeCurrency(500);
 			hmdMovement.enabled = false;
+			mainGameMusic.Pause();
 		}
 
 		// The game/map is over, display end game screen
