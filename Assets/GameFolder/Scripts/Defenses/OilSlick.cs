@@ -7,6 +7,7 @@ public class OilSlick : MonoBehaviour {
 	public bool isForTutorial;
 	private AudioSource source;
 	public AudioClip explosionSound;
+	public AudioClip walkingOnOil;
 
 	// Use this for initialization
 	void Start () {
@@ -20,6 +21,7 @@ public class OilSlick : MonoBehaviour {
 		// If this isn't a root motion enemy (golem/cyclops)
 		if (enemy == null)
 		{
+			source.PlayOneShot(walkingOnOil);
 			enemy = (BasicEnemyController) other.gameObject.GetComponent(typeof(BasicEnemyController));
 			if (enemy == null)
 			{
@@ -34,6 +36,7 @@ public class OilSlick : MonoBehaviour {
 		{
 			Animator anim = other.gameObject.GetComponent<Animator>();
 			anim.SetBool("Slowed", true);
+			source.PlayOneShot(walkingOnOil);
 		}
 
 

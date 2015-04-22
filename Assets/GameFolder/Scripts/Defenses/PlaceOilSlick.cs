@@ -8,6 +8,13 @@ public class PlaceOilSlick : AAttack
 	private bool isInstantiated = false;
 	private GameObject createdOilSlick;
 	public DefensiveAbilities defense;
+	private AudioSource source;
+	public AudioClip placeOilSlickSound;
+
+	void Start()
+	{
+		source = oilSlick.GetComponent<AudioSource> ();
+	}
 
 	public override void chargingFunction(HandModel[] hands){
 
@@ -18,6 +25,7 @@ public class PlaceOilSlick : AAttack
 	public override void releaseFunction(HandModel[] hands){
 		if (defense.getNumSlicksLeft () > 0) {
 			GameObject oilSlickFinal = (GameObject)Instantiate (oilSlick);
+			source.PlayOneShot(placeOilSlickSound);
 			oilSlickFinal.transform.position = defense.getRayHit().point + new Vector3(0.0f, 0.1f, 0.0f);
 			Destroy (createdOilSlick);
 
