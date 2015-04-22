@@ -127,7 +127,6 @@ public class MoveFireball : MonoBehaviour
 			Destroy (gameObject);
 		}
 
-
 		
 		BasicEnemyController enemy = (BasicEnemyController) other.GetComponent(typeof(BasicEnemyController));
 		if (enemy == null) enemy = (BasicEnemyController) other.GetComponentInChildren(typeof(BasicEnemyController));	
