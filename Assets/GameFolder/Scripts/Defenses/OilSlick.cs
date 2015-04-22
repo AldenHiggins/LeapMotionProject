@@ -10,7 +10,7 @@ public class OilSlick : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		source = GetComponent<AudioSource> ();
+		source = gameObject.GetComponent<AudioSource> ();
 	}
 
 	void OnTriggerEnter(Collider other) 

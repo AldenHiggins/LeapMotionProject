@@ -12,9 +12,9 @@ public class PlaceBallista : AAttack
 	private GameObject createdballista;
 	private AudioSource source;
 
-	void start()
+	void Start()
 	{
-		source = GetComponent<AudioSource> ();
+		source = gameObject.GetComponent<AudioSource> ();
 	}
 
 	public override void chargingFunction(HandModel[] hands)

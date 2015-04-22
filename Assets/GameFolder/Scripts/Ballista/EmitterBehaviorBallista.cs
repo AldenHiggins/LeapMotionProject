@@ -21,10 +21,10 @@ public class EmitterBehaviorBallista : MonoBehaviour
 	void Start () 
 	{
 		boltTimer = 0;
-		anim = GetComponent<Animator> ();
+		anim = gameObject.GetComponent<Animator> ();
 		print ("Anim found: " + anim.name);
 		firing = false;
-		source = GetComponent<AudioSource> ();
+		source = gameObject.GetComponent<AudioSource> ();
 	}
 	
 	// Update is called once per frame

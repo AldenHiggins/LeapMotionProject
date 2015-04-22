@@ -104,3 +104,5 @@ Assets/Editor/
 Assets/Editor.meta
 Optimization_Data/
 MattsPimpCastle_Data/
+CastleWithTerrain_Data/
+CastleNoTerrain_Data/
