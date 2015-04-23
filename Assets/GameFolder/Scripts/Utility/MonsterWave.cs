@@ -47,4 +47,12 @@ public class MonsterWave : MonoBehaviour
 
 
 	}
+
+	public void stopWave()
+	{
+		for (int i = 0; i < enemiesToSpawn.Length; i++)
+		{
+			StopCoroutine(spawnEnemyType(i));
+		}
+	}
 }

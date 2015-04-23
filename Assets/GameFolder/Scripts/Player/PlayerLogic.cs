@@ -61,6 +61,7 @@ public class PlayerLogic : MonoBehaviour
 
 	public void respawn()
 	{
+		game.killPlayerEndGame ();
 		transform.position = offensivePlayerSpawnPosition.transform.position;
 		transform.rotation = offensivePlayerSpawnPosition.transform.rotation;
 	}
@@ -71,7 +72,7 @@ public class PlayerLogic : MonoBehaviour
 		// Player is dead
 		if (health < 0)
 		{
-			endGame();
+			respawn();
 		}
 		// Player just takes damage
 		else
@@ -130,10 +131,5 @@ public class PlayerLogic : MonoBehaviour
 	{
 		currentPlayerCurrency += currencyChange;
 		currencyText.text = "" + currentPlayerCurrency;
-	}
-
-	void endGame ()
-	{
-	// Here we want to move to another end game screen! MATT IMPLEMENT THIS.		
 	}
 }

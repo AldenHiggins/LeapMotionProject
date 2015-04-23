@@ -65,6 +65,10 @@ public class GameLogic : MonoBehaviour
 
 	// DEFENSIVE STAGE
 	private bool isDefensiveStageActive = false;
+	// End GAME/PLAYER DEATH
+	public GameObject endGameHud;
+	public ButtonDemoGraphics retryButton;
+	public ButtonDemoGraphics mainMenuButton;
 
 
 	// ALL THE ATTACKS
@@ -154,6 +158,18 @@ public class GameLogic : MonoBehaviour
 			nextRoundButton.ButtonTurnsOff();
 			// Temporarily skip turret placement phase
 			// callForWaveButton.ButtonTurnsOn();
+		}
+
+		// Reload the level if retry is pressed
+		if (retryButton.isPressed())
+		{
+			Application.LoadLevel(2);
+		}
+
+		// Load the main menu if quit to main menu is pressed
+		if (mainMenuButton.isPressed())
+		{
+			Application.LoadLevel(0);
 		}
 
 		// Update round timer
@@ -278,6 +294,37 @@ public class GameLogic : MonoBehaviour
 		// The game/map is over, display end game screen
 		winScreen.SetActive(true);
 	}
+
+
+	// When the player dies bring up the end game screen and stop the current round
+	public void killPlayerEndGame()
+	{
+		hmdMovement.enabled = false;
+		mainGameMusic.Pause ();
+		StopCoroutine (roundFunction ());
+		playerHud.SetActive (false);
+		offensiveAbilities.fistAttack = emptyAttack;
+		offensiveAbilities.handFlipAttack = emptyAttack;
+
+
+
+		// Now deactivate all active enemies
+		for (int enemyIndex = 0; enemyIndex < spawnedEnemies.transform.childCount; enemyIndex++)
+		{
+			BasicEnemyController enemy = (BasicEnemyController) spawnedEnemies.transform.GetChild(enemyIndex).gameObject.GetComponent(typeof(BasicEnemyController));
+			// Case for the root motion zombies
+			if (enemy == null)
+			{
+				enemy = (BasicEnemyController) spawnedEnemies.transform.GetChild(enemyIndex).GetChild (0).gameObject.GetComponent(typeof(BasicEnemyController));
+				Animator anim = (Animator) spawnedEnemies.transform.GetChild(enemyIndex).GetChild (0).gameObject.GetComponent(typeof(Animator));
+				anim.enabled = false;
+			}
+			enemy.enabled = false;
+		}
+
+		endGameHud.SetActive (true);
+	}
+
 
 	public void enableDisableSpawners(bool enableOrDisable)
 	{

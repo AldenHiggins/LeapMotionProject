@@ -16,6 +16,8 @@ public class UIFollowPlayer : MonoBehaviour {
 
 	private Vector3 thisOffset = new Vector3(0.0f, 0.0f, 0.0f);
 
+	public bool isEndGameHud;
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -30,7 +32,18 @@ public class UIFollowPlayer : MonoBehaviour {
 //			this.transform.localPosition = new Vector3(this.transform.localPosition.x, 0, this.transform.localPosition.z);
 			this.transform.rotation = Quaternion.Euler (0.0f, camera.transform.rotation.eulerAngles.y, 0.0f);
 		}
-		this.transform.position = camera.transform.position + thisOffset;
+
+
+
+		if (isEndGameHud)
+		{
+			this.transform.rotation = Quaternion.Euler (0.0f, 190.0f, 0.0f);
+			this.transform.position = camera.transform.position + offensiveOffset;
+		}
+		else
+		{
+			this.transform.position = camera.transform.position + thisOffset;
+		}
 	}
 
 	public void enableUI()
@@ -44,7 +57,15 @@ public class UIFollowPlayer : MonoBehaviour {
 		{
 			thisOffset = camera.transform.rotation * offensiveOffset;
 		}
-		this.transform.rotation = Quaternion.Euler (0.0f, camera.transform.rotation.eulerAngles.y, 0.0f);
+
+		if (isEndGameHud)
+		{
+			this.transform.rotation = Quaternion.Euler (0.0f, 190.0f, 0.0f);
+		}
+		else
+		{
+			this.transform.rotation = Quaternion.Euler (0.0f, camera.transform.rotation.eulerAngles.y, 0.0f);
+		}
 	}
 
 	public void disableUI()

@@ -127,10 +127,6 @@ public class BasicEnemyController : MonoBehaviour
 					
 //				transform.position += velocity;
 //				rigidbody.AddForce (velocity, ForceMode.VelocityChange);
-
-				// Face the target as well
-				transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position);
-				transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
 			}
 		}
 		// If the player is in range attack him
@@ -148,6 +144,10 @@ public class BasicEnemyController : MonoBehaviour
 			}
 		}
 
+		// Face the target as well
+		transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position);
+		transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
+
 		if (showNavMeshPath)
 			displayNavMeshPath ();
 	}
@@ -156,12 +156,15 @@ public class BasicEnemyController : MonoBehaviour
 	{
 //		print ("Attacking");
 		anim.SetBool ("Attacking", true);
-		while(!anim.GetCurrentAnimatorStateInfo(0).IsName("attack0"))
-		{
-			yield return new WaitForSeconds(.01f);
-		}
-//		print ("Animation time: " + anim.GetCurrentAnimationClipState (0) [0].clip.length);
-		yield return new WaitForSeconds (anim.GetCurrentAnimatorClipInfo(0)[0].clip.length - .1f);
+//		while(!anim.GetCurrentAnimatorStateInfo(0).IsName("attack0"))
+//		{
+//			yield return new WaitForSeconds(.01f);
+//		}
+////		print ("Animation time: " + anim.GetCurrentAnimationClipState (0) [0].clip.length);
+//		yield return new WaitForSeconds (anim.GetCurrentAnimatorClipInfo(0)[0].clip.length - .1f);
+
+		// All enemies globally do damage after a second and a half
+		yield return new WaitForSeconds (1.5f);
 
 		Vector3 distance = target.transform.position - transform.position;
 		distance.y = 0.0f;

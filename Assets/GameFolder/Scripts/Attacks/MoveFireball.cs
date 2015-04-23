@@ -125,7 +125,7 @@ public class MoveFireball : MonoBehaviour
 			OilSlick oil = (OilSlick) other.transform.parent.gameObject.GetComponent(typeof(OilSlick));
 			oil.blowUp();
 			Destroy (gameObject);
-		}
+		}	
 
 		
 		BasicEnemyController enemy = (BasicEnemyController) other.GetComponent(typeof(BasicEnemyController));
