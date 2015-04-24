@@ -6,10 +6,16 @@ public class BasicFireballAttack : AAttack
 	public GameLogic game;
 	public GameObject thisCamera;
 	public GameObject fireBall;
+
+	public float firingCoolDown;
+
+	private bool canFire;
+
 	
 	// Use this for initialization
 	void Start () 
 	{
+		canFire = true;
 	}
 
 	
@@ -23,6 +29,15 @@ public class BasicFireballAttack : AAttack
 	
 	public override void releaseFunction(HandModel[] hands)
 	{
+		// Check and see if the cooldown is up
+		if (canFire != true)
+		{
+			return;
+		}
+		// Wait for the next cool down in order to fire again
+		canFire = false;
+		StartCoroutine (waitForCoolDown ());
+
 		// Have the player spend mana
 		// playerLogic.useEnergy(10);
 		// Make sure the fireball spawns in front of the player at a reasonable distance
@@ -49,5 +64,12 @@ public class BasicFireballAttack : AAttack
 	public override void inactiveFunction()
 	{
 
+	}
+
+	IEnumerator waitForCoolDown()
+	{
+		yield return new WaitForSeconds (firingCoolDown);
+
+		canFire = true;
 	}
 }
