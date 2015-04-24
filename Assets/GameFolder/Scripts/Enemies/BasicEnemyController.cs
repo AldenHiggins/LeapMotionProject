@@ -310,6 +310,36 @@ public class BasicEnemyController : MonoBehaviour
 			agent.velocity = anim.deltaPosition / Time.deltaTime;
 	}
 
+	public void slowDown()
+	{
+		if (usesRootMotion)
+		{
+			StopCoroutine(slowRootMotion());
+			StartCoroutine(slowRootMotion());
+		}
+		else
+		{
+			StopCoroutine(slowNavMesh());
+			StartCoroutine(slowNavMesh());
+		}
+	}
+
+	IEnumerator slowRootMotion()
+	{
+		print ("SLOWING!");
+		anim.SetBool ("Slowed", true);
+		yield return new WaitForSeconds (3.0f);
+		print ("Unslowing!");
+		anim.SetBool ("Slowed", false);
+	}
+
+	IEnumerator slowNavMesh()
+	{
+		agent.speed = 1;
+		yield return new WaitForSeconds (3.0f);
+		agent.speed = 2;
+	}
+
 //	void OnAnimatorMove ()
 //	{
 //		//only perform if walking

@@ -63,10 +63,10 @@ public class OffensiveAbilities : MonoBehaviour
 	{
 		hands = handController.GetAllGraphicsHands ();
 
-		// Check to ignite hands if flamethrower is charged up
+		// Check to ignite hands if flamethrower is charged up	
 		if (hands.Length > 0)
 		{
-			if (flamethrowerChargeLevel >= numFireballsForFlamethrower)
+			if (flamethrowerChargeLevel >= numFireballsForFlamethrower && !flamethrowersActive)
 			{
 				for (int handIndex = 0; handIndex < hands.Length; handIndex++)
 				{
@@ -263,15 +263,15 @@ public class OffensiveAbilities : MonoBehaviour
 			//////////////////////////////////////////////////////////////
 			//////////////////////  DETECT A CLAP  ///////////////////////
 			//////////////////////////////////////////////////////////////
-			if (Vector3.Dot (normal0, normal1) < -.6) {
-				Vector3 distance = hands [0].GetPalmPosition () - hands [1].GetPalmPosition ();
-				if (distance.magnitude < .09 && flamethrowerChargeLevel >= numFireballsForFlamethrower) {
+//			if (Vector3.Dot (normal0, normal1) < -.6) {
+			Vector3 distance = hands [0].GetPalmPosition () - hands [1].GetPalmPosition ();
+			if (distance.magnitude < .09 && flamethrowerChargeLevel >= numFireballsForFlamethrower) {
 //					game.clapAttack (playerLogic.transform.position + new Vector3 (0.0f, 0.7f, 0.0f));
-					flamethrowersActive = true;
-					StartCoroutine(flamethrowerCooldown());
-					clapAttack.releaseFunction (hands);
-				}
+				flamethrowersActive = true;
+				StartCoroutine(flamethrowerCooldown());
+				clapAttack.releaseFunction (hands);
 			}
+//			}
 
 			if (flamethrowersActive) clapAttack.holdGestureFunction(hands);
 			//////////////////////////////////////////////////////////////

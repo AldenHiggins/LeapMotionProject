@@ -118,7 +118,7 @@ public class MoveFireball : MonoBehaviour
 
 	void OnParticleCollision(GameObject other) 
 	{
-		print ("other name: " + other.name);
+//		print ("other name: " + other.name);
 
 		if ((other.name == "OilSlickCollider")&&(gameObject.name == "CrazyFireball(Clone)"))
 		{
