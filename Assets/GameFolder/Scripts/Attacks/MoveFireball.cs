@@ -27,6 +27,9 @@ public class MoveFireball : MonoBehaviour
 
 	public bool explodeOnContact;
 
+	// SAVE TO CHARGE FLAMETHROWERS WITH HEADSHOTS ONLY
+	public OffensiveAbilities offense;
+
 	// Use this for initialization
 	void Start () 
 	{
@@ -179,6 +182,11 @@ public class MoveFireball : MonoBehaviour
 				if (collisions[0].intersection.y > 2)
 				{
 					print ("HEADSHOT -- ZOMBIE!!");
+					if (explodeOnContact)
+					{
+						Instantiate (explosion, collisions[0].intersection, Quaternion.identity);
+					}
+					offense.headShotAchieved();
 				}
 			}
 			// Check for other enemies headshots
@@ -187,13 +195,15 @@ public class MoveFireball : MonoBehaviour
 				if (collisions[0].intersection.y > 2.5)
 				{
 					print ("HEADSHOT -- OGRE/GOLEM!!");
+					if (explodeOnContact)
+					{
+						Instantiate (explosion, collisions[0].intersection, Quaternion.identity);
+					}
+					offense.headShotAchieved();
 				}
 			}
 
-			if (explodeOnContact)
-			{
-				Instantiate (explosion, collisions[0].intersection, Quaternion.identity);
-			}
+
 
 			enemy.dealDamage(damage);
 			Destroy(gameObject);

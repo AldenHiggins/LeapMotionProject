@@ -193,6 +193,8 @@ public class GameLogic : MonoBehaviour
 	{
 		for (int i = 0; i < enemyWaves.Length; i++)
 		{
+			// Reset the player's health
+			playerLogic.resetHealth();
 			waveIndex++;
 			// Set the round text
 			roundText.text = "ROUND " + (i + 1);
@@ -305,6 +307,8 @@ public class GameLogic : MonoBehaviour
 		hmdMovement.enabled = false;
 		mainGameMusic.Pause ();
 		StopCoroutine (roundFunction ());
+//		endRoundScreen.disableUI();
+		endRoundScreen.enabled = false;
 		playerHud.SetActive (false);
 		offensiveAbilities.fistAttack = emptyAttack;
 		offensiveAbilities.handFlipAttack = emptyAttack;
@@ -313,15 +317,18 @@ public class GameLogic : MonoBehaviour
 		// Now deactivate all active enemies
 		for (int enemyIndex = 0; enemyIndex < spawnedEnemies.transform.childCount; enemyIndex++)
 		{
-			BasicEnemyController enemy = (BasicEnemyController) spawnedEnemies.transform.GetChild(enemyIndex).gameObject.GetComponent(typeof(BasicEnemyController));
-			// Case for the root motion zombies
-			if (enemy == null)
-			{
-				enemy = (BasicEnemyController) spawnedEnemies.transform.GetChild(enemyIndex).GetChild (0).gameObject.GetComponent(typeof(BasicEnemyController));
-				Animator anim = (Animator) spawnedEnemies.transform.GetChild(enemyIndex).GetChild (0).gameObject.GetComponent(typeof(Animator));
-				anim.enabled = false;
-			}
-			enemy.enabled = false;
+			Destroy (spawnedEnemies.transform.GetChild(enemyIndex).gameObject);
+
+			// Turn enemies into ragdolls/freeze in place
+//			BasicEnemyController enemy = (BasicEnemyController) spawnedEnemies.transform.GetChild(enemyIndex).gameObject.GetComponent(typeof(BasicEnemyController));
+//			// Case for the root motion zombies
+//			if (enemy == null)
+//			{
+//				enemy = (BasicEnemyController) spawnedEnemies.transform.GetChild(enemyIndex).GetChild (0).gameObject.GetComponent(typeof(BasicEnemyController));
+//				Animator anim = (Animator) spawnedEnemies.transform.GetChild(enemyIndex).GetChild (0).gameObject.GetComponent(typeof(Animator));
+//				anim.enabled = false;
+//			}
+//			enemy.enabled = false;
 		}
 
 		endGameHud.SetActive (true);

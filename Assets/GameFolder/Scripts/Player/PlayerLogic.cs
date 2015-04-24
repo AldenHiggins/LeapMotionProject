@@ -142,4 +142,14 @@ public class PlayerLogic : MonoBehaviour
 		currentPlayerCurrency += currencyChange;
 		currencyText.text = "" + currentPlayerCurrency;
 	}
+
+	public void resetHealth()
+	{
+		health = 100;
+
+		Color color = healthTexture.GetComponent<Renderer>().material.color;
+		float newAlpha = (float)health / 100.0f;
+		color.a = 1.0f - newAlpha;
+		healthTexture.GetComponent<Renderer>().material.color = color;
+	}
 }

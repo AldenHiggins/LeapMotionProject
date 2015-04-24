@@ -42,7 +42,7 @@ public class OffensiveAbilities : MonoBehaviour
 	private bool makingAFist = false; 
 	private bool flamethrowersActive = false;
 	private int flamethrowerChargeLevel = 0;
-	public int numFireballsForFlamethrower = 10;
+	public int numFireballsForFlamethrower = 4;
 	public float flamethrowerTimeframe = 6.0f;
 
 	// HANDS
@@ -152,7 +152,7 @@ public class OffensiveAbilities : MonoBehaviour
 					// First check if the player has enough energy
 					if (playerLogic.getEnergy () > 10) {
 						handFlipAttack.releaseFunction (hands);
-						flamethrowerChargeLevel++;
+//						flamethrowerChargeLevel++;
 						if (flamethrowerChargeLevel == numFireballsForFlamethrower) {
 							AudioSource source = (AudioSource) clapAttack.gameObject.GetComponent<AudioSource>();
 							if (source != null) source.Play();
@@ -288,6 +288,12 @@ public class OffensiveAbilities : MonoBehaviour
 			handFlipAttack.inactiveFunction();
 			fistAttack.inactiveFunction();
 		}
+	}
+
+	public void headShotAchieved()
+	{
+		flamethrowerChargeLevel++;
+		print ("Charge level: " + flamethrowerChargeLevel);
 	}
 
 	IEnumerator flamethrowerCooldown()
