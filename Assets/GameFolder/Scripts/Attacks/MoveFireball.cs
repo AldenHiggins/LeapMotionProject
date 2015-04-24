@@ -166,10 +166,9 @@ public class MoveFireball : MonoBehaviour
 		// Collide with an enemy
 		else if (enemy != null)
 		{
-			if (explodeOnContact)
-			{
-				Instantiate (explosion, other.transform.position, Quaternion.identity);
-			}
+			ParticleSystem currentParticle = (ParticleSystem) gameObject.GetComponent(typeof(ParticleSystem));
+			ParticleCollisionEvent[] collisions = new ParticleCollisionEvent[16];
+			int nummberCollisions = currentParticle.GetCollisionEvents(other, collisions);
 
 			if (shouldMoveEnemies)
 				enemy.applyForce(velocity * 20 + new Vector3(0.0f, 10.0f, 0.0f));
@@ -177,38 +176,27 @@ public class MoveFireball : MonoBehaviour
 			// Check for headshots with zombies
 			if (enemy.usesRagdoll)
 			{
-				ParticleSystem currentParticle = (ParticleSystem) gameObject.GetComponent(typeof(ParticleSystem));
-				ParticleCollisionEvent[] collisions = new ParticleCollisionEvent[16];
-				int nummberCollisions = currentParticle.GetCollisionEvents(other, collisions);
-
-//				print ("Collision y : " + collisions[0].intersection.y);
-
 				if (collisions[0].intersection.y > 2)
 				{
-					print ("HEADSHOT!!");
+					print ("HEADSHOT -- ZOMBIE!!");
 				}
 			}
 			// Check for other enemies headshots
 			else
 			{
+				if (collisions[0].intersection.y > 2.5)
+				{
+					print ("HEADSHOT -- OGRE/GOLEM!!");
+				}
+			}
 
+			if (explodeOnContact)
+			{
+				Instantiate (explosion, collisions[0].intersection, Quaternion.identity);
 			}
 
 			enemy.dealDamage(damage);
 			Destroy(gameObject);
-			// Find out where the collision point was 
-			// Resize collision array if you have to
-//			int safeLength = particleSystem.safeCollisionEventSize;
-//			if (collisionEvents.Length < safeLength)
-//				collisionEvents = new ParticleSystem.CollisionEvent[safeLength];
-//			
-//			particleSystem.GetCollisionEvents(other, collisionEvents);
-
-
-				
-//
-//			Instantiate (explosion, collisionEvents[0].intersection, Quaternion.LookRotation (collisionEvents[0].normal.normalized));
-//			Destroy(gameObject);
 		}
 		else if (tutorialEnemy != null)
 		{

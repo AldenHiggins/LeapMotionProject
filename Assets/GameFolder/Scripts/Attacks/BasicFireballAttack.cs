@@ -68,6 +68,7 @@ public class BasicFireballAttack : AAttack
 
 	IEnumerator waitForCoolDown()
 	{
+
 		yield return new WaitForSeconds (firingCoolDown);
 
 		canFire = true;
