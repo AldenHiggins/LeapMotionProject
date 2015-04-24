@@ -126,6 +126,10 @@ public class MoveFireball : MonoBehaviour
 			oil.blowUp();
 			Destroy (gameObject);
 		}	
+		
+
+
+
 
 		
 		BasicEnemyController enemy = (BasicEnemyController) other.GetComponent(typeof(BasicEnemyController));
@@ -169,6 +173,26 @@ public class MoveFireball : MonoBehaviour
 
 			if (shouldMoveEnemies)
 				enemy.applyForce(velocity * 20 + new Vector3(0.0f, 10.0f, 0.0f));
+
+			// Check for headshots with zombies
+			if (enemy.usesRagdoll)
+			{
+				ParticleSystem currentParticle = (ParticleSystem) gameObject.GetComponent(typeof(ParticleSystem));
+				ParticleCollisionEvent[] collisions = new ParticleCollisionEvent[16];
+				int nummberCollisions = currentParticle.GetCollisionEvents(other, collisions);
+
+//				print ("Collision y : " + collisions[0].intersection.y);
+
+				if (collisions[0].intersection.y > 2)
+				{
+					print ("HEADSHOT!!");
+				}
+			}
+			// Check for other enemies headshots
+			else
+			{
+
+			}
 
 			enemy.dealDamage(damage);
 			Destroy(gameObject);
