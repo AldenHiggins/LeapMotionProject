@@ -22,7 +22,6 @@ public class EmitterBehaviorBallista : MonoBehaviour
 	{
 		boltTimer = 0;
 		anim = gameObject.GetComponent<Animator> ();
-		print ("Anim found: " + anim.name);
 		firing = false;
 		source = gameObject.GetComponent<AudioSource> ();
 	}

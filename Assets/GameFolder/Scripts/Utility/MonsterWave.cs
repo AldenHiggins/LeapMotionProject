@@ -41,7 +41,7 @@ public class MonsterWave : MonoBehaviour
 
 			spawners[currentSpawnerIndex].spawnEnemy(enemiesToSpawn[enemyIndex]);
 
-			print ("Waiting this long to spawn next enemy: " + roundTime/spawnAmounts[enemyIndex]);
+//			print ("Waiting this long to spawn next enemy: " + roundTime/spawnAmounts[enemyIndex]);
 			yield return new WaitForSeconds(roundTime/spawnAmounts[enemyIndex]);
 		}
 

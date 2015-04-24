@@ -5,6 +5,7 @@ public class FlameThrowerAttack : AAttack
 {
 	public GameObject flameThrowerParticle;
 	public float positionOffset;
+	public AudioClip flameThrowerNoise;
 
 	private GameObject[] flamethrowers = new GameObject[2];
 
@@ -49,6 +50,10 @@ public class FlameThrowerAttack : AAttack
 		MoveFireball fireball2 = (MoveFireball) flamethrowers[1].GetComponent (typeof(MoveFireball));
 		fireball1.startPeriodicDamage();
 		fireball2.startPeriodicDamage();
+
+		// Play the flamethrower sound
+		AudioSource source = flamethrowers [0].GetComponent<AudioSource> ();
+		source.PlayOneShot (flameThrowerNoise);
 	}
 	
 	public override void holdGestureFunction(HandModel[] hands)

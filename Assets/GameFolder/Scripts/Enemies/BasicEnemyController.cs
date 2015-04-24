@@ -271,7 +271,6 @@ public class BasicEnemyController : MonoBehaviour
 		isDying = true;
 //		agent.enabled = false;
 		anim.enabled = false;
-		print ("Made ragdoll");
 		BoxCollider collider = gameObject.GetComponent<BoxCollider> ();
 		collider.enabled = false;
 		Rigidbody ragDollRigidBody = ragDollCenterObject.GetComponent<Rigidbody> ();
@@ -326,10 +325,8 @@ public class BasicEnemyController : MonoBehaviour
 
 	IEnumerator slowRootMotion()
 	{
-		print ("SLOWING!");
 		anim.SetBool ("Slowed", true);
 		yield return new WaitForSeconds (3.0f);
-		print ("Unslowing!");
 		anim.SetBool ("Slowed", false);
 	}
 
