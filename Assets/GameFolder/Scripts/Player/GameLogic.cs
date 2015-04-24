@@ -43,6 +43,7 @@ public class GameLogic : MonoBehaviour
 	// MONSTER WAVES
 	public GameObject waveContainer;
 	private MonsterWave[] enemyWaves;
+	int waveIndex;
 	// INTERNAL VARIABLES
 	private GameObject playerAvatar;
 	private NetworkView view;
@@ -69,7 +70,7 @@ public class GameLogic : MonoBehaviour
 	public GameObject endGameHud;
 	public ButtonDemoGraphics retryButton;
 	public ButtonDemoGraphics mainMenuButton;
-
+	public Text roundsSurvivedText;
 
 	// ALL THE ATTACKS
 	public AAttack placeTurretAttack;
@@ -83,6 +84,7 @@ public class GameLogic : MonoBehaviour
 	// Initialize variables
 	void Start () 
 	{
+		waveIndex = 0;
 		view = gameObject.GetComponent<NetworkView>();
 		fireballCharged = false;
 		isBlocking = false;
@@ -191,6 +193,7 @@ public class GameLogic : MonoBehaviour
 	{
 		for (int i = 0; i < enemyWaves.Length; i++)
 		{
+			waveIndex++;
 			// Set the round text
 			roundText.text = "ROUND " + (i + 1);
 			// Present start round screen and wait
@@ -307,7 +310,6 @@ public class GameLogic : MonoBehaviour
 		offensiveAbilities.handFlipAttack = emptyAttack;
 
 
-
 		// Now deactivate all active enemies
 		for (int enemyIndex = 0; enemyIndex < spawnedEnemies.transform.childCount; enemyIndex++)
 		{
@@ -323,6 +325,16 @@ public class GameLogic : MonoBehaviour
 		}
 
 		endGameHud.SetActive (true);
+		// Tell the player how many waves they survived
+		if (waveIndex == 1)
+		{
+			roundsSurvivedText.text = "You survived for " + waveIndex + " round!";
+		}
+		else
+		{
+			roundsSurvivedText.text = "You survived for " + waveIndex + " rounds!";
+		}
+
 	}
 
 

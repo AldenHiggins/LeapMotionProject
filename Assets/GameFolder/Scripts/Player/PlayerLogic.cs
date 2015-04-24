@@ -22,6 +22,9 @@ public class PlayerLogic : MonoBehaviour
 	private int currentPlayerCurrency;
 	public int startingPlayerCurrency;
 
+	// PLAYER HEALTH TEXTURE
+	public GameObject healthTexture;
+
 	// Use this for initialization
 	void Start () 
 	{
@@ -78,6 +81,13 @@ public class PlayerLogic : MonoBehaviour
 		else
 		{
 			audioSource.PlayOneShot(grunt);
+//			Material healthMaterial = healthTexture.GetComponent<Material>();
+//			healthMaterial.SetColor();
+
+			Color color = healthTexture.GetComponent<Renderer>().material.color;
+			float newAlpha = (float)health / 100.0f;
+			color.a = 1.0f - newAlpha;
+			healthTexture.GetComponent<Renderer>().material.color = color;
 		}
 	}
 
