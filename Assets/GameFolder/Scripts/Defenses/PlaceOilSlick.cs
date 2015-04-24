@@ -13,7 +13,7 @@ public class PlaceOilSlick : AAttack
 
 	void Start()
 	{
-		source = oilSlick.GetComponent<AudioSource> ();
+		source = gameObject.GetComponent<AudioSource> ();
 	}
 
 	public override void chargingFunction(HandModel[] hands){

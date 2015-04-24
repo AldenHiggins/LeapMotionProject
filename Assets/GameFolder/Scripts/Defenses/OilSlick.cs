@@ -6,7 +6,6 @@ public class OilSlick : MonoBehaviour {
 	public GameObject boom;
 	public bool isForTutorial;
 	private AudioSource source;
-	public AudioClip explosionSound;
 	public AudioClip walkingOnOil;
 
 	// Use this for initialization
@@ -30,6 +29,7 @@ public class OilSlick : MonoBehaviour {
 		if (enemy != null)
 		{
 			enemy.slowDown();
+			source.PlayOneShot(walkingOnOil);
 		}
 
 
@@ -65,7 +65,6 @@ public class OilSlick : MonoBehaviour {
 		//print("EXPLOSION!");
 		Vector3 boomPos = transform.position + new Vector3(0f,1f,0f);
 		Instantiate (boom, boomPos, Quaternion.identity);
-		source.PlayOneShot (explosionSound);
 		if (isForTutorial) {
 			gameObject.GetComponent<TutorialOilSlick>().hasBlownUp();
 		}
