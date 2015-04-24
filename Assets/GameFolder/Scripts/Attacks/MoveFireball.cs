@@ -77,7 +77,7 @@ public class MoveFireball : MonoBehaviour
 
 	public void checkToDealDamageInCapsule()
 	{
-		print ("Checking to deal flamethrower damage");
+//		print ("Checking to deal flamethrower damage");
 		float radius = damageCapsule.radius;
 
 		Vector3 point1 = transform.GetChild(0).position;

@@ -41,11 +41,13 @@ public class BasicEnemyController : MonoBehaviour
 	private GameObject greenHealth;
 	private GameObject redHealth;
 	private float startingHealthScale;
-	// RAGDOLL
+	// RAGDOLL/DEATH
 	public float ragdollTime;
 	public float ragdollForceFactor;
 	public GameObject ragDollCenterObject;
 	public bool usesRagdoll;
+
+	private bool isDying;
 
 	public bool isTutorial;
 	public GameObject tutorialGoalTarget;
@@ -55,6 +57,8 @@ public class BasicEnemyController : MonoBehaviour
 	void Start () 
 	{
 		attacking = false;
+		isDying = false;
+
 		if (usesRootMotion)
 		{
 			anim = gameObject.GetComponent<Animator> ();
@@ -66,6 +70,7 @@ public class BasicEnemyController : MonoBehaviour
 
 		health = startingHealth;
 		agent = gameObject.GetComponent<NavMeshAgent> ();
+		agent.updateRotation = true;
 //		target = game.getEnemyTarget ();
 		if (isTutorial) target = tutorialGoalTarget;
 		else target = player.gameObject;
@@ -116,14 +121,18 @@ public class BasicEnemyController : MonoBehaviour
 //					gameObject.transform.GetChild(0).rotation = Quaternion.identity;
 				}
 
-				if (!usesRootMotion)
-				{
-					if (agent.enabled == true && !agent.hasPath)
-					{
-						agent.SetDestination (target.transform.position);
-					}
-				}
-
+//				if (!usesRootMotion)
+//				{
+//					if (agent.enabled == true && !agent.hasPath)
+////					{
+////						agent.SetDestination (target.transform.position);
+////						agent.updateRotation = true;
+////					}
+//					
+////					print ("position " + target.transform.position);
+//				}
+				agent.Resume();
+				agent.SetDestination (target.transform.position);
 					
 //				transform.position += velocity;
 //				rigidbody.AddForce (velocity, ForceMode.VelocityChange);
@@ -136,17 +145,19 @@ public class BasicEnemyController : MonoBehaviour
 			if (attacking == false)
 			{
 				attacking = true;
-				if (!usesRootMotion)
-				{
-					agent.Stop();
-				}
+//				if (!usesRootMotion)
+//				{
+//					agent.Stop();
+//				}
+				agent.Stop ();
 				StartCoroutine(attack());
 			}
 		}
 
 		// Face the target as well
-		transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position);
-		transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
+//		transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position);
+//		transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
+		
 
 		if (showNavMeshPath)
 			displayNavMeshPath ();
@@ -168,7 +179,7 @@ public class BasicEnemyController : MonoBehaviour
 
 		Vector3 distance = target.transform.position - transform.position;
 		distance.y = 0.0f;
-		if (distance.magnitude < attackRadius)
+		if (distance.magnitude < attackRadius && !isDying)
 		{
 			PlayerLogic playerToAttack = (PlayerLogic) target.GetComponent(typeof(PlayerLogic));
 			if (playerToAttack != null)
@@ -239,10 +250,12 @@ public class BasicEnemyController : MonoBehaviour
 
 	IEnumerator kill()
 	{
+		isDying = true;
 		if (agent.enabled)
 		{
 			agent.enabled = false;
 		}
+		StopCoroutine (attack ());
 		player.changeCurrency (currencyOnKill);
 		anim.Play ("death");
 		while(!anim.GetCurrentAnimatorStateInfo(0).IsName("death"))
@@ -255,6 +268,7 @@ public class BasicEnemyController : MonoBehaviour
 
 	IEnumerator ragdollKill()
 	{
+		isDying = true;
 //		agent.enabled = false;
 		anim.enabled = false;
 		print ("Made ragdoll");
@@ -288,6 +302,12 @@ public class BasicEnemyController : MonoBehaviour
 				lineRender.SetPosition (i, pathVertices[i]);
 			}
 		}
+	}
+
+	void OnAnimatorMove()
+	{
+		if (agent != null)
+			agent.velocity = anim.deltaPosition / Time.deltaTime;
 	}
 
 //	void OnAnimatorMove ()
