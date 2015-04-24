@@ -62,6 +62,28 @@ public class OffensiveAbilities : MonoBehaviour
 	public void controlCheck ()
 	{
 		hands = handController.GetAllGraphicsHands ();
+
+		// Check to ignite hands if flamethrower is charged up
+		if (hands.Length > 0)
+		{
+			if (flamethrowerChargeLevel >= numFireballsForFlamethrower)
+			{
+				for (int handIndex = 0; handIndex < hands.Length; handIndex++)
+				{
+					GameObject hand = hands[handIndex].gameObject;
+					hand.transform.GetChild (1).GetChild (0).gameObject.SetActive(true);
+				}
+			}
+			else
+			{
+				for (int handIndex = 0; handIndex < hands.Length; handIndex++)
+				{
+					GameObject hand = hands[handIndex].gameObject;
+					hand.transform.GetChild (1).GetChild (0).gameObject.SetActive(false);
+				}
+			}
+		}
+
 		if (hands.Length == 1) {
 			Vector3 direction0 = (hands [0].GetPalmPosition () - handController.transform.position).normalized;
 			Vector3 normal0 = hands [0].GetPalmNormal ().normalized;
