@@ -64,7 +64,7 @@ public class PlayerLogic : MonoBehaviour
 
 	public void respawn()
 	{
-		game.killPlayerEndGame ();
+		game.killPlayerEndGame (false);
 		transform.position = offensivePlayerSpawnPosition.transform.position;
 		transform.rotation = offensivePlayerSpawnPosition.transform.rotation;
 	}

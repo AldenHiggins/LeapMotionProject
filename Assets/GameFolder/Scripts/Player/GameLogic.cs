@@ -68,6 +68,7 @@ public class GameLogic : MonoBehaviour
 	private bool isDefensiveStageActive = false;
 	// End GAME/PLAYER DEATH
 	public GameObject endGameHud;
+	public Text endGameText;
 	public ButtonDemoGraphics retryButton;
 	public ButtonDemoGraphics mainMenuButton;
 	public Text roundsSurvivedText;
@@ -197,7 +198,11 @@ public class GameLogic : MonoBehaviour
 			playerLogic.resetHealth();
 			waveIndex++;
 			// Set the round text
-			roundText.text = "ROUND " + (i + 1);
+			if (i == 7) {
+				roundText.text = "FINAL ROUND! ";
+			}else{
+				roundText.text = "ROUND " + (i + 1);
+			}
 			// Present start round screen and wait
 			playerHud.SetActive(false);
 			endRoundScreen.enableUI();
@@ -296,13 +301,12 @@ public class GameLogic : MonoBehaviour
 			mainGameMusic.Pause();
 		}
 
-		// The game/map is over, display end game screen
-		winScreen.SetActive(true);
+		killPlayerEndGame (true);
 	}
 
 
 	// When the player dies bring up the end game screen and stop the current round
-	public void killPlayerEndGame()
+	public void killPlayerEndGame(bool win)
 	{
 		hmdMovement.enabled = false;
 		mainGameMusic.Pause ();
@@ -330,16 +334,17 @@ public class GameLogic : MonoBehaviour
 //			}
 //			enemy.enabled = false;
 		}
-
-		endGameHud.SetActive (true);
-		// Tell the player how many waves they survived
-		if (waveIndex == 1)
-		{
-			roundsSurvivedText.text = "You survived for " + waveIndex + " round!";
+		if (win) {
+			endGameText.text = "YOU WIN";
+			endGameHud.SetActive (true);
+		} else {
+			endGameHud.SetActive (true);
+			// Tell the player how many waves they survived
 		}
-		else
-		{
-			roundsSurvivedText.text = "You survived for " + waveIndex + " rounds!";
+		if (waveIndex == 1) {
+				roundsSurvivedText.text = "You survived for " + waveIndex + " round!";
+		} else {
+				roundsSurvivedText.text = "You survived for " + waveIndex + " rounds!";
 		}
 
 	}

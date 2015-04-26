@@ -63,6 +63,9 @@ public class OffensiveAbilities : MonoBehaviour
 	{
 		hands = handController.GetAllGraphicsHands ();
 
+		//////////////////////////////////////////////////////////////
+		//////////////////////  FLAME THROWER LOGIC  ////////////////////
+		//////////////////////////////////////////////////////////////
 		// Check to ignite hands if flamethrower is charged up	
 		if (hands.Length > 0)
 		{
@@ -71,6 +74,8 @@ public class OffensiveAbilities : MonoBehaviour
 				for (int handIndex = 0; handIndex < hands.Length; handIndex++)
 				{
 					GameObject hand = hands[handIndex].gameObject;
+					// flame hands are a child of the actual hands
+					// so you need to get them and activate them.
 					hand.transform.GetChild (1).GetChild (0).gameObject.SetActive(true);
 				}
 			}
