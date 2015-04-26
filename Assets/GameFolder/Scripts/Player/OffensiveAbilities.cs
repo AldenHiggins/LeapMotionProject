@@ -51,11 +51,14 @@ public class OffensiveAbilities : MonoBehaviour
 	public float flamethrowerTimeframe = 6.0f;
 	public AudioClip clapToActivateFlameThrowerExplanation;
 	public AudioClip faceHandsToEnemiesExplanation;
+	public GameObject flameThrowerChargeCounters;
 
 	// HANDS
 	private HandModel[] hands; 
 
 	private AudioSource source;
+
+	public AudioClip headshotSound;
 
 	// Use this for initialization
 	void Start ()
@@ -319,9 +322,19 @@ public class OffensiveAbilities : MonoBehaviour
 
 	public void headShotAchieved()
 	{
+		if (flamethrowerChargeLevel < flameThrowerChargeCounters.transform.childCount)
+		{
+			// Set the appropriate charge active
+			GameObject flameThrowerCharge = flameThrowerChargeCounters.transform.GetChild(flamethrowerChargeLevel).gameObject;
+			flameThrowerCharge.SetActive(true);
+		}
+
 		flamethrowerChargeLevel++;
 		print ("Charge level: " + flamethrowerChargeLevel);
+		source.PlayOneShot (headshotSound);
+
 	}
+		
 
 	IEnumerator flamethrowerCooldown()
 	{
@@ -329,6 +342,13 @@ public class OffensiveAbilities : MonoBehaviour
 		flamethrowersActive = false;
 		clapAttack.inactiveFunction ();
 		flamethrowerChargeLevel = 0;
+
+		// Disable all flame thrower charges on the UI
+		for (int chargeIndex = 0; chargeIndex < flameThrowerChargeCounters.transform.childCount; chargeIndex++) 
+		{
+			GameObject flameThrowerCharge = flameThrowerChargeCounters.transform.GetChild(chargeIndex).gameObject;
+			flameThrowerCharge.SetActive(false);
+		}
 	}
 
 
