@@ -40,13 +40,20 @@ public class OffensiveAbilities : MonoBehaviour
 	private bool isCircle = false;
 
 	private bool makingAFist = false; 
+
+
+	// FLAMETHROWER VARIABLES
 	private bool flamethrowersActive = false;
+	private bool firstFlameThrowerActive = false;
 	private int flamethrowerChargeLevel = 0;
 	public int numFireballsForFlamethrower = 4;
 	public float flamethrowerTimeframe = 6.0f;
+	public AudioClip clapToActivateFlameThrowerExplanation;
 
 	// HANDS
 	private HandModel[] hands; 
+
+	private AudioSource source;
 
 	// Use this for initialization
 	void Start ()
@@ -55,6 +62,7 @@ public class OffensiveAbilities : MonoBehaviour
 		controller = new Controller();
 		controller.EnableGesture(Gesture.GestureType.TYPE_CIRCLE);
 		defense = (DefensiveAbilities)GetComponent (typeof(DefensiveAbilities));
+		source = gameObject.GetComponent<AudioSource> ();
 	}
 
 
@@ -68,6 +76,12 @@ public class OffensiveAbilities : MonoBehaviour
 		{
 			if (flamethrowerChargeLevel >= numFireballsForFlamethrower && !flamethrowersActive)
 			{
+				// Play an explanation the first time the user charges up
+				if (!firstFlameThrowerActive)
+				{
+					firstFlameThrowerActive = true;
+					source.PlayOneShot(clapToActivateFlameThrowerExplanation);
+				}
 				for (int handIndex = 0; handIndex < hands.Length; handIndex++)
 				{
 					GameObject hand = hands[handIndex].gameObject;
