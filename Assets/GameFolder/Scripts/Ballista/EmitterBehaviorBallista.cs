@@ -16,6 +16,8 @@ public class EmitterBehaviorBallista : MonoBehaviour
 	public AudioClip arrowFire;
 	private bool firing;
 	private AudioSource source;
+	public GameObject ballistaDestroyParticle;
+	public AudioClip ballistaBreakingSound;
 
 	// Use this for initialization
 	void Start () 
@@ -195,10 +197,19 @@ public class EmitterBehaviorBallista : MonoBehaviour
 		}
 	}
 
+//	public GameObject ballistaDestroyParticle;
+//	public AudioClip ballistaBreakingSound;
+//
+
 	private IEnumerator WaitForAnimation ()
 	{
 		print ("Playing the Animation.");
 		anim.SetBool("Breaking", true);
+		// Generate a firey explosion here to signify the ballista got destroyed
+		GameObject breakingExplosion = (GameObject) Instantiate (ballistaDestroyParticle, transform.position, Quaternion.Euler(270.0f, 0.0f, 0.0f));
+		breakingExplosion.SetActive (true);
+		// Play a sound when the ballista gets killed
+		source.PlayOneShot (ballistaBreakingSound);
 		yield return new WaitForSeconds (4);
 		print ("Wait for 4 seconds.");
 		Destroy (gameObject.transform.parent.gameObject);
