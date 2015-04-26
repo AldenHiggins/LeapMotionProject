@@ -45,10 +45,12 @@ public class OffensiveAbilities : MonoBehaviour
 	// FLAMETHROWER VARIABLES
 	private bool flamethrowersActive = false;
 	private bool firstFlameThrowerActive = false;
+	private bool firstFlameThrowerActivated = false;
 	private int flamethrowerChargeLevel = 0;
 	public int numFireballsForFlamethrower = 4;
 	public float flamethrowerTimeframe = 6.0f;
 	public AudioClip clapToActivateFlameThrowerExplanation;
+	public AudioClip faceHandsToEnemiesExplanation;
 
 	// HANDS
 	private HandModel[] hands; 
@@ -286,6 +288,12 @@ public class OffensiveAbilities : MonoBehaviour
 			Vector3 distance = hands [0].GetPalmPosition () - hands [1].GetPalmPosition ();
 			if (distance.magnitude < .09 && flamethrowerChargeLevel >= numFireballsForFlamethrower) {
 //					game.clapAttack (playerLogic.transform.position + new Vector3 (0.0f, 0.7f, 0.0f));
+
+				if (!firstFlameThrowerActivated)
+				{
+					firstFlameThrowerActivated = true;
+					source.PlayOneShot(faceHandsToEnemiesExplanation);
+				}
 				flamethrowersActive = true;
 				StartCoroutine(flamethrowerCooldown());
 				clapAttack.releaseFunction (hands);
