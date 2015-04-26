@@ -198,7 +198,7 @@ public class GameLogic : MonoBehaviour
 			playerLogic.resetHealth();
 			waveIndex++;
 			// Set the round text
-			if (i == 7) {
+			if (i == enemyWaves.Length) {
 				roundText.text = "FINAL ROUND! ";
 			}else{
 				roundText.text = "ROUND " + (i + 1);
