@@ -58,8 +58,8 @@ public class TutorialOffensiveScript : MonoBehaviour
 		flipZombieKilled = false;
 		fistZombieKilled = false;
 
-		//StartCoroutine (beginTutorial ());
-		StartCoroutine (beginEnemiesTutorial ());
+		StartCoroutine (beginTutorial ());
+		//StartCoroutine (beginEnemiesTutorial ());
 		StartCoroutine (activateOffensiveAbilities ());
 	
 	}
@@ -180,7 +180,7 @@ public class TutorialOffensiveScript : MonoBehaviour
 
 		GameObject[] spawnedZombies = GameObject.FindGameObjectsWithTag("Zombie");
 		foreach (GameObject toDestroy in spawnedZombies) {
-			if (toDestroy.name != "Zombie(Clone)") continue;
+			if (toDestroy.name != "RootMotionZombie(Clone)") continue;
 			GameObject.Destroy(toDestroy);
 		}
 

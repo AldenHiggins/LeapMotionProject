@@ -256,6 +256,12 @@ public class TutorialDefensiveScript : MonoBehaviour {
 			GameObject.Destroy(toDestroy);
 		}
 
+		GameObject[] spawnedZombies = GameObject.FindGameObjectsWithTag("Zombie");
+		foreach (GameObject toDestroy in spawnedZombies) {
+			if (toDestroy.name != "RootMotionZombie(Clone)") continue;
+			GameObject.Destroy(toDestroy);
+		}
+
 		offensiveButton.SetActive (true);
 		defensiveButton.SetActive (true);
 
