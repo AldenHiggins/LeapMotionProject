@@ -58,7 +58,8 @@ public class TutorialOffensiveScript : MonoBehaviour
 		flipZombieKilled = false;
 		fistZombieKilled = false;
 
-		StartCoroutine (beginTutorial ());
+		//StartCoroutine (beginTutorial ());
+		StartCoroutine (beginEnemiesTutorial ());
 		StartCoroutine (activateOffensiveAbilities ());
 	
 	}
@@ -133,7 +134,8 @@ public class TutorialOffensiveScript : MonoBehaviour
 
 	IEnumerator beginEnemiesTutorial()
 	{
-		offense.handFlipAttack = offense.alwaysFireballAttack;;
+		offense.handFlipAttack = offense.alwaysFireballAttack;
+		activateOffense = true;
 		
 		handFlipGesture.SetActive (false);
 		handFistGesture.SetActive (false);

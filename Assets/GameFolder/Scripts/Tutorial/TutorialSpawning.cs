@@ -6,6 +6,7 @@ public class TutorialSpawning : MonoBehaviour
 {
 	public GameObject spawnThis;
 	public GameObject spawnedEnemyList;
+	public GameObject target;
 	
 	public float spawnFrequency;
 	
@@ -48,8 +49,9 @@ public class TutorialSpawning : MonoBehaviour
 				monster.transform.GetChild(0).transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
 				BasicEnemyController enemy = (BasicEnemyController) monster.GetComponentInChildren(typeof(BasicEnemyController));
 				enemy.enabled = true;
-				//NavMeshAgent agent = monster.GetComponentInChildren<NavMeshAgent>();
-				//agent.enabled = true;
+				NavMeshAgent agent = monster.GetComponentInChildren<NavMeshAgent>();
+				agent.enabled = true;
+				agent.SetDestination(target.transform.position);
 			}
 			yield return new WaitForSeconds(spawnFrequency);
 		}

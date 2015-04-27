@@ -47,6 +47,7 @@ public class BasicFireballAttack : AAttack
 		Vector3 startingVelocity = thisCamera.transform.forward.normalized;
 		startingVelocity *= .2f;
 
+		print ("Spawning fireball");
 		GameObject newFireball = (GameObject) Instantiate(fireBall, spawnPosition, thisCamera.transform.rotation);
 		newFireball.SetActive(true); 
 		MoveFireball moveThis = (MoveFireball) newFireball.GetComponent(typeof(MoveFireball));

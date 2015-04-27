@@ -150,8 +150,10 @@ public class OffensiveAbilities : MonoBehaviour
 				if (fireballCharged) {
 					fireballCharged = false;
 					// First check if the player has enough energy
+					print("Checking for energy to fire fireball");
 					if (playerLogic.getEnergy () > 10) {
 						handFlipAttack.releaseFunction (hands);
+						print("Firing fireball");
 //						flamethrowerChargeLevel++;
 						if (flamethrowerChargeLevel == numFireballsForFlamethrower) {
 							AudioSource source = (AudioSource) clapAttack.gameObject.GetComponent<AudioSource>();

@@ -131,9 +131,17 @@ public class BasicEnemyController : MonoBehaviour
 //					
 ////					print ("position " + target.transform.position);
 //				}
-				agent.Resume();
-				agent.SetDestination (target.transform.position);
-					
+				if (agent.isActiveAndEnabled) {
+					agent.Resume();
+					agent.SetDestination (target.transform.position);
+				} 
+				else
+				{
+					agent.enabled = true;
+					agent.Resume();
+					agent.SetDestination (target.transform.position);
+				}
+
 //				transform.position += velocity;
 //				rigidbody.AddForce (velocity, ForceMode.VelocityChange);
 			}
