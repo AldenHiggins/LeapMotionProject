@@ -209,14 +209,8 @@ public class BasicEnemyController : MonoBehaviour
 			Destroy (greenHealth);
 			Destroy (redHealth);
 			source.PlayOneShot(killSound);
-			if (usesRagdoll)
-			{
-				StartCoroutine(ragdollKill());
-			}
-			else
-			{
-				StartCoroutine(kill());
-			}
+
+			StartCoroutine(kill ());
 		}
 	}
 
@@ -339,6 +333,11 @@ public class BasicEnemyController : MonoBehaviour
 		agent.speed = 1;
 		yield return new WaitForSeconds (3.0f);
 		agent.speed = 2;
+	}
+
+	public bool isMonsterDying()
+	{
+		return isDying;
 	}
 
 //	void OnAnimatorMove ()
