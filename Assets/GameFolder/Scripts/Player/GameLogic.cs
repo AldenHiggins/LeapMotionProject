@@ -23,6 +23,9 @@ public class GameLogic : MonoBehaviour
 	// AUDIO CLIPS
 	public AudioSource mainGameMusic;
 	public AudioSource defensivePhaseMusic;
+	public AudioSource winningSound;
+	public AudioSource losingSound;
+
 
 	// TURRET PLACEMENT HUD
 	public GameObject turretHud;
@@ -354,9 +357,11 @@ public class GameLogic : MonoBehaviour
 		}
 
 		if (win) {
+			winningSound.Play();
 			endGameText.text = "YOU WIN";
 			endGameHud.SetActive (true);
 		} else {
+			losingSound.Play();
 			endGameHud.SetActive (true);
 			// Tell the player how many waves they survived
 		}
