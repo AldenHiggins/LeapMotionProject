@@ -36,9 +36,11 @@ public class OffensiveAbilities : MonoBehaviour
 
 	private bool fireballCharged = false;
 	private bool handWasFist = false;
-	private bool isCircle = false;
-
 	private bool makingAFist = false; 
+
+	private bool fireballChargedTwo = false;
+	private bool handWasFistTwo = false;
+	private bool makingAFistTwo = false;
 
 
 	// FLAMETHROWER VARIABLES
@@ -68,7 +70,6 @@ public class OffensiveAbilities : MonoBehaviour
 		defense = (DefensiveAbilities)GetComponent (typeof(DefensiveAbilities));
 		source = gameObject.GetComponent<AudioSource> ();
 	}
-
 
 	// Check for input once a frame
 	public void controlCheck ()
@@ -106,8 +107,8 @@ public class OffensiveAbilities : MonoBehaviour
 			Vector3 direction0 = (hands [0].GetPalmPosition () - handController.transform.position).normalized;
 			Vector3 normal0 = hands [0].GetPalmNormal ().normalized;
 		
-			checkHandFlip(normal0);
-			checkHandFist(hands [0].GetLeapHand ());
+			checkHandFlip(normal0, ref fireballCharged, ref makingAFist);
+			checkHandFist(hands [0].GetLeapHand (), ref handWasFist, ref makingAFist, ref makingAFistTwo);
 
 			// Check for attacks with the second hand
 			if (hands.Length > 1)
@@ -115,8 +116,8 @@ public class OffensiveAbilities : MonoBehaviour
 				Vector3 direction1 = (hands [1].GetPalmPosition () - handController.transform.position).normalized;
 				Vector3 normal1 = hands [1].GetPalmNormal ().normalized;
 
-				checkHandFlip(normal1);
-				checkHandFist(hands [1].GetLeapHand ());
+				checkHandFlip(normal1, ref fireballChargedTwo, ref makingAFistTwo);
+				checkHandFist(hands [1].GetLeapHand (), ref handWasFistTwo, ref makingAFistTwo, ref makingAFist);
 				checkClap(hands);
 
 				if (flamethrowersActive)
@@ -130,10 +131,15 @@ public class OffensiveAbilities : MonoBehaviour
 			clapAttack.inactiveFunction();
 			handFlipAttack.inactiveFunction();
 			fistAttack.inactiveFunction();
+
+
 			fireballCharged = false;
 			handWasFist = false;
-			isCircle = false;
 			makingAFist = false; 
+
+			fireballChargedTwo = false;
+			handWasFistTwo = false;
+			makingAFistTwo = false;
 		}
 	}
 
@@ -197,45 +203,48 @@ public class OffensiveAbilities : MonoBehaviour
 	}
 
 	// Logic to check for fists
-	public void checkHandFist(Hand handInput)
+	public void checkHandFist(Hand handInput, ref bool handWasFistInput, ref bool makingAFistInput, ref bool otherMakingAFist)
 	{
 		bool handIsFist = checkFistHelper (handInput);
 		if (handIsFist) 
 		{
-			if (!handWasFist)
+			if (!handWasFistInput)
 			{
-				handWasFist = true;
+				handWasFistInput = true;
 				fistAttack.chargedFunction (hands);
-				makingAFist = true;
+				makingAFistInput = true;
 				handFlipAttack.inactiveFunction();
 			}
 			fistAttack.holdGestureFunction (hands);
 		} 
-		else if (!handIsFist && handWasFist)
+		else if (!handIsFist && handWasFistInput)
 		{
-			handWasFist = false;
-			makingAFist = false;
+			handWasFistInput = false;
+			makingAFistInput = false;
 			fistAttack.releaseFunction (hands);
 		} 
-		else if (!handIsFist && !handWasFist) 
+		else if (!handIsFist && !handWasFistInput) 
 		{
-			fistAttack.inactiveFunction ();	
+			if (!otherMakingAFist)
+			{
+				fistAttack.inactiveFunction ();	
+			}
 		}
 	}
 
 	// Check if the inputted hand is performing a flip attack
-	public void checkHandFlip(Vector3 handNormal)
+	public void checkHandFlip(Vector3 handNormal, ref bool fireballCharge, ref bool makingAFistInput)
 	{	
 		//  Charge a fist attack, -.6 or less means the palm is facing the camera
 		if (Vector3.Dot (handNormal, thisCamera.transform.forward) < -.6)
 		{
 			handFlipAttack.chargingFunction (hands);
 			
-			if (!makingAFist)
+			if (!makingAFist && !makingAFistTwo)
 			{
-				if (!fireballCharged)
+				if (!fireballCharge)
 				{
-					fireballCharged = true;
+					fireballCharge = true;
 					handFlipAttack.chargedFunction (hands);
 					fistAttack.inactiveFunction();
 				}
@@ -254,22 +263,27 @@ public class OffensiveAbilities : MonoBehaviour
 		// Release a fist attack, .6 or more means the palm is facing away from the camera
 		if (Vector3.Dot (handNormal, thisCamera.transform.forward) > .6)
 		{
-			if (fireballCharged) {
-				fireballCharged = false;
+			if (fireballCharge) 
+			{
+				fireballCharge = false;
 				// First check if the player has enough energy
-				if (playerLogic.getEnergy () > 10) {
+				if (playerLogic.getEnergy () > 10) 
+				{
 					handFlipAttack.releaseFunction (hands);
 					//						flamethrowerChargeLevel++;
-					if (flamethrowerChargeLevel == numFireballsForFlamethrower) {
+					if (flamethrowerChargeLevel == numFireballsForFlamethrower) 
+					{
 						AudioSource source = (AudioSource) clapAttack.gameObject.GetComponent<AudioSource>();
-						if (source != null) source.Play();
+						if (source != null)
+						{
+							source.Play();
+						}
 					}
 				}
 			}
 			handFlipAttack.holdGestureFunction (hands);
 		}
 	}
-
 
 	// Helper funtion to check if a hand is making a fist
 	private bool checkFistHelper(Hand hand)
