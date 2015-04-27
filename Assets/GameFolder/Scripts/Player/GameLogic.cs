@@ -352,6 +352,7 @@ public class GameLogic : MonoBehaviour
 //			}
 //			enemy.enabled = false;
 		}
+
 		if (win) {
 			endGameText.text = "YOU WIN";
 			endGameHud.SetActive (true);
