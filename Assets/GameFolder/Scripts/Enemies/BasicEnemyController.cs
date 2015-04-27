@@ -209,14 +209,14 @@ public class BasicEnemyController : MonoBehaviour
 			Destroy (greenHealth);
 			Destroy (redHealth);
 			source.PlayOneShot(killSound);
-//			if (usesRagdoll)
-//			{
-//				StartCoroutine(ragdollKill());
-//			}
-//			else
-//			{
-			StartCoroutine(kill());
-//			}
+			if (usesRagdoll)
+			{
+				StartCoroutine(ragdollKill());
+			}
+			else
+			{
+				StartCoroutine(kill());
+			}
 		}
 	}
 
@@ -257,17 +257,16 @@ public class BasicEnemyController : MonoBehaviour
 		}
 		StopCoroutine (attack ());
 		player.changeCurrency (currencyOnKill);
-		if (usesRagdoll) 
-		{
-			BoxCollider collider = gameObject.GetComponent<BoxCollider> ();
-			collider.enabled = false;
-		}
 		anim.Play ("death");
 		while(!anim.GetCurrentAnimatorStateInfo(0).IsName("death"))
 		{
 			yield return new WaitForSeconds(.1f);
 		}
 		yield return new WaitForSeconds (anim.GetCurrentAnimatorClipInfo(0)[0].clip.length);
+		if (usesRagdoll)
+		{
+			Destroy (this.transform.parent.gameObject);
+		}
 		Destroy (this.gameObject);
 	}
 
@@ -279,7 +278,7 @@ public class BasicEnemyController : MonoBehaviour
 		BoxCollider collider = gameObject.GetComponent<BoxCollider> ();
 		collider.enabled = false;
 		Rigidbody ragDollRigidBody = ragDollCenterObject.GetComponent<Rigidbody> ();
-		ragDollRigidBody.AddForce (new Vector3 (0, 5 * ragdollForceFactor, -5 * ragdollForceFactor), ForceMode.Impulse);
+		ragDollRigidBody.AddForce (new Vector3 (0, 5 * ragdollForceFactor, -10 * ragdollForceFactor), ForceMode.Impulse);
 		yield return new WaitForSeconds (ragdollTime);
 		Destroy (transform.parent.gameObject);
 	}
