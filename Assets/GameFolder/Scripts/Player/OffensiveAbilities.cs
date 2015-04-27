@@ -132,7 +132,6 @@ public class OffensiveAbilities : MonoBehaviour
 			fistAttack.inactiveFunction();
 			fireballCharged = false;
 			handWasFist = false;
-			isChargingAttack = false;
 			isCircle = false;
 			makingAFist = false; 
 		}
