@@ -188,6 +188,20 @@ public class GameLogic : MonoBehaviour
 				roundTimerText.text = "" + currentRoundTime.ToString("F2");
 			}
 		}
+
+		// Press r to recenter view
+		if(Input.GetKeyDown (KeyCode.R))
+		{
+			playerLogic.gameObject.transform.rotation = Quaternion.Euler (0.0f, 180.0f, 0.0f);
+			StartCoroutine(waitToEnableRoundScreen());
+		}
+	}
+
+	IEnumerator waitToEnableRoundScreen()
+	{
+		yield return new WaitForSeconds (.5f);
+		endRoundScreen.disableUI ();
+		endRoundScreen.enableUI ();
 	}
 
 	IEnumerator roundFunction()
@@ -282,7 +296,6 @@ public class GameLogic : MonoBehaviour
 			// Enable the player HUD
 			playerHud.SetActive(true);
 
-		
 			// Start the enemy spawners
 			enemyWaves[i].startWave ();
 			// Wait for the round to time out
