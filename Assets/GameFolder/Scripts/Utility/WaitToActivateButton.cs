@@ -4,7 +4,7 @@ using System.Collections;
 public class WaitToActivateButton : MonoBehaviour {
 
 	public ButtonDemoToggle buttonToActivate;
-
+	public float timeToWait;
 	// Use this for initialization
 	void Start () {
 		StartCoroutine (waitBeforeActivation());
@@ -12,7 +12,7 @@ public class WaitToActivateButton : MonoBehaviour {
 
 	IEnumerator waitBeforeActivation()
 	{
-		yield return new WaitForSeconds (3f);
+		yield return new WaitForSeconds (timeToWait);
 		buttonToActivate.enabled = true;
 	}
 }
