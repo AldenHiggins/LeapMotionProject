@@ -198,9 +198,12 @@ public class GameLogic : MonoBehaviour
 			playerLogic.resetHealth();
 			waveIndex++;
 			// Set the round text
-			if (i == enemyWaves.Length) {
+			if (i == (enemyWaves.Length - 1)) 
+			{
 				roundText.text = "FINAL ROUND! ";
-			}else{
+			}
+			else
+			{
 				roundText.text = "ROUND " + (i + 1);
 			}
 			// Present start round screen and wait
@@ -299,6 +302,8 @@ public class GameLogic : MonoBehaviour
 			playerLogic.changeCurrency(500);
 			hmdMovement.enabled = false;
 			mainGameMusic.Pause();
+			offensiveAbilities.deactivateFlameThrowers();
+			offensiveAbilities.controlCheck();
 		}
 
 		killPlayerEndGame (true);

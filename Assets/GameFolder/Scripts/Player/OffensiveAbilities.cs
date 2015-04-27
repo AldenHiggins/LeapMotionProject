@@ -339,10 +339,15 @@ public class OffensiveAbilities : MonoBehaviour
 	IEnumerator flamethrowerCooldown()
 	{
 		yield return new WaitForSeconds (flamethrowerTimeframe);
+		deactivateFlameThrowers ();
+	}
+
+	public void deactivateFlameThrowers()
+	{
 		flamethrowersActive = false;
 		clapAttack.inactiveFunction ();
 		flamethrowerChargeLevel = 0;
-
+		
 		// Disable all flame thrower charges on the UI
 		for (int chargeIndex = 0; chargeIndex < flameThrowerChargeCounters.transform.childCount; chargeIndex++) 
 		{
