@@ -23,6 +23,9 @@ public class GameLogic : MonoBehaviour
 	// AUDIO CLIPS
 	public AudioSource mainGameMusic;
 	public AudioSource defensivePhaseMusic;
+	public AudioSource winningSound;
+	public AudioSource losingSound;
+
 
 	// TURRET PLACEMENT HUD
 	public GameObject turretHud;
@@ -68,6 +71,7 @@ public class GameLogic : MonoBehaviour
 	private bool isDefensiveStageActive = false;
 	// End GAME/PLAYER DEATH
 	public GameObject endGameHud;
+	public Text endGameText;
 	public ButtonDemoGraphics retryButton;
 	public ButtonDemoGraphics mainMenuButton;
 	public Text roundsSurvivedText;
@@ -81,6 +85,8 @@ public class GameLogic : MonoBehaviour
 	public AAttack flameThrowerAttack;
 	public AAttack iceBallAttack;
 
+	// WAVE TO START AT
+	public int waveToStartAt;
 	// Initialize variables
 	void Start () 
 	{
@@ -187,17 +193,39 @@ public class GameLogic : MonoBehaviour
 				roundTimerText.text = "" + currentRoundTime.ToString("F2");
 			}
 		}
+
+		// Press r to recenter view
+		if(Input.GetKeyDown (KeyCode.R))
+		{
+			playerLogic.gameObject.transform.rotation = Quaternion.Euler (0.0f, 180.0f, 0.0f);
+			StartCoroutine(waitToEnableRoundScreen());
+		}
+	}
+
+	IEnumerator waitToEnableRoundScreen()
+	{
+		yield return new WaitForSeconds (.5f);
+		endRoundScreen.disableUI ();
+		endRoundScreen.enableUI ();
 	}
 
 	IEnumerator roundFunction()
 	{
-		for (int i = 0; i < enemyWaves.Length; i++)
+
+		for (int i = waveToStartAt; i < enemyWaves.Length; i++)
 		{
 			// Reset the player's health
 			playerLogic.resetHealth();
 			waveIndex++;
 			// Set the round text
-			roundText.text = "ROUND " + (i + 1);
+			if (i == (enemyWaves.Length - 1)) 
+			{
+				roundText.text = "FINAL ROUND! ";
+			}
+			else
+			{
+				roundText.text = "ROUND " + (i + 1);
+			}
 			// Present start round screen and wait
 			playerHud.SetActive(false);
 			endRoundScreen.enableUI();
@@ -274,7 +302,6 @@ public class GameLogic : MonoBehaviour
 			// Enable the player HUD
 			playerHud.SetActive(true);
 
-		
 			// Start the enemy spawners
 			enemyWaves[i].startWave ();
 			// Wait for the round to time out
@@ -294,15 +321,16 @@ public class GameLogic : MonoBehaviour
 			playerLogic.changeCurrency(500);
 			hmdMovement.enabled = false;
 			mainGameMusic.Pause();
+			offensiveAbilities.deactivateFlameThrowers();
+			offensiveAbilities.controlCheck();
 		}
 
-		// The game/map is over, display end game screen
-		winScreen.SetActive(true);
+		killPlayerEndGame (true);
 	}
 
 
 	// When the player dies bring up the end game screen and stop the current round
-	public void killPlayerEndGame()
+	public void killPlayerEndGame(bool win)
 	{
 		hmdMovement.enabled = false;
 		mainGameMusic.Pause ();
@@ -331,15 +359,19 @@ public class GameLogic : MonoBehaviour
 //			enemy.enabled = false;
 		}
 
-		endGameHud.SetActive (true);
-		// Tell the player how many waves they survived
-		if (waveIndex == 1)
-		{
-			roundsSurvivedText.text = "You survived for " + waveIndex + " round!";
+		if (win) {
+			winningSound.Play();
+			endGameText.text = "YOU WIN";
+			endGameHud.SetActive (true);
+		} else {
+			losingSound.Play();
+			endGameHud.SetActive (true);
+			// Tell the player how many waves they survived
 		}
-		else
-		{
-			roundsSurvivedText.text = "You survived for " + waveIndex + " rounds!";
+		if (waveIndex == 1) {
+				roundsSurvivedText.text = "You survived for " + waveIndex + " round!";
+		} else {
+				roundsSurvivedText.text = "You survived for " + waveIndex + " rounds!";
 		}
 
 	}

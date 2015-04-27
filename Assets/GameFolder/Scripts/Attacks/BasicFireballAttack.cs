@@ -6,6 +6,8 @@ public class BasicFireballAttack : AAttack
 	public GameLogic game;
 	public GameObject thisCamera;
 	public GameObject fireBall;
+	public GameObject projectileActiveParticle;
+
 
 	public float firingCoolDown;
 
@@ -35,6 +37,7 @@ public class BasicFireballAttack : AAttack
 			return;
 		}
 		// Wait for the next cool down in order to fire again
+		projectileActiveParticle.SetActive (false);
 		canFire = false;
 		StartCoroutine (waitForCoolDown ());
 
@@ -71,7 +74,7 @@ public class BasicFireballAttack : AAttack
 	{
 
 		yield return new WaitForSeconds (firingCoolDown);
-
+		projectileActiveParticle.SetActive (true);
 		canFire = true;
 	}
 }
