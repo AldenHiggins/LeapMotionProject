@@ -85,6 +85,8 @@ public class GameLogic : MonoBehaviour
 	public AAttack flameThrowerAttack;
 	public AAttack iceBallAttack;
 
+	// WAVE TO START AT
+	public int waveToStartAt;
 	// Initialize variables
 	void Start () 
 	{
@@ -209,7 +211,8 @@ public class GameLogic : MonoBehaviour
 
 	IEnumerator roundFunction()
 	{
-		for (int i = 0; i < enemyWaves.Length; i++)
+
+		for (int i = waveToStartAt; i < enemyWaves.Length; i++)
 		{
 			// Reset the player's health
 			playerLogic.resetHealth();
