@@ -36,7 +36,6 @@ public class OffensiveAbilities : MonoBehaviour
 
 	private bool fireballCharged = false;
 	private bool handWasFist = false;
-	private bool isChargingAttack = false;
 	private bool isCircle = false;
 
 	private bool makingAFist = false; 
@@ -76,12 +75,9 @@ public class OffensiveAbilities : MonoBehaviour
 	{
 		hands = handController.GetAllGraphicsHands ();
 
-		//////////////////////////////////////////////////////////////
-		//////////////////////  FLAME THROWER LOGIC  ////////////////////
-		//////////////////////////////////////////////////////////////
-		// Check to ignite hands if flamethrower is charged up	
-		if (hands.Length > 0)
+		if (hands.Length > 0) 
 		{
+			// Check to ignite hands if flamethrower is charged up	
 			if (flamethrowerChargeLevel >= numFireballsForFlamethrower && !flamethrowersActive)
 			{
 				// Play an explanation the first time the user charges up
@@ -90,11 +86,10 @@ public class OffensiveAbilities : MonoBehaviour
 					firstFlameThrowerActive = true;
 					source.PlayOneShot(clapToActivateFlameThrowerExplanation);
 				}
+				
 				for (int handIndex = 0; handIndex < hands.Length; handIndex++)
 				{
 					GameObject hand = hands[handIndex].gameObject;
-					// flame hands are a child of the actual hands
-					// so you need to get them and activate them.
 					hand.transform.GetChild (1).GetChild (0).gameObject.SetActive(true);
 				}
 			}
@@ -106,115 +101,251 @@ public class OffensiveAbilities : MonoBehaviour
 					hand.transform.GetChild (1).GetChild (0).gameObject.SetActive(false);
 				}
 			}
-		}
 
-		if (hands.Length == 1) {
+			// Check for one handed attacks
 			Vector3 direction0 = (hands [0].GetPalmPosition () - handController.transform.position).normalized;
 			Vector3 normal0 = hands [0].GetPalmNormal ().normalized;
+		
+			checkHandFlip(normal0);
+			checkHandFist(hands [0].GetLeapHand ());
 
-			//////////////////////////////////////////////////////////////
-			//////////////////////  DETECT HAND SPIN  ////////////////////
-			//////////////////////////////////////////////////////////////
-			if (controller.IsConnected) { //controller is a Controller object
-				Frame currentFrame = controller.Frame (); //The latest frame
-				Frame previousFrame = controller.Frame (1); //The previous frame
-				
-				GestureList gesturesInFrame = currentFrame.Gestures (previousFrame);
-	
-//				currentFrame.Gestures
-				if (!currentFrame.Gestures (previousFrame).IsEmpty) {
-					for (int i = 0; i < currentFrame.Gestures(previousFrame).Count; i++) {
-						Gesture gesture = currentFrame.Gestures (previousFrame) [i];
-						
-						if (gesture.Type == Gesture.GestureType.TYPE_CIRCLE) {
-							CircleGesture circleGesture = new CircleGesture (gesture);
-							// Limit the radius to prevent accidental gesture recognition
-							if (!isCircle && circleGesture.Radius > 50) {
-								isCircle = true;
+			// Check for attacks with the second hand
+			if (hands.Length > 1)
+			{
+				Vector3 direction1 = (hands [1].GetPalmPosition () - handController.transform.position).normalized;
+				Vector3 normal1 = hands [1].GetPalmNormal ().normalized;
 
-								circularHandAttack.releaseFunction (hands);
-//								Instantiate (psychicParticle, playerLogic.transform.position, playerLogic.transform.rotation);
-							}
-						}
-					}
-				} else {
-					isCircle = false;
+				checkHandFlip(normal1);
+				checkHandFist(hands [1].GetLeapHand ());
+				checkClap(hands);
+
+				if (flamethrowersActive)
+				{
+					clapAttack.holdGestureFunction(hands);
 				}
 			}
+		} 
+		else 
+		{
+			clapAttack.inactiveFunction();
+			handFlipAttack.inactiveFunction();
+			fistAttack.inactiveFunction();
+			fireballCharged = false;
+			handWasFist = false;
+			isChargingAttack = false;
+			isCircle = false;
+			makingAFist = false; 
+		}
+	}
+
+	public void headShotAchieved()
+	{
+		if (flamethrowerChargeLevel < flameThrowerChargeCounters.transform.childCount)
+		{
+			// Set the appropriate charge active
+			GameObject flameThrowerCharge = flameThrowerChargeCounters.transform.GetChild(flamethrowerChargeLevel).gameObject;
+			flameThrowerCharge.SetActive(true);
+		}
+
+		flamethrowerChargeLevel++;
+		print ("Charge level: " + flamethrowerChargeLevel);
+		source.PlayOneShot (headshotSound);
+	}
 		
-			//////////////////////////////////////////////////////////////
-			//////////////////////  DETECT HAND FLIP  ////////////////////
-			//////////////////////////////////////////////////////////////
 
-			//  Charge a fireball, -.6 or less means the palm is facing the camera
-			if (Vector3.Dot (normal0, thisCamera.transform.forward) < -.6) {
-				handFlipAttack.chargingFunction (hands);
+	IEnumerator flamethrowerCooldown()
+	{
+		yield return new WaitForSeconds (flamethrowerTimeframe);
+		deactivateFlameThrowers ();
+	}
 
-				if (!makingAFist)
-				{
-					if (!fireballCharged)
-					{
-						fireballCharged = true;
-						handFlipAttack.chargedFunction (hands);
-						fistAttack.inactiveFunction();
-					}
-				}
-				else
-				{
-					handFlipAttack.inactiveFunction();
-				}
-			} else {
-//				handFlipNotChargingFunction();
+	public void deactivateFlameThrowers()
+	{
+		flamethrowersActive = false;
+		clapAttack.inactiveFunction ();
+		flamethrowerChargeLevel = 0;
+		
+		// Disable all flame thrower charges on the UI
+		for (int chargeIndex = 0; chargeIndex < flameThrowerChargeCounters.transform.childCount; chargeIndex++) 
+		{
+			GameObject flameThrowerCharge = flameThrowerChargeCounters.transform.GetChild(chargeIndex).gameObject;
+			flameThrowerCharge.SetActive(false);
+		}
+	}
+
+
+	IEnumerator attackSelectionCooldown()
+	{
+		yield return new WaitForSeconds (1.0f);
+		selectingAttack = false;
+	}
+
+	// Check if the player has clapped
+	public void checkClap(HandModel[] hands)
+	{
+		Vector3 distance = hands [0].GetPalmPosition () - hands [1].GetPalmPosition ();
+		if (distance.magnitude < .09 && flamethrowerChargeLevel >= numFireballsForFlamethrower) 
+		{
+			if (!firstFlameThrowerActivated)
+			{
+				firstFlameThrowerActivated = true;
+				source.PlayOneShot(faceHandsToEnemiesExplanation);
+			}
+			flamethrowersActive = true;
+			StartCoroutine(flamethrowerCooldown());
+			clapAttack.releaseFunction (hands);
+		}
+	}
+
+	// Logic to check for fists
+	public void checkHandFist(Hand handInput)
+	{
+		bool handIsFist = checkFistHelper (handInput);
+		if (handIsFist) 
+		{
+			if (!handWasFist)
+			{
+				handWasFist = true;
+				fistAttack.chargedFunction (hands);
+				makingAFist = true;
 				handFlipAttack.inactiveFunction();
 			}
-		
+			fistAttack.holdGestureFunction (hands);
+		} 
+		else if (!handIsFist && handWasFist)
+		{
+			handWasFist = false;
+			makingAFist = false;
+			fistAttack.releaseFunction (hands);
+		} 
+		else if (!handIsFist && !handWasFist) 
+		{
+			fistAttack.inactiveFunction ();	
+		}
+	}
 
-			// Fire a fireball, .6 or more means the palm is facing away from the camera
-			if (Vector3.Dot (normal0, thisCamera.transform.forward) > .6) {
-				if (fireballCharged) {
-					fireballCharged = false;
-					// First check if the player has enough energy
-					if (playerLogic.getEnergy () > 10) {
-						handFlipAttack.releaseFunction (hands);
-//						flamethrowerChargeLevel++;
-						if (flamethrowerChargeLevel == numFireballsForFlamethrower) {
-							AudioSource source = (AudioSource) clapAttack.gameObject.GetComponent<AudioSource>();
-							if (source != null) source.Play();
-						}
+	// Check if the inputted hand is performing a flip attack
+	public void checkHandFlip(Vector3 handNormal)
+	{	
+		//  Charge a fist attack, -.6 or less means the palm is facing the camera
+		if (Vector3.Dot (handNormal, thisCamera.transform.forward) < -.6)
+		{
+			handFlipAttack.chargingFunction (hands);
+			
+			if (!makingAFist)
+			{
+				if (!fireballCharged)
+				{
+					fireballCharged = true;
+					handFlipAttack.chargedFunction (hands);
+					fistAttack.inactiveFunction();
+				}
+			}
+			else
+			{
+				handFlipAttack.inactiveFunction();
+			}
+		} 
+		else 
+		{
+			handFlipAttack.inactiveFunction();
+		}
+		
+		
+		// Release a fist attack, .6 or more means the palm is facing away from the camera
+		if (Vector3.Dot (handNormal, thisCamera.transform.forward) > .6)
+		{
+			if (fireballCharged) {
+				fireballCharged = false;
+				// First check if the player has enough energy
+				if (playerLogic.getEnergy () > 10) {
+					handFlipAttack.releaseFunction (hands);
+					//						flamethrowerChargeLevel++;
+					if (flamethrowerChargeLevel == numFireballsForFlamethrower) {
+						AudioSource source = (AudioSource) clapAttack.gameObject.GetComponent<AudioSource>();
+						if (source != null) source.Play();
 					}
 				}
-				handFlipAttack.holdGestureFunction (hands);
 			}
+			handFlipAttack.holdGestureFunction (hands);
+		}
+	}
 
-			//////////////////////////////////////////////////////////////
-			//////////////////////  DETECT A FIST  ///////////////////////
-			//////////////////////////////////////////////////////////////
-			bool handIsFist = checkFist (hands [0].GetLeapHand ());
-			if (handIsFist) {
-				if (!handWasFist) {
-					handWasFist = true;
-					fistAttack.chargedFunction (hands);
-					makingAFist = true;
-					handFlipAttack.inactiveFunction();
-//					game.fistProjectile();
-				}
-				fistAttack.holdGestureFunction (hands);
-			} else if (!handIsFist && handWasFist) {
-				handWasFist = false;
-				makingAFist = false;
-				fistAttack.releaseFunction (hands);
-			} else if (!handIsFist && !handWasFist) {
-				fistAttack.inactiveFunction ();	
-			}
-//			if (handIsFist && !handWasFist)
-//			{
-//				fistAttack.releaseFunction();
-//				game.fistProjectile();
-//				handWasFist = true;
-//			}
-//			else if(!handIsFist && handWasFist){
-//				handWasFist = false;
-//				fistAttack.inactiveFunction();
+
+	// Helper funtion to check if a hand is making a fist
+	private bool checkFistHelper(Hand hand)
+	{
+		float sum = 0;
+		for (int i = 0; i < hand.Fingers.Count; i++) 
+		{
+			Finger f = hand.Fingers[i];
+			if (f.Type() == Finger.FingerType.TYPE_THUMB) continue;
+			Vector meta = f.Bone(Bone.BoneType.TYPE_METACARPAL).Direction;
+			Vector proxi = f.Bone(Bone.BoneType.TYPE_PROXIMAL).Direction;
+			Vector inter = f.Bone(Bone.BoneType.TYPE_INTERMEDIATE).Direction;
+			float dMetaProxi = meta.Dot(proxi);
+			float dProxiInter = proxi.Dot(inter);
+			sum += dMetaProxi;
+			sum += dProxiInter;
+		}
+		sum = sum/8;
+//		print("sum = " + sum);
+		if(sum <= minVal && getExtendedFingers(hand)== 0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	private int getExtendedFingers(Hand h)
+	{
+		int extendedFingers = 0;
+		for(int i=0;i <h.Fingers.Count;i++)
+		{
+			Finger finger = h.Fingers[i];
+			if(finger.Type() == Finger.FingerType.TYPE_THUMB) continue;
+			if(finger.IsExtended) extendedFingers++;
+		}
+		return extendedFingers;
+	}
+
+}
+
+
+
+// OLD DETECTION CODE
+//			//////////////////////////////////////////////////////////////
+//			//////////////////////  DETECT HAND SPIN  ////////////////////
+//			//////////////////////////////////////////////////////////////
+//			if (controller.IsConnected) 
+//			{ //controller is a Controller object
+//				Frame currentFrame = controller.Frame (); //The latest frame
+//				Frame previousFrame = controller.Frame (1); //The previous frame
+//				
+//				GestureList gesturesInFrame = currentFrame.Gestures (previousFrame);
+//	
+////				currentFrame.Gestures
+//				if (!currentFrame.Gestures (previousFrame).IsEmpty) {
+//					for (int i = 0; i < currentFrame.Gestures(previousFrame).Count; i++) {
+//						Gesture gesture = currentFrame.Gestures (previousFrame) [i];
+//						
+//						if (gesture.Type == Gesture.GestureType.TYPE_CIRCLE) {
+//							CircleGesture circleGesture = new CircleGesture (gesture);
+//							// Limit the radius to prevent accidental gesture recognition
+//							if (!isCircle && circleGesture.Radius > 50) {
+//								isCircle = true;
+//
+//								circularHandAttack.releaseFunction (hands);
+////								Instantiate (psychicParticle, playerLogic.transform.position, playerLogic.transform.rotation);
+//							}
+//						}
+//					}
+//				} else {
+//					isCircle = false;
+//				}
 //			}
 
 
@@ -276,140 +407,9 @@ public class OffensiveAbilities : MonoBehaviour
 //
 //			previousAmountHandIsOnRightSideOfScreen = amountHandIsOnRightSideOfScreen;
 
-		} else if (hands.Length > 1) {
-			Vector3 direction0 = (hands [0].GetPalmPosition () - handController.transform.position).normalized;
-			Vector3 normal0 = hands [0].GetPalmNormal ().normalized;
-	
-			Vector3 direction1 = (hands [1].GetPalmPosition () - handController.transform.position).normalized;
-			Vector3 normal1 = hands [1].GetPalmNormal ().normalized;
-			isChargingAttack = true;
-
-			//////////////////////////////////////////////////////////////
-			//////////////////////  DETECT A CLAP  ///////////////////////
-			//////////////////////////////////////////////////////////////
-//			if (Vector3.Dot (normal0, normal1) < -.6) {
-			Vector3 distance = hands [0].GetPalmPosition () - hands [1].GetPalmPosition ();
-			if (distance.magnitude < .09 && flamethrowerChargeLevel >= numFireballsForFlamethrower) {
-//					game.clapAttack (playerLogic.transform.position + new Vector3 (0.0f, 0.7f, 0.0f));
-
-				if (!firstFlameThrowerActivated)
-				{
-					firstFlameThrowerActivated = true;
-					source.PlayOneShot(faceHandsToEnemiesExplanation);
-				}
-				flamethrowersActive = true;
-				StartCoroutine(flamethrowerCooldown());
-				clapAttack.releaseFunction (hands);
-			}
-//			}
-
-			if (flamethrowersActive) clapAttack.holdGestureFunction(hands);
-			//////////////////////////////////////////////////////////////
-			//////////////////////  DETECT A PUSH AWAY  //////////////////
-			//////////////////////////////////////////////////////////////
-			if (Mathf.Abs (Vector3.Dot (normal0, normal1)) > .8) {
-				// Do push attack
-
-			} else {
-				isChargingAttack = false;
-			}
-		} else {
-			clapAttack.inactiveFunction();
-			handFlipAttack.inactiveFunction();
-			fistAttack.inactiveFunction();
-			fireballCharged = false;
-			handWasFist = false;
-			isChargingAttack = false;
-			isCircle = false;
-			makingAFist = false; 
-		}
-	}
-
-	public void headShotAchieved()
-	{
-		if (flamethrowerChargeLevel < flameThrowerChargeCounters.transform.childCount)
-		{
-			// Set the appropriate charge active
-			GameObject flameThrowerCharge = flameThrowerChargeCounters.transform.GetChild(flamethrowerChargeLevel).gameObject;
-			flameThrowerCharge.SetActive(true);
-		}
-
-		flamethrowerChargeLevel++;
-		print ("Charge level: " + flamethrowerChargeLevel);
-		source.PlayOneShot (headshotSound);
-
-	}
-		
-
-	IEnumerator flamethrowerCooldown()
-	{
-		yield return new WaitForSeconds (flamethrowerTimeframe);
-		deactivateFlameThrowers ();
-	}
-
-	public void deactivateFlameThrowers()
-	{
-		flamethrowersActive = false;
-		clapAttack.inactiveFunction ();
-		flamethrowerChargeLevel = 0;
-		
-		// Disable all flame thrower charges on the UI
-		for (int chargeIndex = 0; chargeIndex < flameThrowerChargeCounters.transform.childCount; chargeIndex++) 
-		{
-			GameObject flameThrowerCharge = flameThrowerChargeCounters.transform.GetChild(chargeIndex).gameObject;
-			flameThrowerCharge.SetActive(false);
-		}
-	}
 
 
-	IEnumerator attackSelectionCooldown()
-	{
-		yield return new WaitForSeconds (1.0f);
-		selectingAttack = false;
-	}
 
-	/// <summary>
-	/// Checks the fist.
-	/// </summary>
-	/// <returns><c>true</c>, if fist was checked, <c>false</c> otherwise.</returns>
-	/// <param name="hand">Hand.</param>
-	private bool checkFist(Hand hand)
-	{
-		float sum = 0;
-		for (int i = 0; i < hand.Fingers.Count; i++) 
-		{
-			Finger f = hand.Fingers[i];
-			if (f.Type() == Finger.FingerType.TYPE_THUMB) continue;
-			Vector meta = f.Bone(Bone.BoneType.TYPE_METACARPAL).Direction;
-			Vector proxi = f.Bone(Bone.BoneType.TYPE_PROXIMAL).Direction;
-			Vector inter = f.Bone(Bone.BoneType.TYPE_INTERMEDIATE).Direction;
-			float dMetaProxi = meta.Dot(proxi);
-			float dProxiInter = proxi.Dot(inter);
-			sum += dMetaProxi;
-			sum += dProxiInter;
-		}
-		sum = sum/8;
-//		print("sum = " + sum);
-		if(sum <= minVal && getExtendedFingers(hand)== 0)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
 
-	private int getExtendedFingers(Hand h)
-	{
-		int extendedFingers = 0;
-		for(int i=0;i <h.Fingers.Count;i++)
-		{
-			Finger finger = h.Fingers[i];
-			if(finger.Type() == Finger.FingerType.TYPE_THUMB) continue;
-			if(finger.IsExtended) extendedFingers++;
-		}
-		return extendedFingers;
-	}
 
-}
+
