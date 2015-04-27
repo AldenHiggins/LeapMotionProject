@@ -331,6 +331,8 @@ public class GameLogic : MonoBehaviour
 	{
 		hmdMovement.enabled = false;
 		mainGameMusic.Pause ();
+		defensivePhaseMusic.Pause();
+		defensivePhaseMusic.mute = true;
 		StopCoroutine (roundFunction ());
 //		endRoundScreen.disableUI();
 		endRoundScreen.enabled = false;
