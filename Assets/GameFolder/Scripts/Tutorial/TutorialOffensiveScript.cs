@@ -59,6 +59,7 @@ public class TutorialOffensiveScript : MonoBehaviour
 		fistZombieKilled = false;
 
 		StartCoroutine (beginTutorial ());
+		//StartCoroutine (beginEnemiesTutorial ());
 		StartCoroutine (activateOffensiveAbilities ());
 	
 	}
@@ -133,7 +134,8 @@ public class TutorialOffensiveScript : MonoBehaviour
 
 	IEnumerator beginEnemiesTutorial()
 	{
-		offense.handFlipAttack = offense.alwaysFireballAttack;;
+		offense.handFlipAttack = offense.alwaysFireballAttack;
+		activateOffense = true;
 		
 		handFlipGesture.SetActive (false);
 		handFistGesture.SetActive (false);
@@ -178,7 +180,7 @@ public class TutorialOffensiveScript : MonoBehaviour
 
 		GameObject[] spawnedZombies = GameObject.FindGameObjectsWithTag("Zombie");
 		foreach (GameObject toDestroy in spawnedZombies) {
-			if (toDestroy.name != "Zombie(Clone)") continue;
+			if (toDestroy.name != "RootMotionZombie(Clone)") continue;
 			GameObject.Destroy(toDestroy);
 		}
 
