@@ -130,6 +130,11 @@ public class OffensiveAbilities : MonoBehaviour
 			clapAttack.inactiveFunction();
 			handFlipAttack.inactiveFunction();
 			fistAttack.inactiveFunction();
+			fireballCharged = false;
+			handWasFist = false;
+			isChargingAttack = false;
+			isCircle = false;
+			makingAFist = false; 
 		}
 	}
 
