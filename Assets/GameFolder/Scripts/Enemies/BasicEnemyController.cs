@@ -317,6 +317,7 @@ public class BasicEnemyController : MonoBehaviour
 
 	public void slowDown()
 	{
+		print ("slowing down");
 		if (usesRootMotion)
 		{
 			StopCoroutine(slowRootMotion());
