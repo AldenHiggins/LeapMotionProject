@@ -23,7 +23,7 @@ public class PlayerLogic : MonoBehaviour
 	public int startingPlayerCurrency;
 
 	// PLAYER HEALTH TEXTURE
-	public GameObject healthTexture;
+	public GameObject healthTextureArray;
 
 	// Use this for initialization
 	void Start () 
@@ -84,10 +84,21 @@ public class PlayerLogic : MonoBehaviour
 //			Material healthMaterial = healthTexture.GetComponent<Material>();
 //			healthMaterial.SetColor();
 
-			Color color = healthTexture.GetComponent<Renderer>().material.color;
-			float newAlpha = (float)health / 100.0f;
-			color.a = 1.0f - newAlpha;
-			healthTexture.GetComponent<Renderer>().material.color = color;
+			for (int healthIndex = 0; healthIndex < healthTextureArray.transform.childCount; healthIndex++)
+			{
+				GameObject healthTexture = healthTextureArray.transform.GetChild (healthIndex).gameObject;
+				healthTexture.SetActive(false);
+			}
+
+			float healthLevel = health / 100.0f;
+			healthLevel = 1 - healthLevel;
+
+			int healthTextureChosen = (int)(healthLevel * 5);
+
+			GameObject displayThisHealth = healthTextureArray.transform.GetChild (healthTextureChosen).gameObject;
+			displayThisHealth.SetActive(true);
+
+
 		}
 	}
 
@@ -147,9 +158,10 @@ public class PlayerLogic : MonoBehaviour
 	{
 		health = 100;
 
-		Color color = healthTexture.GetComponent<Renderer>().material.color;
-		float newAlpha = (float)health / 100.0f;
-		color.a = 1.0f - newAlpha;
-		healthTexture.GetComponent<Renderer>().material.color = color;
+		for (int healthIndex = 0; healthIndex < healthTextureArray.transform.childCount; healthIndex++)
+		{
+			GameObject healthTexture = healthTextureArray.transform.GetChild (healthIndex).gameObject;
+			healthTexture.SetActive(false);
+		}
 	}
 }

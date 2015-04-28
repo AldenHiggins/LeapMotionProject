@@ -96,7 +96,7 @@ public class BasicEnemyController : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-		if (health < 0)
+		if (health <= 0)
 			return;
 	
 		startingMoveCounter++;
@@ -264,7 +264,7 @@ public class BasicEnemyController : MonoBehaviour
 		{
 			yield return new WaitForSeconds(.1f);
 		}
-		yield return new WaitForSeconds (anim.GetCurrentAnimatorClipInfo(0)[0].clip.length);
+		yield return new WaitForSeconds (3.0f);
 		if (usesRagdoll)
 		{
 			Destroy (this.transform.parent.gameObject);
