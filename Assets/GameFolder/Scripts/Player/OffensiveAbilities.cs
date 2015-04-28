@@ -104,16 +104,19 @@ public class OffensiveAbilities : MonoBehaviour
 			Vector3 direction0 = (hands [0].GetPalmPosition () - handController.transform.position).normalized;
 			Vector3 normal0 = hands [0].GetPalmNormal ().normalized;
 		
-			if (hands[0].GetLeapHand().IsLeft)
-			{
-				checkHandFlip (normal0, ref fireballCharged, ref makingAFist);
-				checkHandFist (hands [0].GetLeapHand (), ref handWasFist, ref makingAFist, ref makingAFistTwo);
-			}
-			else
-			{
-				checkHandFlip (normal0, ref fireballChargedTwo, ref makingAFistTwo);
-				checkHandFist (hands [0].GetLeapHand (), ref handWasFistTwo, ref makingAFistTwo, ref makingAFist);
-			}
+			checkHandFlip (normal0, ref fireballCharged, ref makingAFist);
+			checkHandFist (hands [0].GetLeapHand (), ref handWasFist, ref makingAFist, ref makingAFistTwo);
+
+//			if (hands[0].GetLeapHand().IsLeft)
+//			{
+//				checkHandFlip (normal0, ref fireballCharged, ref makingAFist);
+//				checkHandFist (hands [0].GetLeapHand (), ref handWasFist, ref makingAFist, ref makingAFistTwo);
+//			}
+//			else
+//			{
+//				checkHandFlip (normal0, ref fireballChargedTwo, ref makingAFistTwo);
+//				checkHandFist (hands [0].GetLeapHand (), ref handWasFistTwo, ref makingAFistTwo, ref makingAFist);
+//			}
 
 
 			// Check for attacks with the second hand
@@ -123,16 +126,18 @@ public class OffensiveAbilities : MonoBehaviour
 				Vector3 normal1 = hands [1].GetPalmNormal ().normalized;
 
 
-				if (hands[1].GetLeapHand().IsLeft)
-				{
-					checkHandFlip (normal1, ref fireballCharged, ref makingAFist);
-					checkHandFist (hands [1].GetLeapHand (), ref handWasFist, ref makingAFist, ref makingAFistTwo);
-				}
-				else
-				{
-					checkHandFlip (normal1, ref fireballChargedTwo, ref makingAFistTwo);
-					checkHandFist (hands [1].GetLeapHand (), ref handWasFistTwo, ref makingAFistTwo, ref makingAFist);
-				}
+//				if (hands[1].GetLeapHand().IsLeft)
+//				{
+//					checkHandFlip (normal1, ref fireballCharged, ref makingAFist);
+//					checkHandFist (hands [1].GetLeapHand (), ref handWasFist, ref makingAFist, ref makingAFistTwo);
+//				}
+//				else
+//				{
+//					checkHandFlip (normal1, ref fireballChargedTwo, ref makingAFistTwo);
+//					checkHandFist (hands [1].GetLeapHand (), ref handWasFistTwo, ref makingAFistTwo, ref makingAFist);
+//				}
+				checkHandFlip (normal1, ref fireballChargedTwo, ref makingAFistTwo);
+				checkHandFist (hands [1].GetLeapHand (), ref handWasFistTwo, ref makingAFistTwo, ref makingAFist);
 
 				checkClap (hands);
 
@@ -201,7 +206,7 @@ public class OffensiveAbilities : MonoBehaviour
 		if (distance.magnitude < .09 && flamethrowerChargeLevel >= numFireballsForFlamethrower) {
 			if (!firstFlameThrowerActivated) {
 				firstFlameThrowerActivated = true;
-				source.PlayOneShot (faceHandsToEnemiesExplanation);
+//				source.PlayOneShot (faceHandsToEnemiesExplanation);
 			}
 			flamethrowersActive = true;
 			StartCoroutine (flamethrowerCooldown ());

@@ -54,7 +54,7 @@ public class FlameThrowerAttack : AAttack
 		flamethrowers [0].transform.parent = flameThrowerCenter.transform;
 		flamethrowers[0].transform.position = flameThrowerCenter.transform.position;
 		flamethrowers[0].transform.position += (positionOffset * flameThrowerCenter.transform.forward);
-		flamethrowers[0].transform.rotation = Quaternion.identity;
+		flamethrowers [0].transform.rotation = Quaternion.Euler (0.0f, 180.0f, 0.0f);
 		// Play the flamethrower sound
 		AudioSource source = flamethrowers [0].GetComponent<AudioSource> ();
 		source.PlayOneShot (flameThrowerNoise);
