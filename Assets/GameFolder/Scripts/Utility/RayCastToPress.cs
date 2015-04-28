@@ -21,7 +21,6 @@ public class RayCastToPress : MonoBehaviour
 
 		if (ray.collider != null) 
 		{
-			print ("Object hit: " + ray.collider.gameObject.name);
 			if (ray.collider.gameObject == buttonToTurnOn.gameObject)
 			{
 				timeHeld += Time.deltaTime;

@@ -72,51 +72,80 @@ public class OffensiveAbilities : MonoBehaviour
 	{
 		hands = handController.GetAllGraphicsHands ();
 
-		if (hands.Length > 0) {
+		if (hands.Length > 0) 
+		{
 			// Check to ignite hands if flamethrower is charged up	
-			if (flamethrowerChargeLevel >= numFireballsForFlamethrower && !flamethrowersActive) {
+			if (flamethrowerChargeLevel >= numFireballsForFlamethrower && !flamethrowersActive)
+			{
 				// Play an explanation the first time the user charges up
-				if (!firstFlameThrowerActive) {
+				if (!firstFlameThrowerActive) 
+				{
 					firstFlameThrowerActive = true;
 					source.PlayOneShot (clapToActivateFlameThrowerExplanation);
 				}
 				
-				for (int handIndex = 0; handIndex < hands.Length; handIndex++) {
+				for (int handIndex = 0; handIndex < hands.Length; handIndex++) 
+				{
 					GameObject hand = hands [handIndex].gameObject;
 					hand.transform.GetChild (1).GetChild (0).gameObject.SetActive (true);
 				}
-			} else {
-				for (int handIndex = 0; handIndex < hands.Length; handIndex++) {
+			}
+			else
+			{
+				for (int handIndex = 0; handIndex < hands.Length; handIndex++)
+				{
 					GameObject hand = hands [handIndex].gameObject;
 					hand.transform.GetChild (1).GetChild (0).gameObject.SetActive (false);
 				}
 			}
 
+
 			// Check for one handed attacks
 			Vector3 direction0 = (hands [0].GetPalmPosition () - handController.transform.position).normalized;
 			Vector3 normal0 = hands [0].GetPalmNormal ().normalized;
 		
-			checkHandFlip (normal0, ref fireballCharged, ref makingAFist);
-			checkHandFist (hands [0].GetLeapHand (), ref handWasFist, ref makingAFist, ref makingAFistTwo);
+			if (hands[0].GetLeapHand().IsLeft)
+			{
+				checkHandFlip (normal0, ref fireballCharged, ref makingAFist);
+				checkHandFist (hands [0].GetLeapHand (), ref handWasFist, ref makingAFist, ref makingAFistTwo);
+			}
+			else
+			{
+				checkHandFlip (normal0, ref fireballChargedTwo, ref makingAFistTwo);
+				checkHandFist (hands [0].GetLeapHand (), ref handWasFistTwo, ref makingAFistTwo, ref makingAFist);
+			}
+
 
 			// Check for attacks with the second hand
-			if (hands.Length > 1) {
+			if (hands.Length > 1)
+			{
 				Vector3 direction1 = (hands [1].GetPalmPosition () - handController.transform.position).normalized;
 				Vector3 normal1 = hands [1].GetPalmNormal ().normalized;
 
-				checkHandFlip (normal1, ref fireballChargedTwo, ref makingAFistTwo);
-				checkHandFist (hands [1].GetLeapHand (), ref handWasFistTwo, ref makingAFistTwo, ref makingAFist);
+
+				if (hands[1].GetLeapHand().IsLeft)
+				{
+					checkHandFlip (normal1, ref fireballCharged, ref makingAFist);
+					checkHandFist (hands [1].GetLeapHand (), ref handWasFist, ref makingAFist, ref makingAFistTwo);
+				}
+				else
+				{
+					checkHandFlip (normal1, ref fireballChargedTwo, ref makingAFistTwo);
+					checkHandFist (hands [1].GetLeapHand (), ref handWasFistTwo, ref makingAFistTwo, ref makingAFist);
+				}
+
 				checkClap (hands);
 
-				if (flamethrowersActive) {
+				if (flamethrowersActive)
+				{
 					clapAttack.holdGestureFunction (hands);
 				}
 			}
-		} else {
-			clapAttack.inactiveFunction ();
+		} 
+		else 
+		{
 			handFlipAttack.inactiveFunction ();
 			fistAttack.inactiveFunction ();
-
 
 			fireballCharged = false;
 			handWasFist = false;
@@ -226,13 +255,11 @@ public class OffensiveAbilities : MonoBehaviour
 
 		// Fire a fireball, .6 or more means the palm is facing away from the camera
 		if (Vector3.Dot (handNormal, thisCamera.transform.forward) > .6) {
-			if (fireballCharged) {
-				fireballCharged = false;
+			if (fireballCharge) {
+				fireballCharge = false;
 				// First check if the player has enough energy
-				print ("Checking for energy to fire fireball");
 				if (playerLogic.getEnergy () > 10) {
 					handFlipAttack.releaseFunction (hands);
-					print ("Firing fireball");
 //						flamethrowerChargeLevel++;
 					if (flamethrowerChargeLevel == numFireballsForFlamethrower) {
 						AudioSource source = (AudioSource)clapAttack.gameObject.GetComponent<AudioSource> ();
