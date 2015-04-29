@@ -176,6 +176,15 @@ public class MoveFireball : MonoBehaviour
 			if (shouldMoveEnemies)
 				enemy.applyForce(velocity * 20 + new Vector3(0.0f, 10.0f, 0.0f));
 
+			if (collisions[0].intersection.y > enemy.headshotHeight)
+			{
+				if (explodeOnContact)
+				{
+					Instantiate (explosion, collisions[0].intersection, Quaternion.identity);
+				}
+				offense.headShotAchieved();
+			}
+
 			// Check for headshots with zombies
 			if (enemy.usesRagdoll)
 			{
@@ -186,7 +195,7 @@ public class MoveFireball : MonoBehaviour
 					{
 						Instantiate (explosion, collisions[0].intersection, Quaternion.identity);
 					}
-					offense.headShotAchieved();
+
 				}
 			}
 			// Check for other enemies headshots

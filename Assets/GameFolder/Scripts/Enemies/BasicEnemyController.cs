@@ -3,21 +3,27 @@ using System.Collections;
 
 public class BasicEnemyController : MonoBehaviour 
 {
+	// GAME LOGIC
 	public GameLogic game;
+	// PLAYER
 	public PlayerLogic player;
+
+	// MONSTER CHARACTERISTICS
 	public float speed;
 	public int startingHealth;
 	public float attackRadius;
 	public int attackDamage;
 	public int currencyOnKill;
 	public int livesTakenOnGoalReached;
+	// HEADSHOTS
+	public float headshotHeight;
+
+	// NAV MESH AND PATH DEBUGGING
 	public bool showNavMeshPath;
-
 	public GameObject pathLine;
-
 	private GameObject thisPathLine;
 
-
+	// ANIMATOR
 	private Animator anim;
 	private int health;
 	private bool attacking;
@@ -46,9 +52,8 @@ public class BasicEnemyController : MonoBehaviour
 	public float ragdollForceFactor;
 	public GameObject ragDollCenterObject;
 	public bool usesRagdoll;
-
 	private bool isDying;
-
+	// TUTORIAL
 	public bool isTutorial;
 	public GameObject tutorialGoalTarget;
 
