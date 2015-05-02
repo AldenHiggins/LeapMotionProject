@@ -170,7 +170,6 @@ public class OffensiveAbilities : MonoBehaviour
 		}
 
 		flamethrowerChargeLevel++;
-		print ("Charge level: " + flamethrowerChargeLevel);
 		source.PlayOneShot (headshotSound);
 	}
 

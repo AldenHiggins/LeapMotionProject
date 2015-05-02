@@ -7,7 +7,6 @@ public class BasicEnemyController : MonoBehaviour
 	public GameLogic game;
 	// PLAYER
 	public PlayerLogic player;
-
 	// MONSTER CHARACTERISTICS
 	public float speed;
 	public int startingHealth;
@@ -17,17 +16,14 @@ public class BasicEnemyController : MonoBehaviour
 	public int livesTakenOnGoalReached;
 	// HEADSHOTS
 	public float headshotHeight;
-
 	// NAV MESH AND PATH DEBUGGING
 	public bool showNavMeshPath;
 	public GameObject pathLine;
 	private GameObject thisPathLine;
-
 	// ANIMATOR
 	private Animator anim;
 	private int health;
 	private bool attacking;
-
 	// MOVEMENT
 	private NavMeshAgent agent;
 	private GameObject target;
@@ -126,17 +122,8 @@ public class BasicEnemyController : MonoBehaviour
 //					gameObject.transform.GetChild(0).rotation = Quaternion.identity;
 				}
 
-//				if (!usesRootMotion)
-//				{
-//					if (agent.enabled == true && !agent.hasPath)
-////					{
-////						agent.SetDestination (target.transform.position);
-////						agent.updateRotation = true;
-////					}
-//					
-////					print ("position " + target.transform.position);
-//				}
-				if (agent.isActiveAndEnabled) {
+				if (agent.isActiveAndEnabled)
+				{
 					agent.Resume();
 					agent.SetDestination (target.transform.position);
 				} 
@@ -146,9 +133,6 @@ public class BasicEnemyController : MonoBehaviour
 					agent.Resume();
 					agent.SetDestination (target.transform.position);
 				}
-
-//				transform.position += velocity;
-//				rigidbody.AddForce (velocity, ForceMode.VelocityChange);
 			}
 		}
 		// If the player is in range attack him
@@ -178,15 +162,7 @@ public class BasicEnemyController : MonoBehaviour
 
 	IEnumerator attack()
 	{
-//		print ("Attacking");
 		anim.SetBool ("Attacking", true);
-//		while(!anim.GetCurrentAnimatorStateInfo(0).IsName("attack0"))
-//		{
-//			yield return new WaitForSeconds(.01f);
-//		}
-////		print ("Animation time: " + anim.GetCurrentAnimationClipState (0) [0].clip.length);
-//		yield return new WaitForSeconds (anim.GetCurrentAnimatorClipInfo(0)[0].clip.length - .1f);
-
 		// All enemies globally do damage after a second and a half
 		yield return new WaitForSeconds (1.5f);
 
@@ -249,7 +225,6 @@ public class BasicEnemyController : MonoBehaviour
 		{
 			yield return new WaitForSeconds(.1f);
 		}
-		print ("Restarting agent");
 		agent.enabled = true;
 //		rigidbody.isKinematic = true;
 	}
@@ -314,6 +289,7 @@ public class BasicEnemyController : MonoBehaviour
 		}
 	}
 
+	// Sets the navmeshAgent to use the animation's velocity (root motion)
 	void OnAnimatorMove()
 	{
 		if (agent != null)
@@ -353,18 +329,4 @@ public class BasicEnemyController : MonoBehaviour
 	{
 		return isDying;
 	}
-
-//	void OnAnimatorMove ()
-//	{
-//		//only perform if walking
-//		if (anim.GetCurrentAnimatorStateInfo(0).IsName("run"))
-//		{
-//			//set the navAgent's velocity to the velocity of the animation clip currently playing
-//			agent.velocity = anim.deltaPosition / Time.deltaTime;
-//			
-//			//set the rotation in the direction of movement
-//			transform.rotation = Quaternion.LookRotation(agent.desiredVelocity);
-//		}
-//	}
-
 }
