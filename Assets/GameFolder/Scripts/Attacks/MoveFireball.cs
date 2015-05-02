@@ -186,32 +186,16 @@ public class MoveFireball : MonoBehaviour
 			}
 
 			// Check for headshots with zombies
-			if (enemy.usesRagdoll)
+			if (collisions[0].intersection.y > enemy.headshotHeight)
 			{
-				if (collisions[0].intersection.y > 2)
+				if (explodeOnContact)
 				{
-					print ("HEADSHOT -- ZOMBIE!!");
-					if (explodeOnContact)
-					{
-						Instantiate (explosion, collisions[0].intersection, Quaternion.identity);
-					}
-
+					GameObject createdExplosion = (GameObject) Instantiate (explosion, collisions[0].intersection, Quaternion.identity);
+					createdExplosion.SetActive(true);
+					print (createdExplosion.name);
 				}
+				offense.headShotAchieved();
 			}
-			// Check for other enemies headshots
-			else
-			{
-				if (collisions[0].intersection.y > 2.5)
-				{
-					print ("HEADSHOT -- OGRE/GOLEM!!");
-					if (explodeOnContact)
-					{
-						Instantiate (explosion, collisions[0].intersection, Quaternion.identity);
-					}
-					offense.headShotAchieved();
-				}
-			}
-
 
 
 			enemy.dealDamage(damage);
