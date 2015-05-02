@@ -290,7 +290,7 @@ public class GameLogic : MonoBehaviour
 			isDefensiveStageActive = false;
 
 			// Change the hand flip attack to fireball
-			offensiveAbilities.handFlipAttack = fireballAttack;
+			offensiveAbilities.handFlipAttack = offensiveAbilities.uiHandFlipAttack;
 			offensiveAbilities.fistAttack = iceBallAttack;
 
 			// Start the next round, spawn enemies, wait for the timer

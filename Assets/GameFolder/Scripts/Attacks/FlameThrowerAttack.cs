@@ -58,8 +58,10 @@ public class FlameThrowerAttack : AAttack
 	
 	public override void holdGestureFunction(HandModel[] hands)
 	{
+		print ("Holding flamethrower");
 		if (flamethrowers [0] == null || flamethrowers[1] == null)
 			return;
+		print ("Flamethrowers weren't null");
 		if (hands.Length > 0)
 		{
 			if (!flameThrowerParticle.activeSelf)
@@ -78,16 +80,16 @@ public class FlameThrowerAttack : AAttack
 	
 	public override void inactiveFunction()
 	{
-		if (flamethrowers [0] == null || flamethrowers[1] == null)
-			return;
-		MoveFireball fireball1 = (MoveFireball) flamethrowers[0].GetComponent (typeof(MoveFireball));
-		MoveFireball fireball2 = (MoveFireball) flamethrowers[1].GetComponent (typeof(MoveFireball));
-		fireball1.stopPeriodicDamage();
-		fireball2.stopPeriodicDamage();
-		
-		//		MoveFireball fireball = (MoveFireball) flameThrowerParticle.GetComponent (typeof(MoveFireball));
-		//		fireball.stopPeriodicDamage();
-		flamethrowers[0].SetActive (false);
-		flamethrowers[1].SetActive (false);
+//		if (flamethrowers [0] == null || flamethrowers[1] == null)
+//			return;
+//		MoveFireball fireball1 = (MoveFireball) flamethrowers[0].GetComponent (typeof(MoveFireball));
+//		MoveFireball fireball2 = (MoveFireball) flamethrowers[1].GetComponent (typeof(MoveFireball));
+//		fireball1.stopPeriodicDamage();
+//		fireball2.stopPeriodicDamage();
+//		
+//		//		MoveFireball fireball = (MoveFireball) flameThrowerParticle.GetComponent (typeof(MoveFireball));
+//		//		fireball.stopPeriodicDamage();
+//		flamethrowers[0].SetActive (false);
+//		flamethrowers[1].SetActive (false);
 	}
 }

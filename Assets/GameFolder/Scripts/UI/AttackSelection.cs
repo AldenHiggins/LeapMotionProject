@@ -48,7 +48,7 @@ public class AttackSelection : MonoBehaviour
 		// Check if the given button is a chosen attack
 		for (int i = 0; i < transform.GetChild (0).childCount; i++)
 		{
-			chosenAttacks[i] = (ButtonDemoToggle) transform.GetChild (0).GetChild(i).GetChild(1).gameObject.GetComponent(typeof(ButtonDemoToggle));
+			chosenAttacks[i] = (ButtonDemoToggle) transform.GetChild (0).GetChild(i).GetChild(2).gameObject.GetComponent(typeof(ButtonDemoToggle));
 			if (attackToCheck == chosenAttacks[i])
 			{
 				return true;
@@ -62,6 +62,7 @@ public class AttackSelection : MonoBehaviour
 		// Chosen attack was highlighted
 		if (isButtonChosenAttack(pressedAttackButton))
 		{
+			print ("Chosen attack was highlighted");
 			if (attackChoice == null)
 			{
 				pressedAttackButton.ButtonTurnsOff();
@@ -97,11 +98,11 @@ public class AttackSelection : MonoBehaviour
 				// Now change the respsective attack in offensive abilities
 				if (modifiedAttackIndex == 0)
 				{
-					offense.handFlipAttack = (AAttack) copiedNewAttack.GetComponent(typeof(AAttack));
+					offense.uiHandFlipAttack = (AAttack) copiedNewAttack.GetComponent(typeof(AAttack));
 				}
 				else if (modifiedAttackIndex == 1)
 				{
-					offense.fistAttack = (AAttack) copiedNewAttack.GetComponent(typeof(AAttack));
+					offense.uiHandFistAttack = (AAttack) copiedNewAttack.GetComponent(typeof(AAttack));
 				}
 				else if (modifiedAttackIndex == 2)
 				{
@@ -124,34 +125,16 @@ public class AttackSelection : MonoBehaviour
 				attackChoice.ButtonTurnsOff();
 				attackChoice = null;
 			}
-
-
-
-//			chosenAttack = pressedAttackButton;
-//			print ("Chosen attack!");
-//			// Iterate through all other attacks and disable them
-//			for (int i = 0; i < transform.GetChild (0).childCount; i++)
-//			{
-//				chosenAttacks[i] = (ButtonDemoToggle) transform.GetChild (0).GetChild(i).GetChild(1).gameObject.GetComponent(typeof(ButtonDemoToggle));
-//				if (chosenAttack == chosenAttacks[i])
-//				{
-//					print ("Found the right one: " + i);
-//				}
-//				else
-//				{
-//					chosenAttacks[i].ButtonTurnsOff();
-//				}
-//			}
 		}
 		// Attack choice was highlighted
 		else
 		{
 			attackChoice = pressedAttackButton;
-			print ("Attack choice!");
+			print (transform.GetChild(1).childCount);
 			// Iterate through all other attacks and disable them
 			for (int i = 0; i < transform.GetChild (1).childCount; i++)
 			{
-				attackChoices[i] = (ButtonDemoToggle) transform.GetChild (1).GetChild(i).GetChild(1).gameObject.GetComponent(typeof(ButtonDemoToggle));
+				attackChoices[i] = (ButtonDemoToggle) transform.GetChild (1).GetChild(i).GetChild(2).gameObject.GetComponent(typeof(ButtonDemoToggle));
 				if (attackChoice == attackChoices[i])
 				{
 					print ("Found the right one: " + i);

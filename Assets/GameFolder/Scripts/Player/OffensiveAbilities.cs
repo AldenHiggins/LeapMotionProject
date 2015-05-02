@@ -31,6 +31,10 @@ public class OffensiveAbilities : MonoBehaviour
 	public AAttack emptyAttack;
 	public AAttack alwaysFireballAttack;
 	public AAttack alwaysIceballAttack;
+	// ATTACKS SET BY THE UI
+	public AAttack uiHandFlipAttack;
+	public AAttack uiHandFistAttack;
+
 	// DEFENSIVE ABILITIES
 	private DefensiveAbilities defense;
 	private bool fireballCharged = false;
@@ -240,52 +244,44 @@ public class OffensiveAbilities : MonoBehaviour
 	public void checkHandFlip (Vector3 handNormal, ref bool fireballCharge, ref bool makingAFistInput)
 	{	
 		//  Charge a fist attack, -.6 or less means the palm is facing the camera
-		if (Vector3.Dot (handNormal, thisCamera.transform.forward) < -.6) {
+		if (Vector3.Dot (handNormal, thisCamera.transform.forward) < -.6) 
+		{
 			handFlipAttack.chargingFunction (hands);
 			
-			if (!makingAFist && !makingAFistTwo) {
-				if (!fireballCharge) {
+			if (!makingAFist && !makingAFistTwo)
+			{
+				if (!fireballCharge) 
+				{
 					fireballCharge = true;
 					handFlipAttack.chargedFunction (hands);
 					fistAttack.inactiveFunction ();
 				}
-			} else {
+			} 
+			else
+			{
 				handFlipAttack.inactiveFunction ();
 			}
-		} else {
+		} 
+		else
+		{
 			handFlipAttack.inactiveFunction ();
 		}
 
 		// Fire a fireball, .6 or more means the palm is facing away from the camera
-		if (Vector3.Dot (handNormal, thisCamera.transform.forward) > .6) {
-			if (fireballCharge) {
+		if (Vector3.Dot (handNormal, thisCamera.transform.forward) > .6)
+		{
+			if (fireballCharge) 
+			{
 				fireballCharge = false;
 				// First check if the player has enough energy
-				if (playerLogic.getEnergy () > 10) {
+				if (playerLogic.getEnergy () > 10) 
+				{
 					handFlipAttack.releaseFunction (hands);
-//						flamethrowerChargeLevel++;
-					if (flamethrowerChargeLevel == numFireballsForFlamethrower) {
+					if (flamethrowerChargeLevel == numFireballsForFlamethrower) 
+					{
 						AudioSource source = (AudioSource)clapAttack.gameObject.GetComponent<AudioSource> ();
 						if (source != null)
 							source.Play ();
-					}
-				}
-			}
-		}
-		
-		// Release a fist attack, .6 or more means the palm is facing away from the camera
-		if (Vector3.Dot (handNormal, thisCamera.transform.forward) > .6) {
-			if (fireballCharge) {
-				fireballCharge = false;
-				// First check if the player has enough energy
-				if (playerLogic.getEnergy () > 10) {
-					handFlipAttack.releaseFunction (hands);
-					//						flamethrowerChargeLevel++;
-					if (flamethrowerChargeLevel == numFireballsForFlamethrower) {
-						AudioSource source = (AudioSource)clapAttack.gameObject.GetComponent<AudioSource> ();
-						if (source != null) {
-							source.Play ();
-						}
 					}
 				}
 			}
