@@ -34,7 +34,7 @@ public class SwordAttack : AAttack
 	{
 		swordObject.transform.position = hands [0].GetPalmPosition();
 		swordObject.transform.rotation = hands [0].GetPalmRotation();
-		swordObject.transform.RotateAround (swordObject.transform.position, new Vector3(0.0f, 0.0f, 1.0f), 90);
+		swordObject.transform.RotateAround (swordObject.transform.position, new Vector3(0.0f, 0.0f, 1.0f), 270);
 		swordObject.transform.position += swordObject.transform.rotation * new Vector3 (0.0f, swordYOffset, 0.0f);
 	}
 	
@@ -42,7 +42,7 @@ public class SwordAttack : AAttack
 	{
 		swordObject.transform.position = hands [0].GetPalmPosition();
 		swordObject.transform.rotation = hands [0].GetPalmRotation();
-		swordObject.transform.RotateAround (swordObject.transform.position, new Vector3(0.0f, 0.0f, 1.0f), 90);
+		swordObject.transform.RotateAround (swordObject.transform.position, new Vector3(0.0f, 0.0f, 1.0f), 270);
 		swordObject.transform.position += swordObject.transform.rotation * new Vector3 (0.0f, swordYOffset, 0.0f);
 	}
 	
