@@ -61,8 +61,8 @@ public class TutorialGameplayIntro : MonoBehaviour
 			newGesture.SetActive (true);
 		if (switchToFist)
 		{
-			offense.fistAttack = offense.handFlipAttack;
-			offense.handFlipAttack = offense.circularHandAttack;
+//			offense.fistAttack = offense.handFlipAttack;
+//			offense.handFlipAttack = offense.circularHandAttack;
 		}
 			
 		
@@ -81,13 +81,13 @@ public class TutorialGameplayIntro : MonoBehaviour
 
 		if (enableTurretPlacementSpots)
 		{
-			offense.handFlipAttack = defense.placeTurretAttack;
+//			offense.handFlipAttack = defense.placeTurretAttack;
 			//turretPlacementSpoots.SetActive(true);
 		}
 
 		if (activateOilSlicks)
 		{
-			offense.fistAttack = defense.placeOilSlickAttack;
+//			offense.fistAttack = defense.placeOilSlickAttack;
 		}
 
 		yield return new WaitForSeconds (thirdMessageTime);

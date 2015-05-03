@@ -104,10 +104,6 @@ public class AttackSelection : MonoBehaviour
 				{
 					offense.uiHandFistAttack = (AAttack) copiedNewAttack.GetComponent(typeof(AAttack));
 				}
-				else if (modifiedAttackIndex == 2)
-				{
-					offense.circularHandAttack = (AAttack) copiedNewAttack.GetComponent(typeof(AAttack));
-				}
 
 				// Now change the icon in the in game UI
 				GameObject oldAttackIcon = inGameAttackBarUI.transform.GetChild(modifiedAttackIndex).GetChild(0).gameObject;

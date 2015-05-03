@@ -253,16 +253,25 @@ public class GameLogic : MonoBehaviour
 			// Start defensive setup phase
 			isDefensiveStageActive = true;
 			turretHud.SetActive(true);
-
-			offensiveAbilities.handFlipAttack = emptyAttack;
-			offensiveAbilities.fistAttack = emptyAttack;
+			// Disable abilities during the change spells/end round screen
+			offensiveAbilities.rightHandFlipAttack = offensiveAbilities.emptyAttack;
+			offensiveAbilities.leftHandFlipAttack = offensiveAbilities.emptyAttack;
+			offensiveAbilities.rightHandFistAttack = offensiveAbilities.emptyAttack;
+			offensiveAbilities.leftHandFistAttack = offensiveAbilities.emptyAttack;
+//			offensiveAbilities.handFlipAttack = emptyAttack;
+//			offensiveAbilities.fistAttack = emptyAttack;
 			defensiveAbilities.updateDefencesCostText();
 			// Wait a couple of seconds for the player to readjust.
 			yield return new WaitForSeconds(1.5f);
 	
-			//defensiveAbilities.showHideTurretPositions(true);
-			offensiveAbilities.handFlipAttack = placeBallistaAttack;
-			offensiveAbilities.fistAttack = placeOilSlickAttack;
+			//Activate defensive abilities
+			offensiveAbilities.rightHandFlipAttack = offensiveAbilities.rightHandDefensiveFlip;
+			offensiveAbilities.leftHandFlipAttack = offensiveAbilities.leftHandDefensiveFlip;
+			offensiveAbilities.rightHandFistAttack = offensiveAbilities.rightHandDefensiveFist;
+			offensiveAbilities.leftHandFistAttack = offensiveAbilities.leftHandDefensiveFist;
+
+//			offensiveAbilities.handFlipAttack = placeBallistaAttack;
+//			offensiveAbilities.fistAttack = placeOilSlickAttack;
 
 			// Enable HMD movement and reset position if enabled
 			if(!disableMovement)
@@ -281,17 +290,23 @@ public class GameLogic : MonoBehaviour
 				yield return new WaitForSeconds(.2f);
 			}
 
-			offensiveAbilities.handFlipAttack.inactiveFunction();
-			offensiveAbilities.fistAttack.inactiveFunction();
+			offensiveAbilities.rightHandFlipAttack.inactiveFunction();
+			offensiveAbilities.leftHandFlipAttack.inactiveFunction();
+			offensiveAbilities.rightHandFistAttack.inactiveFunction();
+			offensiveAbilities.leftHandFistAttack.inactiveFunction();
+//			offensiveAbilities.fistAttack.inactiveFunction();
 			// Clean up defensive setup stuff
 			callForWaveButton.ButtonTurnsOff();
 			//defensiveAbilities.showHideTurretPositions(false);
 			turretHud.SetActive(false);
 			isDefensiveStageActive = false;
 
-			// Change the hand flip attack to fireball
-			offensiveAbilities.handFlipAttack = offensiveAbilities.uiHandFlipAttack;
-			offensiveAbilities.fistAttack = iceBallAttack;
+			// Change To the offensive abilities
+			offensiveAbilities.rightHandFlipAttack = offensiveAbilities.rightHandOffensiveFlip;
+			offensiveAbilities.leftHandFlipAttack = offensiveAbilities.leftHandOffensiveFlip;
+			offensiveAbilities.rightHandFistAttack = offensiveAbilities.rightHandOffensiveFist;
+			offensiveAbilities.leftHandFistAttack = offensiveAbilities.leftHandOffensiveFist;
+//			offensiveAbilities.fistAttack = iceBallAttack;
 
 			// Start the next round, spawn enemies, wait for the timer
 			defensivePhaseMusic.Pause();
@@ -340,8 +355,13 @@ public class GameLogic : MonoBehaviour
 //		endRoundScreen.disableUI();
 		endRoundScreen.enabled = false;
 		playerHud.SetActive (false);
-		offensiveAbilities.fistAttack = emptyAttack;
-		offensiveAbilities.handFlipAttack = emptyAttack;
+
+		offensiveAbilities.rightHandFlipAttack = offensiveAbilities.emptyAttack;
+		offensiveAbilities.leftHandFlipAttack = offensiveAbilities.emptyAttack;
+		offensiveAbilities.rightHandFistAttack = offensiveAbilities.emptyAttack;
+		offensiveAbilities.leftHandFistAttack = offensiveAbilities.emptyAttack;
+//		offensiveAbilities.fistAttack = emptyAttack;
+//		offensiveAbilities.handFlipAttack = emptyAttack;
 
 
 		// Now deactivate all active enemies

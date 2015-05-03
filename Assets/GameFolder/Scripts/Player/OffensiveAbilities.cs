@@ -9,31 +9,41 @@ public class OffensiveAbilities : MonoBehaviour
 	public GameObject thisCamera;
 	public HandController handController = null;
 
-	// PARTICLES
-	public GameObject psychicParticle;
 	// GAME LOGIC
 	private GameLogic game;
 	// INTERNAL VARIABLES
 	private Controller controller;
-	// SWIPE DETECTION
-	private float previousAmountHandIsOnRightSideOfScreen = 0;
 	// Min value for the fist dot product
 	private float minVal = 0.65f;
 	// ATTACK SELECTION
-	public AttackSelection attackSelector;
 	private bool selectingAttack = false;
 
 	// ATTACK CALLBACKS
-	public AAttack handFlipAttack;
-	public AAttack fistAttack;
-	public AAttack circularHandAttack;
+	public AAttack rightHandFlipAttack;
+	public AAttack rightHandFistAttack;
+
+	public AAttack leftHandFlipAttack;
+	public AAttack leftHandFistAttack;
+
 	public AAttack clapAttack;
 	public AAttack emptyAttack;
-	public AAttack alwaysFireballAttack;
-	public AAttack alwaysIceballAttack;
+
+	// right hand
+	public AAttack rightHandOffensiveFlip;
+	public AAttack rightHandOffensiveFist;
+	public AAttack rightHandDefensiveFlip;
+	public AAttack rightHandDefensiveFist;
+
+	// left hand
+	public AAttack leftHandOffensiveFlip;
+	public AAttack leftHandOffensiveFist;
+	public AAttack leftHandDefensiveFlip;
+	public AAttack leftHandDefensiveFist;
+
 	// ATTACKS SET BY THE UI
 	public AAttack uiHandFlipAttack;
 	public AAttack uiHandFistAttack;
+
 
 	// DEFENSIVE ABILITIES
 	private DefensiveAbilities defense;
@@ -108,19 +118,19 @@ public class OffensiveAbilities : MonoBehaviour
 			Vector3 direction0 = (hands [0].GetPalmPosition () - handController.transform.position).normalized;
 			Vector3 normal0 = hands [0].GetPalmNormal ().normalized;
 		
-			checkHandFlip (normal0, ref fireballCharged, ref makingAFist);
-			checkHandFist (hands [0].GetLeapHand (), ref handWasFist, ref makingAFist, ref makingAFistTwo);
+//			checkHandFlip (normal0, ref fireballCharged, ref makingAFist);
+//			checkHandFist (hands [0].GetLeapHand (), ref handWasFist, ref makingAFist, ref makingAFistTwo);
 
-//			if (hands[0].GetLeapHand().IsLeft)
-//			{
-//				checkHandFlip (normal0, ref fireballCharged, ref makingAFist);
-//				checkHandFist (hands [0].GetLeapHand (), ref handWasFist, ref makingAFist, ref makingAFistTwo);
-//			}
-//			else
-//			{
-//				checkHandFlip (normal0, ref fireballChargedTwo, ref makingAFistTwo);
-//				checkHandFist (hands [0].GetLeapHand (), ref handWasFistTwo, ref makingAFistTwo, ref makingAFist);
-//			}
+			if (hands[0].GetLeapHand().IsLeft)
+			{
+				checkHandFlip (normal0, ref fireballCharged, ref makingAFist, 0);
+				checkHandFist (hands [0].GetLeapHand (), ref handWasFist, ref makingAFist, ref makingAFistTwo, 0);
+			}
+			else
+			{
+				checkHandFlip (normal0, ref fireballChargedTwo, ref makingAFistTwo, 1);
+				checkHandFist (hands [0].GetLeapHand (), ref handWasFistTwo, ref makingAFistTwo, ref makingAFist, 1);
+			}
 
 
 			// Check for attacks with the second hand
@@ -130,18 +140,18 @@ public class OffensiveAbilities : MonoBehaviour
 				Vector3 normal1 = hands [1].GetPalmNormal ().normalized;
 
 
-//				if (hands[1].GetLeapHand().IsLeft)
-//				{
-//					checkHandFlip (normal1, ref fireballCharged, ref makingAFist);
-//					checkHandFist (hands [1].GetLeapHand (), ref handWasFist, ref makingAFist, ref makingAFistTwo);
-//				}
-//				else
-//				{
-//					checkHandFlip (normal1, ref fireballChargedTwo, ref makingAFistTwo);
-//					checkHandFist (hands [1].GetLeapHand (), ref handWasFistTwo, ref makingAFistTwo, ref makingAFist);
-//				}
-				checkHandFlip (normal1, ref fireballChargedTwo, ref makingAFistTwo);
-				checkHandFist (hands [1].GetLeapHand (), ref handWasFistTwo, ref makingAFistTwo, ref makingAFist);
+				if (hands[1].GetLeapHand().IsLeft)
+				{
+					checkHandFlip (normal1, ref fireballCharged, ref makingAFist, 0);
+					checkHandFist (hands [1].GetLeapHand (), ref handWasFist, ref makingAFist, ref makingAFistTwo, 0);
+				}
+				else
+				{
+					checkHandFlip (normal1, ref fireballChargedTwo, ref makingAFistTwo, 1);
+					checkHandFist (hands [1].GetLeapHand (), ref handWasFistTwo, ref makingAFistTwo, ref makingAFist, 1);
+				}
+//				checkHandFlip (normal1, ref fireballChargedTwo, ref makingAFistTwo);
+//				checkHandFist (hands [1].GetLeapHand (), ref handWasFistTwo, ref makingAFistTwo, ref makingAFist);
 
 				checkClap (hands);
 
@@ -153,7 +163,8 @@ public class OffensiveAbilities : MonoBehaviour
 		} else {
 			//clapAttack.inactiveFunction ();
 //			handFlipAttack.inactiveFunction ();
-			fistAttack.inactiveFunction ();
+			rightHandFistAttack.inactiveFunction ();
+			leftHandFistAttack.inactiveFunction ();
 
 			fireballCharged = false;
 			handWasFist = false;
@@ -218,53 +229,130 @@ public class OffensiveAbilities : MonoBehaviour
 	}
 
 	// Logic to check for fists
-	public void checkHandFist (Hand handInput, ref bool handWasFistInput, ref bool makingAFistInput, ref bool otherMakingAFist)
+	public void checkHandFist (Hand handInput, ref bool handWasFistInput, ref bool makingAFistInput, ref bool otherMakingAFist, int handLeftOrRight)
 	{
 		bool handIsFist = checkFistHelper (handInput);
 		if (handIsFist) {
 			if (!handWasFistInput) {
 				handWasFistInput = true;
-				fistAttack.chargedFunction (hands);
+				// Check for left handed fist attack
+				if (handLeftOrRight == 0)
+				{
+					leftHandFistAttack.chargedFunction (hands);
+					leftHandFlipAttack.inactiveFunction();
+				}
+				// Right handed fist attack
+				else
+				{
+					rightHandFistAttack.chargedFunction (hands);
+					rightHandFlipAttack.inactiveFunction();
+				}
 				makingAFistInput = true;
-				handFlipAttack.inactiveFunction ();
 			}
-			fistAttack.holdGestureFunction (hands);
+
+			if (handLeftOrRight == 0)
+			{
+				leftHandFistAttack.holdGestureFunction (hands);
+			}
+			// Right handed fist attack
+			else
+			{
+				rightHandFistAttack.holdGestureFunction (hands);
+			}
 		} else if (!handIsFist && handWasFistInput) {
 			handWasFistInput = false;
 			makingAFistInput = false;
-			fistAttack.releaseFunction (hands);
+			if (handLeftOrRight == 0)
+			{
+				leftHandFistAttack.releaseFunction (hands);
+			}
+			// Right handed fist attack
+			else
+			{
+				rightHandFistAttack.releaseFunction (hands);
+			}
+//			fistAttack.releaseFunction (hands);
 		} else if (!handIsFist && !handWasFistInput) {
 			if (!otherMakingAFist) {
-				fistAttack.inactiveFunction ();	
+				if (handLeftOrRight == 0)
+				{
+					leftHandFistAttack.inactiveFunction ();
+				}
+				// Right handed fist attack
+				else
+				{
+					rightHandFistAttack.inactiveFunction ();
+				}
+//				fistAttack.inactiveFunction ();	
 			}
 		}
 	}
 
 	// Check if the inputted hand is performing a flip attack
-	public void checkHandFlip (Vector3 handNormal, ref bool fireballCharge, ref bool makingAFistInput)
+	public void checkHandFlip (Vector3 handNormal, ref bool fireballCharge, ref bool makingAFistInput, int handLeftOrRight)
 	{	
 		//  Charge a fist attack, -.6 or less means the palm is facing the camera
 		if (Vector3.Dot (handNormal, thisCamera.transform.forward) < -.6) 
 		{
-			handFlipAttack.chargingFunction (hands);
+			if (handLeftOrRight == 0)
+			{
+				leftHandFlipAttack.chargingFunction (hands);
+			}
+			// Right handed fist attack
+			else
+			{
+				rightHandFlipAttack.chargingFunction (hands);
+			}
+//			handFlipAttack.chargingFunction (hands);
 			
 			if (!makingAFist && !makingAFistTwo)
 			{
 				if (!fireballCharge) 
 				{
 					fireballCharge = true;
-					handFlipAttack.chargedFunction (hands);
-					fistAttack.inactiveFunction ();
+
+					if (handLeftOrRight == 0)
+					{
+						leftHandFlipAttack.chargedFunction (hands);
+						leftHandFistAttack.inactiveFunction();
+					}
+					// Right handed fist attack
+					else
+					{
+						rightHandFlipAttack.chargedFunction (hands);
+						rightHandFistAttack.inactiveFunction();
+					}
+//					handFlipAttack.chargedFunction (hands);
+//					fistAttack.inactiveFunction ();
 				}
 			} 
 			else
 			{
-				handFlipAttack.inactiveFunction ();
+				if (handLeftOrRight == 0)
+				{
+					leftHandFlipAttack.inactiveFunction ();
+				}
+				// Right handed fist attack
+				else
+				{
+					rightHandFlipAttack.inactiveFunction ();
+				}
+
+//				handFlipAttack.inactiveFunction ();
 			}
 		} 
 		else
 		{
-			handFlipAttack.inactiveFunction ();
+			if (handLeftOrRight == 0)
+			{
+				leftHandFlipAttack.inactiveFunction ();
+			}
+			// Right handed fist attack
+			else
+			{
+				rightHandFlipAttack.inactiveFunction ();
+			}
+//			handFlipAttack.inactiveFunction ();
 		}
 
 		// Fire a fireball, .6 or more means the palm is facing away from the camera
@@ -276,7 +364,16 @@ public class OffensiveAbilities : MonoBehaviour
 				// First check if the player has enough energy
 				if (playerLogic.getEnergy () > 10) 
 				{
-					handFlipAttack.releaseFunction (hands);
+					if (handLeftOrRight == 0)
+					{
+						leftHandFlipAttack.releaseFunction (hands);
+					}
+					// Right handed fist attack
+					else
+					{
+						rightHandFlipAttack.releaseFunction (hands);
+					}
+//					handFlipAttack.releaseFunction (hands);
 					if (flamethrowerChargeLevel == numFireballsForFlamethrower) 
 					{
 						AudioSource source = (AudioSource)clapAttack.gameObject.GetComponent<AudioSource> ();
@@ -285,7 +382,16 @@ public class OffensiveAbilities : MonoBehaviour
 					}
 				}
 			}
-			handFlipAttack.holdGestureFunction (hands);
+			if (handLeftOrRight == 0)
+			{
+				leftHandFlipAttack.holdGestureFunction (hands);
+			}
+			// Right handed fist attack
+			else
+			{
+				rightHandFlipAttack.holdGestureFunction (hands);
+			}
+//			handFlipAttack.holdGestureFunction (hands);
 		}
 	}
 

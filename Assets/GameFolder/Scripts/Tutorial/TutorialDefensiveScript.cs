@@ -65,8 +65,8 @@ public class TutorialDefensiveScript : MonoBehaviour {
 	
 	IEnumerator startTutorial()
 	{
-		offense.handFlipAttack = offense.emptyAttack;
-		offense.fistAttack = offense.emptyAttack;
+//		offense.handFlipAttack = offense.emptyAttack;
+//		offense.fistAttack = offense.emptyAttack;
 
 		displayMessage.text = "Now we will introduce the \n defensive phase. \n Use the hand flip attack \n to place a turret";
 		audio.clip = ballistasAudio;
@@ -85,7 +85,7 @@ public class TutorialDefensiveScript : MonoBehaviour {
 		handFlipGesture.SetActive (false);
 
 		//offense.circularHandAttack = offense.handFlipAttack;
-		offense.handFlipAttack = defense.placeTurretAttack;
+//		offense.handFlipAttack = defense.placeTurretAttack;
 
 		while (true) {
 			GameObject[] placedBallistas = GameObject.FindGameObjectsWithTag("Ballista");
@@ -147,7 +147,8 @@ public class TutorialDefensiveScript : MonoBehaviour {
 		yield return new WaitForSeconds (5.0f);
 
 		displayMessage.text = "First, close your hand \n into a fist and look where \n you want to place the \n oil slick.";
-		offense.fistAttack = defense.placeOilSlickAttack;
+		// TODO: 
+//		offense.fistAttack = defense.placeOilSlickAttack;
 
 		yield return new WaitForSeconds (5.0f);
 
@@ -233,10 +234,10 @@ public class TutorialDefensiveScript : MonoBehaviour {
 
 		handFlipGesture.SetActive (false);
 
-		offense.fistAttack.inactiveFunction ();
-		offense.fistAttack = offense.emptyAttack;
-		offense.handFlipAttack.inactiveFunction ();
-		offense.handFlipAttack = offense.emptyAttack;
+//		offense.fistAttack.inactiveFunction ();
+//		offense.fistAttack = offense.emptyAttack;
+//		offense.handFlipAttack.inactiveFunction ();
+//		offense.handFlipAttack = offense.emptyAttack;
 
 	}
 
@@ -274,7 +275,7 @@ public class TutorialDefensiveScript : MonoBehaviour {
 		print ("ballistaKilledZombie() function called.");
 		if (ballistaHasKilled == false) {
 			ballistaHasKilled = true;
-			offense.handFlipAttack = offense.emptyAttack;
+//			offense.handFlipAttack = offense.emptyAttack;
 
 			StartCoroutine (beginOilSlickTutorial ());
 		}

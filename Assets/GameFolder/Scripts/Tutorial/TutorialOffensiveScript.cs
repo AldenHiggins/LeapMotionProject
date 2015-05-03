@@ -72,7 +72,8 @@ public class TutorialOffensiveScript : MonoBehaviour
 		audio.Play();
 		yield return new WaitForSeconds(audio.clip.length/2);
 
-		offense.handFlipAttack = offense.alwaysFireballAttack;
+		// TODO: FIX THIS
+//		offense.handFlipAttack = offense.alwaysFireballAttack;
 
 		displayMessage.text = "Keep your hand in one place \n and rotate it \n just like the example.";
 		
@@ -108,8 +109,9 @@ public class TutorialOffensiveScript : MonoBehaviour
 
 	IEnumerator beginFistTutorial()
 	{
-		offense.fistAttack = offense.alwaysIceballAttack;
-		offense.handFlipAttack = offense.emptyAttack;;
+		// TODO: Fix this to fix the tutorial
+//		offense.fistAttack = offense.alwaysIceballAttack;
+//		offense.handFlipAttack = offense.emptyAttack;;
 		
 		handFlipGesture.SetActive (false);
 		handFistGesture.SetActive (true);
@@ -134,7 +136,8 @@ public class TutorialOffensiveScript : MonoBehaviour
 
 	IEnumerator beginEnemiesTutorial()
 	{
-		offense.handFlipAttack = offense.alwaysFireballAttack;
+		// TODO: FIx this
+//		offense.handFlipAttack = offense.alwaysFireballAttack;
 		activateOffense = true;
 		
 		handFlipGesture.SetActive (false);
@@ -175,8 +178,8 @@ public class TutorialOffensiveScript : MonoBehaviour
 		
 		yield return new WaitForSeconds (audio.clip.length);
 
-		offense.handFlipAttack = offense.emptyAttack;
-		offense.fistAttack = offense.emptyAttack;
+//		offense.handFlipAttack = offense.emptyAttack;
+//		offense.fistAttack = offense.emptyAttack;
 
 		GameObject[] spawnedZombies = GameObject.FindGameObjectsWithTag("Zombie");
 		foreach (GameObject toDestroy in spawnedZombies) {
