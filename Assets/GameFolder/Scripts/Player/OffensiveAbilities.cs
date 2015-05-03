@@ -152,7 +152,7 @@ public class OffensiveAbilities : MonoBehaviour
 			}
 		} else {
 			//clapAttack.inactiveFunction ();
-			handFlipAttack.inactiveFunction ();
+//			handFlipAttack.inactiveFunction ();
 			fistAttack.inactiveFunction ();
 
 			fireballCharged = false;

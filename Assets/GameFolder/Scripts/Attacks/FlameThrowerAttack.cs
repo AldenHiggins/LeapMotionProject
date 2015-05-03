@@ -33,10 +33,17 @@ public class FlameThrowerAttack : AAttack
 	
 	public override void chargedFunction(HandModel[] hands)
 	{
-		//		flameThrowerParticle.SetActive (true);
-		//		MoveFireball fireball = (MoveFireball) flameThrowerParticle.GetComponent (typeof(MoveFireball));
-		//		fireball.startPeriodicDamage();
+		if (flamethrowers [0] == null || flamethrowers[1] == null)
+			return;
+		MoveFireball fireball1 = (MoveFireball) flamethrowers[0].GetComponent (typeof(MoveFireball));
+		MoveFireball fireball2 = (MoveFireball) flamethrowers[1].GetComponent (typeof(MoveFireball));
+		fireball1.stopPeriodicDamage();
+		fireball2.stopPeriodicDamage();
 		
+		//		MoveFireball fireball = (MoveFireball) flameThrowerParticle.GetComponent (typeof(MoveFireball));
+		//		fireball.stopPeriodicDamage();
+		flamethrowers[0].SetActive (false);
+		flamethrowers[1].SetActive (false);;
 	}
 	
 	public override void releaseFunction(HandModel[] hands)
