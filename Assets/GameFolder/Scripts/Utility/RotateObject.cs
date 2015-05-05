@@ -8,7 +8,8 @@ public class RotateObject : MonoBehaviour
 
 	void Update()
 	{
-		gameObject.transform.RotateAround (gameObject.transform.position, rotationAxis, rotationSpeed);
+		Vector3 newRotationAxis = gameObject.transform.rotation * rotationAxis;
+		gameObject.transform.RotateAround (gameObject.transform.position, newRotationAxis, rotationSpeed);
 	}
 
 

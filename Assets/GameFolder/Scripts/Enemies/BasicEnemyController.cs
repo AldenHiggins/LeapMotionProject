@@ -237,6 +237,8 @@ public class BasicEnemyController : MonoBehaviour
 		{
 			agent.enabled = false;
 		}
+		BoxCollider collider = gameObject.GetComponent<BoxCollider> ();
+		collider.enabled = false;
 		StopCoroutine (attack ());
 		player.changeCurrency (currencyOnKill);
 		anim.Play ("death");

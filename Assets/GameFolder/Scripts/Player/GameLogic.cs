@@ -197,7 +197,7 @@ public class GameLogic : MonoBehaviour
 		// Press r to recenter view
 		if(Input.GetKeyDown (KeyCode.R))
 		{
-			playerLogic.gameObject.transform.rotation = Quaternion.Euler (0.0f, 180.0f, 0.0f);
+			playerLogic.gameObject.transform.rotation = Quaternion.Euler (0.0f, 90.0f, 0.0f);
 			StartCoroutine(waitToEnableRoundScreen());
 		}
 	}
