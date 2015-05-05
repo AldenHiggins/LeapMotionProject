@@ -33,7 +33,8 @@ public class PlaceOilSlick : AAttack
 			oilSlickScript.enabled = true;
 
 			isInstantiated = false;
-			defense.slickUsed();
+			//TODO: change this
+//			defense.slickUsed();
 		}
 	}
 

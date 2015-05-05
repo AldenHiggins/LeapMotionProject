@@ -33,7 +33,7 @@ public class PlaceTurret : AAttack
 			Destroy (createdturret);
 			((EmitterBehavior) turretFinal.GetComponent(typeof(EmitterBehavior))).enabled = true;
 			isInstantiated = false;
-			defense.turretUsed();
+//			defense.turretUsed();
 		}
 	}
 	

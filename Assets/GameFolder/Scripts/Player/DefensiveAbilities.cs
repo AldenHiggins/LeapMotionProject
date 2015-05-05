@@ -395,32 +395,42 @@ public class DefensiveAbilities : MonoBehaviour
 		return (int) Mathf.Floor(player.getCurrencyValue() / ballistaCost);
 	}
 
-	public void slickUsed(){
-		player.changeCurrency (-1 * oilSlickCost);
-		updateDefencesCostText ();
-	}
+//	public void slickUsed()
+//	{
+//		player.changeCurrency (-1 * oilSlickCost);
+//		updateDefencesCostText ();
+//	}
+//
+//	public void turretUsed()
+//	{
+//		player.changeCurrency (-1 * turretCost);
+//		updateDefencesCostText ();
+//	}
+//
+//	public void ballistaUsed()
+//	{
+//		player.changeCurrency (-1 * ballistaCost);
+//		updateDefencesCostText ();
+//	}
 
-	public void turretUsed(){
-		player.changeCurrency (-1 * turretCost);
-		updateDefencesCostText ();
-	}
 
-	public void ballistaUsed()
-	{
-		player.changeCurrency (-1 * ballistaCost);
-		updateDefencesCostText ();
-	}
 	public void updateDefencesCostText ()
 	{
-//		oilSlicksLeft.text =  getNumSlicksLeft() + " Left";
-		if (player.getCurrencyValue () < oilSlickCost) {
+		if (player.getCurrencyValue () < oilSlickCost) 
+		{
 			oilSlickCostText.color = Color.red;		
-		} else {
+		} 
+		else
+		{
 			oilSlickCostText.color = Color.green;	
 		}
-		if (player.getCurrencyValue () < turretCost) {
+
+		if (player.getCurrencyValue () < turretCost)
+		{
 			turretCostText.color = Color.red;		
-		} else {
+		}
+		else
+		{
 			turretCostText.color = Color.green;	
 		}
 	}
