@@ -34,7 +34,7 @@ public class PlaceDefense : AAttack
 				isInstantiated = true;
 			}
 			createdDefensiveObject.transform.position = defense.getRayHit ().point;
-			Quaternion rotation= player.gameObject.transform.GetChild (1).GetChild (1).localRotation;
+			Quaternion rotation= player.gameObject.transform.GetChild (1).GetChild (1).rotation;
 			createdDefensiveObject.transform.rotation = Quaternion.Euler (0.0f, rotation.eulerAngles.y, 0.0f);
 		}
 	}
@@ -45,7 +45,7 @@ public class PlaceDefense : AAttack
 	{
 		if (player.getCurrencyValue() >= defenseCost) 
 		{
-			Quaternion rotation = player.gameObject.transform.GetChild (1).GetChild (1).localRotation;
+			Quaternion rotation = player.gameObject.transform.GetChild (1).GetChild (1).rotation;
 			GameObject ballistaFinal = (GameObject)Instantiate (defensiveObject, defense.getRayHit().point, Quaternion.Euler (0.0f, rotation.eulerAngles.y, 0.0f));
 			ballistaFinal.SetActive (true);
 			source.PlayOneShot(placeObjectSound);
