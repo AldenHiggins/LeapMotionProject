@@ -11,11 +11,17 @@ public class PlayerLogic : MonoBehaviour
 	public GameObject defensivePlayerSpawnPosition;
 	public GameObject offensivePlayerSpawnPosition;
 
+	public GameObject manaUIObject;
+	public GameObject specialAttackUIObject;
 	public SliderDemo healthSlider;
 	public SliderDemo manaSlider;
 
+	public int maxMana;
+	public int manaGainRate;
+
 	private int health;
 	private int energy;
+	private int specialAttackPower;
 
 	// PLAYER CURRENCY
 	public Text currencyText;
@@ -36,7 +42,8 @@ public class PlayerLogic : MonoBehaviour
 		}
 					
 		health = 100;
-		energy = 100;
+		energy = maxMana;
+		specialAttackPower = 0;
 		energyCounter = 0;
 		currentPlayerCurrency = startingPlayerCurrency;
 		currencyText.text = "" + startingPlayerCurrency;
@@ -53,11 +60,12 @@ public class PlayerLogic : MonoBehaviour
 		
 		healthSlider.SetWidgetValue (health / 100.0f);
 		manaSlider.SetWidgetValue (energy / 100.0f);
+		manaUIObject.transform.localScale = new Vector3((energy / 100.0f), 1.0f, 1.0f);
 		energyCounter++;
 		if (energyCounter > energyRefreshCount)
 		{
-			if (energy < 100)
-				energy += 10;
+			if (energy < maxMana)
+				energy += manaGainRate;
 			energyCounter = 0;
 		}
 	}
@@ -115,6 +123,27 @@ public class PlayerLogic : MonoBehaviour
 	public int getEnergy()
 	{
 		return energy;
+	}
+
+	public int getSpecialAttackPower()
+	{
+		return specialAttackPower;
+	}
+
+	public void useSpecialAttack()
+	{
+		specialAttackPower = 0;
+
+		// update special attack power ui element
+		specialAttackUIObject.transform.localScale = new Vector3((specialAttackPower / (float)maxMana), 1.0f, 1.0f);
+	}
+
+	public void addSpecialAttackPower(int powerToAdd)
+	{
+		specialAttackPower += powerToAdd;
+		
+		// update the special attack power UI element
+		specialAttackUIObject.transform.localScale = new Vector3((specialAttackPower / (float)maxMana), 1.0f, 1.0f);
 	}
 
 	public void switchOffensiveDefensive()

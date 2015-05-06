@@ -3,6 +3,8 @@ using System.Collections;
 
 public class MoveFireball : MonoBehaviour 
 {
+	public PlayerLogic player;
+
 	public GameLogic game;
 
 	public GameObject explosion;
@@ -26,6 +28,8 @@ public class MoveFireball : MonoBehaviour
 	private int hashValue;
 
 	public bool explodeOnContact;
+
+	public int specialGainPerHeadshot;
 
 	// SAVE TO CHARGE FLAMETHROWERS WITH HEADSHOTS ONLY
 	public OffensiveAbilities offense;
@@ -184,9 +188,10 @@ public class MoveFireball : MonoBehaviour
 				{
 					GameObject createdExplosion = (GameObject) Instantiate (explosion, collisions[0].intersection, Quaternion.identity);
 					createdExplosion.SetActive(true);
-					print (createdExplosion.name);
+					player.addSpecialAttackPower(specialGainPerHeadshot);
+
 				}
-				offense.headShotAchieved();
+
 			}
 
 

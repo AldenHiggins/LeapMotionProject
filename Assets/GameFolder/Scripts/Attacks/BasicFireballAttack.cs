@@ -3,10 +3,12 @@ using System.Collections;
 
 public class BasicFireballAttack : AAttack 
 {
+	public PlayerLogic player;
 	public GameLogic game;
 	public GameObject thisCamera;
 	public GameObject fireBall;
 	public GameObject projectileActiveParticle;
+	public int manaCost;
 
 
 	public float firingCoolDown;
@@ -31,6 +33,16 @@ public class BasicFireballAttack : AAttack
 	
 	public override void releaseFunction(HandModel[] hands)
 	{
+		if (player.getEnergy() < manaCost)
+		{
+			return;
+		}
+
+		if (manaCost != 0)
+		{
+			player.useEnergy (manaCost);
+		}
+
 		// Check and see if the cooldown is up
 		if (canFire != true)
 		{
@@ -50,7 +62,7 @@ public class BasicFireballAttack : AAttack
 		Vector3 startingVelocity = thisCamera.transform.forward.normalized;
 		startingVelocity *= .2f;
 
-		print ("Spawning fireball");
+//		print ("Spawning fireball");
 		GameObject newFireball = (GameObject) Instantiate(fireBall, spawnPosition, thisCamera.transform.rotation);
 		newFireball.SetActive(true); 
 		MoveFireball moveThis = (MoveFireball) newFireball.GetComponent(typeof(MoveFireball));

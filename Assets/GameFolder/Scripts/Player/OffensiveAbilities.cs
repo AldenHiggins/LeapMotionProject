@@ -89,7 +89,7 @@ public class OffensiveAbilities : MonoBehaviour
 		if (hands.Length > 0) 
 		{
 			// Check to ignite hands if flamethrower is charged up	
-			if (flamethrowerChargeLevel >= numFireballsForFlamethrower && !flamethrowersActive)
+			if (playerLogic.getSpecialAttackPower() > 100 && !flamethrowersActive)
 			{
 				// Play an explanation the first time the user charges up
 				if (!firstFlameThrowerActive) 
@@ -161,7 +161,7 @@ public class OffensiveAbilities : MonoBehaviour
 				}
 			}
 		} else {
-			//clapAttack.inactiveFunction ();
+			clapAttack.chargedFunction (hands);
 //			handFlipAttack.inactiveFunction ();
 			rightHandFistAttack.inactiveFunction ();
 			leftHandFistAttack.inactiveFunction ();
@@ -178,11 +178,14 @@ public class OffensiveAbilities : MonoBehaviour
 
 	public void headShotAchieved ()
 	{
-		if (flamethrowerChargeLevel < flameThrowerChargeCounters.transform.childCount) {
-			// Set the appropriate charge active
-			GameObject flameThrowerCharge = flameThrowerChargeCounters.transform.GetChild (flamethrowerChargeLevel).gameObject;
-			flameThrowerCharge.SetActive (true);
-		}
+//		if (flamethrowerChargeLevel < flameThrowerChargeCounters.transform.childCount)
+//		{
+//			// Set the appropriate charge active
+//			GameObject flameThrowerCharge = flameThrowerChargeCounters.transform.GetChild (flamethrowerChargeLevel).gameObject;
+//			flameThrowerCharge.SetActive (true);
+//		}
+
+		// Update the special bar instead
 
 		flamethrowerChargeLevel++;
 		source.PlayOneShot (headshotSound);
@@ -197,14 +200,14 @@ public class OffensiveAbilities : MonoBehaviour
 	public void deactivateFlameThrowers ()
 	{
 		flamethrowersActive = false;
-		clapAttack.inactiveFunction ();
+		clapAttack.chargedFunction (hands);
 		flamethrowerChargeLevel = 0;
 		
-		// Disable all flame thrower charges on the UI
-		for (int chargeIndex = 0; chargeIndex < flameThrowerChargeCounters.transform.childCount; chargeIndex++) {
-			GameObject flameThrowerCharge = flameThrowerChargeCounters.transform.GetChild (chargeIndex).gameObject;
-			flameThrowerCharge.SetActive (false);
-		}
+//		// Disable all flame thrower charges on the UI
+//		for (int chargeIndex = 0; chargeIndex < flameThrowerChargeCounters.transform.childCount; chargeIndex++) {
+//			GameObject flameThrowerCharge = flameThrowerChargeCounters.transform.GetChild (chargeIndex).gameObject;
+//			flameThrowerCharge.SetActive (false);
+//		}
 	}
 
 	IEnumerator attackSelectionCooldown ()
@@ -217,14 +220,17 @@ public class OffensiveAbilities : MonoBehaviour
 	public void checkClap (HandModel[] hands)
 	{
 		Vector3 distance = hands [0].GetPalmPosition () - hands [1].GetPalmPosition ();
-		if (distance.magnitude < .09 && flamethrowerChargeLevel >= numFireballsForFlamethrower) {
-			if (!firstFlameThrowerActivated) {
+		if (distance.magnitude < .09 && playerLogic.getSpecialAttackPower() >= 100) 
+		{
+			if (!firstFlameThrowerActivated) 
+			{
 				firstFlameThrowerActivated = true;
 //				source.PlayOneShot (faceHandsToEnemiesExplanation);
 			}
 			flamethrowersActive = true;
 			StartCoroutine (flamethrowerCooldown ());
 			clapAttack.releaseFunction (hands);
+			playerLogic.useSpecialAttack();
 		}
 	}
 
