@@ -31,7 +31,6 @@ public class TurnOffButtonWhenThisTurnsOn : MonoBehaviour
 			if (!otherButtonFlipped)
 			{
 				otherButtonFlipped = true;
-				print ("Button is pressed");
 
 				for (int buttonIndex = 0; buttonIndex < buttonToTurnOff.Length; buttonIndex++)
 				{

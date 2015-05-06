@@ -277,7 +277,10 @@ public class GameLogic : MonoBehaviour
 			if(!disableMovement)
 			{
 				hmdMovement.enabled = true;
-				hmdMovement.resetPosition();
+				if (i == waveToStartAt)
+				{
+					hmdMovement.resetPosition();
+				}
 			}
 			else
 			{
@@ -334,7 +337,7 @@ public class GameLogic : MonoBehaviour
 			// Deactivate round
 			roundActive = false;
 			playerLogic.changeCurrency(500);
-			hmdMovement.enabled = false;
+//			hmdMovement.enabled = false;
 			mainGameMusic.Pause();
 			offensiveAbilities.deactivateFlameThrowers();
 			offensiveAbilities.controlCheck();

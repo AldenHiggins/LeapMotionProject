@@ -33,25 +33,28 @@ public class BasicFireballAttack : AAttack
 	
 	public override void releaseFunction(HandModel[] hands)
 	{
-		if (player.getEnergy() < manaCost)
-		{
-			return;
-		}
-
-		if (manaCost != 0)
-		{
-			player.useEnergy (manaCost);
-		}
-
 		// Check and see if the cooldown is up
 		if (canFire != true)
 		{
 			return;
 		}
+
 		// Wait for the next cool down in order to fire again
 		projectileActiveParticle.SetActive (false);
 		canFire = false;
 		StartCoroutine (waitForCoolDown ());
+
+		if (player.getEnergy() < manaCost)
+		{
+			return;
+		}
+		
+		if (manaCost != 0)
+		{
+			player.useEnergy (manaCost);
+		}
+		
+
 
 		// Have the player spend mana
 		// playerLogic.useEnergy(10);
@@ -69,7 +72,7 @@ public class BasicFireballAttack : AAttack
 		moveThis.setVelocity(startingVelocity);
 		newFireball.GetComponent<Renderer>().enabled = true;
 		moveThis.setHash (0);
-				
+
 	}
 	
 	public override void holdGestureFunction(HandModel[] hands)

@@ -50,7 +50,7 @@ public class PlayerLogic : MonoBehaviour
 		audioSource = gameObject.GetComponent<AudioSource> ();
 	}
 
-	private int energyRefreshCount = 100;
+	public int energyRefreshRate;
 	private int energyCounter;
 	// Update is called once per frame
 	void Update ()
@@ -60,12 +60,20 @@ public class PlayerLogic : MonoBehaviour
 		
 		healthSlider.SetWidgetValue (health / 100.0f);
 		manaSlider.SetWidgetValue (energy / 100.0f);
-		manaUIObject.transform.localScale = new Vector3((energy / 100.0f), 1.0f, 1.0f);
+		manaUIObject.transform.localScale = new Vector3((energy / (float) maxMana), manaUIObject.transform.localScale.y, manaUIObject.transform.localScale.z);
 		energyCounter++;
-		if (energyCounter > energyRefreshCount)
+		if (energyCounter > energyRefreshRate)
 		{
 			if (energy < maxMana)
+			{
 				energy += manaGainRate;
+			}
+
+			if (energy > maxMana)
+			{
+				energy = maxMana;
+			}
+				
 			energyCounter = 0;
 		}
 	}
@@ -135,15 +143,18 @@ public class PlayerLogic : MonoBehaviour
 		specialAttackPower = 0;
 
 		// update special attack power ui element
-		specialAttackUIObject.transform.localScale = new Vector3((specialAttackPower / (float)maxMana), 1.0f, 1.0f);
+		specialAttackUIObject.transform.localScale = new Vector3((specialAttackPower / 100.0f), specialAttackUIObject.transform.localScale.y, specialAttackUIObject.transform.localScale.z);
 	}
 
 	public void addSpecialAttackPower(int powerToAdd)
 	{
 		specialAttackPower += powerToAdd;
-		
+		if (specialAttackPower > 100)
+		{
+			specialAttackPower = 100;
+		}
 		// update the special attack power UI element
-		specialAttackUIObject.transform.localScale = new Vector3((specialAttackPower / (float)maxMana), 1.0f, 1.0f);
+		specialAttackUIObject.transform.localScale = new Vector3((specialAttackPower / 100.0f), specialAttackUIObject.transform.localScale.y, specialAttackUIObject.transform.localScale.z);
 	}
 
 	public void switchOffensiveDefensive()
