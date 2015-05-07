@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class BasicEnemyController : MonoBehaviour 
@@ -45,6 +46,7 @@ public class BasicEnemyController : MonoBehaviour
 	private GameObject greenHealth;
 	private GameObject redHealth;
 	private float startingHealthScale;
+	public GameObject damageAmountUI;
 	// RAGDOLL/DEATH
 	public float ragdollTime;
 	public float ragdollForceFactor;
@@ -121,7 +123,6 @@ public class BasicEnemyController : MonoBehaviour
 	{
 		if (health <= 0)
 		{
-			print ("Dead ghost, anim bool : " + anim.GetBool("Dead"));
 			return;
 		}
 	
@@ -225,6 +226,15 @@ public class BasicEnemyController : MonoBehaviour
 
 	public void dealDamage(int damage)
 	{
+		if (damageAmountUI != null)
+		{
+			GameObject thisDamage = (GameObject) Instantiate(damageAmountUI, transform.position, Quaternion.identity);
+			thisDamage.SetActive(true);
+
+			// Get the text field of the damage popup
+			Text textFieldAmountOfDamage = thisDamage.transform.GetChild (1).GetChild(0).GetComponent<Text>();
+			textFieldAmountOfDamage.text = "" + damage;
+		}
 		// TEMP TEMP TEMP check remove after forces can affect enemies
 		if (anim == null)
 			return;
