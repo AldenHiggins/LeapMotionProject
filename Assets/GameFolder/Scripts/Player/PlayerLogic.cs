@@ -109,7 +109,7 @@ public class PlayerLogic : MonoBehaviour
 			float healthLevel = health / 100.0f;
 			healthLevel = 1 - healthLevel;
 
-			int healthTextureChosen = (int)(healthLevel * 5);
+			int healthTextureChosen = (int)(healthLevel * 3);
 
 			GameObject displayThisHealth = healthTextureArray.transform.GetChild (healthTextureChosen).gameObject;
 			displayThisHealth.SetActive(true);
