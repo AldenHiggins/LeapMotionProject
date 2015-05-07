@@ -228,7 +228,7 @@ public class BasicEnemyController : MonoBehaviour
 	{
 		if (damageAmountUI != null)
 		{
-			GameObject thisDamage = (GameObject) Instantiate(damageAmountUI, transform.position, Quaternion.identity);
+			GameObject thisDamage = (GameObject) Instantiate(damageAmountUI, (transform.position + new Vector3(0.0f, headshotHeight, 0.0f)), Quaternion.identity);
 			thisDamage.SetActive(true);
 
 			// Get the text field of the damage popup

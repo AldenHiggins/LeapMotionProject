@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class PlaceDefense : AAttack
@@ -13,6 +14,7 @@ public class PlaceDefense : AAttack
 	private GameObject createdDefensiveObject;
 	private AudioSource source;
 	public bool rotateWhilePlacing;
+	public GameObject goldSpentUI;
 
 	void Start()
 	{
@@ -45,6 +47,18 @@ public class PlaceDefense : AAttack
 	{
 		if (player.getCurrencyValue() >= defenseCost) 
 		{
+			// Generate a popup to show how much gold was spent
+			if (goldSpentUI != null)
+			{
+				GameObject thisDamage = (GameObject) Instantiate(goldSpentUI, defense.getRayHit().point, Quaternion.identity);
+				thisDamage.SetActive(true);
+				
+				// Get the text field of the damage popup
+				Text textFieldAmountOfDamage = thisDamage.transform.GetChild (1).GetChild(0).GetComponent<Text>();
+				textFieldAmountOfDamage.text = "-" + defenseCost;
+			}
+
+
 			Quaternion rotation = player.gameObject.transform.GetChild (1).GetChild (1).rotation;
 			GameObject ballistaFinal = (GameObject)Instantiate (defensiveObject, defense.getRayHit().point, Quaternion.Euler (0.0f, rotation.eulerAngles.y, 0.0f));
 			ballistaFinal.SetActive (true);
