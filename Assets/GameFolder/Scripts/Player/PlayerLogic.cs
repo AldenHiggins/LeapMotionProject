@@ -13,8 +13,6 @@ public class PlayerLogic : MonoBehaviour
 
 	public GameObject manaUIObject;
 	public GameObject specialAttackUIObject;
-	public SliderDemo healthSlider;
-	public SliderDemo manaSlider;
 
 	public int maxMana;
 	public int manaGainRate;
@@ -27,6 +25,8 @@ public class PlayerLogic : MonoBehaviour
 	public Text currencyText;
 	private int currentPlayerCurrency;
 	public int startingPlayerCurrency;
+
+	public GameObject damageExplosion;
 
 	// PLAYER HEALTH TEXTURE
 	public GameObject healthTextureArray;
@@ -57,9 +57,7 @@ public class PlayerLogic : MonoBehaviour
 	{
 		// Update current currency gui value
 		//currencyText.text = "" + currentPlayerCurrency;
-		
-		healthSlider.SetWidgetValue (health / 100.0f);
-		manaSlider.SetWidgetValue (energy / 100.0f);
+
 		manaUIObject.transform.localScale = new Vector3((energy / (float) maxMana), manaUIObject.transform.localScale.y, manaUIObject.transform.localScale.z);
 		energyCounter++;
 		if (energyCounter > energyRefreshRate)
@@ -88,6 +86,8 @@ public class PlayerLogic : MonoBehaviour
 	public void dealDamage(int damageToDeal)
 	{
 		health -= damageToDeal;
+		GameObject createdExplosion = (GameObject) Instantiate (damageExplosion, gameObject.transform.position, Quaternion.identity);
+		createdExplosion.SetActive (true);
 		// Player is dead
 		if (health < 0)
 		{
@@ -113,8 +113,6 @@ public class PlayerLogic : MonoBehaviour
 
 			GameObject displayThisHealth = healthTextureArray.transform.GetChild (healthTextureChosen).gameObject;
 			displayThisHealth.SetActive(true);
-
-
 		}
 	}
 

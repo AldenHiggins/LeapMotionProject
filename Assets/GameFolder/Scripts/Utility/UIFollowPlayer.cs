@@ -1,10 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class UIFollowPlayer : MonoBehaviour {
-
-	public PlayerLogic player;
-
+public class UIFollowPlayer : MonoBehaviour 
+{
 	public GameObject camera;
 
 	// Have different offset positions for the two different types
@@ -21,7 +19,7 @@ public class UIFollowPlayer : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
 	{
-
+		enableUI ();
 	}
 	
 	// Update is called once per frame
@@ -49,14 +47,9 @@ public class UIFollowPlayer : MonoBehaviour {
 	public void enableUI()
 	{
 		this.gameObject.SetActive (true);
-		if (player.isDefensivePlayer)
-		{
-			thisOffset = camera.transform.rotation * defensiveOffset;
-		}
-		else
-		{
-			thisOffset = camera.transform.rotation * offensiveOffset;
-		}
+
+		thisOffset = camera.transform.rotation * offensiveOffset;
+
 
 		if (isEndGameHud)
 		{

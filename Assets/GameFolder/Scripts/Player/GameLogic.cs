@@ -6,7 +6,6 @@ using System.Collections.Generic;
 public class GameLogic : MonoBehaviour 
 {
 	// PUBLIC GAME OBJECTS
-	public GameObject avatarPrefab;
 	public GameObject thisPlayer;
 	public GameObject thisCamera;
 	public GameObject goalPosition;
@@ -35,7 +34,7 @@ public class GameLogic : MonoBehaviour
 	// LEVEL ROUNDS
 	public ButtonDemoGraphics roundButton;
 	public ButtonDemoToggle nextRoundButton;
-	public UIFollowPlayer endRoundScreen;
+	public GameObject endRoundScreen;
 	public GameObject winScreen;
 	private float currentRoundTime = 0;
 	private int currentRound = 0;
@@ -85,34 +84,52 @@ public class GameLogic : MonoBehaviour
 	public AAttack flameThrowerAttack;
 	public AAttack iceBallAttack;
 
+
+	// STEAM ATTACKS
+	public RayCastTest steamManager;
+
+	public SteamAttacks steamDefensivePlacement;
+	public SteamAttacks steamEmptyAttack;
+	public SteamAttacks steamFireballAttack;
+	public SteamAttacks steamDefensiveSwitching;
+
+	// STEAM ACTIVATE OFFENSE
+	public bool startRound1;
+	public bool startRound2;
+
+
+
 	// WAVE TO START AT
 	public int waveToStartAt;
 	// Initialize variables
 	void Start () 
 	{
+		Debug.Log ("Starting game logic");
+
+
 		waveIndex = 0;
-		view = gameObject.GetComponent<NetworkView>();
 		fireballCharged = false;
 		isBlocking = false;
 		fireballTimer = 0;
 		projectiles = new Dictionary<int, GameObject> ();
 		network = (Networking) gameObject.GetComponent (typeof(Networking));
 		playerLogic = (PlayerLogic) thisPlayer.GetComponent (typeof(PlayerLogic));
-		hmdMovement = (HMDMovement)thisPlayer.GetComponent (typeof(HMDMovement));
-		offensiveAbilities = (OffensiveAbilities) gameObject.GetComponent (typeof(OffensiveAbilities));
-		defensiveAbilities = (DefensiveAbilities) gameObject.GetComponent (typeof(DefensiveAbilities));
-		defensiveAbilities.showHideTurretPositions (false);
-		// Disable leap motion for defensive player
-		if (playerLogic.isDefensivePlayer)
-		{
-			HandController hand = (HandController) thisPlayer.transform.GetChild (1).GetChild (1).
-				GetChild (0).gameObject.GetComponent(typeof(HandController));
-			hand.enabled = false;
 
-			// Make the player not use gravity if they are defensive
-			OVRPlayerController ovrController = (OVRPlayerController) thisPlayer.GetComponent(typeof(OVRPlayerController));
-//			ovrController.changeGravityUse(false);
+		if (!disableMovement) 
+		{
+			hmdMovement = (HMDMovement)thisPlayer.GetComponent (typeof(HMDMovement));
 		}
+
+
+
+
+		Debug.Log ("Initializing offensive abilities");
+
+//		offensiveAbilities = (OffensiveAbilities) gameObject.GetComponent (typeof(OffensiveAbilities));
+//		defensiveAbilities = (DefensiveAbilities) gameObject.GetComponent (typeof(DefensiveAbilities));
+//		defensiveAbilities.showHideTurretPositions (false);
+
+		Debug.Log ("Starting waves!");
 
 		// Initialize waves
 		enemyWaves = new MonsterWave[waveContainer.transform.childCount];
@@ -122,43 +139,41 @@ public class GameLogic : MonoBehaviour
 		}
 		// Start up the round timer
 		StartCoroutine (roundFunction());
+
+		Debug.Log ("Waves started!");
 	}
 
 	// Control loop to check for player input
 	void Update () 
 	{
-		// Check if round is active in order for players to use their abilities
-		if (roundActive || isDefensiveStageActive)
-		{
-			if (!playerLogic.isDefensivePlayer)
-			{
-				offensiveAbilities.controlCheck();
-			}
-//			else
+//		// Check if round is active in order for players to use their abilities
+//		if (roundActive || isDefensiveStageActive)
+//		{
+//			if (!playerLogic.isDefensivePlayer)
 //			{
-//				defensiveAbilities.controlCheck();
+//				offensiveAbilities.controlCheck();
 //			}
-		}
-
-		// Shared abilities
-		bool switchButtonPressed = OVRGamepadController.GPC_GetButton (OVRGamepadController.Button.Back);
-
-		if (!switchButtonPressed && previousSwitchPressed)
-		{
-			print ("Switching is happening");
-			playerLogic.switchOffensiveDefensive ();
-		}
-
-		previousSwitchPressed = switchButtonPressed;
-
-		// Debugging abilities
-		//<--------------------- Z to fire fireball ------------------------------->	
-		if (Input.GetKeyDown (KeyCode.Z)) 
-		{
-			playerCastFireball ();
-		}		
-
-
+//		}
+//
+//		// Shared abilities
+//		bool switchButtonPressed = OVRGamepadController.GPC_GetButton (OVRGamepadController.Button.Back);
+//
+//		if (!switchButtonPressed && previousSwitchPressed)
+//		{
+//			print ("Switching is happening");
+//			playerLogic.switchOffensiveDefensive ();
+//		}
+//
+//		previousSwitchPressed = switchButtonPressed;
+//
+//		// Debugging abilities
+//		//<--------------------- Z to fire fireball ------------------------------->	
+//		if (Input.GetKeyDown (KeyCode.Z)) 
+//		{
+//			playerCastFireball ();
+//		}		
+//
+//
 		// Check for the new round button to be pressed
 		if (roundButton.isPressed() || Input.GetKeyDown (KeyCode.V))
 		{
@@ -168,45 +183,74 @@ public class GameLogic : MonoBehaviour
 			// callForWaveButton.ButtonTurnsOn();
 		}
 
-		// Reload the level if retry is pressed
-		if (retryButton.isPressed())
-		{
-			Application.LoadLevel(2);
+		if (Input.GetKeyDown(KeyCode.F))
+	    {
+		    startRound1 = true;
+		    startRound2 = true;
 		}
+//
 
-		// Load the main menu if quit to main menu is pressed
-		if (mainMenuButton.isPressed())
-		{
+		if (Input.GetKeyDown (KeyCode.Y))
+	    {
 			Application.LoadLevel(0);
 		}
 
-		// Update round timer
-		if (roundActive)
+		if (Input.GetKeyDown (KeyCode.Q))
 		{
-			currentRoundTime -= Time.deltaTime;
-			if (currentRoundTime < 0)
+			GameObject wallToDestroy = GameObject.Find ("DefensiveWall(Clone)");
+			Destroy (wallToDestroy);
+		}
+
+		if (Input.GetKeyDown (KeyCode.E))
+		{
+			for (int enemyIndex = 0; enemyIndex < spawnedEnemies.transform.childCount; enemyIndex++)
 			{
-				roundTimerText.text = "0";
-			}
-			else
-			{
-				roundTimerText.text = "" + currentRoundTime.ToString("F2");
+				Destroy (spawnedEnemies.transform.GetChild(enemyIndex).gameObject);
 			}
 		}
 
-		// Press r to recenter view
-		if(Input.GetKeyDown (KeyCode.R))
-		{
-			playerLogic.gameObject.transform.rotation = Quaternion.Euler (0.0f, 90.0f, 0.0f);
-			StartCoroutine(waitToEnableRoundScreen());
-		}
+//		// Reload the level if retry is pressed
+//		if (retryButton.isPressed())
+//		{
+//			Application.LoadLevel(2);
+//		}
+//
+//		// Load the main menu if quit to main menu is pressed
+//		if (mainMenuButton.isPressed())
+//		{
+//			Application.LoadLevel(0);
+//		}
+//
+//		// Update round timer
+//		if (roundActive)
+//		{
+//			currentRoundTime -= Time.deltaTime;
+//			if (currentRoundTime < 0)
+//			{
+//				roundTimerText.text = "0";
+//			}
+//			else
+//			{
+//				roundTimerText.text = "" + currentRoundTime.ToString("F2");
+//			}
+//		}
+//
+//		// Press r to recenter view
+//		if(Input.GetKeyDown (KeyCode.R))
+//		{
+//			playerLogic.gameObject.transform.rotation = Quaternion.Euler (0.0f, 90.0f, 0.0f);
+//			StartCoroutine(waitToEnableRoundScreen());
+//		}
 	}
 
 	IEnumerator waitToEnableRoundScreen()
 	{
 		yield return new WaitForSeconds (.5f);
-		endRoundScreen.disableUI ();
-		endRoundScreen.enableUI ();
+//		endRoundScreen.disableUI ();
+//		endRoundScreen.enableUI ();
+
+		endRoundScreen.SetActive (false);
+		endRoundScreen.SetActive (true);
 	}
 
 	IEnumerator roundFunction()
@@ -227,8 +271,9 @@ public class GameLogic : MonoBehaviour
 				roundText.text = "ROUND " + (i + 1);
 			}
 			// Present start round screen and wait
-			playerHud.SetActive(false);
-			endRoundScreen.enableUI();
+//			playerHud.SetActive(false);
+//			endRoundScreen.enableUI();
+			endRoundScreen.SetActive(true);
 			defensivePhaseMusic.Play();
 
 			// Enable hand controller for defensive player
@@ -248,27 +293,44 @@ public class GameLogic : MonoBehaviour
 //			print ("Activating the next round");
 
 			// Remove attack selection screen
-			endRoundScreen.disableUI();
+//			endRoundScreen.disableUI();
+			endRoundScreen.SetActive(false);
 
 			// Start defensive setup phase
 			isDefensiveStageActive = true;
 			turretHud.SetActive(true);
-			// Disable abilities during the change spells/end round screen
-			offensiveAbilities.rightHandFlipAttack = offensiveAbilities.emptyAttack;
-			offensiveAbilities.leftHandFlipAttack = offensiveAbilities.emptyAttack;
-			offensiveAbilities.rightHandFistAttack = offensiveAbilities.emptyAttack;
-			offensiveAbilities.leftHandFistAttack = offensiveAbilities.emptyAttack;
+
+			steamManager.firstControllerAttack = steamEmptyAttack;
+			steamManager.secondControllerAttack = steamEmptyAttack;
+
+//			// Disable abilities during the change spells/end round screen
+//			offensiveAbilities.rightHandFlipAttack = offensiveAbilities.emptyAttack;
+//			offensiveAbilities.leftHandFlipAttack = offensiveAbilities.emptyAttack;
+//			offensiveAbilities.rightHandFistAttack = offensiveAbilities.emptyAttack;
+//			offensiveAbilities.leftHandFistAttack = offensiveAbilities.emptyAttack;
+
+
+
 //			offensiveAbilities.handFlipAttack = emptyAttack;
 //			offensiveAbilities.fistAttack = emptyAttack;
-			defensiveAbilities.updateDefencesCostText();
+
+
+//			defensiveAbilities.updateDefencesCostText();
+
+
 			// Wait a couple of seconds for the player to readjust.
 			yield return new WaitForSeconds(1.5f);
 	
-			//Activate defensive abilities
-			offensiveAbilities.rightHandFlipAttack = offensiveAbilities.rightHandDefensiveFlip;
-			offensiveAbilities.leftHandFlipAttack = offensiveAbilities.leftHandDefensiveFlip;
-			offensiveAbilities.rightHandFistAttack = offensiveAbilities.rightHandDefensiveFist;
-			offensiveAbilities.leftHandFistAttack = offensiveAbilities.leftHandDefensiveFist;
+
+//			//Activate defensive abilities
+//			offensiveAbilities.rightHandFlipAttack = offensiveAbilities.rightHandDefensiveFlip;
+//			offensiveAbilities.leftHandFlipAttack = offensiveAbilities.leftHandDefensiveFlip;
+//			offensiveAbilities.rightHandFistAttack = offensiveAbilities.rightHandDefensiveFist;
+//			offensiveAbilities.leftHandFistAttack = offensiveAbilities.leftHandDefensiveFist;
+
+			steamManager.firstControllerAttack = steamDefensivePlacement;
+			steamManager.secondControllerAttack = steamDefensiveSwitching;
+
 
 //			offensiveAbilities.handFlipAttack = placeBallistaAttack;
 //			offensiveAbilities.fistAttack = placeOilSlickAttack;
@@ -282,33 +344,40 @@ public class GameLogic : MonoBehaviour
 					hmdMovement.resetPosition();
 				}
 			}
-			else
-			{
-				hmdMovement.enabled = false;
-			}
+
+
 
 			// Wait for player to end defensive setup phase
-			while (!callForWaveButtonGraphic.isPressed()) 
+			while (!startRound1 || !startRound2) 
 			{
 				yield return new WaitForSeconds(.2f);
 			}
 
-			offensiveAbilities.rightHandFlipAttack.inactiveFunction();
-			offensiveAbilities.leftHandFlipAttack.inactiveFunction();
-			offensiveAbilities.rightHandFistAttack.inactiveFunction();
-			offensiveAbilities.leftHandFistAttack.inactiveFunction();
+			startRound1 = false;
+			startRound2 = false;
+
+//			offensiveAbilities.rightHandFlipAttack.inactiveFunction();
+//			offensiveAbilities.leftHandFlipAttack.inactiveFunction();
+//			offensiveAbilities.rightHandFistAttack.inactiveFunction();
+//			offensiveAbilities.leftHandFistAttack.inactiveFunction();
+
+
 //			offensiveAbilities.fistAttack.inactiveFunction();
 			// Clean up defensive setup stuff
 			callForWaveButton.ButtonTurnsOff();
+
 			//defensiveAbilities.showHideTurretPositions(false);
 			turretHud.SetActive(false);
 			isDefensiveStageActive = false;
 
-			// Change To the offensive abilities
-			offensiveAbilities.rightHandFlipAttack = offensiveAbilities.rightHandOffensiveFlip;
-			offensiveAbilities.leftHandFlipAttack = offensiveAbilities.leftHandOffensiveFlip;
-			offensiveAbilities.rightHandFistAttack = offensiveAbilities.rightHandOffensiveFist;
-			offensiveAbilities.leftHandFistAttack = offensiveAbilities.leftHandOffensiveFist;
+			steamManager.firstControllerAttack = steamFireballAttack;
+			steamManager.secondControllerAttack = steamFireballAttack;
+
+//			// Change To the offensive abilities
+//			offensiveAbilities.rightHandFlipAttack = offensiveAbilities.rightHandOffensiveFlip;
+//			offensiveAbilities.leftHandFlipAttack = offensiveAbilities.leftHandOffensiveFlip;
+//			offensiveAbilities.rightHandFistAttack = offensiveAbilities.rightHandOffensiveFist;
+//			offensiveAbilities.leftHandFistAttack = offensiveAbilities.leftHandOffensiveFist;
 //			offensiveAbilities.fistAttack = iceBallAttack;
 
 			// Start the next round, spawn enemies, wait for the timer
@@ -318,7 +387,7 @@ public class GameLogic : MonoBehaviour
 			roundActive = true;
 			currentRoundTime = enemyWaves[i].roundTime;
 			// Enable the player HUD
-			playerHud.SetActive(true);
+//			playerHud.SetActive(true);
 
 			// Start the enemy spawners
 			enemyWaves[i].startWave ();
@@ -339,8 +408,10 @@ public class GameLogic : MonoBehaviour
 			playerLogic.changeCurrency(500);
 //			hmdMovement.enabled = false;
 			mainGameMusic.Pause();
-			offensiveAbilities.deactivateFlameThrowers();
-			offensiveAbilities.controlCheck();
+
+
+//			offensiveAbilities.deactivateFlameThrowers();
+//			offensiveAbilities.controlCheck();
 		}
 
 		killPlayerEndGame (true);
@@ -350,19 +421,27 @@ public class GameLogic : MonoBehaviour
 	// When the player dies bring up the end game screen and stop the current round
 	public void killPlayerEndGame(bool win)
 	{
-		hmdMovement.enabled = false;
+		if (!disableMovement)
+		{
+			hmdMovement.enabled = false;
+		}
+
 		mainGameMusic.Pause ();
 		defensivePhaseMusic.Pause();
 		defensivePhaseMusic.mute = true;
 		StopCoroutine (roundFunction ());
+		Destroy (endRoundScreen);
 //		endRoundScreen.disableUI();
-		endRoundScreen.enabled = false;
-		playerHud.SetActive (false);
+//		endRoundScreen.enabled = false;
+		endRoundScreen.SetActive (false);
+//		playerHud.SetActive (false);
 
-		offensiveAbilities.rightHandFlipAttack = offensiveAbilities.emptyAttack;
-		offensiveAbilities.leftHandFlipAttack = offensiveAbilities.emptyAttack;
-		offensiveAbilities.rightHandFistAttack = offensiveAbilities.emptyAttack;
-		offensiveAbilities.leftHandFistAttack = offensiveAbilities.emptyAttack;
+//		offensiveAbilities.rightHandFlipAttack = offensiveAbilities.emptyAttack;
+//		offensiveAbilities.leftHandFlipAttack = offensiveAbilities.emptyAttack;
+//		offensiveAbilities.rightHandFistAttack = offensiveAbilities.emptyAttack;
+//		offensiveAbilities.leftHandFistAttack = offensiveAbilities.emptyAttack;
+
+
 //		offensiveAbilities.fistAttack = emptyAttack;
 //		offensiveAbilities.handFlipAttack = emptyAttack;
 
@@ -371,31 +450,26 @@ public class GameLogic : MonoBehaviour
 		for (int enemyIndex = 0; enemyIndex < spawnedEnemies.transform.childCount; enemyIndex++)
 		{
 			Destroy (spawnedEnemies.transform.GetChild(enemyIndex).gameObject);
-
-			// Turn enemies into ragdolls/freeze in place
-//			BasicEnemyController enemy = (BasicEnemyController) spawnedEnemies.transform.GetChild(enemyIndex).gameObject.GetComponent(typeof(BasicEnemyController));
-//			// Case for the root motion zombies
-//			if (enemy == null)
-//			{
-//				enemy = (BasicEnemyController) spawnedEnemies.transform.GetChild(enemyIndex).GetChild (0).gameObject.GetComponent(typeof(BasicEnemyController));
-//				Animator anim = (Animator) spawnedEnemies.transform.GetChild(enemyIndex).GetChild (0).gameObject.GetComponent(typeof(Animator));
-//				anim.enabled = false;
-//			}
-//			enemy.enabled = false;
 		}
 
-		if (win) {
+		if (win) 
+		{
 			winningSound.Play();
 			endGameText.text = "YOU WIN";
 			endGameHud.SetActive (true);
-		} else {
+		}
+		else
+		{
 			losingSound.Play();
 			endGameHud.SetActive (true);
 			// Tell the player how many waves they survived
 		}
-		if (waveIndex == 1) {
+		if (waveIndex == 1) 
+		{
 				roundsSurvivedText.text = "You survived for " + waveIndex + " round!";
-		} else {
+		} 
+		else
+		{
 				roundsSurvivedText.text = "You survived for " + waveIndex + " rounds!";
 		}
 
