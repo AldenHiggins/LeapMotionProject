@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class BasicEnemyController : MonoBehaviour 
+public class BasicEnemyController : MonoBehaviour, IUnit
 {
 	// GAME LOGIC
 	public GameLogic game;
@@ -15,6 +15,7 @@ public class BasicEnemyController : MonoBehaviour
 	public int attackDamage;
 	public int currencyOnKill;
 	public int livesTakenOnGoalReached;
+	public bool isAlly;
 	// HEADSHOTS
 	public float headshotHeight;
 	// NAV MESH AND PATH DEBUGGING
@@ -34,6 +35,7 @@ public class BasicEnemyController : MonoBehaviour
 	public bool usesRootMotion;
 	public bool floatingEnemy;
 	public float floatingVelocity;
+	public GameObject goalPosition;
 	// AUDIO
 	private AudioSource source;
 	public AudioClip woundSound;
@@ -84,8 +86,6 @@ public class BasicEnemyController : MonoBehaviour
 			agent.enabled = false;
 		}
 
-
-
 //		target = game.getEnemyTarget ();
 		if (isTutorial)
 		{
@@ -127,7 +127,41 @@ public class BasicEnemyController : MonoBehaviour
 		}
 	
 		startingMoveCounter++;
-//		print ("Current velocity: " + rigidbody.velocity);
+
+		// Search for nearby enemies to attack
+		GameObject enemy = null;
+		
+		// Only gets allies and player
+		int enemySearchLayer = 1 << 16;
+		enemySearchLayer = enemySearchLayer | (1 << 11);
+
+		if (isAlly)
+		{
+			enemySearchLayer = 1 << 8; 
+		}
+
+		RaycastHit[] rayCastHits = Physics.SphereCastAll(transform.position, 3.0f, transform.forward, 10.0f, enemySearchLayer);
+
+		// Just find the closest enemy
+		for (int hitIndex = 0; hitIndex < rayCastHits.Length; hitIndex++)
+		{
+			IUnit enemyUnit = (IUnit) rayCastHits[hitIndex].collider.gameObject.GetComponent(typeof(IUnit));
+			if (enemyUnit != null)
+			{
+				enemy = enemyUnit.getGameObject();
+			}
+		}
+
+
+		if (enemy != null)
+		{
+			target = enemy;
+		}
+		else
+		{
+			target = goalPosition;
+		}
+
 
 		velocity = target.transform.position - transform.position;
 		velocity.y = 0.0f;
@@ -137,16 +171,6 @@ public class BasicEnemyController : MonoBehaviour
 			if (attacking == false)
 			{
 				anim.SetBool ("Running", true);
-				velocity.Normalize ();
-				velocity *= speed;
-				// Get this objects position based on this gameobject's child (i.e. the gameobject of the zombie that's being animated)
-				if (startingMoveCounter > waitToMove)
-				{
-//					print ("Adding this position: " + gameObject.transform.GetChild(0).localPosition);
-//					gameObject.transform.position += gameObject.transform.GetChild(0).localPosition;
-//					gameObject.transform.GetChild(0).localPosition = new Vector3(0,0,0);
-//					gameObject.transform.GetChild(0).rotation = Quaternion.identity;
-				}
 
 				// If the enemy doesn't float use the nav mesh
 				if (!floatingEnemy)
@@ -176,18 +200,20 @@ public class BasicEnemyController : MonoBehaviour
 		else
 		{
 			anim.SetBool ("Running", false);
-			if (attacking == false)
+
+			if (!floatingEnemy)
 			{
-				attacking = true;
-//				if (!usesRootMotion)
-//				{
-//					agent.Stop();
-//				}
-				if (!floatingEnemy)
+				agent.Stop ();
+			}
+
+			// Don't start attacking if no enemy was found
+			if (enemy != null)
+			{
+				if (attacking == false)
 				{
-					agent.Stop ();
+					attacking = true;
+					StartCoroutine(attack());
 				}
-				StartCoroutine(attack());
 			}
 		}
 
@@ -214,14 +240,15 @@ public class BasicEnemyController : MonoBehaviour
 		distance.y = 0.0f;
 		if (distance.magnitude < attackRadius && !isDying)
 		{
-			PlayerLogic playerToAttack = (PlayerLogic) target.GetComponent(typeof(PlayerLogic));
-			if (playerToAttack != null)
-				playerToAttack.dealDamage(attackDamage);
+			IUnit unitToAttack = (IUnit) target.GetComponent(typeof(IUnit));
+			if (unitToAttack != null)
+			{
+				unitToAttack.dealDamage(attackDamage);
+			}
 		}
 		attacking = false;
 		anim.SetBool ("Attacking", false);
 	}
-
 
 
 	public void dealDamage(int damage)
@@ -281,7 +308,6 @@ public class BasicEnemyController : MonoBehaviour
 		agent.enabled = true;
 //		rigidbody.isKinematic = true;
 	}
-
 
 	IEnumerator kill()
 	{
@@ -389,5 +415,10 @@ public class BasicEnemyController : MonoBehaviour
 	public bool isMonsterDying()
 	{
 		return isDying;
+	}
+
+	public GameObject getGameObject()
+	{
+		return gameObject;
 	}
 }

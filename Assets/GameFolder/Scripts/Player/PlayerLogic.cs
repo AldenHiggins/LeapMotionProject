@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class PlayerLogic : MonoBehaviour 
+public class PlayerLogic : MonoBehaviour, IUnit
 {
 	public GameLogic game;
 	public bool isDefensivePlayer;
@@ -201,5 +201,10 @@ public class PlayerLogic : MonoBehaviour
 			GameObject healthTexture = healthTextureArray.transform.GetChild (healthIndex).gameObject;
 			healthTexture.SetActive(false);
 		}
+	}
+
+	public GameObject getGameObject()
+	{
+		return gameObject;
 	}
 }
