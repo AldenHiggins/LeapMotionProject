@@ -40,7 +40,11 @@ public class BasicFireballAttack : AAttack
 		}
 
 		// Wait for the next cool down in order to fire again
-		projectileActiveParticle.SetActive (false);
+		if (projectileActiveParticle != null)
+		{
+			projectileActiveParticle.SetActive (false);
+		}
+
 		canFire = false;
 		StartCoroutine (waitForCoolDown ());
 
@@ -89,7 +93,10 @@ public class BasicFireballAttack : AAttack
 	{
 
 		yield return new WaitForSeconds (firingCoolDown);
-		projectileActiveParticle.SetActive (true);
+		if (projectileActiveParticle != null)
+		{
+			projectileActiveParticle.SetActive (true);
+		}
 		canFire = true;
 	}
 }

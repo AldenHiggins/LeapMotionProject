@@ -42,10 +42,12 @@ public class GameLogic : MonoBehaviour
 	public Text roundText;
 	private bool nextRound = false;
 	private bool roundActive = false;
+
 	// MONSTER WAVES
 	public GameObject waveContainer;
 	private MonsterWave[] enemyWaves;
 	int waveIndex;
+
 	// INTERNAL VARIABLES
 	private GameObject playerAvatar;
 	private NetworkView view;
@@ -53,13 +55,12 @@ public class GameLogic : MonoBehaviour
 	private PlayerLogic playerLogic;
 	private DefensiveAbilities defensiveAbilities;
 	private OffensiveAbilities offensiveAbilities;
+
 	// GAME CONTROLLER VARIABLES
 	private bool previousSwitchPressed = false;
 	private bool fireballCharged;
 	private bool isBlocking;
 
-	// FIreball timing variable.
-	private int fireballTimer;
 	// HEAD BASED MOVEMENT
 	private HMDMovement hmdMovement;
 
@@ -84,7 +85,6 @@ public class GameLogic : MonoBehaviour
 	public AAttack flameThrowerAttack;
 	public AAttack iceBallAttack;
 
-
 	// STEAM ATTACKS
 	public RayCastTest steamManager;
 
@@ -97,20 +97,18 @@ public class GameLogic : MonoBehaviour
 	public bool startRound1;
 	public bool startRound2;
 
-
-
 	// WAVE TO START AT
 	public int waveToStartAt;
+
+
 	// Initialize variables
 	void Start () 
 	{
 		Debug.Log ("Starting game logic");
 
-
 		waveIndex = 0;
 		fireballCharged = false;
 		isBlocking = false;
-		fireballTimer = 0;
 		projectiles = new Dictionary<int, GameObject> ();
 		network = (Networking) gameObject.GetComponent (typeof(Networking));
 		playerLogic = (PlayerLogic) thisPlayer.GetComponent (typeof(PlayerLogic));
@@ -120,14 +118,11 @@ public class GameLogic : MonoBehaviour
 			hmdMovement = (HMDMovement)thisPlayer.GetComponent (typeof(HMDMovement));
 		}
 
-
-
-
 		Debug.Log ("Initializing offensive abilities");
 
-//		offensiveAbilities = (OffensiveAbilities) gameObject.GetComponent (typeof(OffensiveAbilities));
-//		defensiveAbilities = (DefensiveAbilities) gameObject.GetComponent (typeof(DefensiveAbilities));
-//		defensiveAbilities.showHideTurretPositions (false);
+		offensiveAbilities = (OffensiveAbilities) gameObject.GetComponent (typeof(OffensiveAbilities));
+		defensiveAbilities = (DefensiveAbilities) gameObject.GetComponent (typeof(DefensiveAbilities));
+		defensiveAbilities.showHideTurretPositions (false);
 
 		Debug.Log ("Starting waves!");
 
@@ -146,15 +141,15 @@ public class GameLogic : MonoBehaviour
 	// Control loop to check for player input
 	void Update () 
 	{
-//		// Check if round is active in order for players to use their abilities
-//		if (roundActive || isDefensiveStageActive)
-//		{
-//			if (!playerLogic.isDefensivePlayer)
-//			{
-//				offensiveAbilities.controlCheck();
-//			}
-//		}
-//
+		// Check if round is active in order for players to use their abilities
+		if (roundActive || isDefensiveStageActive)
+		{
+			if (!playerLogic.isDefensivePlayer)
+			{
+				offensiveAbilities.controlCheck();
+			}
+		}
+
 //		// Shared abilities
 //		bool switchButtonPressed = OVRGamepadController.GPC_GetButton (OVRGamepadController.Button.Back);
 //
@@ -188,7 +183,6 @@ public class GameLogic : MonoBehaviour
 		    startRound1 = true;
 		    startRound2 = true;
 		}
-//
 
 		if (Input.GetKeyDown (KeyCode.Y))
 	    {
@@ -300,19 +294,18 @@ public class GameLogic : MonoBehaviour
 			isDefensiveStageActive = true;
 			turretHud.SetActive(true);
 
-			steamManager.firstControllerAttack = steamEmptyAttack;
-			steamManager.secondControllerAttack = steamEmptyAttack;
 
-//			// Disable abilities during the change spells/end round screen
-//			offensiveAbilities.rightHandFlipAttack = offensiveAbilities.emptyAttack;
-//			offensiveAbilities.leftHandFlipAttack = offensiveAbilities.emptyAttack;
-//			offensiveAbilities.rightHandFistAttack = offensiveAbilities.emptyAttack;
-//			offensiveAbilities.leftHandFistAttack = offensiveAbilities.emptyAttack;
+//			// STEAM VR REMOVE ATTACKS
+//			steamManager.firstControllerAttack = steamEmptyAttack;
+//			steamManager.secondControllerAttack = steamEmptyAttack;
 
 
+			// Disable abilities during the change spells/end round screen
+			offensiveAbilities.rightHandFlipAttack = offensiveAbilities.emptyAttack;
+			offensiveAbilities.leftHandFlipAttack = offensiveAbilities.emptyAttack;
+			offensiveAbilities.rightHandFistAttack = offensiveAbilities.emptyAttack;
+			offensiveAbilities.leftHandFistAttack = offensiveAbilities.emptyAttack;
 
-//			offensiveAbilities.handFlipAttack = emptyAttack;
-//			offensiveAbilities.fistAttack = emptyAttack;
 
 
 //			defensiveAbilities.updateDefencesCostText();
@@ -322,14 +315,15 @@ public class GameLogic : MonoBehaviour
 			yield return new WaitForSeconds(1.5f);
 	
 
-//			//Activate defensive abilities
-//			offensiveAbilities.rightHandFlipAttack = offensiveAbilities.rightHandDefensiveFlip;
-//			offensiveAbilities.leftHandFlipAttack = offensiveAbilities.leftHandDefensiveFlip;
-//			offensiveAbilities.rightHandFistAttack = offensiveAbilities.rightHandDefensiveFist;
-//			offensiveAbilities.leftHandFistAttack = offensiveAbilities.leftHandDefensiveFist;
+			//Activate defensive abilities
+			offensiveAbilities.rightHandFlipAttack = offensiveAbilities.rightHandDefensiveFlip;
+			offensiveAbilities.leftHandFlipAttack = offensiveAbilities.leftHandDefensiveFlip;
+			offensiveAbilities.rightHandFistAttack = offensiveAbilities.rightHandDefensiveFist;
+			offensiveAbilities.leftHandFistAttack = offensiveAbilities.leftHandDefensiveFist;
 
-			steamManager.firstControllerAttack = steamDefensivePlacement;
-			steamManager.secondControllerAttack = steamDefensiveSwitching;
+//			// STEAM VR ACTIVATE DEFENSIVE ATTACKS
+//			steamManager.firstControllerAttack = steamDefensivePlacement;
+//			steamManager.secondControllerAttack = steamDefensiveSwitching;
 
 
 //			offensiveAbilities.handFlipAttack = placeBallistaAttack;
@@ -345,8 +339,6 @@ public class GameLogic : MonoBehaviour
 				}
 			}
 
-
-
 			// Wait for player to end defensive setup phase
 			while (!startRound1 || !startRound2) 
 			{
@@ -356,10 +348,11 @@ public class GameLogic : MonoBehaviour
 			startRound1 = false;
 			startRound2 = false;
 
-//			offensiveAbilities.rightHandFlipAttack.inactiveFunction();
-//			offensiveAbilities.leftHandFlipAttack.inactiveFunction();
-//			offensiveAbilities.rightHandFistAttack.inactiveFunction();
-//			offensiveAbilities.leftHandFistAttack.inactiveFunction();
+			// Call the inactive functions to clear in progress defensive placements
+			offensiveAbilities.rightHandFlipAttack.inactiveFunction();
+			offensiveAbilities.leftHandFlipAttack.inactiveFunction();
+			offensiveAbilities.rightHandFistAttack.inactiveFunction();
+			offensiveAbilities.leftHandFistAttack.inactiveFunction();
 
 
 //			offensiveAbilities.fistAttack.inactiveFunction();
@@ -370,15 +363,21 @@ public class GameLogic : MonoBehaviour
 			turretHud.SetActive(false);
 			isDefensiveStageActive = false;
 
-			steamManager.firstControllerAttack = steamFireballAttack;
-			steamManager.secondControllerAttack = steamFireballAttack;
+//			// STEAM VR ACTIVATE OFFENSIVE ABILITIES
+//			steamManager.firstControllerAttack = steamFireballAttack;
+//			steamManager.secondControllerAttack = steamFireballAttack;
 
-//			// Change To the offensive abilities
-//			offensiveAbilities.rightHandFlipAttack = offensiveAbilities.rightHandOffensiveFlip;
-//			offensiveAbilities.leftHandFlipAttack = offensiveAbilities.leftHandOffensiveFlip;
-//			offensiveAbilities.rightHandFistAttack = offensiveAbilities.rightHandOffensiveFist;
-//			offensiveAbilities.leftHandFistAttack = offensiveAbilities.leftHandOffensiveFist;
-//			offensiveAbilities.fistAttack = iceBallAttack;
+
+			// Resize the player down to creature-scale
+			playerLogic.gameObject.transform.localScale.Set(1.0f, 1.0f, 1.0f);
+			playerLogic.gameObject.transform.position = new Vector3(playerLogic.gameObject.transform.position.x, 2.0f, playerLogic.gameObject.transform.position.z);
+
+
+			// Change To the offensive abilities
+			offensiveAbilities.rightHandFlipAttack = offensiveAbilities.rightHandOffensiveFlip;
+			offensiveAbilities.leftHandFlipAttack = offensiveAbilities.leftHandOffensiveFlip;
+			offensiveAbilities.rightHandFistAttack = offensiveAbilities.rightHandOffensiveFist;
+			offensiveAbilities.leftHandFistAttack = offensiveAbilities.leftHandOffensiveFist;
 
 			// Start the next round, spawn enemies, wait for the timer
 			defensivePhaseMusic.Pause();
@@ -410,8 +409,8 @@ public class GameLogic : MonoBehaviour
 			mainGameMusic.Pause();
 
 
-//			offensiveAbilities.deactivateFlameThrowers();
-//			offensiveAbilities.controlCheck();
+			offensiveAbilities.deactivateFlameThrowers();
+			offensiveAbilities.controlCheck();
 		}
 
 		killPlayerEndGame (true);
@@ -436,10 +435,10 @@ public class GameLogic : MonoBehaviour
 		endRoundScreen.SetActive (false);
 //		playerHud.SetActive (false);
 
-//		offensiveAbilities.rightHandFlipAttack = offensiveAbilities.emptyAttack;
-//		offensiveAbilities.leftHandFlipAttack = offensiveAbilities.emptyAttack;
-//		offensiveAbilities.rightHandFistAttack = offensiveAbilities.emptyAttack;
-//		offensiveAbilities.leftHandFistAttack = offensiveAbilities.emptyAttack;
+		offensiveAbilities.rightHandFlipAttack = offensiveAbilities.emptyAttack;
+		offensiveAbilities.leftHandFlipAttack = offensiveAbilities.emptyAttack;
+		offensiveAbilities.rightHandFistAttack = offensiveAbilities.emptyAttack;
+		offensiveAbilities.leftHandFistAttack = offensiveAbilities.emptyAttack;
 
 
 //		offensiveAbilities.fistAttack = emptyAttack;
