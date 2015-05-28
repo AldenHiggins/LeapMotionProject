@@ -79,6 +79,8 @@ public class HMDMovement : MonoBehaviour
 			moveVector *= Time.deltaTime;
 			moveVector *= 100;
 
+			// Zero out the y factor so the player won't move up or down
+			moveVector.y = 0;
 
 //			controller.Move (moveVector);
 			transform.position += moveVector;

@@ -25,7 +25,6 @@ public class GameLogic : MonoBehaviour
 	public AudioSource winningSound;
 	public AudioSource losingSound;
 
-
 	// TURRET PLACEMENT HUD
 	public GameObject turretHud;
 	public ButtonDemoGraphics callForWaveButtonGraphic;
@@ -270,12 +269,13 @@ public class GameLogic : MonoBehaviour
 			endRoundScreen.SetActive(true);
 			defensivePhaseMusic.Play();
 
-			// Enable hand controller for defensive player
-			if (playerLogic.isDefensivePlayer)
+			// Size the player up to giant-scale
+			playerLogic.gameObject.transform.localScale= new Vector3(12.0f, 12.0f, 12.0f);
+			playerLogic.gameObject.transform.position = new Vector3(0.0f, 18.59f, 0.0f);
+			// Make the player move faster if movement is enabled
+			if (!disableMovement)
 			{
-				HandController hand = (HandController) thisPlayer.transform.GetChild (1).GetChild (1).
-					GetChild (0).gameObject.GetComponent(typeof(HandController));
-				hand.enabled = true;
+				hmdMovement.moveSpeed *= 12;
 			}
 
 			// Now wait for the player to press next round button
@@ -369,8 +369,13 @@ public class GameLogic : MonoBehaviour
 
 
 			// Resize the player down to creature-scale
-			playerLogic.gameObject.transform.localScale.Set(1.0f, 1.0f, 1.0f);
-			playerLogic.gameObject.transform.position = new Vector3(playerLogic.gameObject.transform.position.x, 2.0f, playerLogic.gameObject.transform.position.z);
+			playerLogic.gameObject.transform.localScale= new Vector3(1.0f, 1.0f, 1.0f);
+			playerLogic.gameObject.transform.position = new Vector3(0.0f, 2.0f, 0.0f);
+			// Slow the player down to human-speed if movement is enabled
+			if (!disableMovement)
+			{
+				hmdMovement.moveSpeed /= 12;
+			}
 
 
 			// Change To the offensive abilities
