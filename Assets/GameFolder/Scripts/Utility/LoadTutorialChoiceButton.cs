@@ -14,7 +14,7 @@ public class LoadTutorialChoiceButton : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-		if (button.isPressed ()) {
+		if (button.gameObject.GetComponentInChildren<Renderer>().enabled) {
 			otherButton.SetActive (false);
 			buttonToggle.ButtonTurnsOff();
 			gameObject.SetActive (false);

@@ -5,8 +5,6 @@ using System.Collections;
 
 public class ButtonDemoGraphics : MonoBehaviour 
 {
-	private bool pressedBoolean = false;
-
 	public void SetActive(bool status)
 	{
 		Renderer[] renderers = GetComponentsInChildren<Renderer>();
@@ -22,10 +20,7 @@ public class ButtonDemoGraphics : MonoBehaviour
 		foreach(Image image in GUIimages){
 			image.enabled = status;
 		}
-
-
-		// Set the isPressed boolean
-		pressedBoolean = status;
+		
 	}
 	
 	public void SetColor(Color color)
@@ -43,10 +38,5 @@ public class ButtonDemoGraphics : MonoBehaviour
 		foreach(Image image in GUIimages){
 			image.color = color;
 		}
-	}
-
-	public bool isPressed()
-	{
-		return pressedBoolean;
 	}
 }

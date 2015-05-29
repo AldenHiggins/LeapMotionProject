@@ -16,7 +16,7 @@ public class AttackContainer : MonoBehaviour
 
 	void Update()
 	{
-		if (thisButton.onGraphics.isPressed())
+		if (thisButton.onGraphics.gameObject.GetComponentInChildren<Renderer>().enabled)
 		{
 			if (!messageSent)
 			{

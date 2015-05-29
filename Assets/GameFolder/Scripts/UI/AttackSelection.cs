@@ -39,7 +39,7 @@ public class AttackSelection : MonoBehaviour
 	{
 		// Check the various selection parameters to see which ones are applicable
 		ButtonDemoToggle button = (ButtonDemoToggle)offenseDefense.transform.GetChild (0).GetComponentInChildren (typeof(ButtonDemoToggle));
-		if (button.onGraphics.isPressed())
+		if (button.onGraphics.gameObject.GetComponentInChildren<Renderer>().enabled)
 		{
 			offenseOrDefense = 0;
 			// Modify the available ability choices based on whether offense or defense was chosen
@@ -56,7 +56,7 @@ public class AttackSelection : MonoBehaviour
 		}
 
 		button = (ButtonDemoToggle)leftRight.transform.GetChild (0).GetComponentInChildren (typeof(ButtonDemoToggle));
-		if (button.onGraphics.isPressed())
+		if (button.onGraphics.gameObject.GetComponentInChildren<Renderer>().enabled)
 		{
 			leftOrRight = 0;
 		}
@@ -66,7 +66,7 @@ public class AttackSelection : MonoBehaviour
 		}
 
 		button = (ButtonDemoToggle)flipFist.transform.GetChild (0).GetComponentInChildren (typeof(ButtonDemoToggle));
-		if (button.onGraphics.isPressed())
+		if (button.onGraphics.gameObject.GetComponentInChildren<Renderer>().enabled)
 		{
 			flipOrFist = 0;
 		}

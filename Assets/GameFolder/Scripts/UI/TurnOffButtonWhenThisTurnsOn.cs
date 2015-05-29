@@ -26,7 +26,7 @@ public class TurnOffButtonWhenThisTurnsOn : MonoBehaviour
 
 	void Update()
 	{
-		if (thisButton.onGraphics.isPressed())
+		if (thisButton.onGraphics.gameObject.GetComponentInChildren<Renderer>().enabled)
 		{
 			if (!otherButtonFlipped)
 			{

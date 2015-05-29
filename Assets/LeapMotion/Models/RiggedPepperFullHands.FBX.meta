@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: 1140de03f648349c6976a0ad6bce907c
 ModelImporter:
-  serializedVersion: 18
+  serializedVersion: 16
   fileIDToRecycleName:
     100000: Bip01 R Finger0
     100002: Bip01 R Finger01
@@ -150,13 +150,11 @@ ModelImporter:
     generateSecondaryUV: 0
     useFileUnits: 1
     optimizeMeshForGPU: 1
-    keepQuads: 0
     weldVertices: 1
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
-    useFileScale: 0
   tangentSpace:
     normalSmoothAngle: 60
     splitTangentsAcrossUV: 1
@@ -179,5 +177,3 @@ ModelImporter:
   animationType: 2
   additionalBone: 0
   userData: 
-  assetBundleName: 
-  assetBundleVariant: 

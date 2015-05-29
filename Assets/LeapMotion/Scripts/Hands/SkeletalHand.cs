@@ -8,24 +8,27 @@ using UnityEngine;
 using System.Collections;
 using Leap;
 
-// The model for our skeletal hand made out of various polyhedra.
+/** 
+ * A hand object consisting of discrete, component parts.
+ * 
+ * The hand can have game objects for the palm, wrist and forearm, as well as fingers.
+ */
 public class SkeletalHand : HandModel {
 
   protected const float PALM_CENTER_OFFSET = 0.0150f;
 
-  public GameObject palm;
-  public GameObject forearm;
-  public GameObject wristJoint;
-
   void Start() {
     // Ignore collisions with self.
     Leap.Utils.IgnoreCollisions(gameObject, gameObject);
+
+    for (int i = 0; i < fingers.Length; ++i) {
+      if (fingers[i] != null) {
+        fingers[i].fingerType = (Finger.FingerType)i;
+      }
+    }
   }
 
-  public override void InitHand() {
-    SetPositions();
-  }
-
+  /** Updates the hand and its component parts by setting their positions and rotations. */
   public override void UpdateHand() {
     SetPositions();
   }
@@ -38,22 +41,22 @@ public class SkeletalHand : HandModel {
   protected void SetPositions() {
     for (int f = 0; f < fingers.Length; ++f) {
       if (fingers[f] != null)
-        fingers[f].InitFinger();
+        fingers[f].UpdateFinger();
     }
 
     if (palm != null) {
-      palm.transform.position = GetPalmCenter();
-      palm.transform.rotation = GetPalmRotation();
+      palm.position = GetPalmCenter();
+      palm.rotation = GetPalmRotation();
     }
 
     if (wristJoint != null) {
-      wristJoint.transform.position = GetWristPosition();
-      wristJoint.transform.rotation = GetPalmRotation();
+      wristJoint.position = GetWristPosition();
+      wristJoint.rotation = GetPalmRotation();
     }
 
     if (forearm != null) {
-      forearm.transform.position = GetArmCenter();
-      forearm.transform.rotation = GetArmRotation();
+      forearm.position = GetArmCenter();
+      forearm.rotation = GetArmRotation();
     }
   }
 }

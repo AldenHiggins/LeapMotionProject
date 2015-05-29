@@ -169,7 +169,9 @@ public class GameLogic : MonoBehaviour
 //
 //
 		// Check for the new round button to be pressed
-		if (roundButton.isPressed() || Input.GetKeyDown (KeyCode.V))
+		// FIND NEW WAY TO CHECK FOR BUTTON PRESS
+//		if (roundButton.gameObject.GetComponentInChildren<Renderer>().enabled || Input.GetKeyDown (KeyCode.V))
+		if (Input.GetKeyDown (KeyCode.V))
 		{
 			nextRound = true;
 			nextRoundButton.ButtonTurnsOff();
