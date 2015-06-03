@@ -115,3 +115,6 @@ CastleGrid_Data/
 2015-05-29_130718/crash.dmp
 2015-05-29_130718/error.log
 2015-05-29_130718/output_log.txt
+*.suo
+obj/
+UpgradeLog.htm

@@ -46,7 +46,7 @@ public class EmitterBehaviorBallista : MonoBehaviour
 			{
 				BasicEnemyController enemy = (BasicEnemyController) nearbyObjects[i].gameObject.GetComponent(typeof(BasicEnemyController));
 				TutorialEnemyController enemyTut = (TutorialEnemyController) nearbyObjects[i].gameObject.GetComponent(typeof(TutorialEnemyController));
-				if (enemy != null && !enemy.isMonsterDying())
+				if (enemy != null && !enemy.isMonsterDying() && !enemy.isAlly)
 				{
 					float distance = Vector3.Distance (transform.position, enemy.transform.position);
 					if (distance < minDistance)

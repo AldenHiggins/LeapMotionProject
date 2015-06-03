@@ -75,6 +75,9 @@ public class GameLogic : MonoBehaviour
 	public ButtonDemoGraphics mainMenuButton;
 	public Text roundsSurvivedText;
 
+    // CONTROLLER ATTACK LOGIC
+    public ControllerAbilities controllerAttacks;
+
 	// ALL THE ATTACKS
 	public AAttack placeTurretAttack;
 	public AAttack placeBallistaAttack;
@@ -120,6 +123,7 @@ public class GameLogic : MonoBehaviour
 
 		offensiveAbilities = (OffensiveAbilities) gameObject.GetComponent (typeof(OffensiveAbilities));
 		defensiveAbilities = (DefensiveAbilities) gameObject.GetComponent (typeof(DefensiveAbilities));
+        controllerAttacks = (ControllerAbilities) gameObject.GetComponent(typeof(ControllerAbilities));
 		defensiveAbilities.showHideTurretPositions (false);
 
 		Debug.Log ("Starting waves!");
@@ -317,6 +321,9 @@ public class GameLogic : MonoBehaviour
 			offensiveAbilities.rightHandFistAttack = offensiveAbilities.emptyAttack;
 			offensiveAbilities.leftHandFistAttack = offensiveAbilities.emptyAttack;
 
+            controllerAttacks.rightTriggerAttack = controllerAttacks.emptyAttack;
+            controllerAttacks.leftTriggerAttack = controllerAttacks.emptyAttack;
+            
 
 
 //			defensiveAbilities.updateDefencesCostText();
@@ -331,6 +338,9 @@ public class GameLogic : MonoBehaviour
 			offensiveAbilities.leftHandFlipAttack = offensiveAbilities.leftHandDefensiveFlip;
 			offensiveAbilities.rightHandFistAttack = offensiveAbilities.rightHandDefensiveFist;
 			offensiveAbilities.leftHandFistAttack = offensiveAbilities.leftHandDefensiveFist;
+
+            controllerAttacks.rightTriggerAttack = controllerAttacks.placeDefense;
+            controllerAttacks.leftTriggerAttack = controllerAttacks.switchDefense;
 
 //			// STEAM VR ACTIVATE DEFENSIVE ATTACKS
 //			steamManager.firstControllerAttack = steamDefensivePlacement;
@@ -365,6 +375,7 @@ public class GameLogic : MonoBehaviour
 			offensiveAbilities.rightHandFistAttack.inactiveFunction();
 			offensiveAbilities.leftHandFistAttack.inactiveFunction();
 
+            controllerAttacks.rightTriggerAttack.inactiveFunction();
 
 //			offensiveAbilities.fistAttack.inactiveFunction();
 			// Clean up defensive setup stuff
@@ -380,8 +391,8 @@ public class GameLogic : MonoBehaviour
 
 
 			// Resize the player down to creature-scale
-			playerLogic.gameObject.transform.localScale= new Vector3(1.0f, 1.0f, 1.0f);
-			playerLogic.gameObject.transform.position = new Vector3(0.0f, 2.0f, 0.0f);
+            playerLogic.gameObject.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+            playerLogic.gameObject.transform.position = new Vector3(0.0f, 2.0f, 0.0f);
 
 
 			// Slow the player down to human-speed if movement is enabled
@@ -395,6 +406,9 @@ public class GameLogic : MonoBehaviour
 			offensiveAbilities.leftHandFlipAttack = offensiveAbilities.leftHandOffensiveFlip;
 			offensiveAbilities.rightHandFistAttack = offensiveAbilities.rightHandOffensiveFist;
 			offensiveAbilities.leftHandFistAttack = offensiveAbilities.leftHandOffensiveFist;
+
+            controllerAttacks.rightTriggerAttack = controllerAttacks.fireballAttack;
+            controllerAttacks.leftTriggerAttack = controllerAttacks.iceballAttack;
 
 			// Start the next round, spawn enemies, wait for the timer
 			defensivePhaseMusic.Pause();

@@ -72,10 +72,18 @@ public class ControllerAbilities : MonoBehaviour
 		// RIGHT TRIGGER //
 		///////////////////
 		float rightTriggerPressed = OVRGamepadController.GPC_GetAxis(OVRGamepadController.Axis.RightTrigger);
-		if (rightTriggerPressed > .1f && previousRightTrigger <= .1f)
-		{
-			rightTriggerAttack.releaseFunction(camera);
-		}
+        if (rightTriggerPressed > .1f && previousRightTrigger > .1f)
+        {
+            rightTriggerAttack.holdFunction();
+        }
+        else if (rightTriggerPressed < .1f && previousRightTrigger >= .1f)
+        {
+            rightTriggerAttack.releaseFunction(camera);
+        }
+        else
+        {
+            rightTriggerAttack.inactiveFunction();
+        }
 		previousRightTrigger = rightTriggerPressed;
 
 		///////////////////

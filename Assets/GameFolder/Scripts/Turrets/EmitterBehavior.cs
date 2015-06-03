@@ -39,12 +39,15 @@ public class EmitterBehavior : MonoBehaviour
 				TutorialEnemyController enemyTut = (TutorialEnemyController) nearbyObjects[i].gameObject.GetComponent(typeof(TutorialEnemyController));
 				if (enemy != null)
 				{
-					float distance = Vector3.Distance (transform.position, enemy.transform.position);
-					if (distance < minDistance)
-					{
-						minDistance = distance;
-						nearestEnemy = enemy;
-					}
+                    if (!enemy.isAlly)
+                    {
+                        float distance = Vector3.Distance(transform.position, enemy.transform.position);
+                        if (distance < minDistance)
+                        {
+                            minDistance = distance;
+                            nearestEnemy = enemy;
+                        }
+                    }
 				}
 
 				if (enemyTut != null)
