@@ -99,12 +99,6 @@ public class GameLogic : MonoBehaviour
 	// WAVE TO START AT
 	public int waveToStartAt;
 
-	// CONTROLLER ATTACKS
-	public AControllerAttack rightTriggerAttack;
-	public AControllerAttack leftTriggerAttack;
-
-
-
 	// Initialize variables
 	void Start () 
 	{
@@ -154,35 +148,6 @@ public class GameLogic : MonoBehaviour
 			}
 		}
 
-		// Check for controller input
-		bool aPressed = OVRGamepadController.GPC_GetButton(OVRGamepadController.Button.A);
-		if (aPressed)
-		{
-			Debug.Log ("A Pressed");
-		}
-
-		// Check for controller usage
-		bool bPressed = OVRGamepadController.GPC_GetButton(OVRGamepadController.Button.B);
-		if (bPressed)
-		{
-			Debug.Log ("B Pressed");
-		}
-
-		float rightTriggerPressed = OVRGamepadController.GPC_GetAxis(OVRGamepadController.Axis.RightTrigger);
-		if (rightTriggerPressed > .1f)
-		{
-			Debug.Log ("Right Trigger Pressed");
-			rightTriggerAttack.releaseFunction(thisCamera);
-		}
-
-		float leftTriggerPressed = OVRGamepadController.GPC_GetAxis(OVRGamepadController.Axis.LeftTrigger);
-		if (leftTriggerPressed > .1f)
-		{
-			Debug.Log ("Left Trigger Pressed");
-			leftTriggerAttack.releaseFunction(thisCamera);
-		}
-
-
 
 //		// Shared abilities
 //		bool switchButtonPressed = OVRGamepadController.GPC_GetButton (OVRGamepadController.Button.Back);
@@ -203,15 +168,10 @@ public class GameLogic : MonoBehaviour
 //		}		
 //
 //
-		// Check for the new round button to be pressed
-		// FIND NEW WAY TO CHECK FOR BUTTON PRESS
-//		if (roundButton.gameObject.GetComponentInChildren<Renderer>().enabled || Input.GetKeyDown (KeyCode.V))
+		// Check for developer/debug actions
 		if (Input.GetKeyDown (KeyCode.V))
 		{
-			nextRound = true;
-			nextRoundButton.ButtonTurnsOff();
-			// Temporarily skip turret placement phase
-			// callForWaveButton.ButtonTurnsOn();
+			startRound();
 		}
 
 		if (Input.GetKeyDown(KeyCode.F))
@@ -271,6 +231,20 @@ public class GameLogic : MonoBehaviour
 //			playerLogic.gameObject.transform.rotation = Quaternion.Euler (0.0f, 90.0f, 0.0f);
 //			StartCoroutine(waitToEnableRoundScreen());
 //		}
+	}
+
+	public void startRound()
+	{
+		if (isDefensiveStageActive)
+		{
+			startRound1 = true;
+			startRound2 = true;
+		}
+		else
+		{
+			nextRound = true;
+			nextRoundButton.ButtonTurnsOff();
+		}
 	}
 
 	IEnumerator waitToEnableRoundScreen()
@@ -408,12 +382,13 @@ public class GameLogic : MonoBehaviour
 			// Resize the player down to creature-scale
 			playerLogic.gameObject.transform.localScale= new Vector3(1.0f, 1.0f, 1.0f);
 			playerLogic.gameObject.transform.position = new Vector3(0.0f, 2.0f, 0.0f);
+
+
 			// Slow the player down to human-speed if movement is enabled
 			if (!disableMovement)
 			{
 				hmdMovement.moveSpeed /= 12;
 			}
-
 
 			// Change To the offensive abilities
 			offensiveAbilities.rightHandFlipAttack = offensiveAbilities.rightHandOffensiveFlip;

@@ -740,6 +740,7 @@ public class OVRMainMenu : MonoBehaviour
 		}
 		
 		bool curStartDown = OVRGamepadController.GPC_GetButton(OVRGamepadController.Button.Start);
+		curStartDown = false;
 		bool startPressed = (curStartDown && !PrevStartDown) || Input.GetKeyDown(KeyCode.RightShift);
 		PrevStartDown = curStartDown;
 		
