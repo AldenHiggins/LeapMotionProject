@@ -14,7 +14,7 @@ public class PlaceDefenseSteam : SteamAttacks
 	public bool rotateWhilePlacing;
 	public GameObject goldSpentUI;
 
-	public RayCastTest rayCast;
+//	public RayCastTest rayCast;
 	
 	void Start()
 	{
@@ -38,22 +38,22 @@ public class PlaceDefenseSteam : SteamAttacks
 			// Generate a popup to show how much gold was spent
 			if (goldSpentUI != null)
 			{
-				GameObject thisDamage = (GameObject) Instantiate(goldSpentUI, rayCast.defensiveRayHit(controllerIndex).point, Quaternion.identity);
-				thisDamage.SetActive(true);
-				
-				// Get the text field of the damage popup
-				Text textFieldAmountOfDamage = thisDamage.transform.GetChild (1).GetChild(0).GetComponent<Text>();
-				textFieldAmountOfDamage.text = "-" + defenseCost;
+//				GameObject thisDamage = (GameObject) Instantiate(goldSpentUI, rayCast.defensiveRayHit(controllerIndex).point, Quaternion.identity);
+//				thisDamage.SetActive(true);
+//				
+//				// Get the text field of the damage popup
+//				Text textFieldAmountOfDamage = thisDamage.transform.GetChild (1).GetChild(0).GetComponent<Text>();
+//				textFieldAmountOfDamage.text = "-" + defenseCost;
 			}
 			
 			
-			Quaternion rotation = trackedDevice.transform.rotation;
-			GameObject ballistaFinal = (GameObject)Instantiate (defensiveObject, rayCast.defensiveRayHit(controllerIndex).point, Quaternion.Euler (0.0f, rotation.eulerAngles.y, 0.0f));
-			ballistaFinal.SetActive (true);
-			source.PlayOneShot(placeObjectSound);
-			Destroy (createdDefensiveObject);
-			isInstantiated = false;
-			player.changeCurrency(-1 * defenseCost);
+//			Quaternion rotation = trackedDevice.transform.rotation;
+//			GameObject ballistaFinal = (GameObject)Instantiate (defensiveObject, rayCast.defensiveRayHit(controllerIndex).point, Quaternion.Euler (0.0f, rotation.eulerAngles.y, 0.0f));
+//			ballistaFinal.SetActive (true);
+//			source.PlayOneShot(placeObjectSound);
+//			Destroy (createdDefensiveObject);
+//			isInstantiated = false;
+//			player.changeCurrency(-1 * defenseCost);
 		}
 	}
 	
@@ -65,15 +65,15 @@ public class PlaceDefenseSteam : SteamAttacks
 		//print ("Place ballista is charging!");
 		if (player.getCurrencyValue() >= defenseCost) 
 		{
-			if (!isInstantiated) 
-			{
-				createdDefensiveObject = (GameObject)Instantiate (defensiveObjectPending);
-				createdDefensiveObject.SetActive(true);
-				isInstantiated = true;
-			}
-			createdDefensiveObject.transform.position = rayCast.defensiveRayHit(controllerIndex).point;
-			Quaternion rotation= trackedDevice.transform.rotation;
-			createdDefensiveObject.transform.rotation = Quaternion.Euler (0.0f, rotation.eulerAngles.y, 0.0f);
+//			if (!isInstantiated) 
+//			{
+//				createdDefensiveObject = (GameObject)Instantiate (defensiveObjectPending);
+//				createdDefensiveObject.SetActive(true);
+//				isInstantiated = true;
+//			}
+//			createdDefensiveObject.transform.position = rayCast.defensiveRayHit(controllerIndex).point;
+//			Quaternion rotation= trackedDevice.transform.rotation;
+//			createdDefensiveObject.transform.rotation = Quaternion.Euler (0.0f, rotation.eulerAngles.y, 0.0f);
 		}
 	}
 

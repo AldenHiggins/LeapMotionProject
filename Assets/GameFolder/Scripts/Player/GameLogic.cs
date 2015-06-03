@@ -85,7 +85,7 @@ public class GameLogic : MonoBehaviour
 	public AAttack iceBallAttack;
 
 	// STEAM ATTACKS
-	public RayCastTest steamManager;
+//	public RayCastTest steamManager;
 
 	public SteamAttacks steamDefensivePlacement;
 	public SteamAttacks steamEmptyAttack;
@@ -98,6 +98,11 @@ public class GameLogic : MonoBehaviour
 
 	// WAVE TO START AT
 	public int waveToStartAt;
+
+	// CONTROLLER ATTACKS
+	public AControllerAttack rightTriggerAttack;
+	public AControllerAttack leftTriggerAttack;
+
 
 
 	// Initialize variables
@@ -148,6 +153,36 @@ public class GameLogic : MonoBehaviour
 				offensiveAbilities.controlCheck();
 			}
 		}
+
+		// Check for controller input
+		bool aPressed = OVRGamepadController.GPC_GetButton(OVRGamepadController.Button.A);
+		if (aPressed)
+		{
+			Debug.Log ("A Pressed");
+		}
+
+		// Check for controller usage
+		bool bPressed = OVRGamepadController.GPC_GetButton(OVRGamepadController.Button.B);
+		if (bPressed)
+		{
+			Debug.Log ("B Pressed");
+		}
+
+		float rightTriggerPressed = OVRGamepadController.GPC_GetAxis(OVRGamepadController.Axis.RightTrigger);
+		if (rightTriggerPressed > .1f)
+		{
+			Debug.Log ("Right Trigger Pressed");
+			rightTriggerAttack.releaseFunction(thisCamera);
+		}
+
+		float leftTriggerPressed = OVRGamepadController.GPC_GetAxis(OVRGamepadController.Axis.LeftTrigger);
+		if (leftTriggerPressed > .1f)
+		{
+			Debug.Log ("Left Trigger Pressed");
+			leftTriggerAttack.releaseFunction(thisCamera);
+		}
+
+
 
 //		// Shared abilities
 //		bool switchButtonPressed = OVRGamepadController.GPC_GetButton (OVRGamepadController.Button.Back);
