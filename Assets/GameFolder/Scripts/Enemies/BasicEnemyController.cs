@@ -223,12 +223,12 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 			}
 		}
 
-		if (floatingEnemy)
-		{
-			// Face the target as well
-			transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position);
-			transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
-		}
+        //if (floatingEnemy)
+        //{
+		// Face the target as well
+		transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position);
+		transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
+        //}
 
 		if (showNavMeshPath)
 		{
@@ -240,7 +240,7 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 	{
 		anim.SetBool ("Attacking", true);
 		// All enemies globally do damage after a second and a half
-		yield return new WaitForSeconds (1.5f);
+		yield return new WaitForSeconds (.5f);
 
 		Vector3 distance = target.transform.position - transform.position;
 		distance.y = 0.0f;
@@ -252,6 +252,9 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 				unitToAttack.dealDamage(attackDamage);
 			}
 		}
+
+        yield return new WaitForSeconds(1.0f);
+
 		attacking = false;
 		anim.SetBool ("Attacking", false);
 	}

@@ -86,8 +86,8 @@ public class PlayerLogic : MonoBehaviour, IUnit
 	public void dealDamage(int damageToDeal)
 	{
 		health -= damageToDeal;
-		GameObject createdExplosion = (GameObject) Instantiate (damageExplosion, gameObject.transform.position, Quaternion.identity);
-		createdExplosion.SetActive (true);
+        //GameObject createdExplosion = (GameObject) Instantiate (damageExplosion, gameObject.transform.position, Quaternion.identity);
+        //createdExplosion.SetActive (true);
 		// Player is dead
 		if (health < 0)
 		{

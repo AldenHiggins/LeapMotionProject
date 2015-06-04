@@ -6,7 +6,7 @@ public class DamageInRadius : MonoBehaviour
 	public int damage;
 	public float radius;
 	public float interval;
-
+    public bool damageAllies;
 
 	// Use this for initialization
 	void Start ()
@@ -23,7 +23,7 @@ public class DamageInRadius : MonoBehaviour
 	{
 		if (interval == 0)
 		{
-			return true;
+            yield break;
 		}
 
 		while (true)
@@ -44,8 +44,14 @@ public class DamageInRadius : MonoBehaviour
 				BasicEnemyController enemy = (BasicEnemyController) nearbyObjects[i].gameObject.GetComponent(typeof(BasicEnemyController));
 				if (enemy != null)
 				{
-					//					print ("Radius dealing damage");
-					enemy.dealDamage(damage);
+                    if (!damageAllies && enemy.isAlly)
+                    {
+
+                    }
+                    else
+                    {
+                        enemy.dealDamage(damage);
+                    }					
 				}
 			}
 			
