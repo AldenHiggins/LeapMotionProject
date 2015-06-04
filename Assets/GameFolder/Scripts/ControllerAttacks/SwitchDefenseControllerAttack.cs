@@ -14,6 +14,8 @@ class SwitchDefenseControllerAttack : AControllerAttack
 
     public override void releaseFunction(GameObject camera)
     {
+        AControllerAttack previousAttack = (AControllerAttack) defensiveChoices.transform.GetChild(currentAttackIndex).gameObject.GetComponent(typeof(AControllerAttack));
+        previousAttack.inactiveFunction();
         currentAttackIndex++;
         if (currentAttackIndex >= defensiveChoices.transform.childCount)
         {

@@ -293,6 +293,15 @@ public class GameLogic : MonoBehaviour
 				hmdMovement.moveSpeed *= 12;
 			}
 
+            // Disable abilities during the change spells/end round screen
+            offensiveAbilities.rightHandFlipAttack = offensiveAbilities.emptyAttack;
+            offensiveAbilities.leftHandFlipAttack = offensiveAbilities.emptyAttack;
+            offensiveAbilities.rightHandFistAttack = offensiveAbilities.emptyAttack;
+            offensiveAbilities.leftHandFistAttack = offensiveAbilities.emptyAttack;
+
+            controllerAttacks.rightTriggerAttack = controllerAttacks.emptyAttack;
+            controllerAttacks.leftTriggerAttack = controllerAttacks.emptyAttack;
+
 			// Now wait for the player to press next round button
 			while (!nextRound)
 			{
@@ -315,14 +324,7 @@ public class GameLogic : MonoBehaviour
 //			steamManager.secondControllerAttack = steamEmptyAttack;
 
 
-			// Disable abilities during the change spells/end round screen
-			offensiveAbilities.rightHandFlipAttack = offensiveAbilities.emptyAttack;
-			offensiveAbilities.leftHandFlipAttack = offensiveAbilities.emptyAttack;
-			offensiveAbilities.rightHandFistAttack = offensiveAbilities.emptyAttack;
-			offensiveAbilities.leftHandFistAttack = offensiveAbilities.emptyAttack;
-
-            controllerAttacks.rightTriggerAttack = controllerAttacks.emptyAttack;
-            controllerAttacks.leftTriggerAttack = controllerAttacks.emptyAttack;
+			
             
 
 
@@ -331,7 +333,8 @@ public class GameLogic : MonoBehaviour
 
 			// Wait a couple of seconds for the player to readjust.
 			yield return new WaitForSeconds(1.5f);
-	
+
+            controllerAttacks.rightTriggerAttack.inactiveFunction();
 
 			//Activate defensive abilities
 			offensiveAbilities.rightHandFlipAttack = offensiveAbilities.rightHandDefensiveFlip;

@@ -279,16 +279,16 @@ public class OVRPlayerController : MonoBehaviour
 		float leftAxisY = OVRGamepadController.GPC_GetAxis(OVRGamepadController.Axis.LeftYAxis);
 
 		if(leftAxisY > 0.0f)
-			MoveThrottle += ort * (leftAxisY * moveInfluence * Vector3.forward);
+			MoveThrottle += ort * (leftAxisY * moveInfluence * -1.0f * CameraController.centerEyeAnchor.right);
 
 		if(leftAxisY < 0.0f)
-			MoveThrottle += ort * (Mathf.Abs(leftAxisY) * moveInfluence * BackAndSideDampen * Vector3.back);
+            MoveThrottle += ort * (Mathf.Abs(leftAxisY) * moveInfluence * BackAndSideDampen * CameraController.centerEyeAnchor.right);
 
 		if(leftAxisX < 0.0f)
-			MoveThrottle += ort * (Mathf.Abs(leftAxisX) * moveInfluence * BackAndSideDampen * Vector3.left);
+            MoveThrottle += ort * (Mathf.Abs(leftAxisX) * moveInfluence * BackAndSideDampen * -1.0f * CameraController.centerEyeAnchor.forward);
 
 		if(leftAxisX > 0.0f)
-			MoveThrottle += ort * (leftAxisX * moveInfluence * BackAndSideDampen * Vector3.right);
+            MoveThrottle += ort * (leftAxisX * moveInfluence * BackAndSideDampen * CameraController.centerEyeAnchor.forward);
 
 		float rightAxisX = OVRGamepadController.GPC_GetAxis(OVRGamepadController.Axis.RightXAxis);
 

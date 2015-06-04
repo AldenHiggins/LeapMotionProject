@@ -141,14 +141,20 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 		}
 
 		RaycastHit[] rayCastHits = Physics.SphereCastAll(transform.position, 3.0f, transform.forward, 10.0f, enemySearchLayer);
-
+        float minimumDistance = float.MaxValue;
 		// Just find the closest enemy
 		for (int hitIndex = 0; hitIndex < rayCastHits.Length; hitIndex++)
 		{
 			IUnit enemyUnit = (IUnit) rayCastHits[hitIndex].collider.gameObject.GetComponent(typeof(IUnit));
 			if (enemyUnit != null)
 			{
-				enemy = enemyUnit.getGameObject();
+				GameObject enemyFound = enemyUnit.getGameObject();
+                float enemyDistance = Vector3.Distance(enemyFound.transform.position, gameObject.transform.position);
+                if (enemyDistance < minimumDistance)
+                {
+                    enemy = enemyFound;
+                    minimumDistance = enemyDistance;
+                }
 			}
 		}
 

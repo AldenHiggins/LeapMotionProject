@@ -13,7 +13,7 @@ public class SwordScript : MonoBehaviour
 			enemy = (BasicEnemyController) other.gameObject.GetComponentInChildren(typeof(BasicEnemyController));
 		}
 
-		if (enemy != null)
+		if (enemy != null && !enemy.isAlly)
 		{
 			print ("Sword collided with an enemy!!");
 			enemy.dealDamage(damageAmount);

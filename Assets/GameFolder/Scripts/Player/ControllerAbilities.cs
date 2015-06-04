@@ -83,6 +83,7 @@ public class ControllerAbilities : MonoBehaviour
         else
         {
             rightTriggerAttack.inactiveFunction();
+            rightTriggerAttack.chargingFunction();
         }
 		previousRightTrigger = rightTriggerPressed;
 

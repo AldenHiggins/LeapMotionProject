@@ -25,7 +25,38 @@ class PlaceDefenseControllerAttack : AControllerAttack
         source = gameObject.GetComponent<AudioSource>();
     }
 
-    public override void chargingFunction() { }
+    public override void chargingFunction()
+    {
+        // Check for left or right axis input
+        float axisRotationValue = OVRGamepadController.GPC_GetAxis(OVRGamepadController.Axis.RightXAxis);
+
+        if (axisRotationValue > .1)
+        {
+            currentRotation += rotationRate;
+        }
+        else if (axisRotationValue < -.1)
+        {
+            currentRotation -= rotationRate;
+        }
+        Debug.Log(axisRotationValue);
+
+
+        // Display prospective ballista spots
+        // defense.showHideballistaPositions (true);
+        //defense.highlightClosestballistaPlacementPosition();
+        //print ("Place ballista is charging!");
+        if (player.getCurrencyValue() >= defenseCost)
+        {
+            if (!isInstantiated)
+            {
+                createdDefensiveObject = (GameObject)Instantiate(defensiveObjectPending);
+                createdDefensiveObject.SetActive(true);
+                isInstantiated = true;
+            }
+            createdDefensiveObject.transform.position = defense.getRayHit().point;
+            createdDefensiveObject.transform.rotation = Quaternion.Euler(0.0f, currentRotation, 0.0f);
+        }
+    }
 
     public override void chargedFunction() { }
 
@@ -66,35 +97,7 @@ class PlaceDefenseControllerAttack : AControllerAttack
 
     public override void holdFunction() 
     {
-        // Check for left or right axis input
-        float axisRotationValue = OVRGamepadController.GPC_GetAxis(OVRGamepadController.Axis.RightXAxis);
-
-        if (axisRotationValue > .1)
-        {
-            currentRotation += rotationRate;
-        }
-        else if (axisRotationValue < -.1)
-        {
-            currentRotation -= rotationRate;
-        }
-        Debug.Log(axisRotationValue);
-
-
-        // Display prospective ballista spots
-        // defense.showHideballistaPositions (true);
-        //defense.highlightClosestballistaPlacementPosition();
-        //print ("Place ballista is charging!");
-        if (player.getCurrencyValue() >= defenseCost)
-        {
-            if (!isInstantiated)
-            {
-                createdDefensiveObject = (GameObject)Instantiate(defensiveObjectPending);
-                createdDefensiveObject.SetActive(true);
-                isInstantiated = true;
-            }
-            createdDefensiveObject.transform.position = defense.getRayHit().point;
-            createdDefensiveObject.transform.rotation = Quaternion.Euler(0.0f, currentRotation, 0.0f);
-        }
+        
     }
 
     public override void inactiveFunction()
