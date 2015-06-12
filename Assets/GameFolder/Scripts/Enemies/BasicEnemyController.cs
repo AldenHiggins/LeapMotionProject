@@ -212,6 +212,10 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 				agent.Stop ();
 			}
 
+            //Face the target as well
+            transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position);
+            transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
+
 			// Don't start attacking if no enemy was found
 			if (enemy != null)
 			{
@@ -223,12 +227,12 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 			}
 		}
 
-        //if (floatingEnemy)
-        //{
-		// Face the target as well
-		transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position);
-		transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
-        //}
+        if (floatingEnemy)
+        {
+            //Face the target as well
+		    transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position);
+		    transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
+        }
 
 		if (showNavMeshPath)
 		{

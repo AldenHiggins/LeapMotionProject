@@ -5,6 +5,8 @@ public class ControllerAbilities : MonoBehaviour
 {
 	// MAIN GAME CAMERA
 	public GameObject camera;
+    public PlayerLogic player;
+    public DefensiveAbilities defense;
 
 	// GAME LOGIC
 	private GameLogic game;
@@ -30,6 +32,7 @@ public class ControllerAbilities : MonoBehaviour
 	bool previousAPressed;
 	bool previousBPressed;
 	bool previousStartPressed;
+    bool previousLeftStickPressed;
 
 	void Start()
 	{
@@ -67,6 +70,26 @@ public class ControllerAbilities : MonoBehaviour
 			Debug.Log ("B Pressed");
 		}
 		previousBPressed = bPressed;
+
+        ///////////////////
+        //LeftStick Button/
+        ///////////////////
+        bool leftStickPressed = OVRGamepadController.GPC_GetButton(OVRGamepadController.Button.LStick);
+        if (leftStickPressed && !previousLeftStickPressed)
+        {
+            if (player.gameObject.transform.localScale.x == 1.0f)
+            {
+                player.gameObject.transform.localScale = new Vector3(12.0f, 12.0f, 12.0f);
+                player.gameObject.transform.position = new Vector3(0.0f, 18.59f, 0.0f);
+            }
+            else if (player.gameObject.transform.localScale.x == 12.0f)
+            {
+                RaycastHit hit = defense.getRayHit();
+                player.gameObject.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                player.gameObject.transform.position = hit.point;
+            }
+        }
+        previousLeftStickPressed = leftStickPressed;
 
 		///////////////////
 		// RIGHT TRIGGER //
