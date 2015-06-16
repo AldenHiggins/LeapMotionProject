@@ -19,26 +19,26 @@ public class TornadoAttack : AAttack
 		
 	}
 	
-	public override void chargingFunction(HandModel[] hands)
-	{
+    //public override void chargingFunction(HandModel[] hands)
+    //{
 		
-	}
+    //}
 	
-	public override void chargedFunction(HandModel[] hands)
-	{}
+    //public override void chargedFunction(HandModel[] hands)
+    //{}
 	
-	public override void releaseFunction(HandModel[] hands)
-	{
-		Instantiate (tornadoParticle, player.transform.position, player.transform.rotation);
-	}
+    //public override void releaseFunction(HandModel[] hands)
+    //{
+    //    Instantiate (tornadoParticle, player.transform.position, player.transform.rotation);
+    //}
 	
-	public override void holdGestureFunction(HandModel[] hands)
-	{
+    //public override void holdGestureFunction(HandModel[] hands)
+    //{
 		
-	}
+    //}
 	
-	public override void inactiveFunction()
-	{
+    //public override void inactiveFunction()
+    //{
 		
-	}
+    //}
 }

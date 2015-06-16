@@ -17,7 +17,7 @@ public class GameLogic : MonoBehaviour
 	public GameObject spawnedEnemies;
 	// PLAYER ATTACKS
 	public GameObject fireBall;
-	public HandController handController = null;
+    //public HandController handController = null;
 
 	// AUDIO CLIPS
 	public AudioSource mainGameMusic;
@@ -373,10 +373,10 @@ public class GameLogic : MonoBehaviour
 			startRound2 = false;
 
 			// Call the inactive functions to clear in progress defensive placements
-			offensiveAbilities.rightHandFlipAttack.inactiveFunction();
-			offensiveAbilities.leftHandFlipAttack.inactiveFunction();
-			offensiveAbilities.rightHandFistAttack.inactiveFunction();
-			offensiveAbilities.leftHandFistAttack.inactiveFunction();
+            //offensiveAbilities.rightHandFlipAttack.inactiveFunction();
+            //offensiveAbilities.leftHandFlipAttack.inactiveFunction();
+            //offensiveAbilities.rightHandFistAttack.inactiveFunction();
+            //offensiveAbilities.leftHandFistAttack.inactiveFunction();
 
             controllerAttacks.rightTriggerAttack.inactiveFunction();
 

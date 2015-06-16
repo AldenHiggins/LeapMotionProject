@@ -10,39 +10,39 @@ public class PlaceTurret : AAttack
 	private GameObject createdturret;
 
 
-	public override void chargingFunction(HandModel[] hands){
-		// Display prospective turret spots
-		// defense.showHideTurretPositions (true);
-		//defense.highlightClosestTurretPlacementPosition();
-		//print ("Place Turret is charging!");
-		if (defense.getNumTurretsLeft () > 0) {
-			if (!isInstantiated) {
-				createdturret = (GameObject)Instantiate (turretPending);
-				isInstantiated = true;
-			}
-			createdturret.transform.position = defense.getRayHit().point + new Vector3(0,1f,0);
-		}
-	}
+//    public override void chargingFunction(HandModel[] hands){
+//        // Display prospective turret spots
+//        // defense.showHideTurretPositions (true);
+//        //defense.highlightClosestTurretPlacementPosition();
+//        //print ("Place Turret is charging!");
+//        if (defense.getNumTurretsLeft () > 0) {
+//            if (!isInstantiated) {
+//                createdturret = (GameObject)Instantiate (turretPending);
+//                isInstantiated = true;
+//            }
+//            createdturret.transform.position = defense.getRayHit().point + new Vector3(0,1f,0);
+//        }
+//    }
 	
-	public override void chargedFunction(HandModel[] hands){}
+//    public override void chargedFunction(HandModel[] hands){}
 	
-	public override void releaseFunction(HandModel[] hands){
-		if (defense.getNumTurretsLeft () > 0) {
-			GameObject turretFinal = (GameObject)Instantiate (turret);
-			turretFinal.transform.position = defense.getRayHit().point + new Vector3(0,1f,0);
-			Destroy (createdturret);
-			((EmitterBehavior) turretFinal.GetComponent(typeof(EmitterBehavior))).enabled = true;
-			isInstantiated = false;
-//			defense.turretUsed();
-		}
-	}
+//    public override void releaseFunction(HandModel[] hands){
+//        if (defense.getNumTurretsLeft () > 0) {
+//            GameObject turretFinal = (GameObject)Instantiate (turret);
+//            turretFinal.transform.position = defense.getRayHit().point + new Vector3(0,1f,0);
+//            Destroy (createdturret);
+//            ((EmitterBehavior) turretFinal.GetComponent(typeof(EmitterBehavior))).enabled = true;
+//            isInstantiated = false;
+////			defense.turretUsed();
+//        }
+//    }
 	
-	public override void holdGestureFunction(HandModel[] hands){}
+//    public override void holdGestureFunction(HandModel[] hands){}
 	
-	public override void inactiveFunction(){
-		if (isInstantiated) {
-			Destroy(createdturret);
-			isInstantiated = false;
-		}
-	}
+//    public override void inactiveFunction(){
+//        if (isInstantiated) {
+//            Destroy(createdturret);
+//            isInstantiated = false;
+//        }
+//    }
 }

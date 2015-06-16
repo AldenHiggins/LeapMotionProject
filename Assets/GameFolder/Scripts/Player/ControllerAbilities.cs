@@ -88,6 +88,10 @@ public class ControllerAbilities : MonoBehaviour
                 player.gameObject.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
                 player.gameObject.transform.position = hit.point;
             }
+            else
+            {
+                Debug.Log("Not working");
+            }
         }
         previousLeftStickPressed = leftStickPressed;
 

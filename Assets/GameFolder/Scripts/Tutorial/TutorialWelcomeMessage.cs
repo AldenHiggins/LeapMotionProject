@@ -56,14 +56,14 @@ public class TutorialWelcomeMessage : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-		HandModel[] hands = tutorial.getHands ();
-		if ((hands != null) && readyForHand)
-		{
-			if (hands.Length > 0)
-			{
-				// Destroy this message and instantiate new one
-				StartCoroutine(presentChoices());
-			}
-		}
+        //HandModel[] hands = tutorial.getHands ();
+        //if ((hands != null) && readyForHand)
+        //{
+        //    if (hands.Length > 0)
+        //    {
+        //        // Destroy this message and instantiate new one
+        //        StartCoroutine(presentChoices());
+        //    }
+        //}
 	}
 }

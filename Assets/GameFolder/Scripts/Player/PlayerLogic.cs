@@ -157,27 +157,27 @@ public class PlayerLogic : MonoBehaviour, IUnit
 
 	public void switchOffensiveDefensive()
 	{
-		if (!isDefensivePlayer)
-		{
-			isDefensivePlayer = true;
-			transform.position = defensivePlayerSpawnPosition.transform.position;
-			transform.rotation = defensivePlayerSpawnPosition.transform.rotation;
-			HandController hand = (HandController) transform.GetChild (1).GetChild (1).
-				GetChild (0).gameObject.GetComponent(typeof(HandController));
-			hand.enabled = false;
+        //if (!isDefensivePlayer)
+        //{
+        //    isDefensivePlayer = true;
+        //    transform.position = defensivePlayerSpawnPosition.transform.position;
+        //    transform.rotation = defensivePlayerSpawnPosition.transform.rotation;
+        //    HandController hand = (HandController) transform.GetChild (1).GetChild (1).
+        //        GetChild (0).gameObject.GetComponent(typeof(HandController));
+        //    hand.enabled = false;
 			
-			// Make the player not use gravity if they are defensive
-			OVRPlayerController ovrController = (OVRPlayerController) GetComponent(typeof(OVRPlayerController));
-			//			ovrController.changeGravityUse(false);
-		}
-		else
-		{
-			respawn();
-			isDefensivePlayer = false;
-			HandController hand = (HandController) transform.GetChild (1).GetChild (1).
-				GetChild (0).gameObject.GetComponent(typeof(HandController));
-			hand.enabled = true;
-		}
+        //    // Make the player not use gravity if they are defensive
+        //    OVRPlayerController ovrController = (OVRPlayerController) GetComponent(typeof(OVRPlayerController));
+        //    //			ovrController.changeGravityUse(false);
+        //}
+        //else
+        //{
+        //    respawn();
+        //    isDefensivePlayer = false;
+        //    HandController hand = (HandController) transform.GetChild (1).GetChild (1).
+        //        GetChild (0).gameObject.GetComponent(typeof(HandController));
+        //    hand.enabled = true;
+        //}
 	}
 
 	// CURRENCY FUNCTIONALITY
