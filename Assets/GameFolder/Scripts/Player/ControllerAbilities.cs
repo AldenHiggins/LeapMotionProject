@@ -79,14 +79,15 @@ public class ControllerAbilities : MonoBehaviour
         {
             if (player.gameObject.transform.localScale.x == 1.0f)
             {
-                player.gameObject.transform.localScale = new Vector3(12.0f, 12.0f, 12.0f);
-                player.gameObject.transform.position = new Vector3(0.0f, 18.59f, 0.0f);
+                player.gameObject.transform.localScale = new Vector3(1.1f, 1.1f, 1.1f);
+                player.gameObject.transform.position = new Vector3(0.0f, 10.0f, 0.0f);
             }
-            else if (player.gameObject.transform.localScale.x == 12.0f)
+            else if (player.gameObject.transform.localScale.x == 1.1f)
             {
                 RaycastHit hit = defense.getRayHit();
                 player.gameObject.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
                 player.gameObject.transform.position = hit.point;
+                player.gameObject.transform.position += new Vector3(0.0f, 1.0f, 0.0f);
             }
             else
             {

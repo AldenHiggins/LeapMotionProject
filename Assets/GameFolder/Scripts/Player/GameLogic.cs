@@ -285,8 +285,8 @@ public class GameLogic : MonoBehaviour
 			defensivePhaseMusic.Play();
 
 			// Size the player up to giant-scale
-			playerLogic.gameObject.transform.localScale= new Vector3(12.0f, 12.0f, 12.0f);
-			playerLogic.gameObject.transform.position = new Vector3(0.0f, 18.59f, 0.0f);
+			playerLogic.gameObject.transform.localScale= new Vector3(1.1f, 1.1f, 1.1f);
+			playerLogic.gameObject.transform.position = new Vector3(0.0f, 10.0f, 0.0f);
 			// Make the player move faster if movement is enabled
 			if (!disableMovement)
 			{
