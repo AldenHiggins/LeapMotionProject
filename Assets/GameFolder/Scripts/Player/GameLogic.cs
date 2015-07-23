@@ -286,7 +286,7 @@ public class GameLogic : MonoBehaviour
 
 			// Size the player up to giant-scale
 			playerLogic.gameObject.transform.localScale= new Vector3(1.1f, 1.1f, 1.1f);
-			playerLogic.gameObject.transform.position = new Vector3(0.0f, 10.0f, 0.0f);
+			playerLogic.gameObject.transform.position = new Vector3(0.0f, 27.0f, 0.0f);
 			// Make the player move faster if movement is enabled
 			if (!disableMovement)
 			{

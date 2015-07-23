@@ -80,7 +80,7 @@ public class ControllerAbilities : MonoBehaviour
             if (player.gameObject.transform.localScale.x == 1.0f)
             {
                 player.gameObject.transform.localScale = new Vector3(1.1f, 1.1f, 1.1f);
-                player.gameObject.transform.position = new Vector3(0.0f, 10.0f, 0.0f);
+                player.gameObject.transform.position = new Vector3(0.0f, 27.0f, 0.0f);
             }
             else if (player.gameObject.transform.localScale.x == 1.1f)
             {
