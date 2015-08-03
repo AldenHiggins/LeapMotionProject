@@ -69,6 +69,8 @@ public class EnemySpawner : MonoBehaviour
 		if (enemy == null)
 		{
 			enemy = (BasicEnemyController)monster.transform.GetChild (0).GetComponent (typeof(BasicEnemyController));
+			NavMeshAgent agent = monster.transform.GetChild (0).GetComponent<NavMeshAgent>();
+			agent.enabled = true;
 		}
 		else
 		{

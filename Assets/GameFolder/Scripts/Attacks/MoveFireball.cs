@@ -3,6 +3,8 @@ using System.Collections;
 
 public class MoveFireball : MonoBehaviour 
 {
+	public PlayerLogic player;
+
 	public GameLogic game;
 
 	public GameObject explosion;
@@ -26,6 +28,11 @@ public class MoveFireball : MonoBehaviour
 	private int hashValue;
 
 	public bool explodeOnContact;
+
+	public int specialGainPerHeadshot;
+
+	// SAVE TO CHARGE FLAMETHROWERS WITH HEADSHOTS ONLY
+	public OffensiveAbilities offense;
 
 	// Use this for initialization
 	void Start () 
@@ -77,7 +84,7 @@ public class MoveFireball : MonoBehaviour
 
 	public void checkToDealDamageInCapsule()
 	{
-		print ("Checking to deal flamethrower damage");
+//		print ("Checking to deal flamethrower damage");
 		float radius = damageCapsule.radius;
 
 		Vector3 point1 = transform.GetChild(0).position;
@@ -118,14 +125,17 @@ public class MoveFireball : MonoBehaviour
 
 	void OnParticleCollision(GameObject other) 
 	{
-		print ("other name: " + other.name);
+//		print ("Fireball colided with: " + other.name);
 
 		if ((other.name == "OilSlickCollider")&&(gameObject.name == "CrazyFireball(Clone)"))
 		{
 			OilSlick oil = (OilSlick) other.transform.parent.gameObject.GetComponent(typeof(OilSlick));
 			oil.blowUp();
 			Destroy (gameObject);
-		}
+		}	
+		
+
+
 
 
 		
@@ -163,29 +173,30 @@ public class MoveFireball : MonoBehaviour
 		// Collide with an enemy
 		else if (enemy != null)
 		{
-			if (explodeOnContact)
-			{
-				Instantiate (explosion, other.transform.position, Quaternion.identity);
-			}
+			ParticleSystem currentParticle = (ParticleSystem) gameObject.GetComponent(typeof(ParticleSystem));
+			ParticleCollisionEvent[] collisions = new ParticleCollisionEvent[16];
+			int nummberCollisions = currentParticle.GetCollisionEvents(other, collisions);
 
 			if (shouldMoveEnemies)
 				enemy.applyForce(velocity * 20 + new Vector3(0.0f, 10.0f, 0.0f));
 
+
+			// Check for headshots with zombies
+			if (collisions[0].intersection.y > enemy.headshotHeight)
+			{
+				if (explodeOnContact)
+				{
+					GameObject createdExplosion = (GameObject) Instantiate (explosion, collisions[0].intersection, Quaternion.identity);
+					createdExplosion.SetActive(true);
+					player.addSpecialAttackPower(specialGainPerHeadshot);
+
+				}
+
+			}
+
+
 			enemy.dealDamage(damage);
 			Destroy(gameObject);
-			// Find out where the collision point was 
-			// Resize collision array if you have to
-//			int safeLength = particleSystem.safeCollisionEventSize;
-//			if (collisionEvents.Length < safeLength)
-//				collisionEvents = new ParticleSystem.CollisionEvent[safeLength];
-//			
-//			particleSystem.GetCollisionEvents(other, collisionEvents);
-
-
-				
-//
-//			Instantiate (explosion, collisionEvents[0].intersection, Quaternion.LookRotation (collisionEvents[0].normal.normalized));
-//			Destroy(gameObject);
 		}
 		else if (tutorialEnemy != null)
 		{

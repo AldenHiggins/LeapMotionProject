@@ -65,8 +65,8 @@ public class TutorialDefensiveScript : MonoBehaviour {
 	
 	IEnumerator startTutorial()
 	{
-		offense.handFlipAttack = offense.emptyAttack;
-		offense.fistAttack = offense.emptyAttack;
+//		offense.handFlipAttack = offense.emptyAttack;
+//		offense.fistAttack = offense.emptyAttack;
 
 		displayMessage.text = "Now we will introduce the \n defensive phase. \n Use the hand flip attack \n to place a turret";
 		audio.clip = ballistasAudio;
@@ -85,7 +85,7 @@ public class TutorialDefensiveScript : MonoBehaviour {
 		handFlipGesture.SetActive (false);
 
 		//offense.circularHandAttack = offense.handFlipAttack;
-		offense.handFlipAttack = defense.placeTurretAttack;
+//		offense.handFlipAttack = defense.placeTurretAttack;
 
 		while (true) {
 			GameObject[] placedBallistas = GameObject.FindGameObjectsWithTag("Ballista");
@@ -97,10 +97,11 @@ public class TutorialDefensiveScript : MonoBehaviour {
 		}
 
 		spawner.SetActive (true);
+		goalPosition.SetActive (true);
 		TutorialSpawning spawn = (TutorialSpawning) spawner.GetComponent (typeof(TutorialSpawning));
 		spawn.stopSpawning ();
 		spawn.startSpawning ();
-		goalPosition.SetActive (true);
+
 		
 	}
 	
@@ -115,7 +116,7 @@ public class TutorialDefensiveScript : MonoBehaviour {
 
 	IEnumerator beginOilSlickTutorial()
 	{
-		yield return new WaitForSeconds(2.0f);
+		yield return new WaitForSeconds(4.0f);
 		
 		GameObject[] spawnedZombies = GameObject.FindGameObjectsWithTag("Zombie");
 		foreach (GameObject toDestroy in spawnedZombies) {
@@ -146,7 +147,8 @@ public class TutorialDefensiveScript : MonoBehaviour {
 		yield return new WaitForSeconds (5.0f);
 
 		displayMessage.text = "First, close your hand \n into a fist and look where \n you want to place the \n oil slick.";
-		offense.fistAttack = defense.placeOilSlickAttack;
+		// TODO: 
+//		offense.fistAttack = defense.placeOilSlickAttack;
 
 		yield return new WaitForSeconds (5.0f);
 
@@ -181,12 +183,8 @@ public class TutorialDefensiveScript : MonoBehaviour {
 //		offense.fistAttack = defense.placeOilSlickAttack;
 //		offense.handFlipAttack = offense.alwaysFireballAttack;
 
-		audio.clip = explodeOilSlicksAudio;
-		audio.Play ();
-		
-		yield return new WaitForSeconds (audio.clip.length);
 
-		handFlipGesture.SetActive (true);
+		//handFlipGesture.SetActive (true);
 
 		GameObject[] placedSlicks = GameObject.FindGameObjectsWithTag("OilSlick");
 
@@ -194,6 +192,25 @@ public class TutorialDefensiveScript : MonoBehaviour {
 			if (toDestroy.name != "TutorialOilSlick(Clone)") continue;
 			else 
 			{
+				GameObject[] spawnedZombies = GameObject.FindGameObjectsWithTag("Zombie");
+				foreach (GameObject blowupzombie in spawnedZombies) {
+					if (blowupzombie.name != "RootMotionZombie(Clone)") continue;
+					NavMeshAgent agent = blowupzombie.GetComponentInChildren<NavMeshAgent>();
+					BasicEnemyController controller = blowupzombie.GetComponentInChildren<BasicEnemyController>();
+					controller.tutorialGoalTarget = toDestroy;
+					agent.ResetPath();
+					agent.SetDestination(toDestroy.transform.position);
+					agent.acceleration = 8;
+					agent.speed = 6;
+					agent.Resume();
+					print("Reset the target to oil slick");
+				}
+
+				audio.clip = explodeOilSlicksAudio;
+				audio.Play ();
+				
+				yield return new WaitForSeconds (audio.clip.length);
+
 				Vector3 fireballSpawnLocation = handFlipGesture.transform.position;
 				Vector3 fireballVelocity = toDestroy.transform.position - handFlipGesture.transform.position;
 				fireballVelocity *= 0.2f;
@@ -211,20 +228,16 @@ public class TutorialDefensiveScript : MonoBehaviour {
 			}
 		}
 
-		GameObject[] spawnedZombies = GameObject.FindGameObjectsWithTag("Zombie");
-		foreach (GameObject toDestroy in spawnedZombies) {
-			if (toDestroy.name != "RootMotionZombie(Clone)") continue;
-			GameObject.Destroy(toDestroy);
-		}
+
 
 		yield return new WaitForSeconds (3.0f);
 
 		handFlipGesture.SetActive (false);
 
-		offense.fistAttack.inactiveFunction ();
-		offense.fistAttack = offense.emptyAttack;
-		offense.handFlipAttack.inactiveFunction ();
-		offense.handFlipAttack = offense.emptyAttack;
+//		offense.fistAttack.inactiveFunction ();
+//		offense.fistAttack = offense.emptyAttack;
+//		offense.handFlipAttack.inactiveFunction ();
+//		offense.handFlipAttack = offense.emptyAttack;
 
 	}
 
@@ -244,6 +257,12 @@ public class TutorialDefensiveScript : MonoBehaviour {
 			GameObject.Destroy(toDestroy);
 		}
 
+		GameObject[] spawnedZombies = GameObject.FindGameObjectsWithTag("Zombie");
+		foreach (GameObject toDestroy in spawnedZombies) {
+			if (toDestroy.name != "RootMotionZombie(Clone)") continue;
+			GameObject.Destroy(toDestroy);
+		}
+
 		offensiveButton.SetActive (true);
 		defensiveButton.SetActive (true);
 
@@ -256,7 +275,7 @@ public class TutorialDefensiveScript : MonoBehaviour {
 		print ("ballistaKilledZombie() function called.");
 		if (ballistaHasKilled == false) {
 			ballistaHasKilled = true;
-			offense.handFlipAttack = offense.emptyAttack;
+//			offense.handFlipAttack = offense.emptyAttack;
 
 			StartCoroutine (beginOilSlickTutorial ());
 		}

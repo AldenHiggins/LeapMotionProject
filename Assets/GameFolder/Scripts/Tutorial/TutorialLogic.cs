@@ -3,9 +3,9 @@ using System.Collections;
 
 public class TutorialLogic : MonoBehaviour 
 {
-	public HandController handController;
+    //public HandController handController;
 
-	private HandModel[] hands; 
+    //private HandModel[] hands; 
 	// Use this for initialization
 	void Start () 
 	{
@@ -15,11 +15,11 @@ public class TutorialLogic : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-		hands = handController.GetAllGraphicsHands ();
+        //hands = handController.GetAllGraphicsHands ();
 	}
 
-	public HandModel[] getHands()
-	{
-		return hands;
-	}
+    //public HandModel[] getHands()
+    //{
+    //    return hands;
+    //}
 }

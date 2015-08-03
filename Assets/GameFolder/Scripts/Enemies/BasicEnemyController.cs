@@ -1,27 +1,31 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
-public class BasicEnemyController : MonoBehaviour 
+public class BasicEnemyController : MonoBehaviour, IUnit
 {
+	// GAME LOGIC
 	public GameLogic game;
+	// PLAYER
 	public PlayerLogic player;
+	// MONSTER CHARACTERISTICS
 	public float speed;
 	public int startingHealth;
 	public float attackRadius;
 	public int attackDamage;
 	public int currencyOnKill;
 	public int livesTakenOnGoalReached;
+	public bool isAlly;
+	// HEADSHOTS
+	public float headshotHeight;
+	// NAV MESH AND PATH DEBUGGING
 	public bool showNavMeshPath;
-
 	public GameObject pathLine;
-
 	private GameObject thisPathLine;
-
-
+	// ANIMATOR
 	private Animator anim;
 	private int health;
 	private bool attacking;
-
 	// MOVEMENT
 	private NavMeshAgent agent;
 	private GameObject target;
@@ -29,6 +33,9 @@ public class BasicEnemyController : MonoBehaviour
 	public int waitToMove;
 	private int startingMoveCounter;
 	public bool usesRootMotion;
+	public bool floatingEnemy;
+	public float floatingVelocity;
+	public GameObject goalPosition;
 	// AUDIO
 	private AudioSource source;
 	public AudioClip woundSound;
@@ -41,12 +48,14 @@ public class BasicEnemyController : MonoBehaviour
 	private GameObject greenHealth;
 	private GameObject redHealth;
 	private float startingHealthScale;
-	// RAGDOLL
+	public GameObject damageAmountUI;
+	// RAGDOLL/DEATH
 	public float ragdollTime;
 	public float ragdollForceFactor;
 	public GameObject ragDollCenterObject;
 	public bool usesRagdoll;
-
+	private bool isDying;
+	// TUTORIAL
 	public bool isTutorial;
 	public GameObject tutorialGoalTarget;
 
@@ -55,6 +64,8 @@ public class BasicEnemyController : MonoBehaviour
 	void Start () 
 	{
 		attacking = false;
+		isDying = false;
+
 		if (usesRootMotion)
 		{
 			anim = gameObject.GetComponent<Animator> ();
@@ -65,12 +76,31 @@ public class BasicEnemyController : MonoBehaviour
 		}
 
 		health = startingHealth;
+
+
 		agent = gameObject.GetComponent<NavMeshAgent> ();
+		agent.updateRotation = true;
+
+		if (floatingEnemy)
+		{
+			agent.enabled = false;
+		}
+
 //		target = game.getEnemyTarget ();
-		if (isTutorial) target = tutorialGoalTarget;
-		else target = player.gameObject;
+		if (isTutorial)
+		{
+			target = tutorialGoalTarget;
+		}
+		else
+		{
+			target = player.gameObject;
+		}
+
 		if (showNavMeshPath)
+		{
 			thisPathLine = (GameObject) Instantiate (pathLine);
+		}
+			
 		source = GetComponent<AudioSource> ();
 		startingMoveCounter = 0;
 
@@ -91,11 +121,53 @@ public class BasicEnemyController : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-		if (health < 0)
+		if (health <= 0)
+		{
 			return;
+		}
 	
 		startingMoveCounter++;
-//		print ("Current velocity: " + rigidbody.velocity);
+
+		// Search for nearby enemies to attack
+		GameObject enemy = null;
+		
+		// Only gets allies and player
+		int enemySearchLayer = 1 << 16;
+		enemySearchLayer = enemySearchLayer | (1 << 11);
+
+		if (isAlly)
+		{
+			enemySearchLayer = 1 << 8; 
+		}
+
+		RaycastHit[] rayCastHits = Physics.SphereCastAll(transform.position, 3.0f, transform.forward, 10.0f, enemySearchLayer);
+        float minimumDistance = float.MaxValue;
+		// Just find the closest enemy
+		for (int hitIndex = 0; hitIndex < rayCastHits.Length; hitIndex++)
+		{
+			IUnit enemyUnit = (IUnit) rayCastHits[hitIndex].collider.gameObject.GetComponent(typeof(IUnit));
+			if (enemyUnit != null)
+			{
+				GameObject enemyFound = enemyUnit.getGameObject();
+                float enemyDistance = Vector3.Distance(enemyFound.transform.position, gameObject.transform.position);
+                if (enemyDistance < minimumDistance)
+                {
+                    enemy = enemyFound;
+                    minimumDistance = enemyDistance;
+                }
+			}
+		}
+
+
+		if (enemy != null)
+		{
+			target = enemy;
+		}
+		else
+		{
+			target = goalPosition;
+		}
+
 
 		velocity = target.transform.position - transform.position;
 		velocity.y = 0.0f;
@@ -105,80 +177,104 @@ public class BasicEnemyController : MonoBehaviour
 			if (attacking == false)
 			{
 				anim.SetBool ("Running", true);
-				velocity.Normalize ();
-				velocity *= speed;
-				// Get this objects position based on this gameobject's child (i.e. the gameobject of the zombie that's being animated)
-				if (startingMoveCounter > waitToMove)
-				{
-//					print ("Adding this position: " + gameObject.transform.GetChild(0).localPosition);
-//					gameObject.transform.position += gameObject.transform.GetChild(0).localPosition;
-//					gameObject.transform.GetChild(0).localPosition = new Vector3(0,0,0);
-//					gameObject.transform.GetChild(0).rotation = Quaternion.identity;
-				}
 
-				if (!usesRootMotion)
+				// If the enemy doesn't float use the nav mesh
+				if (!floatingEnemy)
 				{
-					if (agent.enabled == true && !agent.hasPath)
+					if (agent.isActiveAndEnabled)
 					{
+						agent.Resume();
+						agent.SetDestination (target.transform.position);
+					} 
+					else
+					{
+						agent.enabled = true;
+						agent.Resume();
 						agent.SetDestination (target.transform.position);
 					}
 				}
+				// If it does just move on forward towards the player
+				else
+				{
+					Vector3 targetVector = target.transform.position - gameObject.transform.position;
+					gameObject.transform.position += Time.deltaTime * targetVector * floatingVelocity;
+				}
 
-					
-//				transform.position += velocity;
-//				rigidbody.AddForce (velocity, ForceMode.VelocityChange);
-
-				// Face the target as well
-				transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position);
-				transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
 			}
 		}
 		// If the player is in range attack him
 		else
 		{
 			anim.SetBool ("Running", false);
-			if (attacking == false)
+
+			if (!floatingEnemy)
 			{
-				attacking = true;
-				if (!usesRootMotion)
+				agent.Stop ();
+			}
+
+            //Face the target as well
+            transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position);
+            transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
+
+			// Don't start attacking if no enemy was found
+			if (enemy != null)
+			{
+				if (attacking == false)
 				{
-					agent.Stop();
+					attacking = true;
+					StartCoroutine(attack());
 				}
-				StartCoroutine(attack());
 			}
 		}
 
+        if (floatingEnemy)
+        {
+            //Face the target as well
+		    transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position);
+		    transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
+        }
+
 		if (showNavMeshPath)
+		{
 			displayNavMeshPath ();
+		}
 	}
 
 	IEnumerator attack()
 	{
-//		print ("Attacking");
 		anim.SetBool ("Attacking", true);
-		while(!anim.GetCurrentAnimatorStateInfo(0).IsName("attack0"))
-		{
-			yield return new WaitForSeconds(.01f);
-		}
-//		print ("Animation time: " + anim.GetCurrentAnimationClipState (0) [0].clip.length);
-		yield return new WaitForSeconds (anim.GetCurrentAnimatorClipInfo(0)[0].clip.length - .1f);
+		// All enemies globally do damage after a second and a half
+		yield return new WaitForSeconds (.5f);
 
 		Vector3 distance = target.transform.position - transform.position;
 		distance.y = 0.0f;
-		if (distance.magnitude < attackRadius)
+		if (distance.magnitude < attackRadius && !isDying)
 		{
-			PlayerLogic playerToAttack = (PlayerLogic) target.GetComponent(typeof(PlayerLogic));
-			if (playerToAttack != null)
-				playerToAttack.dealDamage(attackDamage);
+			IUnit unitToAttack = (IUnit) target.GetComponent(typeof(IUnit));
+			if (unitToAttack != null)
+			{
+				unitToAttack.dealDamage(attackDamage);
+			}
 		}
+
+        yield return new WaitForSeconds(1.0f);
+
 		attacking = false;
 		anim.SetBool ("Attacking", false);
 	}
 
 
-
 	public void dealDamage(int damage)
 	{
+		if (damageAmountUI != null)
+		{
+			GameObject thisDamage = (GameObject) Instantiate(damageAmountUI, (transform.position + new Vector3(0.0f, headshotHeight, 0.0f)), Quaternion.identity);
+			thisDamage.SetActive(true);
+
+			// Get the text field of the damage popup
+			Text textFieldAmountOfDamage = thisDamage.transform.GetChild (1).GetChild(0).GetComponent<Text>();
+			textFieldAmountOfDamage.text = "" + damage;
+		}
 		// TEMP TEMP TEMP check remove after forces can affect enemies
 		if (anim == null)
 			return;
@@ -195,14 +291,8 @@ public class BasicEnemyController : MonoBehaviour
 			Destroy (greenHealth);
 			Destroy (redHealth);
 			source.PlayOneShot(killSound);
-			if (usesRagdoll)
-			{
-				StartCoroutine(ragdollKill());
-			}
-			else
-			{
-				StartCoroutine(kill());
-			}
+
+			StartCoroutine(kill ());
 		}
 	}
 
@@ -228,33 +318,40 @@ public class BasicEnemyController : MonoBehaviour
 		{
 			yield return new WaitForSeconds(.1f);
 		}
-		print ("Restarting agent");
 		agent.enabled = true;
 //		rigidbody.isKinematic = true;
 	}
 
-
 	IEnumerator kill()
 	{
+		isDying = true;
 		if (agent.enabled)
 		{
 			agent.enabled = false;
 		}
+		BoxCollider collider = gameObject.GetComponent<BoxCollider> ();
+		collider.enabled = false;
+		StopCoroutine (attack ());
 		player.changeCurrency (currencyOnKill);
-		anim.Play ("death");
-		while(!anim.GetCurrentAnimatorStateInfo(0).IsName("death"))
+		anim.SetBool ("Attacking", false);
+		anim.SetBool ("Dead", true);
+//		while(!anim.GetCurrentAnimatorStateInfo(0).IsName("death"))
+//		{
+//			yield return new WaitForSeconds(.1f);
+//		}
+		yield return new WaitForSeconds (3.0f);
+		if (usesRagdoll)
 		{
-			yield return new WaitForSeconds(.1f);
+			Destroy (this.transform.parent.gameObject);
 		}
-		yield return new WaitForSeconds (anim.GetCurrentAnimatorClipInfo(0)[0].clip.length);
 		Destroy (this.gameObject);
 	}
 
 	IEnumerator ragdollKill()
 	{
+		isDying = true;
 //		agent.enabled = false;
 		anim.enabled = false;
-		print ("Made ragdoll");
 		BoxCollider collider = gameObject.GetComponent<BoxCollider> ();
 		collider.enabled = false;
 		Rigidbody ragDollRigidBody = ragDollCenterObject.GetComponent<Rigidbody> ();
@@ -287,17 +384,54 @@ public class BasicEnemyController : MonoBehaviour
 		}
 	}
 
-//	void OnAnimatorMove ()
-//	{
-//		//only perform if walking
-//		if (anim.GetCurrentAnimatorStateInfo(0).IsName("run"))
-//		{
-//			//set the navAgent's velocity to the velocity of the animation clip currently playing
-//			agent.velocity = anim.deltaPosition / Time.deltaTime;
-//			
-//			//set the rotation in the direction of movement
-//			transform.rotation = Quaternion.LookRotation(agent.desiredVelocity);
-//		}
-//	}
+	// Sets the navmeshAgent to use the animation's velocity (root motion)
+	void OnAnimatorMove()
+	{
+		if (agent != null)
+			agent.velocity = anim.deltaPosition / Time.deltaTime;
+	}
 
+	public void slowDown()
+	{
+		// Don't slow down floating enemies
+		if (floatingEnemy)
+		{
+			return;
+		}
+
+		if (usesRootMotion)
+		{
+			StopCoroutine(slowRootMotion());
+			StartCoroutine(slowRootMotion());
+		}
+		else
+		{
+			StopCoroutine(slowNavMesh());
+			StartCoroutine(slowNavMesh());
+		}
+	}
+
+	IEnumerator slowRootMotion()
+	{
+		anim.SetBool ("Slowed", true);
+		yield return new WaitForSeconds (3.0f);
+		anim.SetBool ("Slowed", false);
+	}
+
+	IEnumerator slowNavMesh()
+	{
+		agent.speed = 1;
+		yield return new WaitForSeconds (3.0f);
+		agent.speed = 2;
+	}
+
+	public bool isMonsterDying()
+	{
+		return isDying;
+	}
+
+	public GameObject getGameObject()
+	{
+		return gameObject;
+	}
 }

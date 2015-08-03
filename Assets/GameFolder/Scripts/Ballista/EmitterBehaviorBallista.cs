@@ -13,15 +13,19 @@ public class EmitterBehaviorBallista : MonoBehaviour
 	private int boltTimer;
 	private int blockTimer;
 	public Vector3 boltHeightOffset;
+	public AudioClip arrowFire;
 	private bool firing;
+	private AudioSource source;
+	public GameObject ballistaDestroyParticle;
+	public AudioClip ballistaBreakingSound;
 
 	// Use this for initialization
 	void Start () 
 	{
 		boltTimer = 0;
-		anim = GetComponent<Animator> ();
-		print ("Anim found: " + anim.name);
+		anim = gameObject.GetComponent<Animator> ();
 		firing = false;
+		source = gameObject.GetComponent<AudioSource> ();
 	}
 	
 	// Update is called once per frame
@@ -42,7 +46,7 @@ public class EmitterBehaviorBallista : MonoBehaviour
 			{
 				BasicEnemyController enemy = (BasicEnemyController) nearbyObjects[i].gameObject.GetComponent(typeof(BasicEnemyController));
 				TutorialEnemyController enemyTut = (TutorialEnemyController) nearbyObjects[i].gameObject.GetComponent(typeof(TutorialEnemyController));
-				if (enemy != null)
+				if (enemy != null && !enemy.isMonsterDying() && !enemy.isAlly)
 				{
 					float distance = Vector3.Distance (transform.position, enemy.transform.position);
 					if (distance < minDistance)
@@ -163,6 +167,7 @@ public class EmitterBehaviorBallista : MonoBehaviour
 	{
 		print ("Shooting bolt");
 		anim.SetBool ("Firing", true);
+		source.PlayOneShot (arrowFire);
 		firing = true;
 //		while(!anim.GetCurrentAnimatorStateInfo(0).IsName("BallistaFire"))
 //		{
@@ -192,10 +197,19 @@ public class EmitterBehaviorBallista : MonoBehaviour
 		}
 	}
 
+//	public GameObject ballistaDestroyParticle;
+//	public AudioClip ballistaBreakingSound;
+//
+
 	private IEnumerator WaitForAnimation ()
 	{
 		print ("Playing the Animation.");
 		anim.SetBool("Breaking", true);
+		// Generate a firey explosion here to signify the ballista got destroyed
+		GameObject breakingExplosion = (GameObject) Instantiate (ballistaDestroyParticle, transform.position, Quaternion.Euler(270.0f, 0.0f, 0.0f));
+		breakingExplosion.SetActive (true);
+		// Play a sound when the ballista gets killed
+		source.PlayOneShot (ballistaBreakingSound);
 		yield return new WaitForSeconds (4);
 		print ("Wait for 4 seconds.");
 		Destroy (gameObject.transform.parent.gameObject);

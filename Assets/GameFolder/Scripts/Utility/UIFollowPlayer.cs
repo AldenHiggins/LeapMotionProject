@@ -1,10 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class UIFollowPlayer : MonoBehaviour {
-
-	public PlayerLogic player;
-
+public class UIFollowPlayer : MonoBehaviour 
+{
 	public GameObject camera;
 
 	// Have different offset positions for the two different types
@@ -16,10 +14,12 @@ public class UIFollowPlayer : MonoBehaviour {
 
 	private Vector3 thisOffset = new Vector3(0.0f, 0.0f, 0.0f);
 
+	public bool isEndGameHud;
+
 	// Use this for initialization
 	void Start ()
 	{
-
+		enableUI ();
 	}
 	
 	// Update is called once per frame
@@ -30,21 +30,35 @@ public class UIFollowPlayer : MonoBehaviour {
 //			this.transform.localPosition = new Vector3(this.transform.localPosition.x, 0, this.transform.localPosition.z);
 			this.transform.rotation = Quaternion.Euler (0.0f, camera.transform.rotation.eulerAngles.y, 0.0f);
 		}
-		this.transform.position = camera.transform.position + thisOffset;
+
+
+
+		if (isEndGameHud)
+		{
+			this.transform.rotation = Quaternion.Euler (0.0f, 190.0f, 0.0f);
+			this.transform.position = camera.transform.position + offensiveOffset;
+		}
+		else
+		{
+			this.transform.position = camera.transform.position + thisOffset;
+		}
 	}
 
 	public void enableUI()
 	{
 		this.gameObject.SetActive (true);
-		if (player.isDefensivePlayer)
+
+		thisOffset = camera.transform.rotation * offensiveOffset;
+
+
+		if (isEndGameHud)
 		{
-			thisOffset = camera.transform.rotation * defensiveOffset;
+			this.transform.rotation = Quaternion.Euler (0.0f, 190.0f, 0.0f);
 		}
 		else
 		{
-			thisOffset = camera.transform.rotation * offensiveOffset;
+			this.transform.rotation = Quaternion.Euler (0.0f, camera.transform.rotation.eulerAngles.y, 0.0f);
 		}
-		this.transform.rotation = Quaternion.Euler (0.0f, camera.transform.rotation.eulerAngles.y, 0.0f);
 	}
 
 	public void disableUI()

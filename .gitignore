@@ -104,5 +104,25 @@ Assets/Editor/
 Assets/Editor.meta
 Optimization_Data/
 MattsPimpCastle_Data/
+<<<<<<< HEAD
 CastleCourtyardNoTerrain_Data/
 2015-04-21_000056/
+=======
+CastleWithTerrain_Data/
+CastleNoTerrain_Data/
+Assets/NewTextures.meta
+PresentationBuild_Data/
+PresentationAldenDemo_Data/
+SteamVRTest_Data/
+CastleGrid_Data/
+2015-05-29_130648/error.log
+2015-05-29_130718/crash.dmp
+2015-05-29_130718/error.log
+2015-05-29_130718/output_log.txt
+*.suo
+obj/
+UpgradeLog.htm
+SquareCastle_Data/
+Castle_Data/
+RagnarokGame_Data/
+>>>>>>> d9a96ece010dcf6496235e082cb8e3271ca1c58c

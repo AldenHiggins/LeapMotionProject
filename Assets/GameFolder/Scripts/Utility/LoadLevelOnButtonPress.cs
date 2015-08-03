@@ -11,7 +11,7 @@ public class LoadLevelOnButtonPress : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-		if (button.isPressed())
+		if (button.gameObject.GetComponentInChildren<Renderer>().enabled)
 			Application.LoadLevel (levelToLoad);
 	}
 }
