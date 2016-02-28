@@ -33,7 +33,6 @@ public class GameLogic : MonoBehaviour
 	// LEVEL ROUNDS
 	public ButtonDemoGraphics roundButton;
 	public ButtonDemoToggle nextRoundButton;
-	public GameObject endRoundScreen;
 	public GameObject winScreen;
 	private float currentRoundTime = 0;
 	private int currentRound = 0;
@@ -123,7 +122,7 @@ public class GameLogic : MonoBehaviour
 
 		offensiveAbilities = (OffensiveAbilities) gameObject.GetComponent (typeof(OffensiveAbilities));
 		defensiveAbilities = (DefensiveAbilities) gameObject.GetComponent (typeof(DefensiveAbilities));
-        controllerAttacks = (ControllerAbilities) gameObject.GetComponent(typeof(ControllerAbilities));
+        //controllerAttacks = (ControllerAbilities) gameObject.GetComponent(typeof(ControllerAbilities));
 		defensiveAbilities.showHideTurretPositions (false);
 
 		Debug.Log ("Starting waves!");
@@ -257,8 +256,8 @@ public class GameLogic : MonoBehaviour
 //		endRoundScreen.disableUI ();
 //		endRoundScreen.enableUI ();
 
-		endRoundScreen.SetActive (false);
-		endRoundScreen.SetActive (true);
+        //endRoundScreen.SetActive (false);
+        //endRoundScreen.SetActive (true);
 	}
 
 	IEnumerator roundFunction()
@@ -281,26 +280,26 @@ public class GameLogic : MonoBehaviour
 			// Present start round screen and wait
 //			playerHud.SetActive(false);
 //			endRoundScreen.enableUI();
-			endRoundScreen.SetActive(true);
+            //endRoundScreen.SetActive(true);
 			defensivePhaseMusic.Play();
 
 			// Size the player up to giant-scale
 			playerLogic.gameObject.transform.localScale= new Vector3(1.1f, 1.1f, 1.1f);
 			playerLogic.gameObject.transform.position = new Vector3(0.0f, 27.0f, 0.0f);
 			// Make the player move faster if movement is enabled
-			if (!disableMovement)
-			{
-				hmdMovement.moveSpeed *= 12;
-			}
+            //if (!disableMovement)
+            //{
+            //    hmdMovement.moveSpeed *= 12;
+            //}
 
             // Disable abilities during the change spells/end round screen
-            offensiveAbilities.rightHandFlipAttack = offensiveAbilities.emptyAttack;
-            offensiveAbilities.leftHandFlipAttack = offensiveAbilities.emptyAttack;
-            offensiveAbilities.rightHandFistAttack = offensiveAbilities.emptyAttack;
-            offensiveAbilities.leftHandFistAttack = offensiveAbilities.emptyAttack;
+//            offensiveAbilities.rightHandFlipAttack = offensiveAbilities.emptyAttack;
+//            offensiveAbilities.leftHandFlipAttack = offensiveAbilities.emptyAttack;
+//            offensiveAbilities.rightHandFistAttack = offensiveAbilities.emptyAttack;
+//            offensiveAbilities.leftHandFistAttack = offensiveAbilities.emptyAttack;
 
-            controllerAttacks.rightTriggerAttack = controllerAttacks.emptyAttack;
-            controllerAttacks.leftTriggerAttack = controllerAttacks.emptyAttack;
+            //controllerAttacks.rightTriggerAttack = controllerAttacks.emptyAttack;
+            //controllerAttacks.leftTriggerAttack = controllerAttacks.emptyAttack;
 
 			// Now wait for the player to press next round button
 			while (!nextRound)
@@ -312,7 +311,7 @@ public class GameLogic : MonoBehaviour
 
 			// Remove attack selection screen
 //			endRoundScreen.disableUI();
-			endRoundScreen.SetActive(false);
+            //endRoundScreen.SetActive(false);
 
 			// Start defensive setup phase
 			isDefensiveStageActive = true;
@@ -334,16 +333,16 @@ public class GameLogic : MonoBehaviour
 			// Wait a couple of seconds for the player to readjust.
 			yield return new WaitForSeconds(1.5f);
 
-            controllerAttacks.rightTriggerAttack.inactiveFunction();
+            //controllerAttacks.rightTriggerAttack.inactiveFunction();
 
 			//Activate defensive abilities
-			offensiveAbilities.rightHandFlipAttack = offensiveAbilities.rightHandDefensiveFlip;
+//			offensiveAbilities.rightHandFlipAttack = offensiveAbilities.rightHandDefensiveFlip;
 			offensiveAbilities.leftHandFlipAttack = offensiveAbilities.leftHandDefensiveFlip;
 			offensiveAbilities.rightHandFistAttack = offensiveAbilities.rightHandDefensiveFist;
 			offensiveAbilities.leftHandFistAttack = offensiveAbilities.leftHandDefensiveFist;
 
-            controllerAttacks.rightTriggerAttack = controllerAttacks.placeDefense;
-            controllerAttacks.leftTriggerAttack = controllerAttacks.switchDefense;
+            //controllerAttacks.rightTriggerAttack = controllerAttacks.placeDefense;
+            //controllerAttacks.leftTriggerAttack = controllerAttacks.switchDefense;
 
 //			// STEAM VR ACTIVATE DEFENSIVE ATTACKS
 //			steamManager.firstControllerAttack = steamDefensivePlacement;
@@ -354,14 +353,14 @@ public class GameLogic : MonoBehaviour
 //			offensiveAbilities.fistAttack = placeOilSlickAttack;
 
 			// Enable HMD movement and reset position if enabled
-			if(!disableMovement)
-			{
-				hmdMovement.enabled = true;
-				if (i == waveToStartAt)
-				{
-					hmdMovement.resetPosition();
-				}
-			}
+            //if(!disableMovement)
+            //{
+            //    hmdMovement.enabled = true;
+            //    if (i == waveToStartAt)
+            //    {
+            //        hmdMovement.resetPosition();
+            //    }
+            //}
 
 			// Wait for player to end defensive setup phase
 			while (!startRound1 || !startRound2) 
@@ -378,7 +377,7 @@ public class GameLogic : MonoBehaviour
             //offensiveAbilities.rightHandFistAttack.inactiveFunction();
             //offensiveAbilities.leftHandFistAttack.inactiveFunction();
 
-            controllerAttacks.rightTriggerAttack.inactiveFunction();
+            //controllerAttacks.rightTriggerAttack.inactiveFunction();
 
 //			offensiveAbilities.fistAttack.inactiveFunction();
 			// Clean up defensive setup stuff
@@ -399,19 +398,19 @@ public class GameLogic : MonoBehaviour
 
 
 			// Slow the player down to human-speed if movement is enabled
-			if (!disableMovement)
-			{
-				hmdMovement.moveSpeed /= 12;
-			}
+            //if (!disableMovement)
+            //{
+            //    hmdMovement.moveSpeed /= 12;
+            //}
 
 			// Change To the offensive abilities
-			offensiveAbilities.rightHandFlipAttack = offensiveAbilities.rightHandOffensiveFlip;
+//			offensiveAbilities.rightHandFlipAttack = offensiveAbilities.rightHandOffensiveFlip;
 			offensiveAbilities.leftHandFlipAttack = offensiveAbilities.leftHandOffensiveFlip;
 			offensiveAbilities.rightHandFistAttack = offensiveAbilities.rightHandOffensiveFist;
 			offensiveAbilities.leftHandFistAttack = offensiveAbilities.leftHandOffensiveFist;
 
-            controllerAttacks.rightTriggerAttack = controllerAttacks.fireballAttack;
-            controllerAttacks.leftTriggerAttack = controllerAttacks.iceballAttack;
+            //controllerAttacks.rightTriggerAttack = controllerAttacks.fireballAttack;
+            //controllerAttacks.leftTriggerAttack = controllerAttacks.iceballAttack;
 
 			// Start the next round, spawn enemies, wait for the timer
 			defensivePhaseMusic.Pause();
@@ -463,13 +462,13 @@ public class GameLogic : MonoBehaviour
 		defensivePhaseMusic.Pause();
 		defensivePhaseMusic.mute = true;
 		StopCoroutine (roundFunction ());
-		Destroy (endRoundScreen);
+        //Destroy (endRoundScreen);
 //		endRoundScreen.disableUI();
 //		endRoundScreen.enabled = false;
-		endRoundScreen.SetActive (false);
+        //endRoundScreen.SetActive (false);
 //		playerHud.SetActive (false);
 
-		offensiveAbilities.rightHandFlipAttack = offensiveAbilities.emptyAttack;
+//		offensiveAbilities.rightHandFlipAttack = offensiveAbilities.emptyAttack;
 		offensiveAbilities.leftHandFlipAttack = offensiveAbilities.emptyAttack;
 		offensiveAbilities.rightHandFistAttack = offensiveAbilities.emptyAttack;
 		offensiveAbilities.leftHandFistAttack = offensiveAbilities.emptyAttack;

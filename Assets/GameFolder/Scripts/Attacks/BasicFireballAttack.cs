@@ -23,71 +23,71 @@ public class BasicFireballAttack : AAttack
 	}
 
 	
-//    public override void chargingFunction(HandModel[] hands)
-//    {
+    public void chargingFunction(RigidHand hands)
+    {
 
-//    }
+    }
 	
-//    public override void chargedFunction(HandModel[] hands)
-//    {}
+	public void chargedFunction(RigidHand hands)
+    {}
 	
-//    public override void releaseFunction(HandModel[] hands)
-//    {
-//        // Check and see if the cooldown is up
-//        if (canFire != true)
-//        {
-//            return;
-//        }
+	public void releaseFunction(RigidHand hands)
+    {
+        // Check and see if the cooldown is up
+        if (canFire != true)
+        {
+            return;
+        }
 
-//        // Wait for the next cool down in order to fire again
-//        if (projectileActiveParticle != null)
-//        {
-//            projectileActiveParticle.SetActive (false);
-//        }
+        // Wait for the next cool down in order to fire again
+        if (projectileActiveParticle != null)
+        {
+            projectileActiveParticle.SetActive (false);
+        }
 
-//        canFire = false;
-//        StartCoroutine (waitForCoolDown ());
+        canFire = false;
+        StartCoroutine (waitForCoolDown ());
 
-//        if (player.getEnergy() < manaCost)
-//        {
-//            return;
-//        }
+        if (player.getEnergy() < manaCost)
+        {
+            return;
+        }
 		
-//        if (manaCost != 0)
-//        {
-//            player.useEnergy (manaCost);
-//        }
+        if (manaCost != 0)
+        {
+            player.useEnergy (manaCost);
+        }
 		
 
 
-//        // Have the player spend mana
-//        // playerLogic.useEnergy(10);
-//        // Make sure the fireball spawns in front of the player at a reasonable distance
-//        Vector3 spawnPosition = thisCamera.transform.position;
-//        spawnPosition += new Vector3(thisCamera.transform.forward.normalized.x * .8f, thisCamera.transform.forward.normalized.y * .8f, thisCamera.transform.forward.normalized.z * .8f);
-//        // Scale the fireball's velocity
-//        Vector3 startingVelocity = thisCamera.transform.forward.normalized;
-//        startingVelocity *= .2f;
+        // Have the player spend mana
+        // playerLogic.useEnergy(10);
+        // Make sure the fireball spawns in front of the player at a reasonable distance
+        Vector3 spawnPosition = thisCamera.transform.position;
+        spawnPosition += new Vector3(thisCamera.transform.forward.normalized.x * .8f, thisCamera.transform.forward.normalized.y * .8f, thisCamera.transform.forward.normalized.z * .8f);
+        // Scale the fireball's velocity
+        Vector3 startingVelocity = thisCamera.transform.forward.normalized;
+        startingVelocity *= .2f;
 
-////		print ("Spawning fireball");
-//        GameObject newFireball = (GameObject) Instantiate(fireBall, spawnPosition, thisCamera.transform.rotation);
-//        newFireball.SetActive(true); 
-//        MoveFireball moveThis = (MoveFireball) newFireball.GetComponent(typeof(MoveFireball));
-//        moveThis.setVelocity(startingVelocity);
-//        newFireball.GetComponent<Renderer>().enabled = true;
-//        moveThis.setHash (0);
+//		print ("Spawning fireball");
+        GameObject newFireball = (GameObject) Instantiate(fireBall, spawnPosition, thisCamera.transform.rotation);
+        newFireball.SetActive(true); 
+        MoveFireball moveThis = (MoveFireball) newFireball.GetComponent(typeof(MoveFireball));
+        moveThis.setVelocity(startingVelocity);
+        newFireball.GetComponent<Renderer>().enabled = true;
+        moveThis.setHash (0);
 
-//    }
+    }
 	
-//    public override void holdGestureFunction(HandModel[] hands)
-//    {
+	public void holdGestureFunction(RigidHand hands)
+    {
 		
-//    }
+    }
 	
-//    public override void inactiveFunction()
-//    {
+    public void inactiveFunction()
+    {
 
-//    }
+    }
 
 	IEnumerator waitForCoolDown()
 	{
