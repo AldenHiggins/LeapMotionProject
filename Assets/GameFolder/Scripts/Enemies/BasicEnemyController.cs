@@ -86,7 +86,6 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 			agent.enabled = false;
 		}
 
-//		target = game.getEnemyTarget ();
 		if (isTutorial)
 		{
 			target = tutorialGoalTarget;

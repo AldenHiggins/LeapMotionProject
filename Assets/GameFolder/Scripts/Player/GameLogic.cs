@@ -88,7 +88,6 @@ public class GameLogic : MonoBehaviour
 
 	// STEAM ATTACKS
 //	public RayCastTest steamManager;
-
 	public SteamAttacks steamDefensivePlacement;
 	public SteamAttacks steamEmptyAttack;
 	public SteamAttacks steamFireballAttack;
@@ -151,26 +150,6 @@ public class GameLogic : MonoBehaviour
 			}
 		}
 
-
-//		// Shared abilities
-//		bool switchButtonPressed = OVRGamepadController.GPC_GetButton (OVRGamepadController.Button.Back);
-//
-//		if (!switchButtonPressed && previousSwitchPressed)
-//		{
-//			print ("Switching is happening");
-//			playerLogic.switchOffensiveDefensive ();
-//		}
-//
-//		previousSwitchPressed = switchButtonPressed;
-//
-//		// Debugging abilities
-//		//<--------------------- Z to fire fireball ------------------------------->	
-//		if (Input.GetKeyDown (KeyCode.Z)) 
-//		{
-//			playerCastFireball ();
-//		}		
-//
-//
 		// Check for developer/debug actions
 		if (Input.GetKeyDown (KeyCode.V))
 		{
@@ -232,7 +211,6 @@ public class GameLogic : MonoBehaviour
 //		if(Input.GetKeyDown (KeyCode.R))
 //		{
 //			playerLogic.gameObject.transform.rotation = Quaternion.Euler (0.0f, 90.0f, 0.0f);
-//			StartCoroutine(waitToEnableRoundScreen());
 //		}
 	}
 
@@ -250,19 +228,8 @@ public class GameLogic : MonoBehaviour
 		}
 	}
 
-	IEnumerator waitToEnableRoundScreen()
-	{
-		yield return new WaitForSeconds (.5f);
-//		endRoundScreen.disableUI ();
-//		endRoundScreen.enableUI ();
-
-        //endRoundScreen.SetActive (false);
-        //endRoundScreen.SetActive (true);
-	}
-
 	IEnumerator roundFunction()
 	{
-
 		for (int i = waveToStartAt; i < enemyWaves.Length; i++)
 		{
 			// Reset the player's health
@@ -426,9 +393,6 @@ public class GameLogic : MonoBehaviour
 			// Wait for the round to time out
 			yield return new WaitForSeconds(currentRoundTime);
 
-			// Turn off spawners
-//			enableDisableSpawners(false);
-
 			// Wait for all the enemies to be cleared
 			while (spawnedEnemies.transform.childCount > 0)
 			{
@@ -473,10 +437,8 @@ public class GameLogic : MonoBehaviour
 		offensiveAbilities.rightHandFistAttack = offensiveAbilities.emptyAttack;
 		offensiveAbilities.leftHandFistAttack = offensiveAbilities.emptyAttack;
 
-
 //		offensiveAbilities.fistAttack = emptyAttack;
 //		offensiveAbilities.handFlipAttack = emptyAttack;
-
 
 		// Now deactivate all active enemies
 		for (int enemyIndex = 0; enemyIndex < spawnedEnemies.transform.childCount; enemyIndex++)
@@ -504,71 +466,6 @@ public class GameLogic : MonoBehaviour
 		{
 				roundsSurvivedText.text = "You survived for " + waveIndex + " rounds!";
 		}
-
-	}
-
-
-	public void enableDisableSpawners(bool enableOrDisable)
-	{
-//		for (int i = 0; i < enemySpawners.transform.childCount; i++)
-//		{
-//
-//			GameObject spawner = enemySpawners.transform.GetChild(i).gameObject;
-//			EnemySpawner spawnScript = (EnemySpawner) spawner.GetComponent(typeof(EnemySpawner));
-//			if (enableOrDisable)
-//			{
-//				spawnScript.startSpawning();
-//			}
-//			else
-//			{
-//				spawnScript.stopSpawning();
-//			}
-//		}
-	}
-
-	public void createFireball(Vector3 position, Quaternion rotation, Vector3 velocity, int hashValue)
-	{
-		GameObject newFireball = (GameObject) Instantiate(fireBall, position, rotation);
-		newFireball.SetActive(true); 
-//		MoveFireball moveThis = (MoveFireball) newFireball.GetComponent(typeof(MoveFireball));
-//		moveThis.setVelocity(velocity);
-//		newFireball.GetComponent<Renderer>().enabled = true;
-//		moveThis.setHash (hashValue);
-
-		// Now add newly generated fireball to projectiles dictionary
-		projectiles.Add (hashValue, newFireball);
-	}
-
-	public void playerCastFireball()
-	{
-		// Have the player spend mana
-		playerLogic.useEnergy(10);
-		// Make sure the fireball spawns in front of the player at a reasonable distance
-		Vector3 spawnPosition = thisCamera.transform.position;
-		spawnPosition += new Vector3(thisCamera.transform.forward.normalized.x * .8f, thisCamera.transform.forward.normalized.y * .8f, thisCamera.transform.forward.normalized.z * .8f);
-		// Scale the fireball's velocity
-		Vector3 startingVelocity = thisCamera.transform.forward.normalized;
-		startingVelocity *= .2f;
-		// Generate a hash value for the fireball (for network synchronization)
-		int fireballHash = generateProjectileHash();
-
-		createFireball(spawnPosition, thisCamera.transform.rotation, startingVelocity, fireballHash);
-		view.RPC ("makeFireballNetwork", RPCMode.Others, spawnPosition, thisCamera.transform.rotation, startingVelocity, fireballHash);
-	}
-
-	public bool isPlayerBlocking ()
-	{
-		return isBlocking;
-	}
-
-	public GameObject getEnemyTarget()
-	{
-		if (playerLogic.isDefensivePlayer)
-		{
-			return goalPosition;
-		}
-//		return thisPlayer;
-		return goalPosition;
 	}
 
 	public RaycastHit getRayHit()
@@ -581,58 +478,4 @@ public class GameLogic : MonoBehaviour
 		Physics.Raycast (ray, out hit, 100f, mask);
 		return hit;
 	}
-
-	[RPC]
-	public void makeFireballNetwork(Vector3 position, Quaternion rotation, Vector3 velocity, int hashValue)
-	{
-		createFireball (position, rotation, velocity, hashValue);
-	}
-	private int generateProjectileHash()
-	{
-		int fireballHash = 0;
-		do
-		{
-			fireballHash = Random.Range(0, 10000);
-		} while(projectiles.ContainsKey(fireballHash));
-		
-		return fireballHash;
-	}
-
 }
-
-	/*
-	[RPC]
-	public void makePlayerOnClient ()
-	{
-		print ("Remote procedure called!");
-		makePlayerOnClientHelper ();
-	}
-	
-	public void makePlayerOnClientHelper()
-	{
-		// previously was Network.Instantiate
-		playerAvatar = (GameObject) Network.Instantiate (avatarPrefab, thisPlayer.transform.position, thisPlayer.transform.rotation, 1);
-		MoveAvatar avatar = (MoveAvatar) playerAvatar.GetComponent (typeof(MoveAvatar));
-		avatar.setPlayer (thisPlayer);
-		avatar.hidePlayer ();	
-	}
-	public void createNewPlayer ()
-	{
-		view.RPC ("makePlayerOnClient", RPCMode.Others);
-	}
-	[RPC]
-	public void reverseFireball(int fireballHash)
-	{
-		GameObject fireball = projectiles [fireballHash];
-		print ("Got fireball: " + fireball.gameObject.name);
-		MoveFireball fireballScript = (MoveFireball) fireball.GetComponent(typeof(MoveFireball));
-		fireballScript.reverseVelocity ();
-	}
-
-	public void reverseProjectileOnOtherClients(int hashValue)
-	{
-		view.RPC ("reverseFireball", RPCMode.Others, hashValue);
-	}
-
-}
-*/
