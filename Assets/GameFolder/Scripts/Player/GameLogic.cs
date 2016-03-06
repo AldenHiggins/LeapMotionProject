@@ -150,68 +150,7 @@ public class GameLogic : MonoBehaviour
 			}
 		}
 
-		// Check for developer/debug actions
-		if (Input.GetKeyDown (KeyCode.V))
-		{
-			startRound();
-		}
-
-		if (Input.GetKeyDown(KeyCode.F))
-	    {
-		    startRound1 = true;
-		    startRound2 = true;
-		}
-
-		if (Input.GetKeyDown (KeyCode.Y))
-	    {
-			Application.LoadLevel(0);
-		}
-
-		if (Input.GetKeyDown (KeyCode.Q))
-		{
-			GameObject wallToDestroy = GameObject.Find ("DefensiveWall(Clone)");
-			Destroy (wallToDestroy);
-		}
-
-		if (Input.GetKeyDown (KeyCode.E))
-		{
-			for (int enemyIndex = 0; enemyIndex < spawnedEnemies.transform.childCount; enemyIndex++)
-			{
-				Destroy (spawnedEnemies.transform.GetChild(enemyIndex).gameObject);
-			}
-		}
-
-//		// Reload the level if retry is pressed
-//		if (retryButton.isPressed())
-//		{
-//			Application.LoadLevel(2);
-//		}
-//
-//		// Load the main menu if quit to main menu is pressed
-//		if (mainMenuButton.isPressed())
-//		{
-//			Application.LoadLevel(0);
-//		}
-//
-//		// Update round timer
-//		if (roundActive)
-//		{
-//			currentRoundTime -= Time.deltaTime;
-//			if (currentRoundTime < 0)
-//			{
-//				roundTimerText.text = "0";
-//			}
-//			else
-//			{
-//				roundTimerText.text = "" + currentRoundTime.ToString("F2");
-//			}
-//		}
-//
-//		// Press r to recenter view
-//		if(Input.GetKeyDown (KeyCode.R))
-//		{
-//			playerLogic.gameObject.transform.rotation = Quaternion.Euler (0.0f, 90.0f, 0.0f);
-//		}
+        developerControlCheck();
 	}
 
 	public void startRound()
@@ -232,9 +171,12 @@ public class GameLogic : MonoBehaviour
 	{
 		for (int i = waveToStartAt; i < enemyWaves.Length; i++)
 		{
-			// Reset the player's health
-			playerLogic.resetHealth();
+            ///////////////////////////////////////
+            /////////    RESET ROUND   ////////////
+            ///////////////////////////////////////
+            playerLogic.resetHealth();
 			waveIndex++;
+
 			// Set the round text
 			if (i == (enemyWaves.Length - 1)) 
 			{
@@ -244,29 +186,10 @@ public class GameLogic : MonoBehaviour
 			{
 				roundText.text = "ROUND " + (i + 1);
 			}
-			// Present start round screen and wait
-//			playerHud.SetActive(false);
-//			endRoundScreen.enableUI();
-            //endRoundScreen.SetActive(true);
-			defensivePhaseMusic.Play();
 
 			// Size the player up to giant-scale
 			playerLogic.gameObject.transform.localScale= new Vector3(1.1f, 1.1f, 1.1f);
 			playerLogic.gameObject.transform.position = new Vector3(0.0f, 27.0f, 0.0f);
-			// Make the player move faster if movement is enabled
-            //if (!disableMovement)
-            //{
-            //    hmdMovement.moveSpeed *= 12;
-            //}
-
-            // Disable abilities during the change spells/end round screen
-//            offensiveAbilities.rightHandFlipAttack = offensiveAbilities.emptyAttack;
-//            offensiveAbilities.leftHandFlipAttack = offensiveAbilities.emptyAttack;
-//            offensiveAbilities.rightHandFistAttack = offensiveAbilities.emptyAttack;
-//            offensiveAbilities.leftHandFistAttack = offensiveAbilities.emptyAttack;
-
-            //controllerAttacks.rightTriggerAttack = controllerAttacks.emptyAttack;
-            //controllerAttacks.leftTriggerAttack = controllerAttacks.emptyAttack;
 
 			// Now wait for the player to press next round button
 			while (!nextRound)
@@ -274,60 +197,16 @@ public class GameLogic : MonoBehaviour
 				yield return new WaitForSeconds(.2f);
 			}
 
-//			print ("Activating the next round");
+            ///////////////////////////////////////
+            ///////    DEFENSIVE PHASE   //////////
+            ///////////////////////////////////////
 
-			// Remove attack selection screen
-//			endRoundScreen.disableUI();
-            //endRoundScreen.SetActive(false);
-
-			// Start defensive setup phase
-			isDefensiveStageActive = true;
+            // Start defensive setup phase
+            isDefensiveStageActive = true;
 			turretHud.SetActive(true);
-
-
-//			// STEAM VR REMOVE ATTACKS
-//			steamManager.firstControllerAttack = steamEmptyAttack;
-//			steamManager.secondControllerAttack = steamEmptyAttack;
-
-
-			
-            
-
-
-//			defensiveAbilities.updateDefencesCostText();
-
 
 			// Wait a couple of seconds for the player to readjust.
 			yield return new WaitForSeconds(1.5f);
-
-            //controllerAttacks.rightTriggerAttack.inactiveFunction();
-
-			//Activate defensive abilities
-//			offensiveAbilities.rightHandFlipAttack = offensiveAbilities.rightHandDefensiveFlip;
-			offensiveAbilities.leftHandFlipAttack = offensiveAbilities.leftHandDefensiveFlip;
-			offensiveAbilities.rightHandFistAttack = offensiveAbilities.rightHandDefensiveFist;
-			offensiveAbilities.leftHandFistAttack = offensiveAbilities.leftHandDefensiveFist;
-
-            //controllerAttacks.rightTriggerAttack = controllerAttacks.placeDefense;
-            //controllerAttacks.leftTriggerAttack = controllerAttacks.switchDefense;
-
-//			// STEAM VR ACTIVATE DEFENSIVE ATTACKS
-//			steamManager.firstControllerAttack = steamDefensivePlacement;
-//			steamManager.secondControllerAttack = steamDefensiveSwitching;
-
-
-//			offensiveAbilities.handFlipAttack = placeBallistaAttack;
-//			offensiveAbilities.fistAttack = placeOilSlickAttack;
-
-			// Enable HMD movement and reset position if enabled
-            //if(!disableMovement)
-            //{
-            //    hmdMovement.enabled = true;
-            //    if (i == waveToStartAt)
-            //    {
-            //        hmdMovement.resetPosition();
-            //    }
-            //}
 
 			// Wait for player to end defensive setup phase
 			while (!startRound1 || !startRound2) 
@@ -335,49 +214,20 @@ public class GameLogic : MonoBehaviour
 				yield return new WaitForSeconds(.2f);
 			}
 
-			startRound1 = false;
+            ///////////////////////////////////////
+            ///////    OFFENSIVE PHASE   //////////
+            ///////////////////////////////////////
+            startRound1 = false;
 			startRound2 = false;
 
-			// Call the inactive functions to clear in progress defensive placements
-            //offensiveAbilities.rightHandFlipAttack.inactiveFunction();
-            //offensiveAbilities.leftHandFlipAttack.inactiveFunction();
-            //offensiveAbilities.rightHandFistAttack.inactiveFunction();
-            //offensiveAbilities.leftHandFistAttack.inactiveFunction();
-
-            //controllerAttacks.rightTriggerAttack.inactiveFunction();
-
-//			offensiveAbilities.fistAttack.inactiveFunction();
 			// Clean up defensive setup stuff
 			callForWaveButton.ButtonTurnsOff();
-
-			//defensiveAbilities.showHideTurretPositions(false);
 			turretHud.SetActive(false);
 			isDefensiveStageActive = false;
-
-//			// STEAM VR ACTIVATE OFFENSIVE ABILITIES
-//			steamManager.firstControllerAttack = steamFireballAttack;
-//			steamManager.secondControllerAttack = steamFireballAttack;
-
 
 			// Resize the player down to creature-scale
             playerLogic.gameObject.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
             playerLogic.gameObject.transform.position = new Vector3(0.0f, 2.0f, 0.0f);
-
-
-			// Slow the player down to human-speed if movement is enabled
-            //if (!disableMovement)
-            //{
-            //    hmdMovement.moveSpeed /= 12;
-            //}
-
-			// Change To the offensive abilities
-//			offensiveAbilities.rightHandFlipAttack = offensiveAbilities.rightHandOffensiveFlip;
-			offensiveAbilities.leftHandFlipAttack = offensiveAbilities.leftHandOffensiveFlip;
-			offensiveAbilities.rightHandFistAttack = offensiveAbilities.rightHandOffensiveFist;
-			offensiveAbilities.leftHandFistAttack = offensiveAbilities.leftHandOffensiveFist;
-
-            //controllerAttacks.rightTriggerAttack = controllerAttacks.fireballAttack;
-            //controllerAttacks.leftTriggerAttack = controllerAttacks.iceballAttack;
 
 			// Start the next round, spawn enemies, wait for the timer
 			defensivePhaseMusic.Pause();
@@ -385,8 +235,6 @@ public class GameLogic : MonoBehaviour
 			nextRound = false;
 			roundActive = true;
 			currentRoundTime = enemyWaves[i].roundTime;
-			// Enable the player HUD
-//			playerHud.SetActive(true);
 
 			// Start the enemy spawners
 			enemyWaves[i].startWave ();
@@ -399,12 +247,12 @@ public class GameLogic : MonoBehaviour
 				yield return new WaitForSeconds(.3f);
 			}
 
-			// Deactivate round
-			roundActive = false;
+            ///////////////////////////////////////
+            ///////      FINISH ROUND    //////////
+            ///////////////////////////////////////
+            roundActive = false;
 			playerLogic.changeCurrency(500);
-//			hmdMovement.enabled = false;
 			mainGameMusic.Pause();
-
 
 			offensiveAbilities.deactivateFlameThrowers();
 			offensiveAbilities.controlCheck();
@@ -458,17 +306,84 @@ public class GameLogic : MonoBehaviour
 			endGameHud.SetActive (true);
 			// Tell the player how many waves they survived
 		}
+
 		if (waveIndex == 1) 
 		{
-				roundsSurvivedText.text = "You survived for " + waveIndex + " round!";
+			roundsSurvivedText.text = "You survived for " + waveIndex + " round!";
 		} 
 		else
 		{
-				roundsSurvivedText.text = "You survived for " + waveIndex + " rounds!";
+			roundsSurvivedText.text = "You survived for " + waveIndex + " rounds!";
 		}
 	}
 
-	public RaycastHit getRayHit()
+    void developerControlCheck()
+    {
+        // Check for developer/debug actions
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            startRound();
+        }
+
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            startRound1 = true;
+            startRound2 = true;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            Application.LoadLevel(0);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            GameObject wallToDestroy = GameObject.Find("DefensiveWall(Clone)");
+            Destroy(wallToDestroy);
+        }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            for (int enemyIndex = 0; enemyIndex < spawnedEnemies.transform.childCount; enemyIndex++)
+            {
+                Destroy(spawnedEnemies.transform.GetChild(enemyIndex).gameObject);
+            }
+        }
+
+        //		// Reload the level if retry is pressed
+        //		if (retryButton.isPressed())
+        //		{
+        //			Application.LoadLevel(2);
+        //		}
+        //
+        //		// Load the main menu if quit to main menu is pressed
+        //		if (mainMenuButton.isPressed())
+        //		{
+        //			Application.LoadLevel(0);
+        //		}
+        //
+        //		// Update round timer
+        //		if (roundActive)
+        //		{
+        //			currentRoundTime -= Time.deltaTime;
+        //			if (currentRoundTime < 0)
+        //			{
+        //				roundTimerText.text = "0";
+        //			}
+        //			else
+        //			{
+        //				roundTimerText.text = "" + currentRoundTime.ToString("F2");
+        //			}
+        //		}
+        //
+        //		// Press r to recenter view
+        //		if(Input.GetKeyDown (KeyCode.R))
+        //		{
+        //			playerLogic.gameObject.transform.rotation = Quaternion.Euler (0.0f, 90.0f, 0.0f);
+        //		}
+    }
+
+    public RaycastHit getRayHit()
 	{
 		int maskOne = 1 << 10;
 		int maskTwo = 1 << 11;
