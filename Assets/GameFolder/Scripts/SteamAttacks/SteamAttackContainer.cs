@@ -4,7 +4,9 @@ using Valve.VR;
 
 public class SteamAttackContainer : MonoBehaviour
 {
-    SteamAttacks triggerAttack = new SteamFireballAttack();
+    public SteamAttacks triggerAttack;
+    public SteamVR_TrackedObject left;
+    public SteamVR_TrackedObject right;
 
     List<int> controllerIndices = new List<int>();
 
@@ -20,13 +22,13 @@ public class SteamAttackContainer : MonoBehaviour
         if (connected)
         {
             Debug.Log(string.Format("Controller {0} connected.", index));
-            PrintControllerStatus(index);
+            //PrintControllerStatus(index);
             controllerIndices.Add(index);
         }
         else
         {
             Debug.Log(string.Format("Controller {0} disconnected.", index));
-            PrintControllerStatus(index);
+            //PrintControllerStatus(index);
             controllerIndices.Remove(index);
         }
     }
@@ -78,6 +80,13 @@ public class SteamAttackContainer : MonoBehaviour
     {
         foreach (var index in controllerIndices)
         {
+            SteamVR_TrackedObject thisController = right;
+
+            if (index == SteamVR_Controller.GetDeviceIndex(SteamVR_Controller.DeviceRelation.Leftmost))
+            {
+                thisController = left;
+            }
+
             var overlay = SteamVR_Overlay.instance;
             if (overlay && point && pointer)
             {
@@ -104,6 +113,7 @@ public class SteamAttackContainer : MonoBehaviour
                     if (buttonId == EVRButtonId.k_EButton_SteamVR_Trigger)
                     {
                         SteamVR_Controller.Input(index).TriggerHapticPulse();
+                        triggerAttack.releaseFunction(0, thisController);
                     }
                 }
                 if (SteamVR_Controller.Input(index).GetPressUp(buttonId))

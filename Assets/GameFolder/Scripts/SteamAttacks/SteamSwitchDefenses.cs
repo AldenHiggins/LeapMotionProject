@@ -12,7 +12,7 @@ public class SteamSwitchDefenses : SteamAttacks
 
 	}
 	
-	public override void releaseFunction(uint controllerIndex, GameObject trackedDevice)
+	public override void releaseFunction(uint controllerIndex, SteamVR_TrackedObject trackedDevice)
 	{
 		currentAttackIndex++;
 		if (currentAttackIndex >= attackChoices.transform.childCount)
@@ -30,7 +30,7 @@ public class SteamSwitchDefenses : SteamAttacks
 //		offense.leftHandFlipAttack = newAttackContainer.thisAttack;
 	}
 	
-	public override void holdFunction(uint controllerIndex, GameObject trackedDevice)
+	public override void holdFunction(uint controllerIndex, SteamVR_TrackedObject trackedDevice)
 	{
 
 	}

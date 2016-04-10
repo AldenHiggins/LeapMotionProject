@@ -58,7 +58,7 @@ public class PlayerLogic : MonoBehaviour, IUnit
 		// Update current currency gui value
 		//currencyText.text = "" + currentPlayerCurrency;
 
-		manaUIObject.transform.localScale = new Vector3((energy / (float) maxMana), manaUIObject.transform.localScale.y, manaUIObject.transform.localScale.z);
+		//manaUIObject.transform.localScale = new Vector3((energy / (float) maxMana), manaUIObject.transform.localScale.y, manaUIObject.transform.localScale.z);
 		energyCounter++;
 		if (energyCounter > energyRefreshRate)
 		{
@@ -196,11 +196,11 @@ public class PlayerLogic : MonoBehaviour, IUnit
 	{
 		health = 100;
 
-		for (int healthIndex = 0; healthIndex < healthTextureArray.transform.childCount; healthIndex++)
-		{
-			GameObject healthTexture = healthTextureArray.transform.GetChild (healthIndex).gameObject;
-			healthTexture.SetActive(false);
-		}
+		//for (int healthIndex = 0; healthIndex < healthTextureArray.transform.childCount; healthIndex++)
+		//{
+		//	GameObject healthTexture = healthTextureArray.transform.GetChild (healthIndex).gameObject;
+		//	healthTexture.SetActive(false);
+		//}
 	}
 
 	public GameObject getGameObject()
@@ -208,3 +208,4 @@ public class PlayerLogic : MonoBehaviour, IUnit
 		return gameObject;
 	}
 }
+

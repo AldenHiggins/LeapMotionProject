@@ -189,9 +189,7 @@ public class MoveFireball : MonoBehaviour
 					GameObject createdExplosion = (GameObject) Instantiate (explosion, collisions[0].intersection, Quaternion.identity);
 					createdExplosion.SetActive(true);
 					player.addSpecialAttackPower(specialGainPerHeadshot);
-
 				}
-
 			}
 
 

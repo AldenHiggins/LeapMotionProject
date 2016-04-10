@@ -6,7 +6,7 @@ public class FacePlayerFadeOutAndMoveUp : MonoBehaviour
 {
 	public PlayerLogic player;
 	public float upwardSpeed;
-
+    
 	void Update()
 	{
 		transform.rotation = Quaternion.LookRotation(player.transform.position - transform.position);

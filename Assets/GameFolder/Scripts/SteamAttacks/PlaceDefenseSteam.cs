@@ -30,7 +30,7 @@ public class PlaceDefenseSteam : SteamAttacks
 		}
 	}
 	
-	public override void releaseFunction(uint controllerIndex, GameObject trackedDevice)
+	public override void releaseFunction(uint controllerIndex, SteamVR_TrackedObject trackedDevice)
 	{
 		Debug.Log ("Casting release function");
 		if (player.getCurrencyValue() >= defenseCost) 
@@ -57,7 +57,7 @@ public class PlaceDefenseSteam : SteamAttacks
 		}
 	}
 	
-	public override void holdFunction(uint controllerIndex, GameObject trackedDevice)
+	public override void holdFunction(uint controllerIndex, SteamVR_TrackedObject trackedDevice)
 	{
 		// Display prospective ballista spots
 		// defense.showHideballistaPositions (true);

@@ -8,18 +8,15 @@ public class SteamFireballAttack : SteamAttacks
 //	public GameObject projectileActiveParticle;
 //	public int manaCost;
 	
-	
 //	public float firingCoolDown;
 	
 //	private bool canFire;
-	
 	
 	// Use this for initialization
 	void Start () 
 	{
 //		canFire = true;
 	}
-
 	
 //	IEnumerator waitForCoolDown()
 //	{
@@ -29,10 +26,9 @@ public class SteamFireballAttack : SteamAttacks
 //		canFire = true;
 //	}
 
-
 	public override void inactiveFunction(){}
 	
-	public override void releaseFunction(uint controllerIndex, GameObject trackedDevice)
+	public override void releaseFunction(uint controllerIndex, SteamVR_TrackedObject trackedDevice)
 	{		
 		// Have the player spend mana
 		// playerLogic.useEnergy(10);
@@ -40,11 +36,11 @@ public class SteamFireballAttack : SteamAttacks
 		Vector3 spawnPosition = trackedDevice.transform.position;
 //		spawnPosition += new Vector3(trackedDevice.transform.up.normalized.x * -.8f, trackedDevice.transform.up.normalized.y * -.8f, trackedDevice.transform.up.normalized.z * -.8f);
 		// Scale the fireball's velocity
-		Vector3 startingVelocity = trackedDevice.transform.up;
+		Vector3 startingVelocity = trackedDevice.transform.forward;
 		startingVelocity *= -.2f;
 		
-		//		print ("Spawning fireball");
-		GameObject newFireball = (GameObject) Instantiate(fireBall, spawnPosition, Quaternion.LookRotation((-1 * trackedDevice.transform.up)));
+//		print ("Spawning fireball");
+		GameObject newFireball = (GameObject) Instantiate(fireBall, spawnPosition, Quaternion.LookRotation((-1 * trackedDevice.transform.forward)));
 		newFireball.SetActive(true); 
 		MoveFireball moveThis = (MoveFireball) newFireball.GetComponent(typeof(MoveFireball));
 //		moveThis.setVelocity(startingVelocity);
@@ -52,7 +48,7 @@ public class SteamFireballAttack : SteamAttacks
 		moveThis.setHash (0);
 	}
 	
-	public override void holdFunction(uint controllerIndex, GameObject trackedDevice){}
+	public override void holdFunction(uint controllerIndex, SteamVR_TrackedObject trackedDevice){}
 }
 
 
