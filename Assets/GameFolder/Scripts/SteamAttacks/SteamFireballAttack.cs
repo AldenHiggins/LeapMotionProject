@@ -40,11 +40,14 @@ public class SteamFireballAttack : SteamAttacks
 		startingVelocity *= -.2f;
 
         //		print ("Spawning fireball");
-        Quaternion newRotation = Quaternion.Euler(trackedDevice.transform.forward);
+        Quaternion newRotation = trackedDevice.transform.rotation;
         Quaternion transformedXRotation = Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f)) * trackedDevice.transform.rotation;
-        newRotation *= Quaternion.AngleAxis(90, Vector3.right);
+        newRotation *= Quaternion.AngleAxis(45, Vector3.right);
+
+        Debug.Log("Current Rotation: " + trackedDevice.transform.forward);
+        Debug.Log("Transformed: " + newRotation.eulerAngles);
         //GameObject newFireball = (GameObject) Instantiate(fireBall, spawnPosition, Quaternion.LookRotation((-1 * trackedDevice.transform.forward)));
-        GameObject newFireball = (GameObject)Instantiate(fireBall, spawnPosition, Quaternion.LookRotation((newRotation.eulerAngles)));
+        GameObject newFireball = (GameObject)Instantiate(fireBall, spawnPosition, newRotation);
         newFireball.SetActive(true); 
 		MoveFireball moveThis = (MoveFireball) newFireball.GetComponent(typeof(MoveFireball));
 //		moveThis.setVelocity(startingVelocity);

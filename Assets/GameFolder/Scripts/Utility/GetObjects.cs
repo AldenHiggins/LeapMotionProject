@@ -13,7 +13,6 @@ public static class GetObjects
 
     public static PlayerLogic getPlayer()
     {
-        Debug.Log("Root: " + getRootTransform().gameObject.name);
         PlayerLogic returnPlayer = new PlayerLogic();
         findFirstObjectOfType<PlayerLogic>(ref returnPlayer, getRootTransform());
         return returnPlayer;
