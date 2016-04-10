@@ -188,8 +188,8 @@ public class GameLogic : MonoBehaviour
 			}
 
 			// Size the player up to giant-scale
-			playerLogic.gameObject.transform.localScale= new Vector3(1.1f, 1.1f, 1.1f);
-			playerLogic.gameObject.transform.position = new Vector3(0.0f, 27.0f, 0.0f);
+			//playerLogic.gameObject.transform.localScale= new Vector3(1.1f, 1.1f, 1.1f);
+			//playerLogic.gameObject.transform.position = new Vector3(0.0f, 27.0f, 0.0f);
 
 			// Now wait for the player to press next round button
 			while (!nextRound)
@@ -226,8 +226,8 @@ public class GameLogic : MonoBehaviour
 			isDefensiveStageActive = false;
 
 			// Resize the player down to creature-scale
-            playerLogic.gameObject.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-            playerLogic.gameObject.transform.position = new Vector3(0.0f, 2.0f, 0.0f);
+            //playerLogic.gameObject.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+            //playerLogic.gameObject.transform.position = new Vector3(0.0f, 2.0f, 0.0f);
 
 			// Start the next round, spawn enemies, wait for the timer
 			defensivePhaseMusic.Pause();
@@ -254,7 +254,7 @@ public class GameLogic : MonoBehaviour
 			playerLogic.changeCurrency(500);
 			mainGameMusic.Pause();
 
-			offensiveAbilities.deactivateFlameThrowers();
+			//offensiveAbilities.deactivateFlameThrowers();
 			offensiveAbilities.controlCheck();
 		}
 
