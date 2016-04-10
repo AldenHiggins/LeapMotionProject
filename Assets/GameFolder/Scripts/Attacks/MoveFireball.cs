@@ -126,9 +126,9 @@ public class MoveFireball : MonoBehaviour
 
 	void OnParticleCollision(GameObject other) 
 	{
-//		print ("Fireball colided with: " + other.name);
+        print("Fireball colided with: " + other.name);
 
-		if ((other.name == "OilSlickCollider")&&(gameObject.name == "CrazyFireball(Clone)"))
+        if ((other.name == "OilSlickCollider")&&(gameObject.name == "CrazyFireball(Clone)"))
 		{
 			OilSlick oil = (OilSlick) other.transform.parent.gameObject.GetComponent(typeof(OilSlick));
 			oil.blowUp();

@@ -141,7 +141,7 @@ public class PlayerLogic : MonoBehaviour, IUnit
 		specialAttackPower = 0;
 
 		// update special attack power ui element
-		specialAttackUIObject.transform.localScale = new Vector3((specialAttackPower / 100.0f), specialAttackUIObject.transform.localScale.y, specialAttackUIObject.transform.localScale.z);
+		//specialAttackUIObject.transform.localScale = new Vector3((specialAttackPower / 100.0f), specialAttackUIObject.transform.localScale.y, specialAttackUIObject.transform.localScale.z);
 	}
 
 	public void addSpecialAttackPower(int powerToAdd)
@@ -152,7 +152,7 @@ public class PlayerLogic : MonoBehaviour, IUnit
 			specialAttackPower = 100;
 		}
 		// update the special attack power UI element
-		specialAttackUIObject.transform.localScale = new Vector3((specialAttackPower / 100.0f), specialAttackUIObject.transform.localScale.y, specialAttackUIObject.transform.localScale.z);
+		//specialAttackUIObject.transform.localScale = new Vector3((specialAttackPower / 100.0f), specialAttackUIObject.transform.localScale.y, specialAttackUIObject.transform.localScale.z);
 	}
 
 	public void switchOffensiveDefensive()

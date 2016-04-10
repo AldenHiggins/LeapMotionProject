@@ -114,7 +114,7 @@ public class GameLogic : MonoBehaviour
 
 		if (!disableMovement) 
 		{
-			hmdMovement = (HMDMovement)thisPlayer.GetComponent (typeof(HMDMovement));
+			hmdMovement = (HMDMovement) thisPlayer.GetComponent (typeof(HMDMovement));
 		}
 
 		Debug.Log ("Initializing offensive abilities");
@@ -155,6 +155,7 @@ public class GameLogic : MonoBehaviour
 
 	public void startRound()
 	{
+        Debug.Log("Starting round");
 		if (isDefensiveStageActive)
 		{
 			startRound1 = true;
@@ -163,7 +164,7 @@ public class GameLogic : MonoBehaviour
 		else
 		{
 			nextRound = true;
-			nextRoundButton.ButtonTurnsOff();
+			//nextRoundButton.ButtonTurnsOff();
 		}
 	}
 

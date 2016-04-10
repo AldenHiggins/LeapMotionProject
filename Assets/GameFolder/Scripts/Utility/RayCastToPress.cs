@@ -3,7 +3,7 @@ using System.Collections;
 
 public class RayCastToPress : MonoBehaviour
 {
-	public GameObject thisCamera;
+	private GameObject thisCamera;
 	public ButtonDemoToggle buttonToTurnOn;
 	public float timeToActivate;
 	private float timeHeld;
@@ -12,6 +12,7 @@ public class RayCastToPress : MonoBehaviour
 	void Start () 
 	{
 		timeHeld = 0;
+        thisCamera = GetObjects.getPlayer().gameObject;
 	}
 	
 	// Update is called once per frame

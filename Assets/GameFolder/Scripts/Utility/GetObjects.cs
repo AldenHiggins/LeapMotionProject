@@ -13,6 +13,7 @@ public static class GetObjects
 
     public static PlayerLogic getPlayer()
     {
+        Debug.Log("Root: " + getRootTransform().gameObject.name);
         PlayerLogic returnPlayer = new PlayerLogic();
         findFirstObjectOfType<PlayerLogic>(ref returnPlayer, getRootTransform());
         return returnPlayer;
@@ -20,7 +21,8 @@ public static class GetObjects
 
     public static Transform getRootTransform()
     {
-        Transform xform = UnityEngine.Object.FindObjectOfType<Transform>();
+        GameObject[] root = GameObject.FindGameObjectsWithTag("Root");
+        Transform xform = root[0].transform;
         return xform.root;
     }
 
