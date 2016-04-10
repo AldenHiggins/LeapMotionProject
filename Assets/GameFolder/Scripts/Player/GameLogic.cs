@@ -207,7 +207,7 @@ public class GameLogic : MonoBehaviour
 
 			// Wait a couple of seconds for the player to readjust.
 			yield return new WaitForSeconds(1.5f);
-
+            
 			// Wait for player to end defensive setup phase
 			while (!startRound1 || !startRound2) 
 			{

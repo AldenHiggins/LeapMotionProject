@@ -7,7 +7,7 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 	// GAME LOGIC
 	public GameLogic game;
 	// PLAYER
-	public PlayerLogic player;
+	PlayerLogic player;
 	// MONSTER CHARACTERISTICS
 	public float speed;
 	public int startingHealth;
@@ -65,6 +65,8 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 	{
 		attacking = false;
 		isDying = false;
+
+        player = GetObjects.getPlayer();
 
 		if (usesRootMotion)
 		{

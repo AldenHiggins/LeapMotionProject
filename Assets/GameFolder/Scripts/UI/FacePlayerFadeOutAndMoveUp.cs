@@ -4,9 +4,14 @@ using System.Collections;
 
 public class FacePlayerFadeOutAndMoveUp : MonoBehaviour
 {
-	public PlayerLogic player;
+	private PlayerLogic player;
 	public float upwardSpeed;
-    
+
+    void Start()
+    {
+        player = GetObjects.getPlayer();
+    }
+
 	void Update()
 	{
 		transform.rotation = Quaternion.LookRotation(player.transform.position - transform.position);

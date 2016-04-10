@@ -3,7 +3,7 @@ using System.Collections;
 
 public class MoveFireball : MonoBehaviour 
 {
-	public PlayerLogic player;
+	private PlayerLogic player;
 
 	public GameLogic game;
 
@@ -37,6 +37,7 @@ public class MoveFireball : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
+        player = GetObjects.getPlayer();
 		hashValue = 0; // Default hash value
 		damageCapsule = gameObject.GetComponent<CapsuleCollider> ();
 		if (damageCapsule != null)
