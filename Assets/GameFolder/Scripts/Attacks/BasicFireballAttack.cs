@@ -57,23 +57,22 @@ public class BasicFireballAttack : AAttack
         {
             player.useEnergy (manaCost);
         }
-		
-
 
         // Have the player spend mana
         // playerLogic.useEnergy(10);
-        // Make sure the fireball spawns in front of the player at a reasonable distance
-        Vector3 spawnPosition = thisCamera.transform.position;
-        spawnPosition += new Vector3(thisCamera.transform.forward.normalized.x * .8f, thisCamera.transform.forward.normalized.y * .8f, thisCamera.transform.forward.normalized.z * .8f);
+        Vector3 spawnPosition = hands.GetPalmPosition();
         // Scale the fireball's velocity
-        Vector3 startingVelocity = thisCamera.transform.forward.normalized;
-        startingVelocity *= .2f;
+        //Vector3 startingVelocity = hands.GetPalmNormal();
+        //print("Palm normal: " + startingVelocity[0] + " " + startingVelocity[1] + " " + startingVelocity[2]);
+        Vector3 cameraNormal = thisCamera.transform.forward.normalized;
+        print("Camera normal: " + cameraNormal[0] + " " + cameraNormal[1] + " " + cameraNormal[2]);
 
-//		print ("Spawning fireball");
-        GameObject newFireball = (GameObject) Instantiate(fireBall, spawnPosition, thisCamera.transform.rotation);
+        //startingVelocity *= .2f;
+
+        GameObject newFireball = (GameObject) Instantiate(fireBall, spawnPosition, Quaternion.LookRotation(cameraNormal));
         newFireball.SetActive(true); 
         MoveFireball moveThis = (MoveFireball) newFireball.GetComponent(typeof(MoveFireball));
-        moveThis.setVelocity(startingVelocity);
+        moveThis.setVelocity(cameraNormal);
         newFireball.GetComponent<Renderer>().enabled = true;
         moveThis.setHash (0);
 

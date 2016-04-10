@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Leap;
 
 public class OffensiveAbilities : MonoBehaviour
 {
@@ -7,8 +8,8 @@ public class OffensiveAbilities : MonoBehaviour
 	public PlayerLogic playerLogic;
 	public GameObject thisCamera;
     //public HandController handController = null;'
-    public RigidHand rightHand;
-    public RigidHand leftHand;
+    private RigidHand rightHand;
+    private RigidHand leftHand;
 
 	// GAME LOGIC
 	private GameLogic game;
@@ -80,13 +81,16 @@ public class OffensiveAbilities : MonoBehaviour
         //controller.EnableGesture (Gesture.GestureType.TYPE_CIRCLE);
 		defense = (DefensiveAbilities)GetComponent (typeof(DefensiveAbilities));
 		source = gameObject.GetComponent<AudioSource> ();
+
+        // Get the Leap hands
+        HandPool pool = FindObjectOfType<HandPool>();
+        rightHand = (RigidHand) pool.RightPhysicsModel;
+        leftHand = (RigidHand) pool.LeftPhysicsModel;
 	}
 
 	// Check for input once a frame
 	public void controlCheck ()
 	{
-        //hands = handController.GetAllGraphicsHands();
-
         if (rightHand.gameObject.activeSelf)
         {
             //// Check to ignite hands if flamethrower is charged up	
@@ -114,12 +118,9 @@ public class OffensiveAbilities : MonoBehaviour
             //    }
             //}
 
-
             // Check for one handed attacks
             //Vector3 direction0 = (hands[0].GetPalmPosition() - handController.transform.position).normalized;
-			Vector3 normal0 = rightHand.GetPalmNormal();
-
-
+            Vector3 normal0 = rightHand.GetPalmNormal();
 
             //			checkHandFlip (normal0, ref fireballCharged, ref makingAFist);
             //			checkHandFist (hands [0].GetLeapHand (), ref handWasFist, ref makingAFist, ref makingAFistTwo);
@@ -304,9 +305,9 @@ public class OffensiveAbilities : MonoBehaviour
     // Check if the inputted hand is performing a flip attack
     public void checkHandFlip(Vector3 handNormal, ref bool fireballCharge, ref bool makingAFistInput, int handLeftOrRight)
     {
-		print ("Hand normal: " + handNormal);
-		print ("Camera normal: " + thisCamera.transform.forward);
-		print ("Dot product: " + Vector3.Dot (handNormal, thisCamera.transform.forward));
+		//print ("Hand normal: " + handNormal);
+		//print ("Camera normal: " + thisCamera.transform.forward);
+		//print ("Dot product: " + Vector3.Dot (handNormal, thisCamera.transform.forward));
 
         //  Charge a fist attack, -.6 or less means the palm is facing the camera
         if (Vector3.Dot(handNormal, thisCamera.transform.forward) < -.6)
