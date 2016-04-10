@@ -21,8 +21,8 @@ public class SteamSwitchDefenses : SteamAttacks
 		}
 		SteamAttackContainer newAttackContainer = (SteamAttackContainer)attackChoices.transform.GetChild (currentAttackIndex).gameObject.GetComponent (typeof(SteamAttackContainer));
 
-		defensiveAttack.defensiveObject = newAttackContainer.defense;
-		defensiveAttack.defensiveObjectPending = newAttackContainer.defensePending;
+		//defensiveAttack.defensiveObject = newAttackContainer.defense;
+		//defensiveAttack.defensiveObjectPending = newAttackContainer.defensePending;
 
 		defensiveAttack.switchDefense ();
 

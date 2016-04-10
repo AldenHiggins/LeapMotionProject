@@ -33,34 +33,10 @@ public class SteamFireballAttack : SteamAttacks
 	public override void inactiveFunction(){}
 	
 	public override void releaseFunction(uint controllerIndex, GameObject trackedDevice)
-	{
-		//		// Check and see if the cooldown is up
-		//		if (canFire != true)
-		//		{
-		//			return;
-		//		}
-		
-		// Wait for the next cool down in order to fire again
-//		projectileActiveParticle.SetActive (false);
-		//		canFire = false;
-		//		StartCoroutine (waitForCoolDown ());
-		
-		//		if (player.getEnergy() < manaCost)
-		//		{
-		//			return;
-		//		}
-		//		
-		//		if (manaCost != 0)
-		//		{
-		//			player.useEnergy (manaCost);
-		//		}
-		
-		
-		
+	{		
 		// Have the player spend mana
 		// playerLogic.useEnergy(10);
 		// Make sure the fireball spawns in front of the player at a reasonable distance
-		print ("Fireball spawn position: " + trackedDevice.transform.position);
 		Vector3 spawnPosition = trackedDevice.transform.position;
 //		spawnPosition += new Vector3(trackedDevice.transform.up.normalized.x * -.8f, trackedDevice.transform.up.normalized.y * -.8f, trackedDevice.transform.up.normalized.z * -.8f);
 		// Scale the fireball's velocity
@@ -77,9 +53,6 @@ public class SteamFireballAttack : SteamAttacks
 	}
 	
 	public override void holdFunction(uint controllerIndex, GameObject trackedDevice){}
-
-
-
 }
 
 

@@ -80,10 +80,10 @@ public class OffensiveAbilities : MonoBehaviour
         defense = (DefensiveAbilities)GetComponent(typeof(DefensiveAbilities));
         source = gameObject.GetComponent<AudioSource>();
 
-        // Get the Leap hands
-        HandPool pool = FindObjectOfType<HandPool>();
-        rightHand = (RigidHand)pool.RightPhysicsModel;
-        leftHand = (RigidHand)pool.LeftPhysicsModel;
+        //// Get the Leap hands
+        //HandPool pool = FindObjectOfType<HandPool>();
+        //rightHand = (RigidHand)pool.RightPhysicsModel;
+        //leftHand = (RigidHand)pool.LeftPhysicsModel;
     }
 
     // Check for input once a frame
