@@ -39,7 +39,7 @@ public class GameLogic : MonoBehaviour
 	public Text roundTimerText;
 	public Text roundText;
 	private bool nextRound = false;
-	private bool roundActive = false;
+	public bool roundActive = false;
 
 	// MONSTER WAVES
 	public GameObject waveContainer;

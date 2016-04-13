@@ -7,6 +7,10 @@ public class SteamAttackContainer : MonoBehaviour
     public SteamAttacks triggerAttack;
     public SteamVR_TrackedObject left;
     public SteamVR_TrackedObject right;
+
+    public SteamAttacks offensiveAttack;
+    public SteamAttacks defensiveAttack;
+    public SteamAttacks defensiveObjectSwitchAttack;
     GameLogic game;
 
     List<int> controllerIndices = new List<int>();
@@ -84,6 +88,20 @@ public class SteamAttackContainer : MonoBehaviour
 
     void Update()
     {
+        // Switch out the attacks based on what mode we're in
+        // Defensive mode
+        if (game.roundActive == false)
+        {
+            defensiveAttack.holdFunction(0, right);
+            triggerAttack = defensiveAttack;
+        }
+        // Offensive mode
+        else
+        {
+            triggerAttack = offensiveAttack;
+        }
+
+
         foreach (var index in controllerIndices)
         {
             SteamVR_TrackedObject thisController = right;
