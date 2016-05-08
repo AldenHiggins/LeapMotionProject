@@ -5,6 +5,7 @@ using Valve.VR;
 public class SteamAttackContainer : MonoBehaviour
 {
     public SteamAttacks triggerAttack;
+    public SteamAttacks gripAttack;
     public SteamVR_TrackedObject left;
     public SteamVR_TrackedObject right;
 
@@ -94,6 +95,7 @@ public class SteamAttackContainer : MonoBehaviour
         {
             defensiveAttack.holdFunction(0, right);
             triggerAttack = defensiveAttack;
+            gripAttack = defensiveObjectSwitchAttack;
         }
         // Offensive mode
         else
@@ -133,7 +135,6 @@ public class SteamAttackContainer : MonoBehaviour
             {
                 if (SteamVR_Controller.Input(index).GetPressDown(buttonId))
                 {
-                    //Debug.Log(buttonId + " press down");
                     if (buttonId == EVRButtonId.k_EButton_SteamVR_Trigger)
                     {
                         SteamVR_Controller.Input(index).TriggerHapticPulse();
@@ -141,8 +142,11 @@ public class SteamAttackContainer : MonoBehaviour
                     }
                     else if (buttonId == EVRButtonId.k_EButton_SteamVR_Touchpad)
                     {
-                        Debug.Log("Gamename: " + game.name);
                         game.startRound();
+                    }
+                    else if (buttonId == EVRButtonId.k_EButton_Grip)
+                    {
+                        gripAttack.releaseFunction(0, thisController);
                     }
                 }
                 if (SteamVR_Controller.Input(index).GetPressUp(buttonId))

@@ -13,20 +13,31 @@ public class PlaceDefenseSteam : SteamAttacks
 	private AudioSource source;
 	public GameObject goldSpentUI;
 
-//	public RayCastTest rayCast;
-	
+    public GameObject[] defenses;
+    public GameObject[] pendingDefenses;
+    private int currentDefense;
+
+    // Keep the game around to check if the offensive mode has started to remove any pending defenses
+    private GameLogic game;
+
 	void Start()
 	{
 		source = gameObject.GetComponent<AudioSource> ();
+        currentDefense = 0;
+        game = GetObjects.getGame();
 	}
+
+    void Update()
+    {
+        if (game.roundActive == true)
+        {
+            destroyPendingObject();
+        }
+    }
 
 	public override void inactiveFunction()
 	{
-		if (isInstantiated)
-		{
-			Destroy(createdDefensiveObject);
-			isInstantiated = false;
-		}
+        destroyPendingObject();
 	}
 	
 	public override void releaseFunction(uint controllerIndex, SteamVR_TrackedObject trackedDevice)
@@ -42,8 +53,9 @@ public class PlaceDefenseSteam : SteamAttacks
 
             Vector3 forwardVector = newRotation * Vector3.forward;
 
+            int layerMask = 1 << 10;
             RaycastHit hit;
-            Physics.Raycast(spawnPosition, forwardVector, out hit, 100.0f);
+            Physics.Raycast(spawnPosition, forwardVector, out hit, 100.0f, layerMask);
 
             if (hit.collider.gameObject != null)
             {
@@ -51,8 +63,7 @@ public class PlaceDefenseSteam : SteamAttacks
                 GameObject ballistaFinal = (GameObject)Instantiate(defensiveObject, hit.point, Quaternion.Euler(0.0f, rotation.eulerAngles.y, 0.0f));
                 ballistaFinal.SetActive(true);
                 source.PlayOneShot(placeObjectSound);
-                Destroy(createdDefensiveObject);
-                isInstantiated = false;
+                destroyPendingObject();
                 //player.changeCurrency(-1 * defenseCost);
             }
         }
@@ -76,8 +87,9 @@ public class PlaceDefenseSteam : SteamAttacks
 
             Vector3 forwardVector = newRotation * Vector3.forward;
 
+            int layerMask = 1 << 10;
             RaycastHit hit;
-            Physics.Raycast(spawnPosition, forwardVector, out hit, 100.0f);
+            Physics.Raycast(spawnPosition, forwardVector, out hit, 100.0f, layerMask);
 
             if (hit.collider.gameObject != null)
             {
@@ -90,12 +102,26 @@ public class PlaceDefenseSteam : SteamAttacks
 
 	public void switchDefense()
 	{
-		if (isInstantiated)
-		{
-			isInstantiated = false;
-			Destroy (createdDefensiveObject);
-		}
+        currentDefense++;
+        destroyPendingObject();
+
+        if (currentDefense >= defenses.Length)
+        {
+            currentDefense = 0;
+        }
+
+        defensiveObject = defenses[currentDefense];
+        defensiveObjectPending = pendingDefenses[currentDefense];
 	}
+
+    void destroyPendingObject()
+    {
+        if (isInstantiated)
+        {
+            isInstantiated = false;
+            Destroy(createdDefensiveObject);
+        }
+    }
 }
 
 
