@@ -59,9 +59,6 @@ public class GameLogic : MonoBehaviour
 	private bool fireballCharged;
 	private bool isBlocking;
 
-	// HEAD BASED MOVEMENT
-	private HMDMovement hmdMovement;
-
 	// RUNTIME GAME REPRESENTATION
 	private Dictionary<int, GameObject> projectiles;
 
@@ -110,12 +107,7 @@ public class GameLogic : MonoBehaviour
 		isBlocking = false;
 		projectiles = new Dictionary<int, GameObject> ();
 		network = (Networking) gameObject.GetComponent (typeof(Networking));
-		playerLogic = (PlayerLogic) thisPlayer.GetComponent (typeof(PlayerLogic));
-
-		if (!disableMovement) 
-		{
-			hmdMovement = (HMDMovement) thisPlayer.GetComponent (typeof(HMDMovement));
-		}
+		playerLogic = (PlayerLogic) GetObjects.getCamera().GetComponent (typeof(PlayerLogic));
 
 		Debug.Log ("Initializing offensive abilities");
 
@@ -266,11 +258,6 @@ public class GameLogic : MonoBehaviour
 	// When the player dies bring up the end game screen and stop the current round
 	public void killPlayerEndGame(bool win)
 	{
-		if (!disableMovement)
-		{
-			hmdMovement.enabled = false;
-		}
-
 		mainGameMusic.Pause ();
 		defensivePhaseMusic.Pause();
 		defensivePhaseMusic.mute = true;
