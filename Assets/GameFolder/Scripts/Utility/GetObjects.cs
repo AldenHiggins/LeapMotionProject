@@ -25,6 +25,32 @@ public static class GetObjects
         return xform.root;
     }
 
+    public static GameObject getCamera()
+    {
+        GameObject firstFoundOfName = null;
+        findFirstObjectWithName("Camera (head)", getRootTransform(), ref firstFoundOfName);
+
+        Debug.Log("First found one is named: " + firstFoundOfName.name);
+
+        return firstFoundOfName;
+    }
+
+    public static void findFirstObjectWithName(string name, Transform findObjectInThis, ref GameObject foundObject)
+    {
+        GameObject thisGameobject = findObjectInThis.gameObject;
+
+        if (thisGameobject.name == name)
+        {
+            foundObject = thisGameobject;
+            return;
+        }
+
+        for (int childIndex = 0; childIndex < findObjectInThis.childCount; childIndex++)
+        {
+            findFirstObjectWithName(name, findObjectInThis.GetChild(childIndex), ref foundObject);
+        }
+    }
+
     public static bool findFirstObjectOfType<FindType>(ref FindType foundObject, Transform findObjectInThis)
     {
         FindType potentialObject = findObjectInThis.gameObject.GetComponent<FindType>();
