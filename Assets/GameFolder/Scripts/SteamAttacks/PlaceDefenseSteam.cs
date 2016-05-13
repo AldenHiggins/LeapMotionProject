@@ -91,11 +91,14 @@ public class PlaceDefenseSteam : SteamAttacks
             RaycastHit hit;
             Physics.Raycast(spawnPosition, forwardVector, out hit, 100.0f, layerMask);
 
-            if (hit.collider.gameObject != null)
+            if (hit.collider != null)
             {
-                createdDefensiveObject.transform.position = hit.point;
-                Quaternion rotation = trackedDevice.transform.rotation;
-                createdDefensiveObject.transform.rotation = Quaternion.Euler(0.0f, rotation.eulerAngles.y, 0.0f);
+                if (hit.collider.gameObject != null)
+                {
+                    createdDefensiveObject.transform.position = hit.point;
+                    Quaternion rotation = trackedDevice.transform.rotation;
+                    createdDefensiveObject.transform.rotation = Quaternion.Euler(0.0f, rotation.eulerAngles.y, 0.0f);
+                }
             }
         }
 	}
