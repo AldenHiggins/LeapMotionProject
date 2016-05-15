@@ -57,14 +57,17 @@ public class PlaceDefenseSteam : SteamAttacks
             RaycastHit hit;
             Physics.Raycast(spawnPosition, forwardVector, out hit, 100.0f, layerMask);
 
-            if (hit.collider.gameObject != null)
+            if (hit.collider != null)
             {
-                Quaternion rotation = trackedDevice.transform.rotation;
-                GameObject ballistaFinal = (GameObject)Instantiate(defensiveObject, hit.point, Quaternion.Euler(0.0f, rotation.eulerAngles.y, 0.0f));
-                ballistaFinal.SetActive(true);
-                source.PlayOneShot(placeObjectSound);
-                destroyPendingObject();
-                //player.changeCurrency(-1 * defenseCost);
+                if (hit.collider.gameObject != null)
+                {
+                    Quaternion rotation = trackedDevice.transform.rotation;
+                    GameObject ballistaFinal = (GameObject)Instantiate(defensiveObject, hit.point, Quaternion.Euler(0.0f, rotation.eulerAngles.y, 0.0f));
+                    ballistaFinal.SetActive(true);
+                    source.PlayOneShot(placeObjectSound);
+                    destroyPendingObject();
+                    //player.changeCurrency(-1 * defenseCost);
+                }
             }
         }
 	}
