@@ -129,3 +129,7 @@ Assets/LeapC.meta
 Assets/LeapMotion.meta
 Assets/SteamVR.meta
 Assets/SteamVR/
+*.exr
+Assets/GameFolder/Scenes/ViveLevel/
+Assets/GameFolder/Scenes/ViveLevel.meta
+Assets/GameFolder/Scenes/ViveLevel.unity
