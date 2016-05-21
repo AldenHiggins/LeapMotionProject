@@ -6,8 +6,6 @@ public class PlayerLogic : MonoBehaviour, IUnit
 {
 	public GameLogic game;
 	public bool isDefensivePlayer;
-	public AudioClip grunt;
-	private AudioSource audioSource;
 	public GameObject defensivePlayerSpawnPosition;
 	public GameObject offensivePlayerSpawnPosition;
 
@@ -28,9 +26,6 @@ public class PlayerLogic : MonoBehaviour, IUnit
 
 	public GameObject damageExplosion;
 
-	// PLAYER HEALTH TEXTURE
-	public GameObject healthTextureArray;
-
 	// Use this for initialization
 	void Start () 
 	{
@@ -47,7 +42,6 @@ public class PlayerLogic : MonoBehaviour, IUnit
 		energyCounter = 0;
 		currentPlayerCurrency = startingPlayerCurrency;
 		currencyText.text = "" + startingPlayerCurrency;
-		audioSource = gameObject.GetComponent<AudioSource> ();
 	}
 
 	public int energyRefreshRate;
@@ -96,23 +90,7 @@ public class PlayerLogic : MonoBehaviour, IUnit
 		// Player just takes damage
 		else
 		{
-			audioSource.PlayOneShot(grunt);
-//			Material healthMaterial = healthTexture.GetComponent<Material>();
-//			healthMaterial.SetColor();
 
-			for (int healthIndex = 0; healthIndex < healthTextureArray.transform.childCount; healthIndex++)
-			{
-				GameObject healthTexture = healthTextureArray.transform.GetChild (healthIndex).gameObject;
-				healthTexture.SetActive(false);
-			}
-
-			float healthLevel = health / 100.0f;
-			healthLevel = 1 - healthLevel;
-
-			int healthTextureChosen = (int)(healthLevel * 3);
-
-			GameObject displayThisHealth = healthTextureArray.transform.GetChild (healthTextureChosen).gameObject;
-			displayThisHealth.SetActive(true);
 		}
 	}
 
