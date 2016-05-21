@@ -4,10 +4,6 @@ using System.Collections;
 
 public class BasicEnemyController : MonoBehaviour, IUnit
 {
-	// GAME LOGIC
-	public GameLogic game;
-	// PLAYER
-	PlayerLogic player;
 	// MONSTER CHARACTERISTICS
 	public float speed;
 	public int startingHealth;
@@ -30,12 +26,10 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 	private NavMeshAgent agent;
 	private GameObject target;
 	private Vector3 velocity;
-	public int waitToMove;
-	private int startingMoveCounter;
 	public bool usesRootMotion;
 	public bool floatingEnemy;
 	public float floatingVelocity;
-	public GameObject goalPosition;
+	private GameObject goalPosition;
 	// AUDIO
 	private AudioSource source;
 	public AudioClip woundSound;
@@ -50,15 +44,7 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 	private float startingHealthScale;
 	public GameObject damageAmountUI;
 	// RAGDOLL/DEATH
-	public float ragdollTime;
-	public float ragdollForceFactor;
-	public GameObject ragDollCenterObject;
-	public bool usesRagdoll;
 	private bool isDying;
-	// TUTORIAL
-	public bool isTutorial;
-	public GameObject tutorialGoalTarget;
-
 
 	// Use this for initialization
 	void Start () 
@@ -66,19 +52,11 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 		attacking = false;
 		isDying = false;
 
-        player = GetObjects.getPlayer();
+        goalPosition = GetObjects.getGoalPosition();
 
-		if (usesRootMotion)
-		{
-			anim = gameObject.GetComponent<Animator> ();
-		}
-		else
-		{
-			anim = transform.GetChild (0).gameObject.GetComponent<Animator> ();
-		}
-
+		anim = transform.GetChild (0).gameObject.GetComponent<Animator> ();
+		
 		health = startingHealth;
-
 
 		agent = gameObject.GetComponent<NavMeshAgent> ();
 		agent.updateRotation = true;
@@ -88,22 +66,12 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 			agent.enabled = false;
 		}
 
-		if (isTutorial)
-		{
-			target = tutorialGoalTarget;
-		}
-		else
-		{
-			target = player.gameObject;
-		}
-
 		if (showNavMeshPath)
 		{
 			thisPathLine = (GameObject) Instantiate (pathLine);
 		}
 			
 		source = GetComponent<AudioSource> ();
-		startingMoveCounter = 0;
 
 		if (showHealthBar)
 		{
@@ -117,8 +85,6 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 		}
 	}
 
-
-
 	// Update is called once per frame
 	void Update () 
 	{
@@ -127,8 +93,6 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 			return;
 		}
 	
-		startingMoveCounter++;
-
 		// Search for nearby enemies to attack
 		GameObject enemy = null;
 		
@@ -159,7 +123,6 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 			}
 		}
 
-
 		if (enemy != null)
 		{
 			target = enemy;
@@ -168,7 +131,6 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 		{
 			target = goalPosition;
 		}
-
 
 		velocity = target.transform.position - transform.position;
 		velocity.y = 0.0f;
@@ -234,11 +196,6 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 		    transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position);
 		    transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
         }
-
-		if (showNavMeshPath)
-		{
-			displayNavMeshPath ();
-		}
 	}
 
 	IEnumerator attack()
@@ -276,9 +233,7 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 			Text textFieldAmountOfDamage = thisDamage.transform.GetChild (1).GetChild(0).GetComponent<Text>();
 			textFieldAmountOfDamage.text = "" + damage;
 		}
-		// TEMP TEMP TEMP check remove after forces can affect enemies
-		if (anim == null)
-			return;
+
 		health -= damage;
 
 		if (health > 0)
@@ -320,7 +275,6 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 			yield return new WaitForSeconds(.1f);
 		}
 		agent.enabled = true;
-//		rigidbody.isKinematic = true;
 	}
 
 	IEnumerator kill()
@@ -333,63 +287,10 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 		BoxCollider collider = gameObject.GetComponent<BoxCollider> ();
 		collider.enabled = false;
 		StopCoroutine (attack ());
-		player.changeCurrency (currencyOnKill);
 		anim.SetBool ("Attacking", false);
 		anim.SetBool ("Dead", true);
-//		while(!anim.GetCurrentAnimatorStateInfo(0).IsName("death"))
-//		{
-//			yield return new WaitForSeconds(.1f);
-//		}
 		yield return new WaitForSeconds (3.0f);
-		if (usesRagdoll)
-		{
-			Destroy (this.transform.parent.gameObject);
-		}
-		Destroy (this.gameObject);
-	}
-
-	IEnumerator ragdollKill()
-	{
-		isDying = true;
-//		agent.enabled = false;
-		anim.enabled = false;
-		BoxCollider collider = gameObject.GetComponent<BoxCollider> ();
-		collider.enabled = false;
-		Rigidbody ragDollRigidBody = ragDollCenterObject.GetComponent<Rigidbody> ();
-		ragDollRigidBody.AddForce (new Vector3 (0, 5 * ragdollForceFactor, -10 * ragdollForceFactor), ForceMode.Impulse);
-		yield return new WaitForSeconds (ragdollTime);
-		Destroy (transform.parent.gameObject);
-	}
-
-	private void displayNavMeshPath()
-	{
-		// Show nav mesh paths
-		if (agent.hasPath)
-		{
-			NavMeshPath thisPath = agent.path;
-			Vector3[] pathVertices = thisPath.corners;
-			
-			LineRenderer lineRender;
-			
-			// Draw a line to show the player where they are aiming
-			lineRender = (LineRenderer) thisPathLine.GetComponent<Renderer>();
-			lineRender.enabled = true;
-			
-			lineRender.SetColors (Color.yellow, Color.yellow);
-			lineRender.SetVertexCount (pathVertices.Length);
-			//			print ("Path length: " + pathVertices.Length);
-			for (int i = 0; i < pathVertices.Length; i++)
-			{
-				lineRender.SetPosition (i, pathVertices[i]);
-			}
-		}
-	}
-
-	// Sets the navmeshAgent to use the animation's velocity (root motion)
-	void OnAnimatorMove()
-	{
-		if (agent != null)
-			agent.velocity = anim.deltaPosition / Time.deltaTime;
+		Destroy (gameObject);
 	}
 
 	public void slowDown()
@@ -400,23 +301,8 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 			return;
 		}
 
-		if (usesRootMotion)
-		{
-			StopCoroutine(slowRootMotion());
-			StartCoroutine(slowRootMotion());
-		}
-		else
-		{
-			StopCoroutine(slowNavMesh());
-			StartCoroutine(slowNavMesh());
-		}
-	}
-
-	IEnumerator slowRootMotion()
-	{
-		anim.SetBool ("Slowed", true);
-		yield return new WaitForSeconds (3.0f);
-		anim.SetBool ("Slowed", false);
+		StopCoroutine(slowNavMesh());
+		StartCoroutine(slowNavMesh());
 	}
 
 	IEnumerator slowNavMesh()
