@@ -19,35 +19,18 @@ public class GameLogic : MonoBehaviour
 	private MonsterWave[] enemyWaves;
 	// INTERNAL VARIABLES
 	private PlayerLogic playerLogic;
-	private DefensiveAbilities defensiveAbilities;
-	private OffensiveAbilities offensiveAbilities;
 	// GAME CONTROLLER VARIABLES
 	private bool isBlocking;
-	// DEFENSIVE STAGE
-	private bool isDefensiveStageActive = false;
-	// STEAM ACTIVATE OFFENSE
-	public bool startRound1;
-	public bool startRound2;
 
 	// Initialize variables
 	void Start () 
 	{
-		Debug.Log ("Starting game logic");
-
 		isBlocking = false;
         mainCamera = GetObjects.getCamera();
         playerLogic = GetObjects.getPlayer();
         spawnedEnemies = GetObjects.getSpawnedEnemies();
         goalPosition = GetObjects.getGoalPosition();
         waveContainer = GetObjects.getEnemyWaves();
-
-		Debug.Log ("Initializing offensive abilities");
-
-		offensiveAbilities = (OffensiveAbilities) gameObject.GetComponent (typeof(OffensiveAbilities));
-		defensiveAbilities = (DefensiveAbilities) gameObject.GetComponent (typeof(DefensiveAbilities));
-		defensiveAbilities.showHideTurretPositions (false);
-
-		Debug.Log ("Starting waves!");
 
 		// Initialize waves
 		enemyWaves = new MonsterWave[waveContainer.transform.childCount];
@@ -57,37 +40,6 @@ public class GameLogic : MonoBehaviour
 		}
 		// Start up the round timer
 		StartCoroutine (roundFunction());
-
-		Debug.Log ("Waves started!");
-	}
-
-	// Control loop to check for player input
-	void Update () 
-	{
-		// Check if round is active in order for players to use their abilities
-		if (roundActive || isDefensiveStageActive)
-		{
-			if (!playerLogic.isDefensivePlayer)
-			{
-				offensiveAbilities.controlCheck();
-			}
-		}
-
-        developerControlCheck();
-	}
-
-	public void startRound()
-	{
-        Debug.Log("Starting round");
-		if (isDefensiveStageActive)
-		{
-			startRound1 = true;
-			startRound2 = true;
-		}
-		else
-		{
-			nextRound = true;
-		}
 	}
 
 	IEnumerator roundFunction()
@@ -99,28 +51,12 @@ public class GameLogic : MonoBehaviour
             ///////////////////////////////////////
             playerLogic.resetHealth();
 
-			// Size the player up to giant-scale
-			//playerLogic.gameObject.transform.localScale= new Vector3(1.1f, 1.1f, 1.1f);
-			//playerLogic.gameObject.transform.position = new Vector3(0.0f, 27.0f, 0.0f);
-
-			// Now wait for the player to press next round button
-			while (!nextRound)
-			{
-				yield return new WaitForSeconds(.2f);
-			}
-
             ///////////////////////////////////////
             ///////    DEFENSIVE PHASE   //////////
             ///////////////////////////////////////
-
-            // Start defensive setup phase
-            isDefensiveStageActive = true;
-
-			// Wait a couple of seconds for the player to readjust.
-			yield return new WaitForSeconds(1.5f);
             
 			// Wait for player to end defensive setup phase
-			while (!startRound1 || !startRound2) 
+			while (!roundActive) 
 			{
 				yield return new WaitForSeconds(.2f);
 			}
@@ -128,19 +64,6 @@ public class GameLogic : MonoBehaviour
             ///////////////////////////////////////
             ///////    OFFENSIVE PHASE   //////////
             ///////////////////////////////////////
-            startRound1 = false;
-			startRound2 = false;
-
-			// Clean up defensive setup stuff
-			isDefensiveStageActive = false;
-
-			// Resize the player down to creature-scale
-            //playerLogic.gameObject.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-            //playerLogic.gameObject.transform.position = new Vector3(0.0f, 2.0f, 0.0f);
-
-			// Start the next round, spawn enemies, wait for the timer
-			nextRound = false;
-			roundActive = true;
 
 			// Start the enemy spawners
 			enemyWaves[i].startWave ();
@@ -158,26 +81,22 @@ public class GameLogic : MonoBehaviour
             ///////////////////////////////////////
             roundActive = false;
 			playerLogic.changeCurrency(500);
-
-			//offensiveAbilities.deactivateFlameThrowers();
-			offensiveAbilities.controlCheck();
 		}
 
 		killPlayerEndGame (true);
 	}
 
+    public void startRound()
+    {
+        roundActive = true;
+    }
 
-	// When the player dies bring up the end game screen and stop the current round
-	public void killPlayerEndGame(bool win)
+    // When the player dies bring up the end game screen and stop the current round
+    public void killPlayerEndGame(bool win)
 	{
 		StopCoroutine (roundFunction ());
-        //Destroy (endRoundScreen);
-//		endRoundScreen.disableUI();
-//		endRoundScreen.enabled = false;
-        //endRoundScreen.SetActive (false);
 
-//		offensiveAbilities.fistAttack = emptyAttack;
-//		offensiveAbilities.handFlipAttack = emptyAttack;
+        Debug.Log("Game over!!");
 
 		// Now deactivate all active enemies
 		for (int enemyIndex = 0; enemyIndex < spawnedEnemies.transform.childCount; enemyIndex++)
@@ -185,35 +104,6 @@ public class GameLogic : MonoBehaviour
 			Destroy (spawnedEnemies.transform.GetChild(enemyIndex).gameObject);
 		}
 	}
-
-    void developerControlCheck()
-    {
-        // Check for developer/debug actions
-        if (Input.GetKeyDown(KeyCode.V))
-        {
-            startRound();
-        }
-
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            startRound1 = true;
-            startRound2 = true;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            GameObject wallToDestroy = GameObject.Find("DefensiveWall(Clone)");
-            Destroy(wallToDestroy);
-        }
-
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            for (int enemyIndex = 0; enemyIndex < spawnedEnemies.transform.childCount; enemyIndex++)
-            {
-                Destroy(spawnedEnemies.transform.GetChild(enemyIndex).gameObject);
-            }
-        }
-    }
 
     public RaycastHit getRayHit()
 	{
