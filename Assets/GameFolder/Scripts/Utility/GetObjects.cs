@@ -35,6 +35,27 @@ public static class GetObjects
         return firstFoundOfName;
     }
 
+    public static GameObject getSpawnedEnemies()
+    {
+        GameObject firstFoundOfName = null;
+        findFirstObjectWithName("SpawnedEnemies", getRootTransform(), ref firstFoundOfName);
+        return firstFoundOfName;
+    }
+
+    public static GameObject getGoalPosition()
+    {
+        GameObject firstFoundOfName = null;
+        findFirstObjectWithName("[CameraRig]", getRootTransform(), ref firstFoundOfName);
+        return firstFoundOfName;
+    }
+
+    public static GameObject getEnemyWaves()
+    {
+        GameObject firstFoundOfName = null;
+        findFirstObjectWithName("EnemyWaves", getRootTransform(), ref firstFoundOfName);
+        return firstFoundOfName;
+    }
+
     public static void findFirstObjectWithName(string name, Transform findObjectInThis, ref GameObject foundObject)
     {
         GameObject thisGameobject = findObjectInThis.gameObject;
