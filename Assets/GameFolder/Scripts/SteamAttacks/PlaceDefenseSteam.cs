@@ -3,15 +3,11 @@ using UnityEngine.UI;
 
 public class PlaceDefenseSteam : SteamAttacks
 {
-	public PlayerLogic player;
-	public int defenseCost;
+	private PlayerLogic player;
 	public GameObject defensiveObject;
 	public GameObject defensiveObjectPending;
-	public AudioClip placeObjectSound;
 	private bool isInstantiated = false;
 	private GameObject createdDefensiveObject;
-	private AudioSource source;
-	public GameObject goldSpentUI;
 
     public GameObject[] defenses;
     public GameObject[] pendingDefenses;
@@ -22,9 +18,9 @@ public class PlaceDefenseSteam : SteamAttacks
 
 	void Start()
 	{
-		source = gameObject.GetComponent<AudioSource> ();
         currentDefense = 0;
         game = GetObjects.getGame();
+        player = GetObjects.getPlayer();
 	}
 
     void Update()
@@ -42,69 +38,67 @@ public class PlaceDefenseSteam : SteamAttacks
 	
 	public override void releaseFunction(uint controllerIndex, SteamVR_TrackedObject trackedDevice)
 	{
-		Debug.Log ("Casting release function");
-		if (player.getCurrencyValue() >= defenseCost) 
-		{
+        Vector3 spawnPosition = trackedDevice.transform.position;
 
-            Vector3 spawnPosition = trackedDevice.transform.position;
+        Quaternion newRotation = trackedDevice.transform.rotation;
+        newRotation *= Quaternion.AngleAxis(45, Vector3.right);
 
-            Quaternion newRotation = trackedDevice.transform.rotation;
-            newRotation *= Quaternion.AngleAxis(45, Vector3.right);
+        Vector3 forwardVector = newRotation * Vector3.forward;
 
-            Vector3 forwardVector = newRotation * Vector3.forward;
+        int layerMask = 1 << 10;
+        RaycastHit hit;
+        Physics.Raycast(spawnPosition, forwardVector, out hit, 100.0f, layerMask);
 
-            int layerMask = 1 << 10;
-            RaycastHit hit;
-            Physics.Raycast(spawnPosition, forwardVector, out hit, 100.0f, layerMask);
-
-            if (hit.collider != null)
-            {
-                if (hit.collider.gameObject != null)
-                {
-                    Quaternion rotation = trackedDevice.transform.rotation;
-                    GameObject ballistaFinal = (GameObject)Instantiate(defensiveObject, hit.point, Quaternion.Euler(0.0f, rotation.eulerAngles.y, 0.0f));
-                    ballistaFinal.SetActive(true);
-                    source.PlayOneShot(placeObjectSound);
-                    destroyPendingObject();
-                    //player.changeCurrency(-1 * defenseCost);
-                }
-            }
+        // Make sure the raycast hit something
+        if (hit.collider == null)
+        {
+            return;
         }
+        if (hit.collider.gameObject == null)
+        {
+            return;
+        }
+
+        Quaternion rotation = trackedDevice.transform.rotation;
+        GameObject ballistaFinal = (GameObject)Instantiate(defensiveObject, hit.point + new Vector3(0.0f, 0.1f, 0.0f), Quaternion.Euler(0.0f, rotation.eulerAngles.y, 0.0f));
+        ballistaFinal.SetActive(true);
+        destroyPendingObject();
 	}
 	
 	public override void holdFunction(uint controllerIndex, SteamVR_TrackedObject trackedDevice)
 	{
-		if (player.getCurrencyValue() >= defenseCost) 
-		{
-            if (!isInstantiated)
-            {
-                createdDefensiveObject = (GameObject)Instantiate(defensiveObjectPending);
-                createdDefensiveObject.SetActive(true);
-                isInstantiated = true;
-            }
-
-            Vector3 spawnPosition = trackedDevice.transform.position;
-
-            Quaternion newRotation = trackedDevice.transform.rotation;
-            newRotation *= Quaternion.AngleAxis(45, Vector3.right);
-
-            Vector3 forwardVector = newRotation * Vector3.forward;
-
-            int layerMask = 1 << 10;
-            RaycastHit hit;
-            Physics.Raycast(spawnPosition, forwardVector, out hit, 100.0f, layerMask);
-
-            if (hit.collider != null)
-            {
-                if (hit.collider.gameObject != null)
-                {
-                    createdDefensiveObject.transform.position = hit.point;
-                    Quaternion rotation = trackedDevice.transform.rotation;
-                    createdDefensiveObject.transform.rotation = Quaternion.Euler(0.0f, rotation.eulerAngles.y, 0.0f);
-                }
-            }
+        if (!isInstantiated)
+        {
+            createdDefensiveObject = Instantiate(defensiveObjectPending);
+            createdDefensiveObject.SetActive(true);
+            isInstantiated = true;
         }
-	}
+
+        Vector3 spawnPosition = trackedDevice.transform.position;
+
+        Quaternion newRotation = trackedDevice.transform.rotation;
+        newRotation *= Quaternion.AngleAxis(45, Vector3.right);
+
+        Vector3 forwardVector = newRotation * Vector3.forward;
+
+        int layerMask = 1 << 10;
+        RaycastHit hit;
+        Physics.Raycast(spawnPosition, forwardVector, out hit, 100.0f, layerMask);
+
+        // Make sure the raycast hit something
+        if (hit.collider == null)
+        {
+            return;
+        }
+        if (hit.collider.gameObject == null)
+        {
+            return;
+        }
+
+        createdDefensiveObject.transform.position = hit.point + new Vector3(0.0f, 0.1f, 0.0f);
+        Quaternion rotation = trackedDevice.transform.rotation;
+        createdDefensiveObject.transform.rotation = Quaternion.Euler(0.0f, rotation.eulerAngles.y, 0.0f);
+    }
 
 	public void switchDefense()
 	{
