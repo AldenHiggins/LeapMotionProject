@@ -61,7 +61,6 @@ public class MoveFireball : MonoBehaviour
 			}
 			//gameObject.transform.position += velocity;
 		}
-		
 	}
 
 	public void startPeriodicDamage()
@@ -126,19 +125,12 @@ public class MoveFireball : MonoBehaviour
 
 	void OnParticleCollision(GameObject other) 
 	{
-        print("Fireball colided with: " + other.name);
-
         if ((other.name == "OilSlickCollider")&&(gameObject.name == "CrazyFireball(Clone)"))
 		{
 			OilSlick oil = (OilSlick) other.transform.parent.gameObject.GetComponent(typeof(OilSlick));
 			oil.blowUp();
 			Destroy (gameObject);
 		}	
-		
-
-
-
-
 		
 		BasicEnemyController enemy = (BasicEnemyController) other.GetComponent(typeof(BasicEnemyController));
 		if (enemy == null) enemy = (BasicEnemyController) other.GetComponentInChildren(typeof(BasicEnemyController));	
@@ -192,7 +184,6 @@ public class MoveFireball : MonoBehaviour
 					player.addSpecialAttackPower(specialGainPerHeadshot);
 				}
 			}
-
 
 			enemy.dealDamage(damage);
 			Destroy(gameObject);

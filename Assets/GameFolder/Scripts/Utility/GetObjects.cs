@@ -29,9 +29,6 @@ public static class GetObjects
     {
         GameObject firstFoundOfName = null;
         findFirstObjectWithName("Camera (head)", getRootTransform(), ref firstFoundOfName);
-
-        Debug.Log("First found one is named: " + firstFoundOfName.name);
-
         return firstFoundOfName;
     }
 

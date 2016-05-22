@@ -98,7 +98,6 @@ public class MoveBolt : MonoBehaviour
 		// Collide with an enemy
 		else if (enemy != null)
 		{
-			print ("Got here, should deal damage to enemies!");
 			enemy.dealDamage(damage);
 			// Find out where the collision point was 
 			// Resize collision array if you have to

@@ -165,7 +165,6 @@ public class EmitterBehaviorBallista : MonoBehaviour
 
 	IEnumerator shootBolt()
 	{
-		print ("Shooting bolt");
 		anim.SetBool ("Firing", true);
 		source.PlayOneShot (arrowFire);
 		firing = true;
@@ -183,7 +182,6 @@ public class EmitterBehaviorBallista : MonoBehaviour
 
 	void OnTriggerEnter(Collider other) 
 	{
-		print(other.name + " collided with Ballista.");
 		BasicEnemyController enemy = (BasicEnemyController) other.gameObject.GetComponent(typeof(BasicEnemyController));
 		//		if (other.name == "CrazyFireball(Clone)") {
 		//			print("EXPLOSION!");
@@ -203,7 +201,6 @@ public class EmitterBehaviorBallista : MonoBehaviour
 
 	private IEnumerator WaitForAnimation ()
 	{
-		print ("Playing the Animation.");
 		anim.SetBool("Breaking", true);
 		// Generate a firey explosion here to signify the ballista got destroyed
 		GameObject breakingExplosion = (GameObject) Instantiate (ballistaDestroyParticle, transform.position, Quaternion.Euler(270.0f, 0.0f, 0.0f));
@@ -211,7 +208,6 @@ public class EmitterBehaviorBallista : MonoBehaviour
 		// Play a sound when the ballista gets killed
 		source.PlayOneShot (ballistaBreakingSound);
 		yield return new WaitForSeconds (4);
-		print ("Wait for 4 seconds.");
 		Destroy (gameObject.transform.parent.gameObject);
 	}
 }

@@ -15,7 +15,6 @@ public class SwordScript : MonoBehaviour
 
 		if (enemy != null && !enemy.isAlly)
 		{
-			print ("Sword collided with an enemy!!");
 			enemy.dealDamage(damageAmount);
 		}
 	}
