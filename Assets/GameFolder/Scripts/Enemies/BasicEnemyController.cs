@@ -238,8 +238,11 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 
 		if (health > 0)
 		{
-			greenHealth.transform.localScale = new Vector3(greenHealth.transform.localScale.x, (((float)health / startingHealth) * startingHealthScale), greenHealth.transform.localScale.z);
-			anim.Play ("wound");
+            if (greenHealth != null)
+            {
+                greenHealth.transform.localScale = new Vector3(greenHealth.transform.localScale.x, (((float)health / startingHealth) * startingHealthScale), greenHealth.transform.localScale.z);
+            }
+            anim.Play ("wound");
 			source.PlayOneShot(woundSound);
 		}
 		else
