@@ -133,3 +133,11 @@ Assets/SteamVR/
 Assets/GameFolder/Scenes/ViveLevel/
 Assets/GameFolder/Scenes/ViveLevel.meta
 Assets/GameFolder/Scenes/ViveLevel.unity
+*.meta
+*.blend
+Assets/Bow/Handpainted Forest Environment Free Sample/
+Assets/Bow/Materials/
+Assets/Bow/Prefabs/
+Assets/Bow/Scene/
+RagnarokVive_Data/
+*.pdb

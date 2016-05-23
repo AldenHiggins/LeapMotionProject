@@ -14,6 +14,10 @@ public class SteamAttackContainer : MonoBehaviour
     public SteamAttacks defensiveObjectSwitchAttack;
     GameLogic game;
 
+    public GameObject bow;
+    public GameObject controllerModel;
+    public ArrowManager arrowManager;
+
     List<int> controllerIndices = new List<int>();
 
     void Start()
@@ -96,11 +100,24 @@ public class SteamAttackContainer : MonoBehaviour
             defensiveAttack.holdFunction(0, right);
             triggerAttack = defensiveAttack;
             gripAttack = defensiveObjectSwitchAttack;
+
+            bow.SetActive(false);
+            controllerModel.SetActive(true);
+            arrowManager.enabled = false;
+
+            GetObjects.getPlayer().gameObject.transform.localScale = new Vector3(18.0f, 18.0f, 18.0f);
         }
         // Offensive mode
         else
         {
-            triggerAttack = offensiveAttack;
+            triggerAttack = new EmptySteamAttack();
+            gripAttack = new EmptySteamAttack();
+
+            bow.SetActive(true);
+            controllerModel.SetActive(false);
+            arrowManager.enabled = true;
+
+            GetObjects.getPlayer().gameObject.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
         }
 
 
