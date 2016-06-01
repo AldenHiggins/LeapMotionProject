@@ -34,15 +34,6 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 	private AudioSource source;
 	public AudioClip woundSound;
 	public AudioClip killSound;
-	// HEALTH BARS
-	public bool showHealthBar;
-	public GameObject greenHealthBar;
-	public GameObject redHealthBar;
-	public float healthBarVerticalOffset;
-	private GameObject greenHealth;
-	private GameObject redHealth;
-	private float startingHealthScale;
-	public GameObject damageAmountUI;
 	// RAGDOLL/DEATH
 	private bool isDying;
 
@@ -72,17 +63,6 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 		}
 			
 		source = GetComponent<AudioSource> ();
-
-		if (showHealthBar)
-		{
-			greenHealth = (GameObject) Instantiate(greenHealthBar);
-			redHealth = (GameObject) Instantiate(redHealthBar);
-			greenHealth.transform.parent = gameObject.transform;
-			redHealth.transform.parent = gameObject.transform;
-			greenHealth.transform.localPosition = new Vector3(0.0f, healthBarVerticalOffset, 0.0f);
-			redHealth.transform.localPosition = new Vector3(0.0f, healthBarVerticalOffset, 0.0f);
-			startingHealthScale = greenHealth.transform.localScale.y;
-		}
 	}
 
 	// Update is called once per frame
@@ -224,31 +204,15 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 
 	public void dealDamage(int damage)
 	{
-		if (damageAmountUI != null)
-		{
-			GameObject thisDamage = (GameObject) Instantiate(damageAmountUI, (transform.position + new Vector3(0.0f, headshotHeight, 0.0f)), Quaternion.identity);
-			thisDamage.SetActive(true);
-
-			// Get the text field of the damage popup
-			Text textFieldAmountOfDamage = thisDamage.transform.GetChild (1).GetChild(0).GetComponent<Text>();
-			textFieldAmountOfDamage.text = "" + damage;
-		}
-
 		health -= damage;
 
 		if (health > 0)
 		{
-            if (greenHealth != null)
-            {
-                greenHealth.transform.localScale = new Vector3(greenHealth.transform.localScale.x, (((float)health / startingHealth) * startingHealthScale), greenHealth.transform.localScale.z);
-            }
             anim.Play ("wound");
 			source.PlayOneShot(woundSound);
 		}
 		else
 		{
-			Destroy (greenHealth);
-			Destroy (redHealth);
 			source.PlayOneShot(killSound);
 
 			StartCoroutine(kill ());
@@ -304,8 +268,10 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 			return;
 		}
 
-		StopCoroutine(slowNavMesh());
-		StartCoroutine(slowNavMesh());
+        agent.speed = 1;
+
+		//StopCoroutine(slowNavMesh());
+		//StartCoroutine(slowNavMesh());
 	}
 
 	IEnumerator slowNavMesh()
