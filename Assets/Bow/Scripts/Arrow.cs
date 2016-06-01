@@ -65,6 +65,11 @@ public class Arrow : MonoBehaviour {
             return;
         }
 
+        if (collision.collider.gameObject.name == "Golden Bow")
+        {
+            return;
+        }
+
         Debug.Log("Arrow collided with: " + collision.collider.gameObject.name);
 
         BasicEnemyController enemy = collision.collider.gameObject.GetComponent<BasicEnemyController>();
@@ -72,9 +77,8 @@ public class Arrow : MonoBehaviour {
         if (enemy != null)
         {
             enemy.dealDamage(100);
-            Destroy(gameObject);
         }
+
+        Destroy(gameObject);
     }
-
-
 }
