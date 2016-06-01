@@ -80,7 +80,6 @@ public class GameLogic : MonoBehaviour
             ///////      FINISH ROUND    //////////
             ///////////////////////////////////////
             roundActive = false;
-			playerLogic.changeCurrency(500);
 		}
 
 		killPlayerEndGame (true);
