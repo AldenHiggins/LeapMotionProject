@@ -14,10 +14,6 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 	public bool isAlly;
 	// HEADSHOTS
 	public float headshotHeight;
-	// NAV MESH AND PATH DEBUGGING
-	public bool showNavMeshPath;
-	public GameObject pathLine;
-	private GameObject thisPathLine;
 	// ANIMATOR
 	private Animator anim;
 	private int health;
@@ -55,11 +51,6 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 		if (floatingEnemy)
 		{
 			agent.enabled = false;
-		}
-
-		if (showNavMeshPath)
-		{
-			thisPathLine = (GameObject) Instantiate (pathLine);
 		}
 			
 		source = GetComponent<AudioSource> ();

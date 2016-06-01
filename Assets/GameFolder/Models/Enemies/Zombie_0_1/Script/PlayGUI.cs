@@ -111,13 +111,6 @@ public class PlayGUI : MonoBehaviour {
 						animator[j].SetBool("idle0ToSkill0", true);
 					}
 					break;
-					/*
-				case "skill1":
-					for (int j = 0; j < animator.Length; j++) {
-						animator[j].SetBool("idle0ToSkill1", true);
-					}
-					*/
-					break;
 				case "wound":
 					for (int j = 0; j < animator.Length; j++) {
 						animator[j].SetBool("idle0ToWound", true);

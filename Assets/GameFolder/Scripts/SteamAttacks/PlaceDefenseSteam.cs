@@ -3,7 +3,6 @@ using UnityEngine.UI;
 
 public class PlaceDefenseSteam : SteamAttacks
 {
-	private PlayerLogic player;
 	public GameObject defensiveObject;
 	public GameObject defensiveObjectPending;
 	private bool isInstantiated = false;
@@ -20,7 +19,6 @@ public class PlaceDefenseSteam : SteamAttacks
 	{
         currentDefense = 0;
         game = GetObjects.getGame();
-        player = GetObjects.getPlayer();
 	}
 
     void Update()

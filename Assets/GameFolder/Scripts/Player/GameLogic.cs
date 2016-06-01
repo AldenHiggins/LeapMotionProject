@@ -7,29 +7,22 @@ public class GameLogic : MonoBehaviour
 {
 	// CAMERA
 	private GameObject mainCamera;
-    // GOAL POSITION
-	private GameObject goalPosition;
 	// ENEMY SPAWNERS
 	private GameObject spawnedEnemies;
 	// LEVEL ROUNDS
-	private bool nextRound = false;
 	public bool roundActive = false;
 	// MONSTER WAVES
 	private GameObject waveContainer;
 	private MonsterWave[] enemyWaves;
 	// INTERNAL VARIABLES
 	private PlayerLogic playerLogic;
-	// GAME CONTROLLER VARIABLES
-	private bool isBlocking;
 
 	// Initialize variables
 	void Start () 
 	{
-		isBlocking = false;
         mainCamera = GetObjects.getCamera();
         playerLogic = GetObjects.getPlayer();
         spawnedEnemies = GetObjects.getSpawnedEnemies();
-        goalPosition = GetObjects.getGoalPosition();
         waveContainer = GetObjects.getEnemyWaves();
 
 		// Initialize waves

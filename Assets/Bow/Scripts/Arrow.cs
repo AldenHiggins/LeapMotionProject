@@ -53,8 +53,6 @@ public class Arrow : MonoBehaviour {
 
     void OnCollisionEnter(Collision collision)
     {
-        ContactPoint contact = collision.contacts[0];
-
         if (collision.collider == null)
         {
             return;

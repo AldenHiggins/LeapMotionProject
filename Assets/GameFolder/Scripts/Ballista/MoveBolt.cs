@@ -18,18 +18,15 @@ public class MoveBolt : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-		if (velocity != null)
+		if (target != null)
 		{
-			if (target != null)
-			{
-				Vector3 toTarget = target.transform.position - transform.position;
-				toTarget.Normalize();
-				toTarget *= .2f;
-				toTarget.y = 0;
-				velocity = toTarget;
-			}
-			gameObject.transform.position += velocity;
+			Vector3 toTarget = target.transform.position - transform.position;
+			toTarget.Normalize();
+			toTarget *= .2f;
+			toTarget.y = 0;
+			velocity = toTarget;
 		}
+		gameObject.transform.position += velocity;	
 	}
 
 	public void setVelocity(Vector3 newVelocity)

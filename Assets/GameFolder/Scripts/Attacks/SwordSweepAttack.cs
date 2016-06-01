@@ -3,30 +3,30 @@ using System.Collections;
 
 public class SwordSweepAttack : AAttack
 {
-	public GameObject swordObject;
-	public float swordYOffset;
-	public float swordAwayOffset;
-	private float oldSwordAwayOffset;
-	public float swordActiveDuration;
-	public GameObject playerCamera;
-	private bool attacking = false;
+	//public GameObject swordObject;
+	//public float swordYOffset;
+	//public float swordAwayOffset;
+	//private float oldSwordAwayOffset;
+	//public float swordActiveDuration;
+	//public GameObject playerCamera;
+	//private bool attacking = false;
 
-	public float yRotationalVelocity;
-	private float yRotation = 0;
+	//public float yRotationalVelocity;
+	//private float yRotation = 0;
 
-	public float outVelocity;
+	//public float outVelocity;
 	
-	// Use this for initialization
-	void Start () 
-	{
-		oldSwordAwayOffset = swordAwayOffset;
-	}
+	//// Use this for initialization
+	//void Start () 
+	//{
+	//	oldSwordAwayOffset = swordAwayOffset;
+	//}
 	
-	// Update is called once per frame
-	void Update () 
-	{
+	//// Update is called once per frame
+	//void Update () 
+	//{
 		
-	}
+	//}
 	
 //    public override void chargingFunction(HandModel[] hands)
 //    {
