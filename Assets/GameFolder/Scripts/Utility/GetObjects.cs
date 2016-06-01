@@ -6,14 +6,14 @@ public static class GetObjects
 {
     public static GameLogic getGame()
     {
-        GameLogic returnGame = new GameLogic();
+        GameLogic returnGame = null;
         findFirstObjectOfType<GameLogic>(ref returnGame, getRootTransform());
         return returnGame;
     }
 
     public static PlayerLogic getPlayer()
     {
-        PlayerLogic returnPlayer = new PlayerLogic();
+        PlayerLogic returnPlayer = null;
         findFirstObjectOfType<PlayerLogic>(ref returnPlayer, getRootTransform());
         return returnPlayer;
     }
