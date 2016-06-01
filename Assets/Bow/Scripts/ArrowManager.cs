@@ -22,6 +22,7 @@ public class ArrowManager : MonoBehaviour
 {
 	public static ArrowManager Instance;
 
+    public SteamVR_TrackedObject bowController;
 	public SteamVR_TrackedObject trackedObj;
 
 	private GameObject currentArrow;
@@ -36,6 +37,10 @@ public class ArrowManager : MonoBehaviour
 
     // Max distance the user can pull back the bow
     public float maxPullDistance;
+
+    // Haptic feedback values
+    public float minHapticFeedback;
+    public float maxHapticFeedback;
 
     void Awake()
     {
@@ -74,10 +79,18 @@ public class ArrowManager : MonoBehaviour
                 dist = maxPullDistance;
             }
 
+            float hapticFeedBack = (((dist / maxPullDistance)) * (maxHapticFeedback - minHapticFeedback)) + minHapticFeedback;
+
 			stringAttachPoint.transform.localPosition = stringStartPoint.transform.localPosition  + new Vector3 (dist, 0f, 0f);
 
 			var device = SteamVR_Controller.Input((int)trackedObj.index);
-			if (device.GetTouchUp (SteamVR_Controller.ButtonMask.Trigger))
+            var bowHoldingController = SteamVR_Controller.Input((int)bowController.index);
+
+            // Trigger haptic feedback for the shot
+            device.TriggerHapticPulse((ushort) hapticFeedBack);
+            bowHoldingController.TriggerHapticPulse((ushort)(hapticFeedBack * .75f));
+
+            if (device.GetTouchUp (SteamVR_Controller.ButtonMask.Trigger))
             {
 				Fire (dist);
 			}
