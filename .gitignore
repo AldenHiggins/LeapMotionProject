@@ -144,3 +144,4 @@ RagnarokVive_Data/
 *.mat
 *.unity
 Assets/GameFolder/Scenes/BowTestLevel/LightingData.asset
+*.prefab
