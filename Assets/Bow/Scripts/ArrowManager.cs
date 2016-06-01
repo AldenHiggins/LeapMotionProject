@@ -18,8 +18,8 @@
 using UnityEngine;
 using System.Collections;
 
-public class ArrowManager : MonoBehaviour {
-
+public class ArrowManager : MonoBehaviour
+{
 	public static ArrowManager Instance;
 
 	public SteamVR_TrackedObject trackedObj;
@@ -34,47 +34,63 @@ public class ArrowManager : MonoBehaviour {
 
 	private bool isAttached = false;
 
-	void Awake() {
+    // Max distance the user can pull back the bow
+    public float maxPullDistance;
+
+    void Awake()
+    {
 		if (Instance == null)
 			Instance = this;
 	}
 
-	void OnDestroy() {
+	void OnDestroy()
+    {
 		if (Instance == this)
 			Instance = null;
 	}
 
 	// Use this for initialization
-	void Start () {
+	void Start ()
+    {
 	
 	}
 
 
-	void Update() {
+	void Update()
+    {
 		AttachArrow ();
 		PullString ();
 	}
 
-	private void PullString() {
-		if (isAttached) {
+	private void PullString()
+    {
+		if (isAttached)
+        {
 			float dist = (stringStartPoint.transform.position - trackedObj.transform.position).magnitude;
-			stringAttachPoint.transform.localPosition = stringStartPoint.transform.localPosition  + new Vector3 (5f* dist, 0f, 0f);
+            dist *= 5f;
+
+            if (dist > maxPullDistance)
+            {
+                dist = maxPullDistance;
+            }
+
+			stringAttachPoint.transform.localPosition = stringStartPoint.transform.localPosition  + new Vector3 (dist, 0f, 0f);
 
 			var device = SteamVR_Controller.Input((int)trackedObj.index);
-			if (device.GetTouchUp (SteamVR_Controller.ButtonMask.Trigger)) {
-				Fire ();
+			if (device.GetTouchUp (SteamVR_Controller.ButtonMask.Trigger))
+            {
+				Fire (dist);
 			}
 		}
 	}
 
-	private void Fire() {
-		float dist = (stringStartPoint.transform.position - trackedObj.transform.position).magnitude;
-
+	private void Fire(float distance)
+    {
 		currentArrow.transform.parent = null;
 		currentArrow.GetComponent<Arrow> ().Fired ();
 
 		Rigidbody r = currentArrow.GetComponent<Rigidbody> ();
-		r.velocity = currentArrow.transform.forward * 25f * dist;
+		r.velocity = currentArrow.transform.forward * 5f * distance;
 		r.useGravity = true;
 
 		currentArrow.GetComponent<Collider> ().isTrigger = false;
@@ -85,8 +101,10 @@ public class ArrowManager : MonoBehaviour {
 		isAttached = false;
 	}
 
-	private void AttachArrow() {
-		if (currentArrow == null) {
+	private void AttachArrow()
+    {
+		if (currentArrow == null)
+        {
 			currentArrow = Instantiate (arrowPrefab);
 			currentArrow.transform.parent = trackedObj.transform;
 			currentArrow.transform.localPosition = new Vector3 (0f, 0f, .342f);
@@ -94,7 +112,8 @@ public class ArrowManager : MonoBehaviour {
 		}
 	}
 
-	public void AttachBowToArrow() {
+	public void AttachBowToArrow()
+    {
 		currentArrow.transform.parent = stringAttachPoint.transform;
 		currentArrow.transform.position = arrowStartPoint.transform.position;
 		currentArrow.transform.rotation = arrowStartPoint.transform.rotation;
