@@ -205,7 +205,7 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 		{
 			source.PlayOneShot(killSound);
 
-			StartCoroutine(kill ());
+            kill();
 		}
 	}
 
@@ -234,20 +234,27 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 		agent.enabled = true;
 	}
 
-	IEnumerator kill()
-	{
-		isDying = true;
+    void kill()
+    {
+        isDying = true;
 		if (agent.enabled)
-		{
-			agent.enabled = false;
-		}
-		BoxCollider collider = gameObject.GetComponent<BoxCollider> ();
-		collider.enabled = false;
-		StopCoroutine (attack ());
-		anim.SetBool ("Attacking", false);
-		anim.SetBool ("Dead", true);
-		yield return new WaitForSeconds (3.0f);
-		Destroy (gameObject);
+        {
+            agent.enabled = false;
+        }
+        BoxCollider collider = gameObject.GetComponent<BoxCollider> ();
+        collider.enabled = false;
+        StopCoroutine (attack ());
+        anim.SetBool ("Attacking", false);
+        anim.SetBool ("Dead", true);
+
+        // Start the coroutine that will wait for the monster to be destroyed
+        StartCoroutine(waitToDestroy());
+    }
+
+	IEnumerator waitToDestroy()
+	{
+		yield return new WaitForSeconds (10.0f);
+        Destroy (gameObject);
 	}
 
 	public void slowDown()
