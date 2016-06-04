@@ -35,6 +35,9 @@ public class ArrowManager : MonoBehaviour
 
 	private bool isAttached = false;
 
+    // Force multiplier for the arrow (how hard the bow shoots essentially)
+    public float bowStrength;
+
     // Max distance the user can pull back the bow
     public float maxPullDistance;
 
@@ -72,7 +75,7 @@ public class ArrowManager : MonoBehaviour
 		if (isAttached)
         {
 			float dist = (stringStartPoint.transform.position - trackedObj.transform.position).magnitude;
-            dist *= 5f;
+            dist *= bowStrength;
 
             if (dist > maxPullDistance)
             {
@@ -103,7 +106,7 @@ public class ArrowManager : MonoBehaviour
 		currentArrow.GetComponent<Arrow> ().Fired ();
 
 		Rigidbody r = currentArrow.GetComponent<Rigidbody> ();
-		r.velocity = currentArrow.transform.forward * 5f * distance;
+		r.velocity = currentArrow.transform.forward * bowStrength * distance;
 		r.useGravity = true;
 
 		currentArrow.GetComponent<Collider> ().isTrigger = false;
