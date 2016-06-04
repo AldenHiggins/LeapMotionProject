@@ -41,6 +41,9 @@ public class ArrowManager : MonoBehaviour
     // Max distance the user can pull back the bow
     public float maxPullDistance;
 
+    // The starting distance the string is along the bow's x axis (used to determine how far the user is actually pulling the string back)
+    private float startingStringDistance;
+
     // Haptic feedback values
     public float minHapticFeedback;
     public float maxHapticFeedback;
@@ -60,7 +63,7 @@ public class ArrowManager : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
-	
+        startingStringDistance = stringStartPoint.transform.localPosition.x;
 	}
 
 
@@ -74,12 +77,21 @@ public class ArrowManager : MonoBehaviour
     {
 		if (isAttached)
         {
-			float dist = (stringStartPoint.transform.position - trackedObj.transform.position).magnitude;
-            dist *= bowStrength;
+            // Get the position of the controller in the bow space...the x axis travels from the bow to it's string and will be used
+            // for the bow's draw distance
+            Vector3 stringSpaceControllerPosition = stringStartPoint.transform.parent.InverseTransformPoint(trackedObj.transform.position);
+            
+            float dist = stringSpaceControllerPosition.x;
+            dist -= startingStringDistance;
 
+            // Keep the distance of the shot within certain bounds
             if (dist > maxPullDistance)
             {
                 dist = maxPullDistance;
+            }
+            else if (dist < 0.0f)
+            {
+                dist = 0.0f;
             }
 
             float hapticFeedBack = (((dist / maxPullDistance)) * (maxHapticFeedback - minHapticFeedback)) + minHapticFeedback;
