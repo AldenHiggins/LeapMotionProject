@@ -133,7 +133,6 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 					Vector3 targetVector = target.transform.position - gameObject.transform.position;
 					gameObject.transform.position += Time.deltaTime * targetVector * floatingVelocity;
 				}
-
 			}
 		}
 		// If the player is in range attack him

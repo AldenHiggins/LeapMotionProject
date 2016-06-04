@@ -19,33 +19,40 @@
 using UnityEngine;
 using System.Collections;
 
-public class Arrow : MonoBehaviour {
-
+public class Arrow : MonoBehaviour
+{
 	private bool isAttached = false;
 
 	private bool isFired = false;
 
-	void OnTriggerStay() {
+	void OnTriggerStay()
+    {
 		AttachArrow ();
 	}
 
-	void OnTriggerEnter() {
+	void OnTriggerEnter()
+    {
 		AttachArrow ();
 	}
 
-	void Update() {
-		if (isFired && transform.GetComponent<Rigidbody> ().velocity.magnitude > 5f) {
+	void Update()
+    {
+		if (isFired && transform.GetComponent<Rigidbody> ().velocity.magnitude > 5f)
+        {
 			transform.LookAt (transform.position + transform.GetComponent<Rigidbody> ().velocity);
 		}
 	}
 
-	public void Fired() {
+	public void Fired()
+    {
 		isFired =  true; 
 	}
 
-	private void AttachArrow() {
+	private void AttachArrow()
+    {
 		var device = SteamVR_Controller.Input((int)ArrowManager.Instance.trackedObj.index);
-		if (!isAttached && device.GetTouch (SteamVR_Controller.ButtonMask.Trigger)) {
+		if (!isAttached && device.GetTouch (SteamVR_Controller.ButtonMask.Trigger))
+        {
 			ArrowManager.Instance.AttachBowToArrow ();
 			isAttached = true;
 		}
@@ -67,8 +74,6 @@ public class Arrow : MonoBehaviour {
         {
             return;
         }
-
-        Debug.Log("Arrow collided with: " + collision.collider.gameObject.name);
 
         BasicEnemyController enemy = collision.collider.gameObject.GetComponent<BasicEnemyController>();
 
