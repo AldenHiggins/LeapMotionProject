@@ -6,11 +6,14 @@ public class PlayerLogic : MonoBehaviour, IUnit
 {
 	private GameLogic game;
 
+    public int startingHealth;
+
 	private int health;
 
 	// Use this for initialization
 	void Start () 
 	{
+        health = startingHealth;
         game = GetObjects.getGame();
 	}
 
@@ -21,8 +24,11 @@ public class PlayerLogic : MonoBehaviour, IUnit
 
 	public void respawn()
 	{
-		game.killPlayerEndGame (false);
-	}
+        if (game != null)
+        {
+            game.killPlayerEndGame(false);
+        }
+    }
 
 	public void dealDamage(int damageToDeal)
 	{
