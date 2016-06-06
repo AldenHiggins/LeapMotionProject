@@ -148,3 +148,6 @@ Assets/GameFolder/Scenes/BowTestLevel/LightingData.asset
 Assets/GameFolder/Models/Swords/
 Assets/GameFolder/Scenes/BowTestLevel/NavMesh.asset
 Assets/Zombie/
+Assets/ghoul/
+Assets/Elven Long Bow (fully animated)/
+*.controller
