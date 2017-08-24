@@ -19,8 +19,8 @@ public class TutorialZombieKillCounter : MonoBehaviour {
 
 	void OnParticleCollision(GameObject other)
 	{
-		if (isOffense)
-			tutorialObject.GetComponent<TutorialOffensiveScript> ().killedZombie ();
+		//if (isOffense)
+			//tutorialObject.GetComponent<TutorialOffensiveScript> ().killedZombie ();
 
 		StartCoroutine (ZombieDeath ());
 	}

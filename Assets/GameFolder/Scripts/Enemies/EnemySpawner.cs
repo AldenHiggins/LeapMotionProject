@@ -60,13 +60,13 @@ public class EnemySpawner : MonoBehaviour
 
 		if (enemy == null)
 		{
-<<<<<<< HEAD
+//<<<<<<< HEAD
 			enemy = (BasicEnemyController)monster.transform.GetChild (0).GetComponent (typeof(BasicEnemyController));
 			UnityEngine.AI.NavMeshAgent agent = monster.transform.GetChild (0).GetComponent<UnityEngine.AI.NavMeshAgent>();
-=======
-			enemy = (BasicEnemyController) monster.transform.GetChild (0).GetComponent (typeof(BasicEnemyController));
-			NavMeshAgent agent = monster.transform.GetChild (0).GetComponent<NavMeshAgent>();
->>>>>>> c5c8868af13028fa52019e2b91ab548f24e18634
+//=======
+			//enemy = (BasicEnemyController) monster.transform.GetChild (0).GetComponent (typeof(BasicEnemyController));
+			//NavMeshAgent agent = monster.transform.GetChild (0).GetComponent<NavMeshAgent>();
+//>>>>>>> c5c8868af13028fa52019e2b91ab548f24e18634
 			agent.enabled = true;
 		}
 		else

@@ -45,13 +45,13 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 		
 		health = startingHealth;
 
-<<<<<<< HEAD
+        //<<<<<<< HEAD
 
-		agent = gameObject.GetComponent<UnityEngine.AI.NavMeshAgent> ();
-=======
-		agent = gameObject.GetComponent<NavMeshAgent> ();
->>>>>>> c5c8868af13028fa52019e2b91ab548f24e18634
-		agent.updateRotation = true;
+        agent = gameObject.GetComponent<UnityEngine.AI.NavMeshAgent>();
+        //=======
+        //agent = gameObject.GetComponent<NavMeshAgent> ();
+        //>>>>>>> c5c8868af13028fa52019e2b91ab548f24e18634
+        agent.updateRotation = true;
 
 		if (floatingEnemy)
 		{
@@ -242,17 +242,19 @@ public class BasicEnemyController : MonoBehaviour, IUnit
     void kill()
     {
         isDying = true;
-		if (agent.enabled)
+        if (agent.enabled)
         {
             agent.enabled = false;
         }
-        BoxCollider collider = gameObject.GetComponent<BoxCollider> ();
+        BoxCollider collider = gameObject.GetComponent<BoxCollider>();
         collider.enabled = false;
-        StopCoroutine (attack ());
-        anim.SetBool ("Attacking", false);
-        anim.SetBool ("Dead", true);
+        StopCoroutine(attack());
+        anim.SetBool("Attacking", false);
+        anim.SetBool("Dead", true);
+        StartCoroutine(waitToDestroy());
+    }
 
-<<<<<<< HEAD
+//<<<<<<< HEAD
 	private void displayNavMeshPath()
 	{
 		// Show nav mesh paths
@@ -264,23 +266,22 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 			LineRenderer lineRender;
 			
 			// Draw a line to show the player where they are aiming
-			lineRender = (LineRenderer) thisPathLine.GetComponent<Renderer>();
-			lineRender.enabled = true;
+			//lineRender = (LineRenderer) thisPathLine.GetComponent<Renderer>();
+			//lineRender.enabled = true;
 			
-			lineRender.SetColors (Color.yellow, Color.yellow);
-			lineRender.SetVertexCount (pathVertices.Length);
-			//			print ("Path length: " + pathVertices.Length);
-			for (int i = 0; i < pathVertices.Length; i++)
-			{
-				lineRender.SetPosition (i, pathVertices[i]);
-			}
+			//lineRender.SetColors (Color.yellow, Color.yellow);
+			//lineRender.SetVertexCount (pathVertices.Length);
+			////			print ("Path length: " + pathVertices.Length);
+			//for (int i = 0; i < pathVertices.Length; i++)
+			//{
+			//	lineRender.SetPosition (i, pathVertices[i]);
+			//}
 		}
-	}
-=======
+//=======
         // Start the coroutine that will wait for the monster to be destroyed
-        StartCoroutine(waitToDestroy());
+        //StartCoroutine(waitToDestroy());
     }
->>>>>>> c5c8868af13028fa52019e2b91ab548f24e18634
+//>>>>>>> c5c8868af13028fa52019e2b91ab548f24e18634
 
 	IEnumerator waitToDestroy()
 	{

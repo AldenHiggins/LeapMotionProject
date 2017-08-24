@@ -22,8 +22,8 @@ public class ArrowManager : MonoBehaviour
 {
 	public static ArrowManager Instance;
 
-    public SteamVR_TrackedObject bowController;
-	public SteamVR_TrackedObject trackedObj;
+    //public SteamVR_TrackedObject bowController;
+	//public SteamVR_TrackedObject trackedObj;
 
 	private GameObject currentArrow;
 
@@ -75,41 +75,41 @@ public class ArrowManager : MonoBehaviour
 
 	private void PullString()
     {
-		if (isAttached)
-        {
-            // Get the position of the controller in the bow space...the x axis travels from the bow to it's string and will be used
-            // for the bow's draw distance
-            Vector3 stringSpaceControllerPosition = stringStartPoint.transform.parent.InverseTransformPoint(trackedObj.transform.position);
+		//if (isAttached)
+  //      {
+  //          // Get the position of the controller in the bow space...the x axis travels from the bow to it's string and will be used
+  //          // for the bow's draw distance
+  //          Vector3 stringSpaceControllerPosition = stringStartPoint.transform.parent.InverseTransformPoint(trackedObj.transform.position);
             
-            float dist = stringSpaceControllerPosition.x;
-            dist -= startingStringDistance;
+  //          float dist = stringSpaceControllerPosition.x;
+  //          dist -= startingStringDistance;
 
-            // Keep the distance of the shot within certain bounds
-            if (dist > maxPullDistance)
-            {
-                dist = maxPullDistance;
-            }
-            else if (dist < 0.0f)
-            {
-                dist = 0.0f;
-            }
+  //          // Keep the distance of the shot within certain bounds
+  //          if (dist > maxPullDistance)
+  //          {
+  //              dist = maxPullDistance;
+  //          }
+  //          else if (dist < 0.0f)
+  //          {
+  //              dist = 0.0f;
+  //          }
 
-            float hapticFeedBack = (((dist / maxPullDistance)) * (maxHapticFeedback - minHapticFeedback)) + minHapticFeedback;
+  //          float hapticFeedBack = (((dist / maxPullDistance)) * (maxHapticFeedback - minHapticFeedback)) + minHapticFeedback;
 
-			stringAttachPoint.transform.localPosition = stringStartPoint.transform.localPosition  + new Vector3 (dist, 0f, 0f);
+		//	stringAttachPoint.transform.localPosition = stringStartPoint.transform.localPosition  + new Vector3 (dist, 0f, 0f);
 
-			var device = SteamVR_Controller.Input((int)trackedObj.index);
-            var bowHoldingController = SteamVR_Controller.Input((int)bowController.index);
+		//	var device = SteamVR_Controller.Input((int)trackedObj.index);
+  //          var bowHoldingController = SteamVR_Controller.Input((int)bowController.index);
 
-            // Trigger haptic feedback for the shot
-            device.TriggerHapticPulse((ushort) hapticFeedBack);
-            bowHoldingController.TriggerHapticPulse((ushort)(hapticFeedBack * .75f));
+  //          // Trigger haptic feedback for the shot
+  //          device.TriggerHapticPulse((ushort) hapticFeedBack);
+  //          bowHoldingController.TriggerHapticPulse((ushort)(hapticFeedBack * .75f));
 
-            if (device.GetTouchUp (SteamVR_Controller.ButtonMask.Trigger))
-            {
-				Fire (dist);
-			}
-		}
+  //          if (device.GetTouchUp (SteamVR_Controller.ButtonMask.Trigger))
+  //          {
+		//		Fire (dist);
+		//	}
+		//}
 	}
 
 	private void Fire(float distance)
@@ -131,21 +131,21 @@ public class ArrowManager : MonoBehaviour
 
 	private void AttachArrow()
     {
-		if (currentArrow == null)
-        {
-			currentArrow = Instantiate (arrowPrefab);
-			currentArrow.transform.parent = trackedObj.transform;
-			currentArrow.transform.localPosition = new Vector3 (0f, 0f, .342f);
-			currentArrow.transform.localRotation = Quaternion.identity;
-		}
+		//if (currentArrow == null)
+  //      {
+		//	currentArrow = Instantiate (arrowPrefab);
+		//	currentArrow.transform.parent = trackedObj.transform;
+		//	currentArrow.transform.localPosition = new Vector3 (0f, 0f, .342f);
+		//	currentArrow.transform.localRotation = Quaternion.identity;
+		//}
 	}
 
 	public void AttachBowToArrow()
     {
-		currentArrow.transform.parent = stringAttachPoint.transform;
-		currentArrow.transform.position = arrowStartPoint.transform.position;
-		currentArrow.transform.rotation = arrowStartPoint.transform.rotation;
+		//currentArrow.transform.parent = stringAttachPoint.transform;
+		//currentArrow.transform.position = arrowStartPoint.transform.position;
+		//currentArrow.transform.rotation = arrowStartPoint.transform.rotation;
 
-		isAttached = true;
+		//isAttached = true;
 	}
 }

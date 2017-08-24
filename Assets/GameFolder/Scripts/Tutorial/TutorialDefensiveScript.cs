@@ -13,8 +13,8 @@ public class TutorialDefensiveScript : MonoBehaviour {
 	public Text displayMessage;
 
 	public PlayerLogic player;
-	public OffensiveAbilities offense;
-	public DefensiveAbilities defense;
+	//public OffensiveAbilities offense;
+	//public DefensiveAbilities defense;
 
 	public GameObject fireBall;
 	
@@ -48,18 +48,18 @@ public class TutorialDefensiveScript : MonoBehaviour {
 
 	public void activateTutorial() 
 	{
-		player.changeCurrency (500);
-		ballistaHasKilled = false;
-		oilSlickHasSlowed = false;
-		oilSlickHasExploded = false;
+		//player.changeCurrency (500);
+		//ballistaHasKilled = false;
+		//oilSlickHasSlowed = false;
+		//oilSlickHasExploded = false;
 
 
-		handFlipGesture.SetActive (false);
-		handFistGesture.SetActive (false);
+		//handFlipGesture.SetActive (false);
+		//handFistGesture.SetActive (false);
 
-		StartCoroutine (startTutorial ());
-		//StartCoroutine (beginOilSlickTutorial ());
-		StartCoroutine (activateOffensiveAbilities ());
+		//StartCoroutine (startTutorial ());
+		////StartCoroutine (beginOilSlickTutorial ());
+		//StartCoroutine (activateOffensiveAbilities ());
 
 	}
 	
@@ -110,7 +110,7 @@ public class TutorialDefensiveScript : MonoBehaviour {
 		while(true)
 		{
 			yield return new WaitForSeconds(.1f);
-			offense.controlCheck();
+			//offense.controlCheck();
 		}
 	}
 
@@ -130,7 +130,7 @@ public class TutorialDefensiveScript : MonoBehaviour {
 			GameObject.Destroy(toDestroy);
 		}
 
-		player.changeCurrency (5);
+		//player.changeCurrency (5);
 		handFlipGesture.SetActive (false);
 		spawner.SetActive (false);
 		goalPosition.SetActive (false);
@@ -197,7 +197,7 @@ public class TutorialDefensiveScript : MonoBehaviour {
 					if (blowupzombie.name != "RootMotionZombie(Clone)") continue;
 					UnityEngine.AI.NavMeshAgent agent = blowupzombie.GetComponentInChildren<UnityEngine.AI.NavMeshAgent>();
 					BasicEnemyController controller = blowupzombie.GetComponentInChildren<BasicEnemyController>();
-					controller.tutorialGoalTarget = toDestroy;
+					//controller.tutorialGoalTarget = toDestroy;
 					agent.ResetPath();
 					agent.SetDestination(toDestroy.transform.position);
 					agent.acceleration = 8;
@@ -219,10 +219,10 @@ public class TutorialDefensiveScript : MonoBehaviour {
 				GameObject newFireball = 
 					(GameObject) Instantiate(fireBall, fireballSpawnLocation, Quaternion.LookRotation(fireballVelocity.normalized));
 				newFireball.SetActive(true); 
-				MoveFireball moveThis = (MoveFireball) newFireball.GetComponent(typeof(MoveFireball));
-				moveThis.setVelocity(fireballVelocity);
-				newFireball.GetComponent<Renderer>().enabled = true;
-				moveThis.setHash (0);
+				//MoveFireball moveThis = (MoveFireball) newFireball.GetComponent(typeof(MoveFireball));
+				//moveThis.setVelocity(fireballVelocity);
+				//newFireball.GetComponent<Renderer>().enabled = true;
+				//moveThis.setHash (0);
 
 				break;
 			}
