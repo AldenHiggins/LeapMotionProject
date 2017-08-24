@@ -44,7 +44,7 @@ public class EnemySpawner : MonoBehaviour
 				monster.transform.parent = spawnedEnemyList.transform;
 				BasicEnemyController enemy = (BasicEnemyController) monster.GetComponent(typeof(BasicEnemyController));
 				enemy.enabled = true;
-				NavMeshAgent agent = monster.GetComponent<NavMeshAgent>();
+				UnityEngine.AI.NavMeshAgent agent = monster.GetComponent<UnityEngine.AI.NavMeshAgent>();
 				agent.enabled = true;
 			}
 			yield return new WaitForSeconds(spawnFrequency);
@@ -69,12 +69,12 @@ public class EnemySpawner : MonoBehaviour
 		if (enemy == null)
 		{
 			enemy = (BasicEnemyController)monster.transform.GetChild (0).GetComponent (typeof(BasicEnemyController));
-			NavMeshAgent agent = monster.transform.GetChild (0).GetComponent<NavMeshAgent>();
+			UnityEngine.AI.NavMeshAgent agent = monster.transform.GetChild (0).GetComponent<UnityEngine.AI.NavMeshAgent>();
 			agent.enabled = true;
 		}
 		else
 		{
-			NavMeshAgent agent = monster.GetComponent<NavMeshAgent>();
+			UnityEngine.AI.NavMeshAgent agent = monster.GetComponent<UnityEngine.AI.NavMeshAgent>();
 			agent.enabled = true;
 		}
 

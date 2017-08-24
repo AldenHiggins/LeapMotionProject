@@ -19,7 +19,7 @@ public class TutorialEnemyController : MonoBehaviour
 	private Animator anim;
 	private int health;
 	private bool attacking;
-	private NavMeshAgent agent;
+	private UnityEngine.AI.NavMeshAgent agent;
 	public GameObject target;
 	// AUDIO
 	private AudioSource source;
@@ -32,7 +32,7 @@ public class TutorialEnemyController : MonoBehaviour
 		//anim = transform.GetChild (0).gameObject.GetComponent<Animator> ();
 		anim = gameObject.GetComponent<Animator> ();
 		health = startingHealth;
-		agent = gameObject.GetComponent<NavMeshAgent> ();
+		agent = gameObject.GetComponent<UnityEngine.AI.NavMeshAgent> ();
 		if (showNavMeshPath)
 			thisPathLine = (GameObject) Instantiate (pathLine);
 		source = GetComponent<AudioSource> ();
@@ -175,7 +175,7 @@ public class TutorialEnemyController : MonoBehaviour
 		// Show nav mesh paths
 		if (agent.hasPath)
 		{
-			NavMeshPath thisPath = agent.path;
+			UnityEngine.AI.NavMeshPath thisPath = agent.path;
 			Vector3[] pathVertices = thisPath.corners;
 			
 			LineRenderer lineRender;

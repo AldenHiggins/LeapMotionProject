@@ -49,7 +49,7 @@ public class TutorialSpawning : MonoBehaviour
 				monster.transform.GetChild(0).transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
 				BasicEnemyController enemy = (BasicEnemyController) monster.GetComponentInChildren(typeof(BasicEnemyController));
 				enemy.enabled = true;
-				NavMeshAgent agent = monster.GetComponentInChildren<NavMeshAgent>();
+				UnityEngine.AI.NavMeshAgent agent = monster.GetComponentInChildren<UnityEngine.AI.NavMeshAgent>();
 				agent.enabled = true;
 				agent.SetDestination(target.transform.position);
 			}
@@ -63,7 +63,7 @@ public class TutorialSpawning : MonoBehaviour
 		monster.transform.parent = spawnedEnemyList.transform;
 		BasicEnemyController enemy = (BasicEnemyController) monster.GetComponent(typeof(BasicEnemyController));
 		enemy.enabled = true;
-		NavMeshAgent agent = monster.GetComponent<NavMeshAgent>();
+		UnityEngine.AI.NavMeshAgent agent = monster.GetComponent<UnityEngine.AI.NavMeshAgent>();
 		agent.enabled = true;
 	}
 	

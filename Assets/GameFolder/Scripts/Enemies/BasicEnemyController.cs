@@ -27,7 +27,7 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 	private int health;
 	private bool attacking;
 	// MOVEMENT
-	private NavMeshAgent agent;
+	private UnityEngine.AI.NavMeshAgent agent;
 	private GameObject target;
 	private Vector3 velocity;
 	public int waitToMove;
@@ -78,7 +78,7 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 		health = startingHealth;
 
 
-		agent = gameObject.GetComponent<NavMeshAgent> ();
+		agent = gameObject.GetComponent<UnityEngine.AI.NavMeshAgent> ();
 		agent.updateRotation = true;
 
 		if (floatingEnemy)
@@ -365,7 +365,7 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 		// Show nav mesh paths
 		if (agent.hasPath)
 		{
-			NavMeshPath thisPath = agent.path;
+			UnityEngine.AI.NavMeshPath thisPath = agent.path;
 			Vector3[] pathVertices = thisPath.corners;
 			
 			LineRenderer lineRender;

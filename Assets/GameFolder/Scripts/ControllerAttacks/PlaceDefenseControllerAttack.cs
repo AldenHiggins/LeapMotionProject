@@ -80,7 +80,7 @@ class PlaceDefenseControllerAttack : AControllerAttack
             if (isAlly)
             {
                 BasicEnemyController enemy = (BasicEnemyController) ballistaFinal.GetComponent(typeof(BasicEnemyController));
-                NavMeshAgent agent = (NavMeshAgent) ballistaFinal.GetComponent(typeof(NavMeshAgent));
+                UnityEngine.AI.NavMeshAgent agent = (UnityEngine.AI.NavMeshAgent) ballistaFinal.GetComponent(typeof(UnityEngine.AI.NavMeshAgent));
                 agent.enabled = true;
                 enemy.enabled = true;
             }

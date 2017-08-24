@@ -5,11 +5,11 @@ public class NavTest : MonoBehaviour {
 
 	public GameObject target;
 
-	private NavMeshAgent agent;
+	private UnityEngine.AI.NavMeshAgent agent;
 
 	// Use this for initialization
 	void Start () {
-		agent = GetComponent<NavMeshAgent> ();;
+		agent = GetComponent<UnityEngine.AI.NavMeshAgent> ();;
 		agent.SetDestination (target.transform.position);
 	}
 	

@@ -195,7 +195,7 @@ public class TutorialDefensiveScript : MonoBehaviour {
 				GameObject[] spawnedZombies = GameObject.FindGameObjectsWithTag("Zombie");
 				foreach (GameObject blowupzombie in spawnedZombies) {
 					if (blowupzombie.name != "RootMotionZombie(Clone)") continue;
-					NavMeshAgent agent = blowupzombie.GetComponentInChildren<NavMeshAgent>();
+					UnityEngine.AI.NavMeshAgent agent = blowupzombie.GetComponentInChildren<UnityEngine.AI.NavMeshAgent>();
 					BasicEnemyController controller = blowupzombie.GetComponentInChildren<BasicEnemyController>();
 					controller.tutorialGoalTarget = toDestroy;
 					agent.ResetPath();
