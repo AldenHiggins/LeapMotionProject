@@ -4,10 +4,6 @@ using System.Collections;
 
 public class BasicEnemyController : MonoBehaviour, IUnit
 {
-	// GAME LOGIC
-	public GameLogic game;
-	// PLAYER
-	public PlayerLogic player;
 	// MONSTER CHARACTERISTICS
 	public float speed;
 	public int startingHealth;
@@ -18,10 +14,6 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 	public bool isAlly;
 	// HEADSHOTS
 	public float headshotHeight;
-	// NAV MESH AND PATH DEBUGGING
-	public bool showNavMeshPath;
-	public GameObject pathLine;
-	private GameObject thisPathLine;
 	// ANIMATOR
 	private Animator anim;
 	private int health;
@@ -30,35 +22,16 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 	private UnityEngine.AI.NavMeshAgent agent;
 	private GameObject target;
 	private Vector3 velocity;
-	public int waitToMove;
-	private int startingMoveCounter;
 	public bool usesRootMotion;
 	public bool floatingEnemy;
 	public float floatingVelocity;
-	public GameObject goalPosition;
+	private GameObject goalPosition;
 	// AUDIO
 	private AudioSource source;
 	public AudioClip woundSound;
 	public AudioClip killSound;
-	// HEALTH BARS
-	public bool showHealthBar;
-	public GameObject greenHealthBar;
-	public GameObject redHealthBar;
-	public float healthBarVerticalOffset;
-	private GameObject greenHealth;
-	private GameObject redHealth;
-	private float startingHealthScale;
-	public GameObject damageAmountUI;
 	// RAGDOLL/DEATH
-	public float ragdollTime;
-	public float ragdollForceFactor;
-	public GameObject ragDollCenterObject;
-	public bool usesRagdoll;
 	private bool isDying;
-	// TUTORIAL
-	public bool isTutorial;
-	public GameObject tutorialGoalTarget;
-
 
 	// Use this for initialization
 	void Start () 
@@ -66,57 +39,27 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 		attacking = false;
 		isDying = false;
 
-		if (usesRootMotion)
-		{
-			anim = gameObject.GetComponent<Animator> ();
-		}
-		else
-		{
-			anim = transform.GetChild (0).gameObject.GetComponent<Animator> ();
-		}
+        goalPosition = GetObjects.getGoalPosition();
 
+		anim = transform.GetChild (0).gameObject.GetComponent<Animator> ();
+		
 		health = startingHealth;
 
+<<<<<<< HEAD
 
 		agent = gameObject.GetComponent<UnityEngine.AI.NavMeshAgent> ();
+=======
+		agent = gameObject.GetComponent<NavMeshAgent> ();
+>>>>>>> c5c8868af13028fa52019e2b91ab548f24e18634
 		agent.updateRotation = true;
 
 		if (floatingEnemy)
 		{
 			agent.enabled = false;
 		}
-
-//		target = game.getEnemyTarget ();
-		if (isTutorial)
-		{
-			target = tutorialGoalTarget;
-		}
-		else
-		{
-			target = player.gameObject;
-		}
-
-		if (showNavMeshPath)
-		{
-			thisPathLine = (GameObject) Instantiate (pathLine);
-		}
 			
 		source = GetComponent<AudioSource> ();
-		startingMoveCounter = 0;
-
-		if (showHealthBar)
-		{
-			greenHealth = (GameObject) Instantiate(greenHealthBar);
-			redHealth = (GameObject) Instantiate(redHealthBar);
-			greenHealth.transform.parent = gameObject.transform;
-			redHealth.transform.parent = gameObject.transform;
-			greenHealth.transform.localPosition = new Vector3(0.0f, healthBarVerticalOffset, 0.0f);
-			redHealth.transform.localPosition = new Vector3(0.0f, healthBarVerticalOffset, 0.0f);
-			startingHealthScale = greenHealth.transform.localScale.y;
-		}
 	}
-
-
 
 	// Update is called once per frame
 	void Update () 
@@ -126,8 +69,6 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 			return;
 		}
 	
-		startingMoveCounter++;
-
 		// Search for nearby enemies to attack
 		GameObject enemy = null;
 		
@@ -158,7 +99,6 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 			}
 		}
 
-
 		if (enemy != null)
 		{
 			target = enemy;
@@ -167,7 +107,6 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 		{
 			target = goalPosition;
 		}
-
 
 		velocity = target.transform.position - transform.position;
 		velocity.y = 0.0f;
@@ -199,7 +138,6 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 					Vector3 targetVector = target.transform.position - gameObject.transform.position;
 					gameObject.transform.position += Time.deltaTime * targetVector * floatingVelocity;
 				}
-
 			}
 		}
 		// If the player is in range attack him
@@ -233,11 +171,6 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 		    transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position);
 		    transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
         }
-
-		if (showNavMeshPath)
-		{
-			displayNavMeshPath ();
-		}
 	}
 
 	IEnumerator attack()
@@ -266,33 +199,18 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 
 	public void dealDamage(int damage)
 	{
-		if (damageAmountUI != null)
-		{
-			GameObject thisDamage = (GameObject) Instantiate(damageAmountUI, (transform.position + new Vector3(0.0f, headshotHeight, 0.0f)), Quaternion.identity);
-			thisDamage.SetActive(true);
-
-			// Get the text field of the damage popup
-			Text textFieldAmountOfDamage = thisDamage.transform.GetChild (1).GetChild(0).GetComponent<Text>();
-			textFieldAmountOfDamage.text = "" + damage;
-		}
-		// TEMP TEMP TEMP check remove after forces can affect enemies
-		if (anim == null)
-			return;
 		health -= damage;
 
 		if (health > 0)
 		{
-			greenHealth.transform.localScale = new Vector3(greenHealth.transform.localScale.x, (((float)health / startingHealth) * startingHealthScale), greenHealth.transform.localScale.z);
-			anim.Play ("wound");
+            anim.Play ("wound");
 			source.PlayOneShot(woundSound);
 		}
 		else
 		{
-			Destroy (greenHealth);
-			Destroy (redHealth);
 			source.PlayOneShot(killSound);
 
-			StartCoroutine(kill ());
+            kill();
 		}
 	}
 
@@ -319,47 +237,22 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 			yield return new WaitForSeconds(.1f);
 		}
 		agent.enabled = true;
-//		rigidbody.isKinematic = true;
 	}
 
-	IEnumerator kill()
-	{
-		isDying = true;
+    void kill()
+    {
+        isDying = true;
 		if (agent.enabled)
-		{
-			agent.enabled = false;
-		}
-		BoxCollider collider = gameObject.GetComponent<BoxCollider> ();
-		collider.enabled = false;
-		StopCoroutine (attack ());
-		player.changeCurrency (currencyOnKill);
-		anim.SetBool ("Attacking", false);
-		anim.SetBool ("Dead", true);
-//		while(!anim.GetCurrentAnimatorStateInfo(0).IsName("death"))
-//		{
-//			yield return new WaitForSeconds(.1f);
-//		}
-		yield return new WaitForSeconds (3.0f);
-		if (usesRagdoll)
-		{
-			Destroy (this.transform.parent.gameObject);
-		}
-		Destroy (this.gameObject);
-	}
+        {
+            agent.enabled = false;
+        }
+        BoxCollider collider = gameObject.GetComponent<BoxCollider> ();
+        collider.enabled = false;
+        StopCoroutine (attack ());
+        anim.SetBool ("Attacking", false);
+        anim.SetBool ("Dead", true);
 
-	IEnumerator ragdollKill()
-	{
-		isDying = true;
-//		agent.enabled = false;
-		anim.enabled = false;
-		BoxCollider collider = gameObject.GetComponent<BoxCollider> ();
-		collider.enabled = false;
-		Rigidbody ragDollRigidBody = ragDollCenterObject.GetComponent<Rigidbody> ();
-		ragDollRigidBody.AddForce (new Vector3 (0, 5 * ragdollForceFactor, -10 * ragdollForceFactor), ForceMode.Impulse);
-		yield return new WaitForSeconds (ragdollTime);
-		Destroy (transform.parent.gameObject);
-	}
-
+<<<<<<< HEAD
 	private void displayNavMeshPath()
 	{
 		// Show nav mesh paths
@@ -383,12 +276,16 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 			}
 		}
 	}
+=======
+        // Start the coroutine that will wait for the monster to be destroyed
+        StartCoroutine(waitToDestroy());
+    }
+>>>>>>> c5c8868af13028fa52019e2b91ab548f24e18634
 
-	// Sets the navmeshAgent to use the animation's velocity (root motion)
-	void OnAnimatorMove()
+	IEnumerator waitToDestroy()
 	{
-		if (agent != null)
-			agent.velocity = anim.deltaPosition / Time.deltaTime;
+		yield return new WaitForSeconds (10.0f);
+        Destroy (gameObject);
 	}
 
 	public void slowDown()
@@ -399,23 +296,10 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 			return;
 		}
 
-		if (usesRootMotion)
-		{
-			StopCoroutine(slowRootMotion());
-			StartCoroutine(slowRootMotion());
-		}
-		else
-		{
-			StopCoroutine(slowNavMesh());
-			StartCoroutine(slowNavMesh());
-		}
-	}
+        agent.speed = 1;
 
-	IEnumerator slowRootMotion()
-	{
-		anim.SetBool ("Slowed", true);
-		yield return new WaitForSeconds (3.0f);
-		anim.SetBool ("Slowed", false);
+		//StopCoroutine(slowNavMesh());
+		//StartCoroutine(slowNavMesh());
 	}
 
 	IEnumerator slowNavMesh()

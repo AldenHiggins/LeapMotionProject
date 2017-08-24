@@ -104,10 +104,6 @@ Assets/Editor/
 Assets/Editor.meta
 Optimization_Data/
 MattsPimpCastle_Data/
-<<<<<<< HEAD
-CastleCourtyardNoTerrain_Data/
-2015-04-21_000056/
-=======
 CastleWithTerrain_Data/
 CastleNoTerrain_Data/
 Assets/NewTextures.meta
@@ -125,4 +121,35 @@ UpgradeLog.htm
 SquareCastle_Data/
 Castle_Data/
 RagnarokGame_Data/
->>>>>>> d9a96ece010dcf6496235e082cb8e3271ca1c58c
+Assets/LeapMotion/
+Assets/LeapC/
+ProjectSettings/
+Assets/Plugins/
+Assets/LeapC.meta
+Assets/LeapMotion.meta
+Assets/SteamVR.meta
+Assets/SteamVR/
+*.exr
+Assets/GameFolder/Scenes/ViveLevel/
+Assets/GameFolder/Scenes/ViveLevel.meta
+Assets/GameFolder/Scenes/ViveLevel.unity
+*.meta
+*.blend
+Assets/Bow/Handpainted Forest Environment Free Sample/
+Assets/Bow/Materials/
+Assets/Bow/Prefabs/
+Assets/Bow/Scene/
+RagnarokVive_Data/
+*.pdb
+*.mat
+*.unity
+Assets/GameFolder/Scenes/BowTestLevel/LightingData.asset
+*.prefab
+Assets/GameFolder/Models/Swords/
+Assets/GameFolder/Scenes/BowTestLevel/NavMesh.asset
+Assets/Zombie/
+Assets/ghoul/
+Assets/Elven Long Bow (fully animated)/
+*.controller
+CastleCourtyardNoTerrain_Data/
+2015-04-21_000056/
