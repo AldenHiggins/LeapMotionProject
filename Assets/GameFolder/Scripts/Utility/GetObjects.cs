@@ -42,7 +42,7 @@ public static class GetObjects
     public static GameObject getGoalPosition()
     {
         GameObject firstFoundOfName = null;
-        findFirstObjectWithName("[CameraRig]", getRootTransform(), ref firstFoundOfName);
+        findFirstObjectWithName("OVRCameraRig", getRootTransform(), ref firstFoundOfName);
         return firstFoundOfName;
     }
 
