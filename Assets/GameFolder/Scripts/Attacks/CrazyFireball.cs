@@ -16,7 +16,12 @@ public class CrazyFireball : MonoBehaviour {
 	void OnParticleCollision(GameObject other) {
 		Rigidbody body = other.GetComponent<Rigidbody>();
 		if (body) {
-
+            BasicEnemyController foundEnemy = body.gameObject.GetComponent<BasicEnemyController>();
+            
+            if (foundEnemy != null)
+            {
+                foundEnemy.dealDamage(20);    
+            }
 		}
 	}
 }
