@@ -37,13 +37,13 @@ public class VRControls : MonoBehaviour
 
             placeDefenseAttack.holdFunction(OVRInput.Controller.RTouch);
 
-            if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger))
+            if (OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger))
             {
                 Debug.Log("The trigger is gettin pressed");
                 placeDefenseAttack.releaseFunction(OVRInput.Controller.RTouch);
             }
 
-            if (OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger))
+            if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger))
             {
                 Debug.Log("The trigger is gettin pressed");
                 switchDefenseAttack.releaseFunction(OVRInput.Controller.RTouch);

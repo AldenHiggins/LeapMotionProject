@@ -62,7 +62,7 @@ public class PlaceDefenseSteam : SteamAttacks
         }
 
         Quaternion rotation = OVRInput.GetLocalControllerRotation(hand);
-        GameObject ballistaFinal = (GameObject)Instantiate(defensiveObject, hit.point + new Vector3(0.0f, 0.1f, 0.0f), Quaternion.Euler(0.0f, rotation.eulerAngles.y, 0.0f));
+        GameObject ballistaFinal = (GameObject)Instantiate(defensiveObject, hit.point + new Vector3(0.0f, 0.1f, 0.0f), Quaternion.Euler(0.0f, -1 * rotation.eulerAngles.z, 0.0f));
         ballistaFinal.SetActive(true);
         destroyPendingObject();
     }
@@ -99,7 +99,7 @@ public class PlaceDefenseSteam : SteamAttacks
 
         createdDefensiveObject.transform.position = hit.point + new Vector3(0.0f, 0.1f, 0.0f);
         Quaternion rotation = OVRInput.GetLocalControllerRotation(hand);
-        createdDefensiveObject.transform.rotation = Quaternion.Euler(0.0f, rotation.eulerAngles.y, 0.0f);
+        createdDefensiveObject.transform.rotation = Quaternion.Euler(0.0f, -1 * rotation.eulerAngles.z, 0.0f);
     }
 
     public void switchDefense()
