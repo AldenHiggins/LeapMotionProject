@@ -1,15 +1,15 @@
-﻿/************************************************************************************
+/************************************************************************************
 
 Copyright   :   Copyright 2014 Oculus VR, LLC. All Rights reserved.
 
-Licensed under the Oculus VR Rift SDK License Version 3.2 (the "License");
+Licensed under the Oculus VR Rift SDK License Version 3.3 (the "License");
 you may not use the Oculus VR Rift SDK except in compliance with the License,
 which is provided at the time of installation or download, or which
 otherwise accompanies this software in either electronic or hard copy form.
 
 You may obtain a copy of the License at
 
-http://www.oculusvr.com/licenses/LICENSE-3.2
+http://www.oculus.com/licenses/LICENSE-3.3
 
 Unless required by applicable law or agreed to in writing, the Oculus VR SDK
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -39,6 +39,7 @@ public class OVRScreenFade : MonoBehaviour
 
 	private Material fadeMaterial = null;
 	private bool isFading = false;
+	private YieldInstruction fadeInstruction = new WaitForEndOfFrame();
 
 	/// <summary>
 	/// Initialize.
@@ -60,7 +61,11 @@ public class OVRScreenFade : MonoBehaviour
 	/// <summary>
 	/// Starts a fade in when a new level is loaded
 	/// </summary>
+#if UNITY_5_4_OR_NEWER
+	void OnLevelFinishedLoading(int level)
+#else
 	void OnLevelWasLoaded(int level)
+#endif
 	{
 		StartCoroutine(FadeIn());
 	}
@@ -87,7 +92,7 @@ public class OVRScreenFade : MonoBehaviour
 		isFading = true;
 		while (elapsedTime < fadeTime)
 		{
-			yield return new WaitForEndOfFrame();
+			yield return fadeInstruction;
 			elapsedTime += Time.deltaTime;
 			color.a = 1.0f - Mathf.Clamp01(elapsedTime / fadeTime);
 			fadeMaterial.color = color;
