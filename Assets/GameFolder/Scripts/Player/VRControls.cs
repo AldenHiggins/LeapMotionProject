@@ -22,7 +22,6 @@ public class VRControls : MonoBehaviour
     {
         game = GetObjects.getGame();
         player = GetObjects.getPlayer();
-
     }
 	
 	// Update is called once per frame
@@ -31,6 +30,16 @@ public class VRControls : MonoBehaviour
         // If the player is dead don't do anything
         if (!player.getIsAlive())
         {
+            return;
+        }
+
+        // If we are still on the start screen wait for input and pass it along to the game
+        if (game.getStartScreenActive())
+        {
+            if (OVRInput.GetDown(OVRInput.Button.One))
+            {
+                game.startGame();
+            }
             return;
         }
 

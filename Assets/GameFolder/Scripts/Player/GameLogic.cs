@@ -16,6 +16,8 @@ public class GameLogic : MonoBehaviour
 	private MonsterWave[] enemyWaves;
 	// INTERNAL VARIABLES
 	private PlayerLogic playerLogic;
+    // STILL ON START SCREEN
+    private bool startScreenActive = true;
 
 	// Initialize variables
 	void Start () 
@@ -31,8 +33,6 @@ public class GameLogic : MonoBehaviour
 		{
 			enemyWaves[i] = (MonsterWave) waveContainer.transform.GetChild(i).gameObject.GetComponent(typeof(MonsterWave));
 		}
-		// Start up the round timer
-		StartCoroutine (roundFunction());
 	}
 
 	IEnumerator roundFunction()
@@ -107,4 +107,17 @@ public class GameLogic : MonoBehaviour
 		Physics.Raycast (ray, out hit, 100f, mask);
 		return hit;
 	}
+
+    public void startGame()
+    {
+        startScreenActive = false;
+
+        // Start up the round timer
+        StartCoroutine(roundFunction());
+    }
+
+    public bool getStartScreenActive()
+    {
+        return startScreenActive;
+    }
 }

@@ -114,6 +114,7 @@
     <Compile Include="Assets\GameFolder\Scripts\Enemies\Ragdoll.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Player\GameLogic.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Player\PlayerLogic.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\Player\UILogic.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Player\VRControls.cs" />
     <Compile Include="Assets\GameFolder\Scripts\SteamAttacks\EmptySteamAttack.cs" />
     <Compile Include="Assets\GameFolder\Scripts\SteamAttacks\PlaceDefenseSteam.cs" />
