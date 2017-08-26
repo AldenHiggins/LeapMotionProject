@@ -5,6 +5,7 @@ using UnityEngine;
 public class VRControls : MonoBehaviour
 {
     private GameLogic game;
+    private PlayerLogic player;
 
     [SerializeField]
     private SteamAttacks placeDefenseAttack;
@@ -20,18 +21,24 @@ public class VRControls : MonoBehaviour
     void Start ()
     {
         game = GetObjects.getGame();
-	}
+        player = GetObjects.getPlayer();
+
+    }
 	
 	// Update is called once per frame
 	void Update ()
     {
+        // If the player is dead don't do anything
+        if (!player.getIsAlive())
+        {
+            return;
+        }
+
         // The round hasn't started yet and we are in the defensive setup mode
         if (!game.roundActive)
         {
             if (OVRInput.GetDown(OVRInput.Button.One))
             {
-                Debug.Log("The player pressed ovr input button one");
-                //OVRInput.GetLocalControllerPosition(OVRInput.Controller.LTouch);
                 game.startRound();
             }
 
@@ -39,13 +46,11 @@ public class VRControls : MonoBehaviour
 
             if (OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger))
             {
-                Debug.Log("The trigger is gettin pressed");
                 placeDefenseAttack.releaseFunction(OVRInput.Controller.RTouch);
             }
 
             if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger))
             {
-                Debug.Log("The trigger is gettin pressed");
                 switchDefenseAttack.releaseFunction(OVRInput.Controller.RTouch);
             }
         }
@@ -54,13 +59,11 @@ public class VRControls : MonoBehaviour
         {
             if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger))
             {
-                Debug.Log("The trigger is gettin pressed");
                 fireballAttack.releaseFunction(OVRInput.Controller.RTouch);
             }
 
             if (OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger))
             {
-                Debug.Log("The trigger is gettin pressed");
                 fireballAttack.releaseFunction(OVRInput.Controller.LTouch);
             }
         }

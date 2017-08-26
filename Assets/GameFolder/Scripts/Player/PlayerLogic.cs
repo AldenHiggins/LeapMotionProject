@@ -10,6 +10,8 @@ public class PlayerLogic : MonoBehaviour, IUnit
 
 	private int health;
 
+    private bool isAlive = true;
+
 	// Use this for initialization
 	void Start () 
 	{
@@ -26,6 +28,7 @@ public class PlayerLogic : MonoBehaviour, IUnit
 	{
         if (game != null)
         {
+            isAlive = false;
             game.killPlayerEndGame(false);
         }
     }
@@ -55,5 +58,10 @@ public class PlayerLogic : MonoBehaviour, IUnit
 	{
 		return gameObject;
 	}
+
+    public bool getIsAlive()
+    {
+        return isAlive;
+    }
 }
 
