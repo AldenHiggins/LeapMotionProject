@@ -116,7 +116,6 @@
     <Compile Include="Assets\GameFolder\Scripts\Player\VRControls.cs" />
     <Compile Include="Assets\GameFolder\Scripts\SteamAttacks\EmptySteamAttack.cs" />
     <Compile Include="Assets\GameFolder\Scripts\SteamAttacks\PlaceDefenseSteam.cs" />
-    <Compile Include="Assets\GameFolder\Scripts\SteamAttacks\SteamAttackContainer.cs" />
     <Compile Include="Assets\GameFolder\Scripts\SteamAttacks\SteamAttacks.cs" />
     <Compile Include="Assets\GameFolder\Scripts\SteamAttacks\SteamFireballAttack.cs" />
     <Compile Include="Assets\GameFolder\Scripts\SteamAttacks\SteamSwitchDefenses.cs" />
