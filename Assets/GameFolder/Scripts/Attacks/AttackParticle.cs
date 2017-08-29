@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CrazyFireball : MonoBehaviour
+public class AttackParticle : MonoBehaviour
 {
 	// Use this for initialization
 	void Start ()

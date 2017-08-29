@@ -8,14 +8,13 @@ public class VRControls : MonoBehaviour
     private PlayerLogic player;
 
     [SerializeField]
-    private SteamAttacks placeDefenseAttack;
+    private AAttack placeDefenseAttack;
 
     [SerializeField]
-    private SteamAttacks switchDefenseAttack;
+    private AAttack switchDefenseAttack;
 
     [SerializeField]
-    private SteamAttacks fireballAttack;
-
+    private AAttack fireballAttack;
 
     // Use this for initialization
     void Start ()

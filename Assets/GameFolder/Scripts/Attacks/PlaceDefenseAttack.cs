@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlaceDefenseSteam : SteamAttacks
+public class PlaceDefenseAttack : AAttack
 {
 	public GameObject defensiveObject;
 	public GameObject defensiveObjectPending;
@@ -38,18 +38,11 @@ public class PlaceDefenseSteam : SteamAttacks
         destroyPendingObject();
     }
 
-    public override void releaseFunction(OVRInput.Controller hand)
+    public override void releaseFunctionConcrete(Vector3 localPos, Vector3 worldPos, Quaternion localRot, Quaternion worldRot)
     {
-        Vector3 spawnPosition = playerRoot.TransformPoint(OVRInput.GetLocalControllerPosition(hand));
-
-        Quaternion newRotation = playerRoot.rotation * OVRInput.GetLocalControllerRotation(hand);
-        //newRotation *= Quaternion.AngleAxis(45, Vector3.right);
-
-        Vector3 forwardVector = newRotation * Vector3.forward;
-
         int layerMask = 1 << 10;
         RaycastHit hit;
-        Physics.Raycast(spawnPosition, forwardVector, out hit, 100.0f, layerMask);
+        Physics.Raycast(worldPos, (worldRot * Vector3.forward), out hit, 100.0f, layerMask);
 
         // Make sure the raycast hit something
         if (hit.collider == null)
@@ -61,13 +54,12 @@ public class PlaceDefenseSteam : SteamAttacks
             return;
         }
 
-        Quaternion rotation = OVRInput.GetLocalControllerRotation(hand);
-        GameObject ballistaFinal = (GameObject)Instantiate(defensiveObject, hit.point + new Vector3(0.0f, 0.1f, 0.0f), Quaternion.Euler(0.0f, -1 * rotation.eulerAngles.z, 0.0f));
+        GameObject ballistaFinal = (GameObject)Instantiate(defensiveObject, hit.point + new Vector3(0.0f, 0.1f, 0.0f), Quaternion.Euler(0.0f, -1 * localRot.eulerAngles.z, 0.0f));
         ballistaFinal.SetActive(true);
         destroyPendingObject();
     }
 
-    public override void holdFunction(OVRInput.Controller hand)
+    public override void holdFunctionConcrete(Vector3 localPos, Vector3 worldPos, Quaternion localRot, Quaternion worldRot)
     {
         if (!isInstantiated)
         {
@@ -76,16 +68,9 @@ public class PlaceDefenseSteam : SteamAttacks
             isInstantiated = true;
         }
 
-        Vector3 spawnPosition = playerRoot.TransformPoint(OVRInput.GetLocalControllerPosition(hand));
-
-        Quaternion newRotation = playerRoot.rotation * OVRInput.GetLocalControllerRotation(hand);
-        //newRotation *= Quaternion.AngleAxis(45, Vector3.right);
-
-        Vector3 forwardVector = newRotation * Vector3.forward;
-
         int layerMask = 1 << 10;
         RaycastHit hit;
-        Physics.Raycast(spawnPosition, forwardVector, out hit, 100.0f, layerMask);
+        Physics.Raycast(worldPos, (worldRot * Vector3.forward), out hit, 100.0f, layerMask);
 
         // Make sure the raycast hit something
         if (hit.collider == null)
@@ -98,8 +83,7 @@ public class PlaceDefenseSteam : SteamAttacks
         }
 
         createdDefensiveObject.transform.position = hit.point + new Vector3(0.0f, 0.1f, 0.0f);
-        Quaternion rotation = OVRInput.GetLocalControllerRotation(hand);
-        createdDefensiveObject.transform.rotation = Quaternion.Euler(0.0f, -1 * rotation.eulerAngles.z, 0.0f);
+        createdDefensiveObject.transform.rotation = Quaternion.Euler(0.0f, -1 * localRot.eulerAngles.z, 0.0f);
     }
 
     public void switchDefense()
