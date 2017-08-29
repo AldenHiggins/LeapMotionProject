@@ -88,19 +88,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\GameFolder\Models\Enemies\Zombie_0_1\Script\PlayGUI.cs" />
-    <Compile Include="Assets\GameFolder\Scripts\Attacks\AAttack.cs" />
-    <Compile Include="Assets\GameFolder\Scripts\Attacks\BlinkAttack.cs" />
-    <Compile Include="Assets\GameFolder\Scripts\Attacks\ClapAttack.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Attacks\CrazyFireball.cs" />
-    <Compile Include="Assets\GameFolder\Scripts\Attacks\EmptyAttack.cs" />
-    <Compile Include="Assets\GameFolder\Scripts\Attacks\ExplosionAttack.cs" />
-    <Compile Include="Assets\GameFolder\Scripts\Attacks\FlameThrowerAttack.cs" />
-    <Compile Include="Assets\GameFolder\Scripts\Attacks\GunAttack.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Attacks\HomingProjectile.cs" />
-    <Compile Include="Assets\GameFolder\Scripts\Attacks\SwordAttack.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Attacks\SwordScript.cs" />
-    <Compile Include="Assets\GameFolder\Scripts\Attacks\SwordSweepAttack.cs" />
-    <Compile Include="Assets\GameFolder\Scripts\Attacks\TornadoAttack.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Defenses\EmitterBehaviorBallista.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Defenses\MoveBolt.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Defenses\OilSlick.cs" />
