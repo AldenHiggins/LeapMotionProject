@@ -89,7 +89,6 @@
   <ItemGroup>
     <Compile Include="Assets\GameFolder\Models\Enemies\Zombie_0_1\Script\PlayGUI.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Attacks\CrazyFireball.cs" />
-    <Compile Include="Assets\GameFolder\Scripts\Attacks\HomingProjectile.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Attacks\SwordScript.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Defenses\EmitterBehaviorBallista.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Defenses\MoveBolt.cs" />
@@ -115,6 +114,7 @@
     <Compile Include="Assets\GameFolder\Scripts\Utility\GetObjects.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\GoalPosition.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\HideOnGameStart.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\Utility\HomingProjectile.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\LevelBoundary.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\MonsterWave.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\ParticleDestroy.cs" />
