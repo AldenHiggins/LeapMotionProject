@@ -46,19 +46,23 @@ public class VRControls : MonoBehaviour
         // The round hasn't started yet and we are in the defensive setup mode
         if (!game.roundActive)
         {
+            // Check for the user skipping the defensive stage and activating the wave
             if (OVRInput.GetDown(OVRInput.Button.One))
             {
                 game.startRound();
             }
 
+            // Iterate the hold function of the place defense attack
             placeDefenseAttack.holdFunction(OVRInput.Controller.RTouch);
 
-            if (OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger))
+            // Check if the user wants to place a defense
+            if (OVRInput.GetDown(OVRInput.RawButton.RIndexTrigger))
             {
                 placeDefenseAttack.releaseFunction(OVRInput.Controller.RTouch);
             }
 
-            if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger))
+            // Check if the user wants to switch the defense they're placing
+            if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger))
             {
                 switchDefenseAttack.releaseFunction(OVRInput.Controller.RTouch);
             }
@@ -66,12 +70,12 @@ public class VRControls : MonoBehaviour
         // The wave has started and enemies are still alive
         else
         {
-            if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger))
+            // Check for the user firing fireballs
+            if (OVRInput.GetDown(OVRInput.RawButton.RIndexTrigger))
             {
                 fireballAttack.releaseFunction(OVRInput.Controller.RTouch);
             }
-
-            if (OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger))
+            if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger))
             {
                 fireballAttack.releaseFunction(OVRInput.Controller.LTouch);
             }
