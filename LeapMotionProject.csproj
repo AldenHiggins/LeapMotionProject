@@ -101,9 +101,8 @@
     <Compile Include="Assets\GameFolder\Scripts\Attacks\SwordScript.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Attacks\SwordSweepAttack.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Attacks\TornadoAttack.cs" />
-    <Compile Include="Assets\GameFolder\Scripts\Ballista\EmitterBehaviorBallista.cs" />
-    <Compile Include="Assets\GameFolder\Scripts\Ballista\MoveBolt.cs" />
-    <Compile Include="Assets\GameFolder\Scripts\ControllerAttacks\PlaceDefenseControllerAttack.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\Defenses\EmitterBehaviorBallista.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\Defenses\MoveBolt.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Defenses\OilSlick.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Enemies\BasicEnemyController.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Enemies\EnemySpawner.cs" />
@@ -119,11 +118,6 @@
     <Compile Include="Assets\GameFolder\Scripts\SteamAttacks\SteamAttacks.cs" />
     <Compile Include="Assets\GameFolder\Scripts\SteamAttacks\SteamFireballAttack.cs" />
     <Compile Include="Assets\GameFolder\Scripts\SteamAttacks\SteamSwitchDefenses.cs" />
-    <Compile Include="Assets\GameFolder\Scripts\Tutorial\TutorialDefensiveCollisionNotifier.cs" />
-    <Compile Include="Assets\GameFolder\Scripts\Tutorial\TutorialDefensiveScript.cs" />
-    <Compile Include="Assets\GameFolder\Scripts\Tutorial\TutorialEnemyController.cs" />
-    <Compile Include="Assets\GameFolder\Scripts\Tutorial\TutorialSpawning.cs" />
-    <Compile Include="Assets\GameFolder\Scripts\Tutorial\TutorialZombieKillCounter.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\CircularParticleEmission.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\DamageInRadius.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\DontRotate.cs" />
