@@ -89,7 +89,6 @@
   <ItemGroup>
     <Compile Include="Assets\GameFolder\Models\Enemies\Zombie_0_1\Script\PlayGUI.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Attacks\CrazyFireball.cs" />
-    <Compile Include="Assets\GameFolder\Scripts\Attacks\SwordScript.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Defenses\EmitterBehaviorBallista.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Defenses\MoveBolt.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Defenses\OilSlick.cs" />
@@ -109,6 +108,7 @@
     <Compile Include="Assets\GameFolder\Scripts\SteamAttacks\SteamSwitchDefenses.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\CircularParticleEmission.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\DamageInRadius.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\Utility\DamageOnCollision.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\DontRotate.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\ExplosiveForce.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\GetObjects.cs" />

@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class SwordScript : MonoBehaviour
+public class DamageOnCollision : MonoBehaviour
 {
 	public int damageAmount;
 
