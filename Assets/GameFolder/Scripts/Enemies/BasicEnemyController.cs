@@ -103,12 +103,17 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 		{
 			target = enemy;
 		}
-		else
-		{
-			target = goalPosition;
-		}
+        else
+        {
+            if (isAlly)
+            {
+                return;
+            }
 
-		velocity = target.transform.position - transform.position;
+            target = goalPosition;
+        }
+
+        velocity = target.transform.position - transform.position;
 		velocity.y = 0.0f;
 		// If the enemy is outside melee range keep coming forward
 		if (velocity.magnitude > attackRadius)
@@ -195,7 +200,6 @@ public class BasicEnemyController : MonoBehaviour, IUnit
 		attacking = false;
 		anim.SetBool ("Attacking", false);
 	}
-
 
 	public void dealDamage(int damage)
 	{
