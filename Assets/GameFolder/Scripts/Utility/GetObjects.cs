@@ -25,6 +25,23 @@ public static class GetObjects
         return xform.root;
     }
 
+    public static Transform getAttackContainer()
+    {
+        GameObject attackContainer = null;
+        findNameInChildren("Attacks", getRootTransform(), ref attackContainer);
+
+        if (attackContainer != null)
+        {
+            return attackContainer.transform;
+        }
+
+        attackContainer = new GameObject();
+        attackContainer.name = "Attacks";
+        attackContainer.transform.parent = getRootTransform();
+
+        return attackContainer.transform;
+    }
+
     public static GameObject getCamera()
     {
         GameObject firstFoundOfName = null;
@@ -51,6 +68,19 @@ public static class GetObjects
         GameObject firstFoundOfName = null;
         findFirstObjectWithName("EnemyWaves", getRootTransform(), ref firstFoundOfName);
         return firstFoundOfName;
+    }
+
+    // Try and find an object with a specific name ONLY within the direct children of the supplied transform
+    public static void findNameInChildren(string name, Transform findObjectInThis, ref GameObject foundObject)
+    {
+        for (int childIndex = 0; childIndex < findObjectInThis.childCount; childIndex++)
+        {
+            GameObject childObject = findObjectInThis.GetChild(childIndex).gameObject;
+            if (childObject.name == name)
+            {
+                foundObject = childObject;
+            }
+        }
     }
 
     public static void findFirstObjectWithName(string name, Transform findObjectInThis, ref GameObject foundObject)

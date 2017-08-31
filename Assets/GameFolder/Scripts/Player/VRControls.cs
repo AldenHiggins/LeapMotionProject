@@ -21,10 +21,15 @@ public class VRControls : MonoBehaviour
     {
         game = GetObjects.getGame();
         player = GetObjects.getPlayer();
+
+        // Instantiate all of the attacks we're going to use
+        placeDefenseAttack = Instantiate(placeDefenseAttack.gameObject, GetObjects.getAttackContainer()).GetComponent<AAttack>();
+        switchDefenseAttack = Instantiate(switchDefenseAttack.gameObject, GetObjects.getAttackContainer()).GetComponent<AAttack>();
+        fireballAttack = Instantiate(fireballAttack.gameObject, GetObjects.getAttackContainer()).GetComponent<AAttack>();
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    void Update ()
     {
         // If the player is dead don't do anything
         if (player.isUnitDying())
