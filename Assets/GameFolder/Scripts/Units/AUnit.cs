@@ -25,7 +25,6 @@ public abstract class AUnit : MonoBehaviour, IUnit
     // MOVEMENT
     protected UnityEngine.AI.NavMeshAgent agent;
     protected GameObject target;
-    protected Vector3 velocity;
     // ENEMY SEARCH
     protected int enemySearchLayer = (1 << 16) | (1 << 11);
     protected float enemySearchRadius = 3.0f;
@@ -81,7 +80,7 @@ public abstract class AUnit : MonoBehaviour, IUnit
         float distanceToTarget = targetVector.magnitude;
 
         // If the enemy is outside attack range keep coming forward
-        if (velocity.magnitude > attackRadius)
+        if (distanceToTarget > attackRadius)
         {
             moveToTarget();
         }
@@ -150,7 +149,7 @@ public abstract class AUnit : MonoBehaviour, IUnit
         // Find the closest enemy
         for (int hitIndex = 0; hitIndex < hitColliders.Length; hitIndex++)
         {
-            IUnit enemyUnit = (IUnit)hitColliders[hitIndex].gameObject.GetComponent(typeof(IUnit));
+            IUnit enemyUnit = (IUnit) hitColliders[hitIndex].gameObject.GetComponent(typeof(IUnit));
             if (enemyUnit != null)
             {
                 GameObject enemyFound = enemyUnit.getGameObject();
@@ -268,7 +267,7 @@ public abstract class AUnit : MonoBehaviour, IUnit
         return isDying;
     }
 
-    public bool isUnitAlly()
+    public virtual bool isUnitAlly()
     {
         return isAlly;
     }
