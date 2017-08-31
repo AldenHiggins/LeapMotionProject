@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1910949896804664}
+  m_IsPrefabParent: 1
+--- !u!1 &1910949896804664
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4068677660812802}
+  - component: {fileID: 114282185735976166}
+  m_Layer: 0
+  m_Name: DefensiveAttack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4068677660812802
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1910949896804664}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114282185735976166
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1910949896804664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e08d886e839254478257ecbe15a0069, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defensiveObject: {fileID: 121926, guid: a073f5bc6703fcd4399486aea12fd060, type: 2}
+  defensiveObjectPending: {fileID: 165658, guid: c1f0f968ebd6ab44eb2181590522274e,
+    type: 2}
+  defenses:
+  - {fileID: 121926, guid: a073f5bc6703fcd4399486aea12fd060, type: 2}
+  - {fileID: 128418, guid: 69b7b3fa4a9bee549a50f58f171bd4f8, type: 2}
+  - {fileID: 177348, guid: 3d3aaa961bcdb8c41a13981cf024587f, type: 2}
+  - {fileID: 1951192256757944, guid: 69b3539f5e7d8a244979681e8bb5f0c3, type: 2}
+  - {fileID: 1184049140664582, guid: 0caf8fecc4805534da7265483be5cf97, type: 2}
+  pendingDefenses:
+  - {fileID: 165658, guid: c1f0f968ebd6ab44eb2181590522274e, type: 2}
+  - {fileID: 128418, guid: d29d4834e850e2b4ba023a44a4f2f554, type: 2}
+  - {fileID: 166830, guid: 67f968e9f94c84e49b3728c9ef84ef9b, type: 2}
+  - {fileID: 1793647851824640, guid: f20a6158299ea0b4e87fb20b9c8c492f, type: 2}
+  - {fileID: 1334546574425462, guid: 6a4dcae183dafa34ab7c0f1e5a6c9196, type: 2}

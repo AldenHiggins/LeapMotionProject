@@ -143,7 +143,6 @@ RagnarokVive_Data/
 *.pdb
 *.mat
 Assets/GameFolder/Scenes/BowTestLevel/LightingData.asset
-*.prefab
 Assets/GameFolder/Models/Swords/
 Assets/GameFolder/Scenes/BowTestLevel/NavMesh.asset
 Assets/Zombie/
@@ -164,3 +163,5 @@ Assets/Resources/
 .vs/
 Assets/GameFolder/Scenes/SquareCastle/
 Assets/GameFolder/Particles/Sci-Fi Effects/
+Assets/GameFolder/Models/
+Assets/GameFolder/Particles/
