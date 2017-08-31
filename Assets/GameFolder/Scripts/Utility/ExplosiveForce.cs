@@ -17,12 +17,12 @@ public class ExplosiveForce : MonoBehaviour
 		{
 			if (nearbyObjects[i].transform.childCount > 0)
 			{
-				BasicEnemyController enemy = (BasicEnemyController) nearbyObjects[i].gameObject.GetComponent(typeof(BasicEnemyController));
-				if (enemy != null)
-				{
-//					print ("Applying explosive force");
-					enemy.applyExplosiveForce(force, transform.position, radius);
-				}
+//				BasicEnemyController enemy = (BasicEnemyController) nearbyObjects[i].gameObject.GetComponent(typeof(BasicEnemyController));
+//				if (enemy != null)
+//				{
+////					print ("Applying explosive force");
+//					enemy.applyExplosiveForce(force, transform.position, radius);
+//				}
 			}
 			
 		}

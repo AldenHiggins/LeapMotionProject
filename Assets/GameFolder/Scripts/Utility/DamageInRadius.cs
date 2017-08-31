@@ -11,13 +11,9 @@ public class DamageInRadius : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-
-
-//		print ("Damaging in radius!!!!");
 		dealDamageInRadius ();
 		StartCoroutine (damageOverInterval ());
 	}
-
 
 	IEnumerator damageOverInterval()
 	{
@@ -41,10 +37,10 @@ public class DamageInRadius : MonoBehaviour
 		{
 			if (nearbyObjects[i].transform.childCount > 0)
 			{
-				BasicEnemyController enemy = (BasicEnemyController) nearbyObjects[i].gameObject.GetComponent(typeof(BasicEnemyController));
+				IUnit enemy = (IUnit) nearbyObjects[i].gameObject.GetComponent(typeof(IUnit));
 				if (enemy != null)
 				{
-                    if (!damageAllies && enemy.isAlly)
+                    if (!damageAllies && enemy.isUnitAlly())
                     {
 
                     }

@@ -53,7 +53,7 @@ public class MoveBolt : MonoBehaviour
 
 		GameObject other = collision.gameObject;
 
-		BasicEnemyController enemy = (BasicEnemyController) other.GetComponent(typeof(BasicEnemyController));	
+		IUnit enemy = (IUnit) other.GetComponent(typeof(IUnit));	
 		MoveBolt moveScript = (MoveBolt) other.GetComponent ((typeof(MoveBolt)));
 		// Ignore collisions with other bolts
 		if (moveScript != null)

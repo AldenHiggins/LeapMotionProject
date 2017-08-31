@@ -37,7 +37,7 @@ public class UILogic : MonoBehaviour
         }
 
         // If the player is dead show the end game UI
-        if (!player.getIsAlive())
+        if (player.isUnitDying())
         {
             defenseUI.SetActive(false);
             endGameUI.SetActive(true);

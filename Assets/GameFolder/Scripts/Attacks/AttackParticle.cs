@@ -30,7 +30,7 @@ public class AttackParticle : MonoBehaviour
             return;
         }
 
-        BasicEnemyController foundEnemy = body.gameObject.GetComponent<BasicEnemyController>();
+        IUnit foundEnemy = body.gameObject.GetComponent<IUnit>();
         if (foundEnemy == null)
         {
             return;

@@ -7,13 +7,13 @@ public class DamageOnCollision : MonoBehaviour
 
 	void OnTriggerEnter(Collider other)
 	{
-		BasicEnemyController enemy = (BasicEnemyController) other.gameObject.GetComponent(typeof(BasicEnemyController));
+		IUnit enemy = (IUnit) other.gameObject.GetComponent(typeof(IUnit));
 		if (enemy == null)
 		{
-			enemy = (BasicEnemyController) other.gameObject.GetComponentInChildren(typeof(BasicEnemyController));
+			enemy = (IUnit) other.gameObject.GetComponentInChildren(typeof(IUnit));
 		}
 
-		if (enemy != null && !enemy.isAlly)
+		if (enemy != null && !enemy.isUnitAlly())
 		{
 			enemy.dealDamage(damageAmount);
 		}

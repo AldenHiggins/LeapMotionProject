@@ -59,9 +59,16 @@ public class PlayerLogic : MonoBehaviour, IUnit
 		return gameObject;
 	}
 
-    public bool getIsAlive()
+    public bool isUnitDying()
     {
-        return isAlive;
+        return !isAlive;
     }
+
+    public bool isUnitAlly()
+    {
+        return true;
+    }
+
+    public void slowDown() { }
 }
 

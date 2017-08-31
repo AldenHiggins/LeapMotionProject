@@ -27,7 +27,7 @@ public class VRControls : MonoBehaviour
 	void Update ()
     {
         // If the player is dead don't do anything
-        if (!player.getIsAlive())
+        if (player.isUnitDying())
         {
             return;
         }

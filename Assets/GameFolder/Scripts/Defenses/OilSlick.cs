@@ -15,8 +15,8 @@ public class OilSlick : MonoBehaviour
 
 	void OnTriggerEnter(Collider other) 
 	{
-		BasicEnemyController enemy = (BasicEnemyController) other.gameObject.GetComponent(typeof(BasicEnemyController));
-		if (enemy != null)
+		IUnit enemy = (IUnit) other.gameObject.GetComponent(typeof(IUnit));
+		if (enemy != null && !enemy.isUnitAlly())
 		{
 			enemy.slowDown();
 			source.PlayOneShot(walkingOnOil);

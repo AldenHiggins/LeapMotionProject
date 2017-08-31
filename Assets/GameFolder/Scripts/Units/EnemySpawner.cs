@@ -40,41 +40,16 @@ public class EnemySpawner : MonoBehaviour
 		{
 			if (spawning)
 			{
-				GameObject monster = (GameObject) Instantiate (spawnThis, transform.position, Quaternion.identity);
+				GameObject monster = Instantiate (spawnThis, transform.position, Quaternion.identity);
 				monster.transform.parent = spawnedEnemyList.transform;
-				BasicEnemyController enemy = (BasicEnemyController) monster.GetComponent(typeof(BasicEnemyController));
-				enemy.enabled = true;
-				UnityEngine.AI.NavMeshAgent agent = monster.GetComponent<UnityEngine.AI.NavMeshAgent>();
-				agent.enabled = true;
 			}
 			yield return new WaitForSeconds(spawnFrequency);
 		}
 	}
 
-	public void spawnEnemy(GameObject enemyToSpawn)
-	{
-		GameObject monster = (GameObject) Instantiate (enemyToSpawn, transform.position, Quaternion.identity);
-		monster.transform.parent = spawnedEnemyList.transform;
-
-		BasicEnemyController enemy = (BasicEnemyController) monster.GetComponent(typeof(BasicEnemyController));
-
-		if (enemy == null)
-		{
-//<<<<<<< HEAD
-			enemy = (BasicEnemyController)monster.transform.GetChild (0).GetComponent (typeof(BasicEnemyController));
-			UnityEngine.AI.NavMeshAgent agent = monster.transform.GetChild (0).GetComponent<UnityEngine.AI.NavMeshAgent>();
-//=======
-			//enemy = (BasicEnemyController) monster.transform.GetChild (0).GetComponent (typeof(BasicEnemyController));
-			//NavMeshAgent agent = monster.transform.GetChild (0).GetComponent<NavMeshAgent>();
-//>>>>>>> c5c8868af13028fa52019e2b91ab548f24e18634
-			agent.enabled = true;
-		}
-		else
-		{
-			UnityEngine.AI.NavMeshAgent agent = monster.GetComponent<UnityEngine.AI.NavMeshAgent>();
-			agent.enabled = true;
-		}
-
-		enemy.enabled = true;
-	}
+    public void spawnEnemy(GameObject enemyToSpawn)
+    {
+        GameObject monster = Instantiate(enemyToSpawn, transform.position, Quaternion.identity);
+        monster.transform.parent = spawnedEnemyList.transform;
+    }
 }

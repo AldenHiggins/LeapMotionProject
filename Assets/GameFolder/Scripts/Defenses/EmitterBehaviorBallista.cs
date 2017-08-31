@@ -34,19 +34,19 @@ public class EmitterBehaviorBallista : MonoBehaviour
 		// Acquire the nearest target
 		Collider[] nearbyObjects = Physics.OverlapSphere (transform.position, attackRadius);
 		float minDistance = float.MaxValue;
-		BasicEnemyController nearestEnemy = null;
+		IUnit nearestEnemy = null;
 		for (int i = 0; i < nearbyObjects.Length; i++)
 		{
 			if (nearbyObjects[i].transform.childCount > 0)
 			{
-				BasicEnemyController enemy = (BasicEnemyController) nearbyObjects[i].gameObject.GetComponent(typeof(BasicEnemyController));
-				if (enemy != null && !enemy.isMonsterDying() && !enemy.isAlly)
+				IUnit target = (IUnit) nearbyObjects[i].gameObject.GetComponent(typeof(IUnit));
+				if (target != null && !target.isUnitDying() && !target.isUnitAlly())
 				{
-					float distance = Vector3.Distance (transform.position, enemy.transform.position);
+					float distance = Vector3.Distance (transform.position, target.getGameObject().transform.position);
 					if (distance < minDistance)
 					{
 						minDistance = distance;
-						nearestEnemy = enemy;
+						nearestEnemy = target;
 					}
 				}
 			}
@@ -55,7 +55,7 @@ public class EmitterBehaviorBallista : MonoBehaviour
 		if (nearestEnemy != null)
 		{
 			// Turn to face the enemy
-			transform.rotation = Quaternion.LookRotation(nearestEnemy.transform.position - transform.position);
+			transform.rotation = Quaternion.LookRotation(nearestEnemy.getGameObject().transform.position - transform.position);
 			transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
 
 			// Launch bolt as long as an enemy is found
@@ -69,7 +69,7 @@ public class EmitterBehaviorBallista : MonoBehaviour
 				velocity *= emissionVelocity;
 				GameObject newbolt = createbolt(startPosition, transform.rotation, velocity, 0);
 				MoveBolt bolt = (MoveBolt) newbolt.GetComponent(typeof(MoveBolt));
-				bolt.setTarget(nearestEnemy.gameObject);
+				bolt.setTarget(nearestEnemy.getGameObject());
 
 				// Create Coroutine to stop firing after playing the animation once
 				StartCoroutine (shootBolt());
@@ -122,7 +122,7 @@ public class EmitterBehaviorBallista : MonoBehaviour
 
 	void OnTriggerEnter(Collider other) 
 	{
-		BasicEnemyController enemy = (BasicEnemyController) other.gameObject.GetComponent(typeof(BasicEnemyController));
+		IUnit enemy = (IUnit) other.gameObject.GetComponent(typeof(IUnit));
 
 		if (enemy != null) 
 		{
@@ -134,7 +134,7 @@ public class EmitterBehaviorBallista : MonoBehaviour
 	{
 		anim.SetBool("Breaking", true);
 		// Generate a firey explosion here to signify the ballista got destroyed
-		GameObject breakingExplosion = (GameObject) Instantiate (ballistaDestroyParticle, transform.position, Quaternion.Euler(270.0f, 0.0f, 0.0f));
+		GameObject breakingExplosion = Instantiate (ballistaDestroyParticle, transform.position, Quaternion.Euler(270.0f, 0.0f, 0.0f));
 		breakingExplosion.SetActive (true);
 		// Play a sound when the ballista gets killed
 		source.PlayOneShot (ballistaBreakingSound);
