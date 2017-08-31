@@ -142,7 +142,6 @@ Assets/Bow/Scene/
 RagnarokVive_Data/
 *.pdb
 *.mat
-*.unity
 Assets/GameFolder/Scenes/BowTestLevel/LightingData.asset
 *.prefab
 Assets/GameFolder/Models/Swords/
@@ -163,3 +162,4 @@ Assets/OVR/
 Assets/Parse/
 Assets/Resources/
 .vs/
+Assets/GameFolder/Scenes/SquareCastle/
