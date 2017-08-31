@@ -101,6 +101,7 @@
     <Compile Include="Assets\GameFolder\Scripts\Player\PlayerLogic.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Player\UILogic.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Player\VRControls.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\Units\Ally.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\AUnit.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\Enemy.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\EnemySpawner.cs" />
