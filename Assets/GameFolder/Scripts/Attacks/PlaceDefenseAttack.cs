@@ -5,11 +5,14 @@ public class PlaceDefenseAttack : AAttack
 {
 	public GameObject defensiveObject;
 	public GameObject defensiveObjectPending;
+    public GameObject defensiveObjectInvalid;
 	private bool isInstantiated = false;
 	private GameObject createdDefensiveObject;
+    private GameObject invalidDefensiveObject;
 
     public GameObject[] defenses;
     public GameObject[] pendingDefenses;
+    public GameObject[] invalidDefenses;
     private int currentDefense;
 
     // The layer that we raycast to for our defenses
@@ -64,6 +67,7 @@ public class PlaceDefenseAttack : AAttack
         if (!isInstantiated)
         {
             createdDefensiveObject = Instantiate(defensiveObjectPending);
+            invalidDefensiveObject = Instantiate(defensiveObjectInvalid);
             isInstantiated = true;
         }
 
@@ -74,9 +78,23 @@ public class PlaceDefenseAttack : AAttack
             return;
         }
 
+        // Check to see if this is an invalid location...if so replace our defensive object with an invalid one
+        if (grid.isSpotTaken(defenseLocation))
+        {
+            createdDefensiveObject.SetActive(false);
+            invalidDefensiveObject.SetActive(true);
+        }
+        else
+        {
+            createdDefensiveObject.SetActive(true);
+            invalidDefensiveObject.SetActive(false);
+        }
+
         // Show the user where there defense will be placed
         createdDefensiveObject.transform.position = defenseLocation + new Vector3(0.0f, 0.1f, 0.0f);
         createdDefensiveObject.transform.rotation = defenseRotation(localRot);
+        invalidDefensiveObject.transform.position = defenseLocation + new Vector3(0.0f, 0.1f, 0.0f);
+        invalidDefensiveObject.transform.rotation = defenseRotation(localRot);
     }
 
     private Quaternion defenseRotation(Quaternion localRot)
@@ -119,7 +137,8 @@ public class PlaceDefenseAttack : AAttack
 
         defensiveObject = defenses[currentDefense];
         defensiveObjectPending = pendingDefenses[currentDefense];
-	}
+        defensiveObjectInvalid = invalidDefenses[currentDefense];
+    }
 
     void destroyPendingObject()
     {
@@ -127,6 +146,7 @@ public class PlaceDefenseAttack : AAttack
         {
             isInstantiated = false;
             Destroy(createdDefensiveObject);
+            Destroy(invalidDefensiveObject);
         }
     }
 }

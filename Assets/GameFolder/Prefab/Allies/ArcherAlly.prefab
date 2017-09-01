@@ -710,7 +710,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1590304947238202}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.85, y: 0.08, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4300529951790324}
@@ -1268,17 +1268,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67a91693c3a64f6418bbd0b7b5b68146, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0.02
   startingHealth: 60
   attackRadius: 10
   attackDamage: 30
-  currencyOnKill: 0
-  livesTakenOnGoalReached: 1
-  isAlly: 1
+  bodyDespawnTime: 10
   headshotHeight: 1.5
-  usesRootMotion: 0
-  floatingEnemy: 0
-  floatingVelocity: 0
   woundSound: {fileID: 8300000, guid: c2455c9d500e4a44da2c153bed88971e, type: 3}
   killSound: {fileID: 8300000, guid: c2455c9d500e4a44da2c153bed88971e, type: 3}
 --- !u!137 &137715918904553692

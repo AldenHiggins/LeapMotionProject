@@ -54,6 +54,8 @@ MonoBehaviour:
   defensiveObject: {fileID: 121926, guid: a073f5bc6703fcd4399486aea12fd060, type: 2}
   defensiveObjectPending: {fileID: 165658, guid: c1f0f968ebd6ab44eb2181590522274e,
     type: 2}
+  defensiveObjectInvalid: {fileID: 1428289812490378, guid: 97a3158d005bae147afa70c2aff69313,
+    type: 2}
   defenses:
   - {fileID: 121926, guid: a073f5bc6703fcd4399486aea12fd060, type: 2}
   - {fileID: 128418, guid: 69b7b3fa4a9bee549a50f58f171bd4f8, type: 2}
@@ -64,5 +66,11 @@ MonoBehaviour:
   - {fileID: 165658, guid: c1f0f968ebd6ab44eb2181590522274e, type: 2}
   - {fileID: 128418, guid: d29d4834e850e2b4ba023a44a4f2f554, type: 2}
   - {fileID: 166830, guid: 67f968e9f94c84e49b3728c9ef84ef9b, type: 2}
-  - {fileID: 1793647851824640, guid: f20a6158299ea0b4e87fb20b9c8c492f, type: 2}
+  - {fileID: 1649017628397738, guid: 86ffcb963182b9f4981a796903ea60fb, type: 2}
   - {fileID: 1334546574425462, guid: 6a4dcae183dafa34ab7c0f1e5a6c9196, type: 2}
+  invalidDefenses:
+  - {fileID: 1428289812490378, guid: 97a3158d005bae147afa70c2aff69313, type: 2}
+  - {fileID: 1934177570346710, guid: 5d012e53943ef2540a102ee0e00e0f77, type: 2}
+  - {fileID: 1053315315030336, guid: a8b97f4c50b5f194384324cd8aa3799e, type: 2}
+  - {fileID: 1013785471550116, guid: 2f5ebef19a8e2eb44acabd6d8a8a1c22, type: 2}
+  - {fileID: 1548130292974028, guid: 193d7d27e4d199d40a1ddde7f1b1fe5e, type: 2}
