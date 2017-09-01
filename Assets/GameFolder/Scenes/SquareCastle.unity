@@ -35582,10 +35582,11 @@ GameObject:
   m_Component:
   - component: {fileID: 1541341432}
   - component: {fileID: 1541341435}
-  - component: {fileID: 1541341434}
   - component: {fileID: 1541341433}
+  - component: {fileID: 1541341436}
+  - component: {fileID: 1541341434}
   m_Layer: 10
-  m_Name: GamePlane
+  m_Name: DefensiveGrid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35599,7 +35600,7 @@ Transform:
   m_GameObject: {fileID: 1541341431}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 2.5, y: 0, z: -4}
-  m_LocalScale: {x: 4.5165005, y: 1, z: 4.7643604}
+  m_LocalScale: {x: 44.301014, y: 0.1, z: 43.232304}
   m_Children: []
   m_Father: {fileID: 1153595736}
   m_RootOrder: 1
@@ -35637,21 +35638,18 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &1541341434
-MeshCollider:
+--- !u!65 &1541341434
+BoxCollider:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 6451268, guid: 5998c28e5db14af4981cc196d6f29856,
-    type: 2}
+  m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1541341431}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Convex: 0
-  m_InflateMesh: 0
-  m_SkinWidth: 0.01
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!33 &1541341435
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -35659,7 +35657,21 @@ MeshFilter:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1541341431}
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1541341436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1541341431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52d29c54776d5d04eaeb68d466b2e755, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numColumns: 21
+  numRows: 21
+  gridLine: {fileID: 1676745147816672, guid: 8db8fc42c4c1423478829c9752fe5155, type: 2}
 --- !u!1 &1541612884
 GameObject:
   m_ObjectHideFlags: 0
