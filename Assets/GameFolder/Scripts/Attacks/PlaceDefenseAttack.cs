@@ -50,9 +50,12 @@ public class PlaceDefenseAttack : AAttack
             return;
         }
 
-        // Place the new defense
-        GameObject ballistaFinal = Instantiate(defensiveObject, defenseLocation + new Vector3(0.0f, 0.1f, 0.0f), defenseRotation(localRot));
-        destroyPendingObject();
+        // Place the new defense if a spot is available
+        if (grid.placeNewDefense(defenseLocation))
+        {
+            GameObject ballistaFinal = Instantiate(defensiveObject, defenseLocation + new Vector3(0.0f, 0.1f, 0.0f), defenseRotation(localRot));
+            destroyPendingObject();
+        }
     }
 
     public override void holdFunctionConcrete(Vector3 localPos, Vector3 worldPos, Quaternion localRot, Quaternion worldRot)
@@ -78,7 +81,8 @@ public class PlaceDefenseAttack : AAttack
 
     private Quaternion defenseRotation(Quaternion localRot)
     {
-        return Quaternion.Euler(0.0f, -1 * localRot.eulerAngles.z, 0.0f);
+        //return Quaternion.Euler(0.0f, -1 * localRot.eulerAngles.z, 0.0f);
+        return Quaternion.identity;
     }
 
     private bool raycastToPlaceDefense(Vector3 worldPos, Quaternion worldRot, ref Vector3 defensePosition)
@@ -98,7 +102,7 @@ public class PlaceDefenseAttack : AAttack
         }
 
         // Set the defensive position
-        defensePosition = hit.point;
+        defensePosition = grid.getClosestGridPoint(hit.point);
 
         return true;
     }
