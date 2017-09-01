@@ -59,15 +59,11 @@ public class DefensiveGrid : MonoBehaviour
         Vector3 gridSpacePoint = transform.InverseTransformPoint(referencePoint);
         Vector3 newPoint = gridSpacePoint;
 
-        Debug.Log("Grid point: " + gridSpacePoint);
-
-        // Find out the x and z positions
-        // X is rows, z is columns
-        // Find out the z column position
+        // Find out the column position of the point (the z axis)
         float newZ = (gridSpacePoint.z + .5f) / columnStep;
         newZ = (((int)newZ) * columnStep) - .5f + (columnStep / 2.0f);
 
-        // Find out the x row position
+        // Find out the row position of the point (the x axis)
         float newX = (gridSpacePoint.x + .5f) / rowStep;
         newX = (((int)newX) * rowStep) - .5f + (rowStep / 2.0f);
 
