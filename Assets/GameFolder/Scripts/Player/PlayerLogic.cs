@@ -4,28 +4,32 @@ using System.Collections;
 
 public class PlayerLogic : MonoBehaviour, IUnit
 {
-	private GameLogic game;
+    private GameLogic game;
 
-    public int startingHealth;
+    [SerializeField]
+    private int startingHealth = 100;
 
-	private int health;
+    [SerializeField]
+    private int gold = 500;
+
+    private int health;
 
     private bool isAlive = true;
 
-	// Use this for initialization
-	void Start () 
-	{
+    // Use this for initialization
+    void Start()
+    {
         health = startingHealth;
         game = GetObjects.getGame();
-	}
+    }
 
-	// Update is called once per frame
-	void Update ()
-	{
-	}
+    // Update is called once per frame
+    void Update()
+    {
+    }
 
-	public void respawn()
-	{
+    public void respawn()
+    {
         if (game != null)
         {
             isAlive = false;
@@ -33,31 +37,31 @@ public class PlayerLogic : MonoBehaviour, IUnit
         }
     }
 
-	public void dealDamage(int damageToDeal)
-	{
-		health -= damageToDeal;
+    public void dealDamage(int damageToDeal)
+    {
+        health -= damageToDeal;
 
-		// Player is dead
-		if (health < 0)
-		{
-			respawn();
-		}
-	}
+        // Player is dead
+        if (health < 0)
+        {
+            respawn();
+        }
+    }
 
-	public int getHealth()
-	{
-		return health;
-	}
+    public int getHealth()
+    {
+        return health;
+    }
 
-	public void resetHealth()
-	{
-		health = 100;
-	}
+    public void resetHealth()
+    {
+        health = 100;
+    }
 
-	public GameObject getGameObject()
-	{
-		return gameObject;
-	}
+    public GameObject getGameObject()
+    {
+        return gameObject;
+    }
 
     public bool isUnitDying()
     {
@@ -70,5 +74,21 @@ public class PlayerLogic : MonoBehaviour, IUnit
     }
 
     public void slowDown() { }
+
+    public int getGold()
+    {
+        return gold;
+    }
+
+    public bool spendGold(int goldSpent)
+    {
+        if (goldSpent > gold)
+        {
+            return false;
+        }
+
+        gold -= goldSpent;
+        return true;
+    }
 }
 
