@@ -47,6 +47,7 @@ public class AttackParticle : MonoBehaviour
         if (impactParticle != null)
         {
             GameObject newImpactParticle = Instantiate(impactParticle, collisionEvents[0].intersection, Quaternion.identity);
+            newImpactParticle.transform.parent = GetObjects.getAttackParticleContainer();
             newImpactParticle.SetActive(true);
         }
 

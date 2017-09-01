@@ -42,6 +42,40 @@ public static class GetObjects
         return attackContainer.transform;
     }
 
+    public static Transform getDefenseContainer()
+    {
+        GameObject defenseContainer = null;
+        findNameInChildren("Defenses", getRootTransform(), ref defenseContainer);
+
+        if (defenseContainer != null)
+        {
+            return defenseContainer.transform;
+        }
+
+        defenseContainer = new GameObject();
+        defenseContainer.name = "Defenses";
+        defenseContainer.transform.parent = getRootTransform();
+
+        return defenseContainer.transform;
+    }
+
+    public static Transform getAttackParticleContainer()
+    {
+        GameObject attackParticleContainer = null;
+        findNameInChildren("AttackParticles", getRootTransform(), ref attackParticleContainer);
+
+        if (attackParticleContainer != null)
+        {
+            return attackParticleContainer.transform;
+        }
+
+        attackParticleContainer = new GameObject();
+        attackParticleContainer.name = "AttackParticles";
+        attackParticleContainer.transform.parent = getRootTransform();
+
+        return attackParticleContainer.transform;
+    }
+
     public static GameObject getCamera()
     {
         GameObject firstFoundOfName = null;
@@ -68,6 +102,13 @@ public static class GetObjects
         GameObject firstFoundOfName = null;
         findFirstObjectWithName("EnemyWaves", getRootTransform(), ref firstFoundOfName);
         return firstFoundOfName;
+    }
+
+    public static Transform getMiscContainer()
+    {
+        GameObject firstFoundOfName = null;
+        findFirstObjectWithName("MiscGameObjects", getRootTransform(), ref firstFoundOfName);
+        return firstFoundOfName.transform;
     }
 
     public static DefensiveGrid getDefensiveGrid()

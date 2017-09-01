@@ -47,6 +47,7 @@ public class PlaceDefenseAttack : AAttack
         grid = GetObjects.getDefensiveGrid();
         // Instantiate our defensive pointer
         defensivePointer = Instantiate(defensivePointer);
+        defensivePointer.transform.parent = GetObjects.getMiscContainer();
         defensivePointer.SetActive(false);
     }
 
@@ -77,6 +78,7 @@ public class PlaceDefenseAttack : AAttack
         if (grid.placeNewDefense(defenseLocation))
         {
             GameObject ballistaFinal = Instantiate(defensiveObject, defenseLocation + new Vector3(0.0f, 0.1f, 0.0f), defenseRotation(localRot));
+            ballistaFinal.transform.parent = GetObjects.getDefenseContainer();
             destroyPendingObject();
         }
     }

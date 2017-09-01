@@ -84,6 +84,7 @@ public class EmitterBehaviorBallista : MonoBehaviour
 	public GameObject createbolt(Vector3 position, Quaternion rotation, Vector3 velocity, int hashValue)
 	{
 		GameObject newbolt = (GameObject) Instantiate(bolt, position - boltHeightOffset, rotation);
+        newbolt.transform.parent = GetObjects.getAttackParticleContainer();
 
 		newbolt.SetActive(true); 
 		MoveBolt moveThis = (MoveBolt) newbolt.GetComponent(typeof(MoveBolt));
