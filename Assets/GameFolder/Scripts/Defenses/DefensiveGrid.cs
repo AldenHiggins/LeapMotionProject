@@ -16,11 +16,19 @@ public class DefensiveGrid : MonoBehaviour
     [SerializeField]
     private GameObject gridLine;
 
+    private bool showGrid;
+
     private bool[,] placedDefenses;
+
+    // Keep the game around to display the grid only during the defensive mode
+    private GameLogic game;
 
     // Use this for initialization
     void Start()
     {
+        // Get access to the game
+        game = GetObjects.getGame();
+
         // Generate all of the columns
         for (int colIndex = 0; colIndex < numColumns; colIndex++)
         {
@@ -49,7 +57,16 @@ public class DefensiveGrid : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Show the grid during the defensive phase and hide it during the offensive
+        if (game.roundActive == showGrid)
+        {
+            showGrid = !game.roundActive;
 
+            for (int childIndex = 0; childIndex < transform.childCount; childIndex++)
+            {
+                transform.GetChild(childIndex).gameObject.SetActive(showGrid);
+            }
+        }
     }
 
     // Get a new grid position based on the inputted world space position
