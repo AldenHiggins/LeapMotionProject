@@ -3,17 +3,31 @@ using UnityEngine.UI;
 
 public class PlaceDefenseAttack : AAttack
 {
-	public GameObject defensiveObject;
-	public GameObject defensiveObjectPending;
-    public GameObject defensiveObjectInvalid;
-	private bool isInstantiated = false;
-	private GameObject createdDefensiveObject;
+    // Current prefabs for the defense
+    private GameObject defensiveObject;
+    private GameObject defensiveObjectPending;
+    private GameObject defensiveObjectInvalid;
+    // The current game objects for our pending/invalid defensive object
+    private GameObject createdDefensiveObject;
     private GameObject invalidDefensiveObject;
 
-    public GameObject[] defenses;
-    public GameObject[] pendingDefenses;
-    public GameObject[] invalidDefenses;
+    // Keep track of whether the invalid/pending defensive objects have been instantiated
+    private bool isInstantiated = false;
+
+    // Arrays for the defenses and their different visual forms
+    [SerializeField]
+    private GameObject[] defenses;
+    [SerializeField]
+    private GameObject[] pendingDefenses;
+    [SerializeField]
+    private GameObject[] invalidDefenses;
+
+    // Keep track of the current index into the defense arrays
     private int currentDefense;
+
+    // The pointer that shows where our controller is pointing
+    [SerializeField]
+    private GameObject defensivePointer;
 
     // The layer that we raycast to for our defenses
     private int defenseGridLayerMask = 1 << 10;
@@ -26,7 +40,9 @@ public class PlaceDefenseAttack : AAttack
 
     void Start()
 	{
-        currentDefense = 0;
+        // Initialize the first defense
+        currentDefense = -1;
+        switchDefense();
         game = GetObjects.getGame();
         grid = GetObjects.getDefensiveGrid();
 	}
