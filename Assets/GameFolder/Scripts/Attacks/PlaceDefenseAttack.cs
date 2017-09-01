@@ -12,17 +12,20 @@ public class PlaceDefenseAttack : AAttack
     public GameObject[] pendingDefenses;
     private int currentDefense;
 
+    // The layer that we raycast to for our defenses
+    private int defenseGridLayerMask = 1 << 10;
+
     // Keep the game around to check if the offensive mode has started to remove any pending defenses
     private GameLogic game;
 
-    // Keep track of the player's transform
-    private Transform playerRoot;
+    // Keep a reference to the defensive grid to correctly place objects
+    private DefensiveGrid grid;
 
-	void Start()
+    void Start()
 	{
         currentDefense = 0;
         game = GetObjects.getGame();
-        playerRoot = GetObjects.getPlayer().gameObject.transform.parent;
+        grid = GetObjects.getDefensiveGrid();
 	}
 
     void Update()
@@ -40,50 +43,64 @@ public class PlaceDefenseAttack : AAttack
 
     public override void releaseFunctionConcrete(Vector3 localPos, Vector3 worldPos, Quaternion localRot, Quaternion worldRot)
     {
-        int layerMask = 1 << 10;
-        RaycastHit hit;
-        Physics.Raycast(worldPos, (worldRot * Vector3.forward), out hit, 100.0f, layerMask);
-
-        // Make sure the raycast hit something
-        if (hit.collider == null)
-        {
-            return;
-        }
-        if (hit.collider.gameObject == null)
+        // Get the location we should place our defense in
+        Vector3 defenseLocation = new Vector3();
+        if (!raycastToPlaceDefense(worldPos, worldRot, ref defenseLocation))
         {
             return;
         }
 
-        GameObject ballistaFinal = (GameObject)Instantiate(defensiveObject, hit.point + new Vector3(0.0f, 0.1f, 0.0f), Quaternion.Euler(0.0f, -1 * localRot.eulerAngles.z, 0.0f));
-        ballistaFinal.SetActive(true);
+        // Place the new defense
+        GameObject ballistaFinal = Instantiate(defensiveObject, defenseLocation + new Vector3(0.0f, 0.1f, 0.0f), defenseRotation(localRot));
         destroyPendingObject();
     }
 
     public override void holdFunctionConcrete(Vector3 localPos, Vector3 worldPos, Quaternion localRot, Quaternion worldRot)
     {
+        // Create our pending defensive object if it hasn't been done already
         if (!isInstantiated)
         {
             createdDefensiveObject = Instantiate(defensiveObjectPending);
-            createdDefensiveObject.SetActive(true);
             isInstantiated = true;
         }
 
-        int layerMask = 1 << 10;
-        RaycastHit hit;
-        Physics.Raycast(worldPos, (worldRot * Vector3.forward), out hit, 100.0f, layerMask);
-
-        // Make sure the raycast hit something
-        if (hit.collider == null)
+        // Get the location that we should place our defense in
+        Vector3 defenseLocation = new Vector3();
+        if (!raycastToPlaceDefense(worldPos, worldRot, ref defenseLocation))
         {
             return;
+        }
+
+        // Show the user where there defense will be placed
+        createdDefensiveObject.transform.position = defenseLocation + new Vector3(0.0f, 0.1f, 0.0f);
+        createdDefensiveObject.transform.rotation = defenseRotation(localRot);
+    }
+
+    private Quaternion defenseRotation(Quaternion localRot)
+    {
+        return Quaternion.Euler(0.0f, -1 * localRot.eulerAngles.z, 0.0f);
+    }
+
+    private bool raycastToPlaceDefense(Vector3 worldPos, Quaternion worldRot, ref Vector3 defensePosition)
+    {
+        // Raycast onto the defensive grid
+        RaycastHit hit;
+        Physics.Raycast(worldPos, (worldRot * Vector3.forward), out hit, 100.0f, defenseGridLayerMask);
+
+        // Make sure the raycast hit the defensive grid
+        if (hit.collider == null)
+        {
+            return false;
         }
         if (hit.collider.gameObject == null)
         {
-            return;
+            return false;
         }
 
-        createdDefensiveObject.transform.position = hit.point + new Vector3(0.0f, 0.1f, 0.0f);
-        createdDefensiveObject.transform.rotation = Quaternion.Euler(0.0f, -1 * localRot.eulerAngles.z, 0.0f);
+        // Set the defensive position
+        defensePosition = hit.point;
+
+        return true;
     }
 
     public void switchDefense()

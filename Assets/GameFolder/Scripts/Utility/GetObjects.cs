@@ -7,14 +7,14 @@ public static class GetObjects
     public static GameLogic getGame()
     {
         GameLogic returnGame = null;
-        findFirstObjectOfType<GameLogic>(ref returnGame, getRootTransform());
+        findFirstObjectOfType(ref returnGame, getRootTransform());
         return returnGame;
     }
 
     public static PlayerLogic getPlayer()
     {
         PlayerLogic returnPlayer = null;
-        findFirstObjectOfType<PlayerLogic>(ref returnPlayer, getRootTransform());
+        findFirstObjectOfType(ref returnPlayer, getRootTransform());
         return returnPlayer;
     }
 
@@ -68,6 +68,13 @@ public static class GetObjects
         GameObject firstFoundOfName = null;
         findFirstObjectWithName("EnemyWaves", getRootTransform(), ref firstFoundOfName);
         return firstFoundOfName;
+    }
+
+    public static DefensiveGrid getDefensiveGrid()
+    {
+        DefensiveGrid returnGrid = null;
+        findFirstObjectOfType(ref returnGrid, getRootTransform());
+        return returnGrid;
     }
 
     // Try and find an object with a specific name ONLY within the direct children of the supplied transform
