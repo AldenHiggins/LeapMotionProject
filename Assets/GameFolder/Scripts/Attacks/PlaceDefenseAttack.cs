@@ -45,12 +45,16 @@ public class PlaceDefenseAttack : AAttack
         switchDefense();
         game = GetObjects.getGame();
         grid = GetObjects.getDefensiveGrid();
-	}
+        // Instantiate our defensive pointer
+        defensivePointer = Instantiate(defensivePointer);
+        defensivePointer.SetActive(false);
+    }
 
     void Update()
     {
         if (game.roundActive == true)
         {
+            defensivePointer.SetActive(false);
             destroyPendingObject();
         }
     }
@@ -79,6 +83,11 @@ public class PlaceDefenseAttack : AAttack
 
     public override void holdFunctionConcrete(Vector3 localPos, Vector3 worldPos, Quaternion localRot, Quaternion worldRot)
     {
+        // Show our defensive pointer in the correct place
+        defensivePointer.transform.position = worldPos;
+        defensivePointer.transform.rotation = worldRot;
+        defensivePointer.SetActive(true);
+        
         // Create our pending defensive object if it hasn't been done already
         if (!isInstantiated)
         {

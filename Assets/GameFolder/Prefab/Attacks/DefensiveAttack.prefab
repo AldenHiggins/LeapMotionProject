@@ -51,11 +51,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e08d886e839254478257ecbe15a0069, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defensiveObject: {fileID: 121926, guid: a073f5bc6703fcd4399486aea12fd060, type: 2}
-  defensiveObjectPending: {fileID: 165658, guid: c1f0f968ebd6ab44eb2181590522274e,
-    type: 2}
-  defensiveObjectInvalid: {fileID: 1428289812490378, guid: 97a3158d005bae147afa70c2aff69313,
-    type: 2}
   defenses:
   - {fileID: 121926, guid: a073f5bc6703fcd4399486aea12fd060, type: 2}
   - {fileID: 128418, guid: 69b7b3fa4a9bee549a50f58f171bd4f8, type: 2}
@@ -74,3 +69,5 @@ MonoBehaviour:
   - {fileID: 1053315315030336, guid: a8b97f4c50b5f194384324cd8aa3799e, type: 2}
   - {fileID: 1013785471550116, guid: 2f5ebef19a8e2eb44acabd6d8a8a1c22, type: 2}
   - {fileID: 1548130292974028, guid: 193d7d27e4d199d40a1ddde7f1b1fe5e, type: 2}
+  defensivePointer: {fileID: 1126803390585156, guid: b45bfffab55b13648bec88c32643d6eb,
+    type: 2}
