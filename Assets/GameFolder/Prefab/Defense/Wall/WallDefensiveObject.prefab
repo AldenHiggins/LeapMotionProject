@@ -9,30 +9,30 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1910949896804664}
+  m_RootGameObject: {fileID: 1179229209090426}
   m_IsPrefabParent: 1
---- !u!1 &1910949896804664
+--- !u!1 &1179229209090426
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 4068677660812802}
-  - component: {fileID: 114282185735976166}
+  - component: {fileID: 4146267053875816}
+  - component: {fileID: 114476438662212672}
   m_Layer: 0
-  m_Name: DefensiveAttack
+  m_Name: WallDefensiveObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4068677660812802
+--- !u!4 &4146267053875816
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1910949896804664}
+  m_GameObject: {fileID: 1179229209090426}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -40,22 +40,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114282185735976166
+--- !u!114 &114476438662212672
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1910949896804664}
+  m_GameObject: {fileID: 1179229209090426}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e08d886e839254478257ecbe15a0069, type: 3}
+  m_Script: {fileID: 11500000, guid: 122c63ce05e8c0146b2e10561474dcc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defenses:
-  - {fileID: 114476438662212672, guid: 320d849b9bce3c34dba2eea3fe5e8f2c, type: 2}
-  - {fileID: 114935511626487342, guid: 709288f22b680e74d9f2af104d5d2d5e, type: 2}
-  - {fileID: 114174076615924582, guid: 2a4b551a082b9134282639740eb4e37e, type: 2}
-  - {fileID: 114998563331423516, guid: d1cc5da7b3986c047bd0be76d3ac6276, type: 2}
-  - {fileID: 114353315544376732, guid: afb1790d61b39194baf6adcd5c79b476, type: 2}
-  defensivePointer: {fileID: 1126803390585156, guid: b45bfffab55b13648bec88c32643d6eb,
+  defenseCost: 1
+  defensiveObject: {fileID: 121926, guid: a073f5bc6703fcd4399486aea12fd060, type: 2}
+  defensiveObjectInvalid: {fileID: 1428289812490378, guid: 97a3158d005bae147afa70c2aff69313,
+    type: 2}
+  defensiveObjectPending: {fileID: 165658, guid: c1f0f968ebd6ab44eb2181590522274e,
     type: 2}

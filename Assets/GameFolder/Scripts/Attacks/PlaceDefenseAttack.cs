@@ -3,24 +3,16 @@ using UnityEngine.UI;
 
 public class PlaceDefenseAttack : AAttack
 {
-    // Current prefabs for the defense
-    private GameObject defensiveObject;
-    private GameObject defensiveObjectPending;
-    private GameObject defensiveObjectInvalid;
+    // Arrays for the defenses and their different visual forms
+    [SerializeField]
+    private DefensiveObject[] defenses;
+
     // The current game objects for our pending/invalid defensive object
     private GameObject createdDefensiveObject;
     private GameObject invalidDefensiveObject;
 
     // Keep track of whether the invalid/pending defensive objects have been instantiated
     private bool isInstantiated = false;
-
-    // Arrays for the defenses and their different visual forms
-    [SerializeField]
-    private GameObject[] defenses;
-    [SerializeField]
-    private GameObject[] pendingDefenses;
-    [SerializeField]
-    private GameObject[] invalidDefenses;
 
     // Keep track of the current index into the defense arrays
     private int currentDefense;
@@ -77,7 +69,7 @@ public class PlaceDefenseAttack : AAttack
         // Place the new defense if a spot is available
         if (grid.placeNewDefense(defenseLocation))
         {
-            GameObject ballistaFinal = Instantiate(defensiveObject, defenseLocation + new Vector3(0.0f, 0.1f, 0.0f), defenseRotation(localRot));
+            GameObject ballistaFinal = Instantiate(defenses[currentDefense].getDefensiveObject(), defenseLocation + new Vector3(0.0f, 0.1f, 0.0f), defenseRotation(localRot));
             ballistaFinal.transform.parent = GetObjects.getDefenseContainer();
             destroyPendingObject();
         }
@@ -93,8 +85,8 @@ public class PlaceDefenseAttack : AAttack
         // Create our pending defensive object if it hasn't been done already
         if (!isInstantiated)
         {
-            createdDefensiveObject = Instantiate(defensiveObjectPending);
-            invalidDefensiveObject = Instantiate(defensiveObjectInvalid);
+            createdDefensiveObject = Instantiate(defenses[currentDefense].getPending());
+            invalidDefensiveObject = Instantiate(defenses[currentDefense].getInvalid());
             isInstantiated = true;
         }
 
@@ -161,10 +153,6 @@ public class PlaceDefenseAttack : AAttack
         {
             currentDefense = 0;
         }
-
-        defensiveObject = defenses[currentDefense];
-        defensiveObjectPending = pendingDefenses[currentDefense];
-        defensiveObjectInvalid = invalidDefenses[currentDefense];
     }
 
     void destroyPendingObject()
