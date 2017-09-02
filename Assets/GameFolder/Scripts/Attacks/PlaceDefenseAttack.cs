@@ -27,6 +27,9 @@ public class PlaceDefenseAttack : AAttack
     // Keep the game around to check if the offensive mode has started to remove any pending defenses
     private GameLogic game;
 
+    // Keep a reference to the player around to deduct gold to place defenses
+    private PlayerLogic player;
+
     // Keep a reference to the defensive grid to correctly place objects
     private DefensiveGrid grid;
 
@@ -37,6 +40,7 @@ public class PlaceDefenseAttack : AAttack
         switchDefense();
         game = GetObjects.getGame();
         grid = GetObjects.getDefensiveGrid();
+        player = GetObjects.getPlayer();
         // Instantiate our defensive pointer
         defensivePointer = Instantiate(defensivePointer);
         defensivePointer.transform.parent = GetObjects.getMiscContainer();
@@ -66,11 +70,18 @@ public class PlaceDefenseAttack : AAttack
             return;
         }
 
+        // Check to see if the player has enough money
+        if (player.getGold() < defenses[currentDefense].getCost())
+        {
+            return;
+        }
+
         // Place the new defense if a spot is available
         if (grid.placeNewDefense(defenseLocation))
         {
             GameObject ballistaFinal = Instantiate(defenses[currentDefense].getDefensiveObject(), defenseLocation + new Vector3(0.0f, 0.1f, 0.0f), defenseRotation(localRot));
             ballistaFinal.transform.parent = GetObjects.getDefenseContainer();
+            player.spendGold(defenses[currentDefense].getCost());
             destroyPendingObject();
         }
     }
@@ -97,8 +108,8 @@ public class PlaceDefenseAttack : AAttack
             return;
         }
 
-        // Check to see if this is an invalid location...if so replace our defensive object with an invalid one
-        if (grid.isSpotTaken(defenseLocation))
+        // Check to see if this is an invalid location or if we don't have enough money
+        if (grid.isSpotTaken(defenseLocation) || player.getGold() < defenses[currentDefense].getCost())
         {
             createdDefensiveObject.SetActive(false);
             invalidDefensiveObject.SetActive(true);

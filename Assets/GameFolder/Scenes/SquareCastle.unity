@@ -20615,7 +20615,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startingHealth: 100
-  gold: 500
+  gold: 15
 --- !u!136 &935322798
 CapsuleCollider:
   m_ObjectHideFlags: 0
