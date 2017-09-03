@@ -99,6 +99,7 @@
     <Compile Include="Assets\GameFolder\Scripts\Defenses\EmitterBehaviorBallista.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Defenses\MoveBolt.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Defenses\OilSlick.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\Player\GameEvents.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Player\GameLogic.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Player\PlayerLogic.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Player\UILogic.cs" />
@@ -115,6 +116,7 @@
     <Compile Include="Assets\GameFolder\Scripts\Utility\DamageInRadius.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\DamageOnCollision.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\DontRotate.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\Utility\EventManager.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\ExplosiveForce.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\GetObjects.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\HideOnGameStart.cs" />

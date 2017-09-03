@@ -46,26 +46,35 @@ public class DefensiveGrid : MonoBehaviour
             newGridLine.transform.localPosition = new Vector3(xPosition, 1.0f, 0.0f);
         }
 
+        // Hid the grid to start with
+        showHideGrid(false);
+
         // Generate the column and row steps
         columnStep = 1.0f / (numColumns - 1);
         rowStep = 1.0f / (numRows - 1);
 
         // Generate our placedDefenses array
         placedDefenses = new bool[numColumns, numRows];
+
+        // Listen for events
+        EventManager.StartListening(GameEvents.GameStart, defensiveModeStart);
     }
 
-    // Update is called once per frame
-    void Update()
+    void defensiveModeStart()
     {
-        // Show the grid during the defensive phase and hide it during the offensive
-        if (game.roundActive == showGrid)
-        {
-            showGrid = !game.roundActive;
+        showHideGrid(true);
+    }
 
-            for (int childIndex = 0; childIndex < transform.childCount; childIndex++)
-            {
-                transform.GetChild(childIndex).gameObject.SetActive(showGrid);
-            }
+    void defensiveModeEnd()
+    {
+        showHideGrid(false);
+    }
+
+    void showHideGrid(bool showGrid)
+    {
+        for (int childIndex = 0; childIndex < transform.childCount; childIndex++)
+        {
+            transform.GetChild(childIndex).gameObject.SetActive(showGrid);
         }
     }
 

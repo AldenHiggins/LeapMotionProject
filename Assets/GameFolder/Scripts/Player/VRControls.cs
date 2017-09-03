@@ -43,6 +43,7 @@ public class VRControls : MonoBehaviour
             if (OVRInput.GetDown(OVRInput.Button.One))
             {
                 game.startGame();
+                EventManager.TriggerEvent(GameEvents.GameStart);
             }
             return;
         }
