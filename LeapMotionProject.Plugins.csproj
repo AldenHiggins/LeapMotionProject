@@ -209,6 +209,8 @@
     <None Include="Assets\SampleScenes\UI\Pointers - Gaze Click\Resources\GazeInteraction.txt" />
     <None Include="Assets\SampleScenes\UI\Pointers\Resources\Pointers.txt" />
     <None Include="Assets\SampleScenes\UI\TrackerFrusta\Resources\TrackerFrusta.txt" />
+    <None Include="Assets\SimpleFantasy\ReadMe.txt" />
+    <None Include="Assets\SimpleSky\ReadMe.txt" />
     <None Include="Assets\Standard Assets\Characters\ThirdPersonCharacter\ThirdPersonCharacterGuidelines.txt" />
     <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
     <None Include="Assets\Standard Assets\Effects\Projectors\Guidelines.txt" />
