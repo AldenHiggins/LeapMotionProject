@@ -24,7 +24,7 @@ public abstract class AUnit : MonoBehaviour, IUnit
     protected bool attacking = false;
     // MOVEMENT
     protected UnityEngine.AI.NavMeshAgent agent;
-    protected GameObject target;
+    protected IUnit target;
     // ENEMY SEARCH
     protected int enemySearchLayer = (1 << 16) | (1 << 11);
     protected float enemySearchRadius = 3.0f;
@@ -70,12 +70,23 @@ public abstract class AUnit : MonoBehaviour, IUnit
         {
             // Stop running
             anim.SetBool("Running", false);
+            anim.SetBool("Attacking", false);
             agent.isStopped = true;
+            return;
+        }
+        // If the target is dead clear it
+        else if (target.isUnitDying())
+        {
+            // Stop running
+            anim.SetBool("Running", false);
+            anim.SetBool("Attacking", false);
+            agent.isStopped = true;
+            target = null;
             return;
         }
 
         // Determine if the unit should start attacking its target
-        Vector3 targetVector = target.transform.position - transform.position;
+        Vector3 targetVector = target.getGameObject().transform.position - transform.position;
         targetVector.y = 0.0f;
         float distanceToTarget = targetVector.magnitude;
 
@@ -108,7 +119,7 @@ public abstract class AUnit : MonoBehaviour, IUnit
             agent.enabled = true;
         }
         agent.isStopped = false;
-        agent.SetDestination(target.transform.position);
+        agent.SetDestination(target.getGameObject().transform.position);
     }
 
     protected virtual void attackTarget()
@@ -118,7 +129,7 @@ public abstract class AUnit : MonoBehaviour, IUnit
         agent.isStopped = true;
 
         // Face the target
-        transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position);
+        transform.rotation = Quaternion.LookRotation(target.getGameObject().transform.position - transform.position);
         transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
 
         // If the unit isn't attacking yet start the attack function
@@ -131,7 +142,7 @@ public abstract class AUnit : MonoBehaviour, IUnit
 
     protected virtual void findTarget()
     {
-        GameObject newTarget = findClosestUnit();
+        IUnit newTarget = findClosestUnit();
 
         if (newTarget != null)
         {
@@ -139,9 +150,9 @@ public abstract class AUnit : MonoBehaviour, IUnit
         }
     }
 
-    protected GameObject findClosestUnit()
+    protected IUnit findClosestUnit()
     {
-        GameObject foundTarget = null;
+        IUnit foundTarget = null;
 
         // Sphere cast around the unit for a target
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, enemySearchRadius, enemySearchLayer);
@@ -150,13 +161,12 @@ public abstract class AUnit : MonoBehaviour, IUnit
         for (int hitIndex = 0; hitIndex < hitColliders.Length; hitIndex++)
         {
             IUnit enemyUnit = (IUnit) hitColliders[hitIndex].gameObject.GetComponent(typeof(IUnit));
-            if (enemyUnit != null)
+            if (enemyUnit != null && !enemyUnit.isUnitDying())
             {
-                GameObject enemyFound = enemyUnit.getGameObject();
-                float enemyDistance = Vector3.Distance(enemyFound.transform.position, gameObject.transform.position);
+                float enemyDistance = Vector3.Distance(enemyUnit.getGameObject().transform.position, gameObject.transform.position);
                 if (enemyDistance < minimumDistance)
                 {
-                    foundTarget = enemyFound;
+                    foundTarget = enemyUnit;
                     minimumDistance = enemyDistance;
                 }
             }
@@ -180,15 +190,19 @@ public abstract class AUnit : MonoBehaviour, IUnit
         }
 
         // Check if our target is within the attack radius and isn't already dying
-        Vector3 distance = target.transform.position - transform.position;
+        Vector3 distance = target.getGameObject().transform.position - transform.position;
         distance.y = 0.0f;
-        if (distance.magnitude < attackRadius && !isDying)
+        if (distance.magnitude < attackRadius)
         {
-            IUnit unitToAttack = (IUnit)target.GetComponent(typeof(IUnit));
-            if (unitToAttack != null)
+            // Check to see if our target has died
+            if (target.isUnitDying())
             {
-                unitToAttack.dealDamage(attackDamage);
+                attacking = false;
+                anim.SetBool("Attacking", false);
+                yield break;
             }
+
+            target.dealDamage(attackDamage);
         }
 
         // Wait another second before attacking again

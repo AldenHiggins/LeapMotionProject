@@ -13,7 +13,7 @@ public class Enemy : AUnit
 
     override protected void findTarget()
     {
-        GameObject newTarget = findClosestUnit();
+        IUnit newTarget = findClosestUnit();
 
         if (newTarget != null)
         {
@@ -21,7 +21,7 @@ public class Enemy : AUnit
         }
         else
         {
-            target = goalPosition;
+            target = goalPosition.GetComponent<IUnit>();
         }
     }
 }
