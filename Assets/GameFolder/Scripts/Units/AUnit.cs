@@ -27,7 +27,8 @@ public abstract class AUnit : MonoBehaviour, IUnit
     protected IUnit target;
     // ENEMY SEARCH
     protected int enemySearchLayer = (1 << 16) | (1 << 11);
-    protected float enemySearchRadius = 3.0f;
+    [SerializeField]
+    protected float enemySearchRadius = 10.0f;
     // AUDIO
     protected AudioSource source;
     [SerializeField]
@@ -72,16 +73,6 @@ public abstract class AUnit : MonoBehaviour, IUnit
             anim.SetBool("Running", false);
             anim.SetBool("Attacking", false);
             agent.isStopped = true;
-            return;
-        }
-        // If the target is dead clear it
-        else if (target.isUnitDying())
-        {
-            // Stop running
-            anim.SetBool("Running", false);
-            anim.SetBool("Attacking", false);
-            agent.isStopped = true;
-            target = null;
             return;
         }
 
@@ -154,6 +145,23 @@ public abstract class AUnit : MonoBehaviour, IUnit
     {
         IUnit foundTarget = null;
 
+        // If we have a target and we are attacking it don't switch
+        if (target != null)
+        {
+            // If our target is dying null it out
+            if (target.isUnitDying())
+            {
+                anim.SetBool("Attacking", false);
+                attacking = false;
+                target = null;
+            }
+            // If the target is still alive and we are attacking don't switch targets
+            else if (attacking)
+            {
+                return foundTarget;
+            }
+        }
+
         // Sphere cast around the unit for a target
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, enemySearchRadius, enemySearchLayer);
         float minimumDistance = float.MaxValue;
@@ -181,18 +189,10 @@ public abstract class AUnit : MonoBehaviour, IUnit
         // Let the animation play for half a second before dealing damage to the target
         yield return new WaitForSeconds(.5f);
 
-        // Make sure our target still exists
-        if (target == null)
-        {
-            attacking = false;
-            anim.SetBool("Attacking", false);
-            yield break;
-        }
-
         // Check if our target is within the attack radius and isn't already dying
         Vector3 distance = target.getGameObject().transform.position - transform.position;
         distance.y = 0.0f;
-        if (distance.magnitude < attackRadius)
+        if (distance.magnitude <= attackRadius)
         {
             // Check to see if our target has died
             if (target.isUnitDying())
@@ -217,7 +217,9 @@ public abstract class AUnit : MonoBehaviour, IUnit
 
         if (health > 0)
         {
-            anim.Play("wound");
+            anim.SetBool("Wounded", true);
+            StopCoroutine(endWound());
+            StartCoroutine(endWound());
             source.PlayOneShot(woundSound);
         }
         else
@@ -225,6 +227,12 @@ public abstract class AUnit : MonoBehaviour, IUnit
             source.PlayOneShot(killSound);
             kill();
         }
+    }
+
+    IEnumerator endWound()
+    {
+        yield return new WaitForSeconds(0.2f);
+        anim.SetBool("Wounded", false);
     }
 
     public void applyForce(Vector3 force)
