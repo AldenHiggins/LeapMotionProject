@@ -112,6 +112,7 @@
     <Compile Include="Assets\GameFolder\Scripts\Units\MonsterWave.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\NavTest.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\Ragdoll.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\Units\StaticUnit.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\CircularParticleEmission.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\DamageInRadius.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\DamageOnCollision.cs" />
