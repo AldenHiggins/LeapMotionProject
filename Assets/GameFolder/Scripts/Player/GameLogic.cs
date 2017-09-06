@@ -88,7 +88,7 @@ public class GameLogic : MonoBehaviour
         roundActive = true;
     }
 
-    // When the player dies bring up the end game screen and stop the current round
+    // When the player dies stop the current round
     public void killPlayerEndGame(bool win)
 	{
 		StopCoroutine (roundFunction ());
