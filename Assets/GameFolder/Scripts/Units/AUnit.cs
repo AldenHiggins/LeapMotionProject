@@ -103,6 +103,7 @@ public abstract class AUnit : MonoBehaviour, IUnit
 
         // Animate the unit to start running
         anim.SetBool("Running", true);
+        anim.SetBool("Attacking", false);
 
         // Activate our nav mesh agent and start moving to our destination
         if (!agent.isActiveAndEnabled)
@@ -208,7 +209,6 @@ public abstract class AUnit : MonoBehaviour, IUnit
         // Wait another second before attacking again
         yield return new WaitForSeconds(2.0f);
         attacking = false;
-        anim.SetBool("Attacking", false);
     }
 
     public void dealDamage(int damage)
