@@ -33,7 +33,10 @@ public class GameLogic : MonoBehaviour
 		{
 			enemyWaves[i] = (MonsterWave) waveContainer.transform.GetChild(i).gameObject.GetComponent(typeof(MonsterWave));
 		}
-	}
+
+        // Install event listeners
+        EventManager.StartListening(GameEvents.GameStart, startGame);
+    }
 
 	IEnumerator roundFunction()
 	{
@@ -47,9 +50,10 @@ public class GameLogic : MonoBehaviour
             ///////////////////////////////////////
             ///////    DEFENSIVE PHASE   //////////
             ///////////////////////////////////////
-            
-			// Wait for player to end defensive setup phase
-			while (!roundActive) 
+            EventManager.TriggerEvent(GameEvents.DefensivePhaseStart);
+
+            // Wait for player to end defensive setup phase
+            while (!roundActive) 
 			{
 				yield return new WaitForSeconds(.2f);
 			}
@@ -57,9 +61,10 @@ public class GameLogic : MonoBehaviour
             ///////////////////////////////////////
             ///////    OFFENSIVE PHASE   //////////
             ///////////////////////////////////////
+            EventManager.TriggerEvent(GameEvents.OffensivePhaseStart);
 
-			// Start the enemy spawners
-			enemyWaves[i].startWave ();
+            // Start the enemy spawners
+            enemyWaves[i].startWave ();
 			// Wait for the round to time out
 			yield return new WaitForSeconds(enemyWaves[i].roundTime);
 

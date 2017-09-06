@@ -57,17 +57,8 @@ public class DefensiveGrid : MonoBehaviour
         placedDefenses = new bool[numColumns, numRows];
 
         // Listen for events
-        EventManager.StartListening(GameEvents.GameStart, defensiveModeStart);
-    }
-
-    void defensiveModeStart()
-    {
-        showHideGrid(true);
-    }
-
-    void defensiveModeEnd()
-    {
-        showHideGrid(false);
+        EventManager.StartListening(GameEvents.DefensivePhaseStart, delegate () { showHideGrid(true); });
+        EventManager.StartListening(GameEvents.OffensivePhaseStart, delegate () { showHideGrid(false); });
     }
 
     void showHideGrid(bool showGrid)

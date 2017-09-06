@@ -16,6 +16,10 @@ public class VRControls : MonoBehaviour
     [SerializeField]
     private AAttack fireballAttack;
 
+    // Keep track of the current update function and switch it out as the game switches state
+    private delegate void UpdateFunction();
+    private UpdateFunction currentUpdate;
+
     // Use this for initialization
     void Start ()
     {
@@ -26,65 +30,64 @@ public class VRControls : MonoBehaviour
         placeDefenseAttack = Instantiate(placeDefenseAttack.gameObject, GetObjects.getAttackContainer()).GetComponent<AAttack>();
         switchDefenseAttack = Instantiate(switchDefenseAttack.gameObject, GetObjects.getAttackContainer()).GetComponent<AAttack>();
         fireballAttack = Instantiate(fireballAttack.gameObject, GetObjects.getAttackContainer()).GetComponent<AAttack>();
+
+        // Install our state-switching listeners
+        EventManager.StartListening(GameEvents.DefensivePhaseStart, delegate() { currentUpdate = defensiveUpdate; });
+        EventManager.StartListening(GameEvents.OffensivePhaseStart, delegate () { currentUpdate = offensiveUpdate; });
+
+        // Start by waiting for input
+        currentUpdate = waitForStartInputUpdate;
+    }
+
+    void offensiveUpdate()
+    {
+        // Check for the user firing fireballs
+        if (OVRInput.GetDown(OVRInput.RawButton.RIndexTrigger))
+        {
+            fireballAttack.releaseFunction(OVRInput.Controller.RTouch);
+        }
+        if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger))
+        {
+            fireballAttack.releaseFunction(OVRInput.Controller.LTouch);
+        }
+    }
+
+    void defensiveUpdate()
+    {
+        // Check for the user skipping the defensive stage and activating the wave
+        if (OVRInput.GetDown(OVRInput.Button.One) || Input.GetKeyDown("v"))
+        {
+            game.startRound();
+        }
+
+        // Iterate the hold function of the place defense attack
+        placeDefenseAttack.holdFunction(OVRInput.Controller.RTouch);
+
+        // Check if the user wants to place a defense
+        if (OVRInput.GetDown(OVRInput.RawButton.RIndexTrigger))
+        {
+            placeDefenseAttack.releaseFunction(OVRInput.Controller.RTouch);
+        }
+
+        // Check if the user wants to switch the defense they're placing
+        if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger))
+        {
+            switchDefenseAttack.releaseFunction(OVRInput.Controller.RTouch);
+        }
+    }
+
+    void waitForStartInputUpdate()
+    {
+        // Wait for input to start the game
+        if (OVRInput.GetDown(OVRInput.Button.One) || Input.GetKeyDown("v"))
+        {
+            EventManager.TriggerEvent(GameEvents.GameStart);
+        }
     }
 
     // Update is called once per frame
     void Update ()
     {
-        // If the player is dead don't do anything
-        if (player.isUnitDying())
-        {
-            return;
-        }
-
-        // If we are still on the start screen wait for input and pass it along to the game
-        if (game.getStartScreenActive())
-        {
-            if (OVRInput.GetDown(OVRInput.Button.One) || Input.GetKeyDown("v"))
-            {
-                game.startGame();
-                EventManager.TriggerEvent(GameEvents.GameStart);
-            }
-
-            return;
-        }
-
-        // The round hasn't started yet and we are in the defensive setup mode
-        if (!game.roundActive)
-        {
-            // Check for the user skipping the defensive stage and activating the wave
-            if (OVRInput.GetDown(OVRInput.Button.One) || Input.GetKeyDown("v"))
-            {
-                game.startRound();
-            }
-
-            // Iterate the hold function of the place defense attack
-            placeDefenseAttack.holdFunction(OVRInput.Controller.RTouch);
-
-            // Check if the user wants to place a defense
-            if (OVRInput.GetDown(OVRInput.RawButton.RIndexTrigger))
-            {
-                placeDefenseAttack.releaseFunction(OVRInput.Controller.RTouch);
-            }
-
-            // Check if the user wants to switch the defense they're placing
-            if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger))
-            {
-                switchDefenseAttack.releaseFunction(OVRInput.Controller.RTouch);
-            }
-        }
-        // The wave has started and enemies are still alive
-        else
-        {
-            // Check for the user firing fireballs
-            if (OVRInput.GetDown(OVRInput.RawButton.RIndexTrigger))
-            {
-                fireballAttack.releaseFunction(OVRInput.Controller.RTouch);
-            }
-            if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger))
-            {
-                fireballAttack.releaseFunction(OVRInput.Controller.LTouch);
-            }
-        }
+        currentUpdate();
 	}
 }
