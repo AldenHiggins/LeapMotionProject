@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class UILogic : MonoBehaviour
 {
-    private GameLogic game;
-    private PlayerLogic player;
-
     [SerializeField]
     private GameObject introUI;
 
@@ -19,32 +16,14 @@ public class UILogic : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
-        game = GetObjects.getGame();
-        player = GetObjects.getPlayer();
-    }
-	
-	// Update is called once per frame
-	void Update ()
-    {
-        // If the start screen is active keep the start screen going
-        if (game.getStartScreenActive())
-        {
-            return;
-        }
-        else
-        {
-            introUI.SetActive(false);
-        }
-
-        // If the player is dead show the end game UI
-        if (player.isUnitDying())
+        // For now the UI just changes based on the game state
+        EventManager.StartListening(GameEvents.GameStart, delegate () { introUI.SetActive(false); });
+        EventManager.StartListening(GameEvents.DefensivePhaseStart, delegate () { defenseUI.SetActive(true); });
+        EventManager.StartListening(GameEvents.OffensivePhaseStart, delegate () { defenseUI.SetActive(false); });
+        EventManager.StartListening(GameEvents.GameOver, delegate ()
         {
             defenseUI.SetActive(false);
             endGameUI.SetActive(true);
-            return;
-        }
-
-        // Else show the user their defensive options
-        defenseUI.SetActive(true);
+        });
     }
 }

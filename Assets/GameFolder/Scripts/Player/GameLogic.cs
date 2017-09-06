@@ -94,6 +94,7 @@ public class GameLogic : MonoBehaviour
 		StopCoroutine (roundFunction ());
 
         Debug.Log("Game over!!");
+        EventManager.TriggerEvent(GameEvents.GameOver);
 
 		// Now deactivate all active enemies
 		for (int enemyIndex = 0; enemyIndex < spawnedEnemies.transform.childCount; enemyIndex++)
