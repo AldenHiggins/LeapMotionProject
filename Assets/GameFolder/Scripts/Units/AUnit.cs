@@ -206,7 +206,7 @@ public abstract class AUnit : MonoBehaviour, IUnit
         }
 
         // Wait another second before attacking again
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(2.0f);
         attacking = false;
         anim.SetBool("Attacking", false);
     }
