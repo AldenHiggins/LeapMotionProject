@@ -303,6 +303,11 @@ public abstract class AUnit : MonoBehaviour, IUnit
         onDamageTaken += onDamageCallback;
     }
 
+    public int getCurrentHealth()
+    {
+        return health;
+    }
+
     public int getMaxHealth()
     {
         return startingHealth;

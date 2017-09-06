@@ -56,6 +56,11 @@ public class StaticUnit : MonoBehaviour, IUnit
         return startingHealth;
     }
 
+    public int getCurrentHealth()
+    {
+        return currentHealth;
+    }
+
     public bool isUnitDying()
     {
         return isDead;

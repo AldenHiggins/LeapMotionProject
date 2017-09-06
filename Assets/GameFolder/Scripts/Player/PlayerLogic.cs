@@ -60,7 +60,7 @@ public class PlayerLogic : MonoBehaviour, IUnit
         return startingHealth;
     }
 
-    public int getHealth()
+    public int getCurrentHealth()
     {
         return health;
     }

@@ -9,6 +9,8 @@ public interface IUnit
 
     int getMaxHealth();
 
+    int getCurrentHealth();
+
 	void dealDamage(int damageToDeal);
 
     bool isUnitDying();
