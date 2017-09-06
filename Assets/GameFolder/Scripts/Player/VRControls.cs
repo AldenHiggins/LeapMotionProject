@@ -40,11 +40,12 @@ public class VRControls : MonoBehaviour
         // If we are still on the start screen wait for input and pass it along to the game
         if (game.getStartScreenActive())
         {
-            if (OVRInput.GetDown(OVRInput.Button.One))
+            if (OVRInput.GetDown(OVRInput.Button.One) || Input.GetKeyDown("v"))
             {
                 game.startGame();
                 EventManager.TriggerEvent(GameEvents.GameStart);
             }
+
             return;
         }
 
@@ -52,7 +53,7 @@ public class VRControls : MonoBehaviour
         if (!game.roundActive)
         {
             // Check for the user skipping the defensive stage and activating the wave
-            if (OVRInput.GetDown(OVRInput.Button.One))
+            if (OVRInput.GetDown(OVRInput.Button.One) || Input.GetKeyDown("v"))
             {
                 game.startRound();
             }
