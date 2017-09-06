@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System;
 
 public class PlayerLogic : MonoBehaviour, IUnit
 {
@@ -46,6 +47,17 @@ public class PlayerLogic : MonoBehaviour, IUnit
         {
             respawn();
         }
+    }
+
+    public void installDeathListener(Action onDeathCallback)
+    { }
+
+    public void installDamageListener(Action<int> onDamageCallback)
+    { }
+
+    public int getMaxHealth()
+    {
+        return startingHealth;
     }
 
     public int getHealth()

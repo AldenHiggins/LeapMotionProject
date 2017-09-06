@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,28 +11,49 @@ public class StaticUnit : MonoBehaviour, IUnit
     private int currentHealth;
 
     private bool isDead = false;
-    
+
+    // DELEGATES
+    private Action onDeath;
+    private Action<int> onDamageTaken;
+
     // Use this for initialization
     void Start()
     {
         currentHealth = startingHealth;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public void dealDamage(int damageToDeal)
     {
         currentHealth -= damageToDeal;
 
+        if (onDamageTaken != null)
+        {
+            onDamageTaken(damageToDeal);
+        }
+
         if (currentHealth <= 0)
         {
             isDead = true;
-            EventManager.TriggerEvent(GameEvents.GameOver);
+            if (onDeath != null)
+            {
+                onDeath();
+            }
         }
+    }
+
+    public void installDeathListener(Action onDeathCallback)
+    {
+        onDeath += onDeathCallback;
+    }
+
+    public void installDamageListener(Action<int> onDamageCallback)
+    {
+        onDamageTaken += onDamageCallback;
+    }
+
+    public int getMaxHealth()
+    {
+        return startingHealth;
     }
 
     public bool isUnitDying()

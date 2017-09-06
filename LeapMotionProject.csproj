@@ -108,6 +108,7 @@
     <Compile Include="Assets\GameFolder\Scripts\Units\AUnit.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\Enemy.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\EnemySpawner.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\Units\HealthBar.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\IUnit.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\MonsterWave.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\NavTest.cs" />
@@ -117,6 +118,7 @@
     <Compile Include="Assets\GameFolder\Scripts\Utility\DamageInRadius.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\DamageOnCollision.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\DontRotate.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\Utility\EndGameOnUnitDeath.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\EventManager.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\ExplosiveForce.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\GetObjects.cs" />

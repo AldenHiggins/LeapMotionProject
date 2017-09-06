@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -37,6 +38,9 @@ public abstract class AUnit : MonoBehaviour, IUnit
     protected AudioClip killSound;
     // RAGDOLL/DEATH
     protected bool isDying = false;
+    // DELEGATES
+    private Action onDeath;
+    private Action<int> onDamageTaken;
 
     // Use this for initialization
     void Start()
@@ -215,6 +219,11 @@ public abstract class AUnit : MonoBehaviour, IUnit
     {
         health -= damage;
 
+        if (onDamageTaken != null)
+        {
+            onDamageTaken(damage);
+        }
+
         if (health > 0)
         {
             anim.SetBool("Wounded", true);
@@ -265,6 +274,11 @@ public abstract class AUnit : MonoBehaviour, IUnit
         {
             agent.enabled = false;
         }
+        // Call our on death callbacks if necessary
+        if (onDeath != null)
+        {
+            onDeath();
+        }
         BoxCollider collider = gameObject.GetComponent<BoxCollider>();
         collider.enabled = false;
         StopCoroutine(attack());
@@ -277,6 +291,21 @@ public abstract class AUnit : MonoBehaviour, IUnit
     {
         yield return new WaitForSeconds(bodyDespawnTime);
         Destroy(gameObject);
+    }
+
+    public void installDeathListener(Action onDeathCallback)
+    {
+        onDeath += onDeathCallback;
+    }
+
+    public void installDamageListener(Action<int> onDamageCallback)
+    {
+        onDamageTaken += onDamageCallback;
+    }
+
+    public int getMaxHealth()
+    {
+        return startingHealth;
     }
 
     public void slowDown()
