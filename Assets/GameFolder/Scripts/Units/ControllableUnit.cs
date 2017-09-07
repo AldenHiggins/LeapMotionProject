@@ -29,6 +29,7 @@ public class ControllableUnit : MonoBehaviour, IUnit
     private GameObject fireBall;
     [SerializeField]
     private GameObject fireBallTransform;
+    private bool attacking;
     // IS ALIVE
     private bool isDying;
 
@@ -84,18 +85,22 @@ public class ControllableUnit : MonoBehaviour, IUnit
         // Accept player input to initiate attacks
         if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger))
         {
-            //anim.SetBool("Attacking", true);
-            StopCoroutine(attack());
-            StartCoroutine(attack());
+            if (!attacking)
+            {
+                StopCoroutine(attack());
+                StartCoroutine(attack());
+            }            
         }
     }
 
     IEnumerator attack()
     {
+        attacking = true;
         anim.SetBool("Attacking", true);
+        anim.Play("attack0");
         moveSpeed = attackWalkSpeed;
         // Let the animation play for half a second before dealing damage to the target
-        yield return new WaitForSeconds(.2f);
+        //yield return new WaitForSeconds(.2f);
 
         //// Check if our target is within the attack radius and isn't already dying
         //Vector3 distance = target.getGameObject().transform.position - transform.position;
@@ -114,10 +119,10 @@ public class ControllableUnit : MonoBehaviour, IUnit
         //}
 
         // Wait another second before attacking again
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
         moveSpeed = walkSpeed;
         anim.SetBool("Attacking", false);
-        //attacking = false;
+        attacking = false;
     }
 
     public void FireFireball()
