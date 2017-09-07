@@ -30,6 +30,13 @@ public class ControllableUnit : MonoBehaviour, IUnit
     [SerializeField]
     private GameObject fireBallTransform;
     private bool attacking;
+    // ENEMIES
+    private int enemySearchLayer = 1 << 8;
+    // MELEE
+    [SerializeField]
+    private GameObject meleeHitbox;
+    [SerializeField]
+    private int meleeDamage = 10;
     // IS ALIVE
     private bool isDying;
 
@@ -87,36 +94,26 @@ public class ControllableUnit : MonoBehaviour, IUnit
         {
             if (!attacking)
             {
-                StopCoroutine(attack());
-                StartCoroutine(attack());
+                StopCoroutine(attack("attack0"));
+                StartCoroutine(attack("attack0"));
             }            
+        }
+        if (OVRInput.GetDown(OVRInput.RawButton.RIndexTrigger))
+        {
+            if (!attacking)
+            {
+                StopCoroutine(attack("attack1"));
+                StartCoroutine(attack("attack1"));
+            }
         }
     }
 
-    IEnumerator attack()
+    IEnumerator attack(string attackName)
     {
         attacking = true;
         anim.SetBool("Attacking", true);
-        anim.Play("attack0");
+        anim.Play(attackName);
         moveSpeed = attackWalkSpeed;
-        // Let the animation play for half a second before dealing damage to the target
-        //yield return new WaitForSeconds(.2f);
-
-        //// Check if our target is within the attack radius and isn't already dying
-        //Vector3 distance = target.getGameObject().transform.position - transform.position;
-        //distance.y = 0.0f;
-        //if (distance.magnitude <= attackRadius)
-        //{
-        //    // Check to see if our target has died
-        //    if (target.isUnitDying())
-        //    {
-        //        attacking = false;
-        //        anim.SetBool("Attacking", false);
-        //        yield break;
-        //    }
-
-        //    target.dealDamage(attackDamage);
-        //}
 
         // Wait another second before attacking again
         yield return new WaitForSeconds(0.5f);
@@ -125,10 +122,26 @@ public class ControllableUnit : MonoBehaviour, IUnit
         attacking = false;
     }
 
-    public void FireFireball()
+    public void fireFireball()
     {
         GameObject newFireball = Instantiate(fireBall, fireBallTransform.transform.position, fireBallTransform.transform.rotation);
         newFireball.transform.parent = GetObjects.getAttackParticleContainer();
+    }
+
+    public void dealMeleeDamage()
+    {
+        RaycastHit[] hits = Physics.BoxCastAll(meleeHitbox.transform.position, meleeHitbox.transform.localScale, 
+            meleeHitbox.transform.forward, meleeHitbox.transform.rotation, meleeHitbox.transform.localScale.z,
+            enemySearchLayer);
+
+        for (int hitIndex = 0; hitIndex < hits.Length; hitIndex++)
+        {
+            IUnit hitUnit = hits[hitIndex].collider.gameObject.GetComponent<IUnit>();
+            if (hitUnit != null)
+            {
+                hitUnit.dealDamage(meleeDamage);
+            }
+        }
     }
 
     public void installDeathListener(Action onDeathCallback) { }
