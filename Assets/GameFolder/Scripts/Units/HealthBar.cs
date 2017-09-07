@@ -17,6 +17,7 @@ public class HealthBar : MonoBehaviour
         }
 
         parentUnit.installDamageListener(onDamageTaken);
+        parentUnit.installDeathListener(delegate { Destroy(gameObject); });
     }
 
     void onDamageTaken(int damageTaken)
