@@ -41,15 +41,17 @@ public class VRControls : MonoBehaviour
 
     void offensiveUpdate()
     {
-        // Check for the user firing fireballs
-        if (OVRInput.GetDown(OVRInput.RawButton.RIndexTrigger))
-        {
-            fireballAttack.releaseFunction(OVRInput.Controller.RTouch);
-        }
-        if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger))
-        {
-            fireballAttack.releaseFunction(OVRInput.Controller.LTouch);
-        }
+        return;
+
+        //// Check for the user firing fireballs
+        //if (OVRInput.GetDown(OVRInput.RawButton.RIndexTrigger))
+        //{
+        //    fireballAttack.releaseFunction(OVRInput.Controller.RTouch);
+        //}
+        //if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger))
+        //{
+        //    fireballAttack.releaseFunction(OVRInput.Controller.LTouch);
+        //}
     }
 
     void defensiveUpdate()

@@ -18,9 +18,17 @@ public class ControllableUnit : MonoBehaviour, IUnit
     [SerializeField]
     private float walkSpeed = .1f;
     [SerializeField]
+    private float attackWalkSpeed = .1f;
+    private float moveSpeed;
+    [SerializeField]
     private float turnSpeed = .1f;
     [SerializeField]
     private float movementAngle = 10.0f;
+    // ATTACKS
+    [SerializeField]
+    private GameObject fireBall;
+    [SerializeField]
+    private GameObject fireBallTransform;
     // IS ALIVE
     private bool isDying;
 
@@ -29,11 +37,19 @@ public class ControllableUnit : MonoBehaviour, IUnit
     {
         currentHealth = startingHealth;
         controller = GetComponent<CharacterController>();
-        anim = transform.GetChild(0).GetComponent<Animator>();
+        anim = GetComponent<Animator>();
+        moveSpeed = walkSpeed;
     }
 
     // Update is called once per frame
     void Update()
+    {
+        handleMovement();
+
+        handleAttacks();
+    }
+
+    void handleMovement()
     {
         // Take in input from the player
         Vector2 leftInput = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick);
@@ -55,12 +71,59 @@ public class ControllableUnit : MonoBehaviour, IUnit
         if (rotationAngle <= movementAngle)
         {
             anim.SetBool("Running", true);
-            controller.Move(movementVector * walkSpeed * Time.deltaTime);
+            //controller.Move(movementVector * moveSpeed * Time.deltaTime);
         }
         else
         {
             anim.SetBool("Running", false);
         }
+    }
+
+    void handleAttacks()
+    {
+        // Accept player input to initiate attacks
+        if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger))
+        {
+            //anim.SetBool("Attacking", true);
+            StopCoroutine(attack());
+            StartCoroutine(attack());
+        }
+    }
+
+    IEnumerator attack()
+    {
+        anim.SetBool("Attacking", true);
+        moveSpeed = attackWalkSpeed;
+        // Let the animation play for half a second before dealing damage to the target
+        yield return new WaitForSeconds(.2f);
+
+        //// Check if our target is within the attack radius and isn't already dying
+        //Vector3 distance = target.getGameObject().transform.position - transform.position;
+        //distance.y = 0.0f;
+        //if (distance.magnitude <= attackRadius)
+        //{
+        //    // Check to see if our target has died
+        //    if (target.isUnitDying())
+        //    {
+        //        attacking = false;
+        //        anim.SetBool("Attacking", false);
+        //        yield break;
+        //    }
+
+        //    target.dealDamage(attackDamage);
+        //}
+
+        // Wait another second before attacking again
+        yield return new WaitForSeconds(1.0f);
+        moveSpeed = walkSpeed;
+        anim.SetBool("Attacking", false);
+        //attacking = false;
+    }
+
+    public void FireFireball()
+    {
+        GameObject newFireball = Instantiate(fireBall, fireBallTransform.transform.position, fireBallTransform.transform.rotation);
+        newFireball.transform.parent = GetObjects.getAttackParticleContainer();
     }
 
     public void installDeathListener(Action onDeathCallback) { }
