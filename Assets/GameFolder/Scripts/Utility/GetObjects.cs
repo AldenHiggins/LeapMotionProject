@@ -79,7 +79,7 @@ public static class GetObjects
     public static GameObject getCamera()
     {
         GameObject firstFoundOfName = null;
-        findFirstObjectWithName("Camera (head)", getRootTransform(), ref firstFoundOfName);
+        findFirstObjectWithName("CenterEyeAnchor", getRootTransform(), ref firstFoundOfName);
         return firstFoundOfName;
     }
 

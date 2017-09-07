@@ -37,6 +37,8 @@ public class ControllableUnit : MonoBehaviour, IUnit
     private GameObject meleeHitbox;
     [SerializeField]
     private int meleeDamage = 10;
+    // PLAYER CAMERA
+    private GameObject playerCamera;
     // IS ALIVE
     private bool isDying;
 
@@ -46,6 +48,7 @@ public class ControllableUnit : MonoBehaviour, IUnit
         currentHealth = startingHealth;
         controller = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
+        playerCamera = GetObjects.getCamera();
         moveSpeed = walkSpeed;
     }
 
@@ -70,6 +73,9 @@ public class ControllableUnit : MonoBehaviour, IUnit
             anim.SetBool("Running", false);
             return;
         }
+        // Rotate the movement vector based on the camera rotation
+        movementVector = playerCamera.transform.rotation * movementVector;
+        movementVector.y = 0.0f;
         // Rotate the unit
         Quaternion targetRot = Quaternion.LookRotation(movementVector);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * turnSpeed);
