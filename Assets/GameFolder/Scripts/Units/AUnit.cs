@@ -226,9 +226,7 @@ public abstract class AUnit : MonoBehaviour, IUnit
 
         if (health > 0)
         {
-            anim.SetBool("Wounded", true);
-            StopCoroutine(endWound());
-            StartCoroutine(endWound());
+            anim.Play("wound");
             source.PlayOneShot(woundSound);
         }
         else
@@ -236,12 +234,6 @@ public abstract class AUnit : MonoBehaviour, IUnit
             source.PlayOneShot(killSound);
             kill();
         }
-    }
-
-    IEnumerator endWound()
-    {
-        yield return new WaitForSeconds(0.2f);
-        anim.SetBool("Wounded", false);
     }
 
     public void applyForce(Vector3 force)
