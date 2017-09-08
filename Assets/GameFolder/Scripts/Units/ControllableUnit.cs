@@ -41,6 +41,8 @@ public class ControllableUnit : MonoBehaviour, IUnit
     private GameObject playerCamera;
     // IS ALIVE
     private bool isDying;
+    // PLAYER CONTROl
+    private bool isControlled;
 
     // Use this for initialization
     void Start()
@@ -50,11 +52,24 @@ public class ControllableUnit : MonoBehaviour, IUnit
         anim = GetComponent<Animator>();
         playerCamera = GetObjects.getCamera();
         moveSpeed = walkSpeed;
+        isControlled = true;
+        EventManager.StartListening(GameEvents.DefensivePhaseStart, delegate { isControlled = false; });
+        EventManager.StartListening(GameEvents.OffensivePhaseStart, delegate { isControlled = true; });
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        // If this isn't currently being controlled ignore input
+        if (!isControlled)
+        {
+            // Stop movement
+            anim.SetBool("Running", false);
+            anim.SetBool("Attacking", false);
+            return;
+        }
+
         handleMovement();
 
         handleAttacks();
