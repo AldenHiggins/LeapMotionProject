@@ -83,7 +83,7 @@ public class ControllableUnit : MonoBehaviour, IUnit
         // Find the movement vector of the unit
         Vector3 movementVector = new Vector3(leftInput.x, 0.0f, leftInput.y);
         float magnitude = movementVector.magnitude;
-        Debug.Log("Magnitude: " + magnitude);
+        //Debug.Log("Magnitude: " + magnitude);
         // Don't do anything if we haven't received any input
         if (movementVector == Vector3.zero)
         {
@@ -182,10 +182,12 @@ public class ControllableUnit : MonoBehaviour, IUnit
     public void dealDamage(int damageToDeal)
     {
         currentHealth -= damageToDeal;
+        Debug.Log("taking damage, current health: " + currentHealth);
 
         if (currentHealth <= 0)
         {
             isDying = true;
+            anim.SetTrigger("DeathTrigger");
         }
     }
 
