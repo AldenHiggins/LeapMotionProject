@@ -66,7 +66,7 @@ public class ControllableUnit : MonoBehaviour, IUnit
         if (!isControlled)
         {
             // Stop movement
-            anim.SetBool("Running", false);
+            anim.SetBool("Moving", false);
             return;
         }
 
@@ -83,11 +83,12 @@ public class ControllableUnit : MonoBehaviour, IUnit
         // Find the movement vector of the unit
         Vector3 movementVector = new Vector3(leftInput.x, 0.0f, leftInput.y);
         float magnitude = movementVector.magnitude;
+        anim.SetFloat("MoveSpeed", magnitude);
         //Debug.Log("Magnitude: " + magnitude);
         // Don't do anything if we haven't received any input
         if (movementVector == Vector3.zero)
         {
-            anim.SetBool("Running", false);
+            anim.SetBool("Moving", false);
             return;
         }
         // Rotate the movement vector based on the camera rotation
@@ -101,12 +102,12 @@ public class ControllableUnit : MonoBehaviour, IUnit
         float rotationAngle = Quaternion.Angle(targetRot, transform.rotation);
         if (rotationAngle <= movementAngle)
         {
-            anim.SetBool("Running", true);
+            anim.SetBool("Moving", true);
             //controller.Move(movementVector * moveSpeed * Time.deltaTime);
         }
         else
         {
-            anim.SetBool("Running", false);
+            anim.SetBool("Moving", false);
         }
     }
 
