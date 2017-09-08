@@ -30,6 +30,7 @@ public class ControllableUnit : MonoBehaviour, IUnit
     [SerializeField]
     private GameObject fireBallTransform;
     private bool attacking;
+    private float attackCooldown = .5f;
     // ENEMIES
     private int enemySearchLayer = 1 << 8;
     // MELEE
@@ -53,9 +54,9 @@ public class ControllableUnit : MonoBehaviour, IUnit
         playerCamera = GetObjects.getCamera();
         moveSpeed = walkSpeed;
         isControlled = true;
+        // Don't accept player input during the defensive phase
         EventManager.StartListening(GameEvents.DefensivePhaseStart, delegate { isControlled = false; });
         EventManager.StartListening(GameEvents.OffensivePhaseStart, delegate { isControlled = true; });
-
     }
 
     // Update is called once per frame
@@ -66,7 +67,6 @@ public class ControllableUnit : MonoBehaviour, IUnit
         {
             // Stop movement
             anim.SetBool("Running", false);
-            anim.SetBool("Attacking", false);
             return;
         }
 
@@ -82,6 +82,8 @@ public class ControllableUnit : MonoBehaviour, IUnit
 
         // Find the movement vector of the unit
         Vector3 movementVector = new Vector3(leftInput.x, 0.0f, leftInput.y);
+        float magnitude = movementVector.magnitude;
+        Debug.Log("Magnitude: " + magnitude);
         // Don't do anything if we haven't received any input
         if (movementVector == Vector3.zero)
         {
@@ -115,16 +117,16 @@ public class ControllableUnit : MonoBehaviour, IUnit
         {
             if (!attacking)
             {
-                StopCoroutine(attack("attack0"));
-                StartCoroutine(attack("attack0"));
+                StopCoroutine(attack("Attack1Trigger"));
+                StartCoroutine(attack("Attack1Trigger"));
             }            
         }
         if (OVRInput.GetDown(OVRInput.RawButton.RIndexTrigger))
         {
             if (!attacking)
             {
-                StopCoroutine(attack("attack1"));
-                StartCoroutine(attack("attack1"));
+                StopCoroutine(attack("Attack2Trigger"));
+                StartCoroutine(attack("Attack2Trigger"));
             }
         }
     }
@@ -132,14 +134,12 @@ public class ControllableUnit : MonoBehaviour, IUnit
     IEnumerator attack(string attackName)
     {
         attacking = true;
-        anim.SetBool("Attacking", true);
-        anim.Play(attackName);
+        anim.SetTrigger(attackName);
         moveSpeed = attackWalkSpeed;
 
-        // Wait another second before attacking again
-        yield return new WaitForSeconds(0.5f);
+        // Wait for a cooldown before attacking again
+        yield return new WaitForSeconds(attackCooldown);
         moveSpeed = walkSpeed;
-        anim.SetBool("Attacking", false);
         attacking = false;
     }
 
