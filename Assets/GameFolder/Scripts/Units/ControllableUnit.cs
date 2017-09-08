@@ -79,33 +79,60 @@ public class ControllableUnit : MonoBehaviour, IUnit
     {
         // Take in input from the player
         Vector2 leftInput = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick);
+        Vector2 rightInput = OVRInput.Get(OVRInput.Axis2D.SecondaryThumbstick);
 
+        // Find the look vector of the unit
+        Vector3 lookVector = new Vector3(rightInput.x, 0.0f, rightInput.y);
         // Find the movement vector of the unit
         Vector3 movementVector = new Vector3(leftInput.x, 0.0f, leftInput.y);
-        float magnitude = movementVector.magnitude;
-        anim.SetFloat("MoveSpeed", magnitude);
-        //Debug.Log("Magnitude: " + magnitude);
-        // Don't do anything if we haven't received any input
+
+        // Figure out where the unit should look
+        if (lookVector == Vector3.zero)
+        {
+            anim.SetBool("Strafing", false);
+            if (movementVector == Vector3.zero)
+            {
+                lookVector = transform.forward;
+            }
+            else
+            {
+                lookVector = playerCamera.transform.rotation * movementVector;
+            }
+        }
+        else
+        {
+            anim.SetBool("Strafing", true);
+            lookVector = playerCamera.transform.rotation * lookVector;
+        }
+
+        lookVector.y = 0.0f;
+
+        // Set the player's move speed
+        float movementMagnitude = movementVector.magnitude;
+        anim.SetFloat("MoveSpeed", movementMagnitude);
+        //playerCamera.transform.rotation
+        movementVector = playerCamera.transform.rotation * movementVector;
+        movementVector.y = 0.0f;
+        movementVector = Quaternion.Inverse(transform.rotation) * movementVector;
+        anim.SetFloat("MoveX", movementVector.x);
+        anim.SetFloat("MoveY", movementVector.z);
+        // Don't move if the player isn't using the left stick
         if (movementVector == Vector3.zero)
         {
             anim.SetBool("Moving", false);
-            return;
         }
-        // Rotate the movement vector based on the camera rotation
-        movementVector = playerCamera.transform.rotation * movementVector;
-        movementVector.y = 0.0f;
+        else
+        {
+            anim.SetBool("Moving", true);
+        }
+
         // Rotate the unit
-        Quaternion targetRot = Quaternion.LookRotation(movementVector);
+        Quaternion targetRot = Quaternion.LookRotation(lookVector);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * turnSpeed);
 
         // Move the unit if it's sufficiently pointed in the direction of its intended movement
         float rotationAngle = Quaternion.Angle(targetRot, transform.rotation);
-        if (rotationAngle <= movementAngle)
-        {
-            anim.SetBool("Moving", true);
-            //controller.Move(movementVector * moveSpeed * Time.deltaTime);
-        }
-        else
+        if (rotationAngle > movementAngle)
         {
             anim.SetBool("Moving", false);
         }
@@ -183,7 +210,6 @@ public class ControllableUnit : MonoBehaviour, IUnit
     public void dealDamage(int damageToDeal)
     {
         currentHealth -= damageToDeal;
-        Debug.Log("taking damage, current health: " + currentHealth);
 
         if (currentHealth <= 0)
         {
