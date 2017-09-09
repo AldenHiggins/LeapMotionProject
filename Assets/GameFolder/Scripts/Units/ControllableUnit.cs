@@ -62,8 +62,8 @@ public class ControllableUnit : MonoBehaviour, IUnit
     // Update is called once per frame
     void Update()
     {
-        // If this isn't currently being controlled ignore input
-        if (!isControlled)
+        // If this isn't currently being controlled or is dead ignore input
+        if (!isControlled || isDying)
         {
             // Stop movement
             anim.SetBool("Moving", false);
@@ -110,7 +110,6 @@ public class ControllableUnit : MonoBehaviour, IUnit
         // Set the player's move speed
         float movementMagnitude = movementVector.magnitude;
         anim.SetFloat("MoveSpeed", movementMagnitude);
-        //playerCamera.transform.rotation
         movementVector = playerCamera.transform.rotation * movementVector;
         movementVector.y = 0.0f;
         movementVector = Quaternion.Inverse(transform.rotation) * movementVector;
