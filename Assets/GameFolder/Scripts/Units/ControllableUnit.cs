@@ -251,4 +251,7 @@ public class ControllableUnit : MonoBehaviour, IUnit
     {
         return gameObject;
     }
+
+    public void FootR() { }
+    public void FootL() { }
 }
