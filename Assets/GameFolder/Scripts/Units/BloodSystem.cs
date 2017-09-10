@@ -6,10 +6,7 @@ public class BloodSystem : MonoBehaviour
 {
     private IUnit parentUnit;
 
-    [SerializeField]
-    private GameObject bloodParticle;
-
-    private ParticleSystem subParticle;
+    private int currentParticle;
 
     // Use this for initialization
     void Start ()
@@ -22,14 +19,17 @@ public class BloodSystem : MonoBehaviour
         }
 
         parentUnit.installDamageListener(onDamageTaken);
-
-        subParticle = transform.GetChild(0).gameObject.GetComponent<ParticleSystem>();
     }
 
     void onDamageTaken(int damageTaken)
     {
-        Debug.Log("Simulating blood!");
-        subParticle.Stop();
-        subParticle.Play();
+        transform.GetChild(currentParticle).gameObject.SetActive(false);
+        transform.GetChild(currentParticle).gameObject.SetActive(true);
+
+        currentParticle++;
+        if (currentParticle >= transform.childCount)
+        {
+            currentParticle = 0;
+        }
     }
 }
