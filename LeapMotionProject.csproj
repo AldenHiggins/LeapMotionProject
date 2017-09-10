@@ -106,6 +106,7 @@
     <Compile Include="Assets\GameFolder\Scripts\Player\VRControls.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\Ally.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\AUnit.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\Units\BloodSystem.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\ControllableUnit.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\Enemy.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\EnemySpawner.cs" />
@@ -447,6 +448,7 @@
     <None Include="Assets\SampleScenes\UI\Pointers - Gaze Click\Resources\GazeInteraction.txt" />
     <None Include="Assets\SampleScenes\UI\Pointers\Resources\Pointers.txt" />
     <None Include="Assets\SampleScenes\UI\TrackerFrusta\Resources\TrackerFrusta.txt" />
+    <None Include="Assets\SimpleFX\Materials\UnlitVertexColour_Alpha.shader" />
     <None Include="Assets\SimpleFantasy\ReadMe.txt" />
     <None Include="Assets\SimpleSky\ReadMe.txt" />
     <None Include="Assets\Standard Assets\Characters\ThirdPersonCharacter\ThirdPersonCharacterGuidelines.txt" />
