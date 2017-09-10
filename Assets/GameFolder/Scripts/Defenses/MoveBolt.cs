@@ -73,7 +73,7 @@ public class MoveBolt : MonoBehaviour
 		// Collide with an enemy
 		else if (enemy != null)
 		{
-			enemy.dealDamage(damage);
+			enemy.dealDamage(damage, Vector3.zero);
 			Destroy (gameObject);
 		}
 		else

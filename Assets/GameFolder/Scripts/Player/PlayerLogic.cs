@@ -38,7 +38,7 @@ public class PlayerLogic : MonoBehaviour, IUnit
         }
     }
 
-    public void dealDamage(int damageToDeal)
+    public void dealDamage(int damageToDeal, Vector3 damageDirection)
     {
         health -= damageToDeal;
 
@@ -52,7 +52,7 @@ public class PlayerLogic : MonoBehaviour, IUnit
     public void installDeathListener(Action onDeathCallback)
     { }
 
-    public void installDamageListener(Action<int> onDamageCallback)
+    public void installDamageListener(Action<int, Vector3> onDamageCallback)
     { }
 
     public int getMaxHealth()

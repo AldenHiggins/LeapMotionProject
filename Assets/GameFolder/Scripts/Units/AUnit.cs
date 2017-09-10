@@ -40,7 +40,7 @@ public abstract class AUnit : MonoBehaviour, IUnit
     protected bool isDying = false;
     // DELEGATES
     private Action onDeath;
-    private Action<int> onDamageTaken;
+    private Action<int, Vector3> onDamageTaken;
 
     // Use this for initialization
     void Start()
@@ -207,7 +207,7 @@ public abstract class AUnit : MonoBehaviour, IUnit
                 yield break;
             }
 
-            target.dealDamage(attackDamage);
+            target.dealDamage(attackDamage, distance.normalized);
         }
 
         // Wait another second before attacking again
@@ -215,13 +215,13 @@ public abstract class AUnit : MonoBehaviour, IUnit
         attacking = false;
     }
 
-    public void dealDamage(int damage)
+    public void dealDamage(int damage, Vector3 damageVector)
     {
         health -= damage;
 
         if (onDamageTaken != null)
         {
-            onDamageTaken(damage);
+            onDamageTaken(damage, damageVector);
         }
 
         if (health > 0)
@@ -290,7 +290,7 @@ public abstract class AUnit : MonoBehaviour, IUnit
         onDeath += onDeathCallback;
     }
 
-    public void installDamageListener(Action<int> onDamageCallback)
+    public void installDamageListener(Action<int, Vector3> onDamageCallback)
     {
         onDamageTaken += onDamageCallback;
     }

@@ -5,13 +5,13 @@ public interface IUnit
 {
     void installDeathListener(Action onDeathCallback);
 
-    void installDamageListener(Action<int> onDamageCallback);
+    void installDamageListener(Action<int, Vector3> onDamageCallback);
 
     int getMaxHealth();
 
     int getCurrentHealth();
 
-	void dealDamage(int damageToDeal);
+	void dealDamage(int damageToDeal, Vector3 damageDirection);
 
     bool isUnitDying();
 

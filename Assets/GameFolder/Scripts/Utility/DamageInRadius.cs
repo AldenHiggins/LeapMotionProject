@@ -46,7 +46,8 @@ public class DamageInRadius : MonoBehaviour
                     }
                     else
                     {
-                        enemy.dealDamage(damage);
+                        Vector3 damageVector = enemy.getGameObject().transform.position - transform.position;
+                        enemy.dealDamage(damage, damageVector.normalized);
                     }					
 				}
 			}

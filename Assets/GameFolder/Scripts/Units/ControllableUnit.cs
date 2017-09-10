@@ -46,7 +46,7 @@ public class ControllableUnit : MonoBehaviour, IUnit
     private bool isControlled;
     // DELEGATES
     private Action onDeath;
-    private Action<int> onDamageTaken;
+    private Action<int, Vector3> onDamageTaken;
 
     // Use this for initialization
     void Start()
@@ -190,7 +190,8 @@ public class ControllableUnit : MonoBehaviour, IUnit
             IUnit hitUnit = hits[hitIndex].collider.gameObject.GetComponent<IUnit>();
             if (hitUnit != null)
             {
-                hitUnit.dealDamage(meleeDamage);
+                Vector3 damageVector = hitUnit.getGameObject().transform.position - transform.position;
+                hitUnit.dealDamage(meleeDamage, damageVector.normalized);
             }
         }
     }
@@ -200,7 +201,7 @@ public class ControllableUnit : MonoBehaviour, IUnit
         onDeath += onDeathCallback;
     }
 
-    public void installDamageListener(Action<int> onDamageCallback)
+    public void installDamageListener(Action<int, Vector3> onDamageCallback)
     {
         onDamageTaken += onDamageCallback;
     }
@@ -215,13 +216,13 @@ public class ControllableUnit : MonoBehaviour, IUnit
         return currentHealth;
     }
 
-    public void dealDamage(int damageToDeal)
+    public void dealDamage(int damageToDeal, Vector3 damageDirection)
     {
         currentHealth -= damageToDeal;
 
         if (onDamageTaken != null)
         {
-            onDamageTaken(damageToDeal);
+            onDamageTaken(damageToDeal, damageDirection);
         }
 
         if (currentHealth <= 0)

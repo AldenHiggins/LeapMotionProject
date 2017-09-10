@@ -36,12 +36,12 @@ public class AttackParticle : MonoBehaviour
             return;
         }
 
-        // If we have collided with an enemy deal the appropriate amount of damage
-        foundEnemy.dealDamage(attackDamage);
-
         // Get access to the collision data
         List<ParticleCollisionEvent> collisionEvents = new List<ParticleCollisionEvent>();
         GetComponent<ParticleSystem>().GetCollisionEvents(other, collisionEvents);
+
+        // If we have collided with an enemy deal the appropriate amount of damage
+        foundEnemy.dealDamage(attackDamage, collisionEvents[0].velocity.normalized);
 
         // Spawn an impact particle if necessary
         if (impactParticle != null)

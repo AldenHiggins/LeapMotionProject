@@ -20,7 +20,7 @@ public class HealthBar : MonoBehaviour
         parentUnit.installDeathListener(delegate { Destroy(gameObject); });
     }
 
-    void onDamageTaken(int damageTaken)
+    void onDamageTaken(int damageTaken, Vector3 damageDirection)
     {
         // Get a new scale for our green health bar based on the unit's current health %
         float newScale = (float)parentUnit.getCurrentHealth() / parentUnit.getMaxHealth();

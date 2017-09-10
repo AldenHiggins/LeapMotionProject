@@ -15,7 +15,8 @@ public class DamageOnCollision : MonoBehaviour
 
 		if (enemy != null && !enemy.isUnitAlly())
 		{
-			enemy.dealDamage(damageAmount);
+            Vector3 damageVector = enemy.getGameObject().transform.position - transform.position;
+			enemy.dealDamage(damageAmount, damageVector.normalized);
 		}
 	}
 }

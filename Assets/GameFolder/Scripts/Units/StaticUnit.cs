@@ -14,7 +14,7 @@ public class StaticUnit : MonoBehaviour, IUnit
 
     // DELEGATES
     private Action onDeath;
-    private Action<int> onDamageTaken;
+    private Action<int, Vector3> onDamageTaken;
 
     // Use this for initialization
     void Start()
@@ -22,13 +22,13 @@ public class StaticUnit : MonoBehaviour, IUnit
         currentHealth = startingHealth;
     }
 
-    public void dealDamage(int damageToDeal)
+    public void dealDamage(int damageToDeal, Vector3 damageDirection)
     {
         currentHealth -= damageToDeal;
 
         if (onDamageTaken != null)
         {
-            onDamageTaken(damageToDeal);
+            onDamageTaken(damageToDeal, damageDirection);
         }
 
         if (currentHealth <= 0)
@@ -46,7 +46,7 @@ public class StaticUnit : MonoBehaviour, IUnit
         onDeath += onDeathCallback;
     }
 
-    public void installDamageListener(Action<int> onDamageCallback)
+    public void installDamageListener(Action<int, Vector3> onDamageCallback)
     {
         onDamageTaken += onDamageCallback;
     }
