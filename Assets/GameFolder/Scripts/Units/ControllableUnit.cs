@@ -38,6 +38,8 @@ public class ControllableUnit : MonoBehaviour, IUnit
     private GameObject meleeHitbox;
     [SerializeField]
     private int meleeDamage = 10;
+    [SerializeField]
+    private GameObject meleeParticle;
     // PLAYER CAMERA
     private GameObject playerCamera;
     // IS ALIVE
@@ -176,11 +178,16 @@ public class ControllableUnit : MonoBehaviour, IUnit
     public void fireFireball()
     {
         GameObject newFireball = Instantiate(fireBall, fireBallTransform.transform.position, fireBallTransform.transform.rotation);
+        newFireball.GetComponent<Rigidbody>().AddForce(newFireball.transform.forward * 1000.0f);
         newFireball.transform.parent = GetObjects.getAttackParticleContainer();
     }
 
     public void dealMeleeDamage()
     {
+        // Fire the melee particle
+        meleeParticle.SetActive(false);
+        meleeParticle.SetActive(true);
+
         RaycastHit[] hits = Physics.BoxCastAll(meleeHitbox.transform.position, meleeHitbox.transform.localScale, 
             meleeHitbox.transform.forward, meleeHitbox.transform.rotation, meleeHitbox.transform.localScale.z,
             enemySearchLayer);
