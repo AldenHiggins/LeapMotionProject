@@ -42,8 +42,11 @@ public class ControllableUnit : MonoBehaviour, IUnit
     private GameObject playerCamera;
     // IS ALIVE
     private bool isDying;
-    // PLAYER CONTROl
+    // PLAYER CONTROL
     private bool isControlled;
+    // DELEGATES
+    private Action onDeath;
+    private Action<int> onDamageTaken;
 
     // Use this for initialization
     void Start()
@@ -192,9 +195,15 @@ public class ControllableUnit : MonoBehaviour, IUnit
         }
     }
 
-    public void installDeathListener(Action onDeathCallback) { }
+    public void installDeathListener(Action onDeathCallback)
+    {
+        onDeath += onDeathCallback;
+    }
 
-    public void installDamageListener(Action<int> onDamageCallback) { }
+    public void installDamageListener(Action<int> onDamageCallback)
+    {
+        onDamageTaken += onDamageCallback;
+    }
 
     public int getMaxHealth()
     {
@@ -210,9 +219,18 @@ public class ControllableUnit : MonoBehaviour, IUnit
     {
         currentHealth -= damageToDeal;
 
+        if (onDamageTaken != null)
+        {
+            onDamageTaken(damageToDeal);
+        }
+
         if (currentHealth <= 0)
         {
             isDying = true;
+            if (onDeath != null)
+            {
+                onDeath();
+            }
             anim.SetTrigger("DeathTrigger");
         }
     }
