@@ -1213,7 +1213,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.15
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -1338,8 +1338,8 @@ MonoBehaviour:
   bodyDespawnTime: 10
   headshotHeight: 1.5
   enemySearchRadius: 5
-  woundSound: {fileID: 0}
-  killSound: {fileID: 0}
+  woundSound: {fileID: 8300000, guid: c7e2366c7a424b34196cd52618c484be, type: 3}
+  killSound: {fileID: 8300000, guid: f99cb71f0022a4a49b7f6a7e3f8ce0f1, type: 3}
 --- !u!137 &137408172634152714
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
