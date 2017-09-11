@@ -132,6 +132,15 @@
     <Compile Include="Assets\GameFolder\Scripts\Utility\RotateObject.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\UIFollowPlayer.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\WaitToActivateButton.cs" />
+    <Compile Include="Assets\MagicArsenal\Demo\Scripts\MagicButtonScript.cs" />
+    <Compile Include="Assets\MagicArsenal\Demo\Scripts\MagicDragMouseOrbit.cs" />
+    <Compile Include="Assets\MagicArsenal\Demo\Scripts\MagicFireProjectile.cs" />
+    <Compile Include="Assets\MagicArsenal\Demo\Scripts\MagicLoadSceneOnClick.cs" />
+    <Compile Include="Assets\MagicArsenal\Demo\Scripts\MagicLoopScript.cs" />
+    <Compile Include="Assets\MagicArsenal\Demo\Scripts\MagicProjectileScript.cs" />
+    <Compile Include="Assets\MagicArsenal\Effects\Scripts\MagicBeamScript.cs" />
+    <Compile Include="Assets\MagicArsenal\Effects\Scripts\MagicLightFade.cs" />
+    <Compile Include="Assets\MagicArsenal\Effects\Scripts\MagicRotation.cs" />
     <Compile Include="Assets\OVR\Scripts\OVRBoundary.cs" />
     <Compile Include="Assets\OVR\Scripts\OVRCameraRig.cs" />
     <Compile Include="Assets\OVR\Scripts\OVRCommon.cs" />
@@ -319,6 +328,7 @@
     <None Include="Assets\GameFolder\Shaders\WavingGrass.shader" />
     <None Include="Assets\GameFolder\Textures\Skyboxes\_skybox info.txt" />
     <None Include="Assets\LICENSE.txt" />
+    <None Include="Assets\MagicArsenal\MagicArsenal - ReadMe.txt" />
     <None Include="Assets\OVR\Editor\AndroidManifest.OVRSubmission.xml" />
     <None Include="Assets\OVR\Plugins\placeholder.txt" />
     <None Include="Assets\OVR\Resources\Alpha Premultiply.shader" />
@@ -456,6 +466,16 @@
     <None Include="Assets\Standard Assets\Effects\Projectors\Guidelines.txt" />
     <None Include="Assets\Standard Assets\Effects\Projectors\Shaders\ProjectorLight.shader" />
     <None Include="Assets\Standard Assets\Effects\Projectors\Shaders\ProjectorMultiply.shader" />
+    <None Include="Assets\Universal Sound FX\#Game Genre References\8bit and Retro.txt" />
+    <None Include="Assets\Universal Sound FX\#Game Genre References\Fighting.txt" />
+    <None Include="Assets\Universal Sound FX\#Game Genre References\First Person Shooter (FPS).txt" />
+    <None Include="Assets\Universal Sound FX\#Game Genre References\Physics.txt" />
+    <None Include="Assets\Universal Sound FX\#Game Genre References\Platform.txt" />
+    <None Include="Assets\Universal Sound FX\#Game Genre References\Puzzle.txt" />
+    <None Include="Assets\Universal Sound FX\#Game Genre References\Real Time Stategy (RTS) Medieval.txt" />
+    <None Include="Assets\Universal Sound FX\#Game Genre References\Real Time Stategy (RTS) Sci-Fi.txt" />
+    <None Include="Assets\Universal Sound FX\#Game Genre References\Shoot em Up.txt" />
+    <None Include="Assets\Universal Sound FX\version_history.txt" />
     <None Include="Assets\third_party_notices.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
