@@ -10,6 +10,8 @@ public class ControllableUnit : MonoBehaviour, IUnit
     private CharacterController controller;
     // ANIMATOR
     private Animator anim;
+    // AUDIO SOURCE
+    private AudioSource source;
     // HEALTH
     [SerializeField]
     private int startingHealth = 100;
@@ -40,6 +42,8 @@ public class ControllableUnit : MonoBehaviour, IUnit
     private int meleeDamage = 10;
     [SerializeField]
     private GameObject meleeParticle;
+    [SerializeField]
+    private AudioClip meleeNoise;
     // PLAYER CAMERA
     private GameObject playerCamera;
     // IS ALIVE
@@ -56,6 +60,7 @@ public class ControllableUnit : MonoBehaviour, IUnit
         currentHealth = startingHealth;
         controller = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
+        source = GetComponent<AudioSource>();
         playerCamera = GetObjects.getCamera();
         moveSpeed = walkSpeed;
         isControlled = true;
@@ -187,6 +192,9 @@ public class ControllableUnit : MonoBehaviour, IUnit
         // Fire the melee particle
         meleeParticle.SetActive(false);
         meleeParticle.SetActive(true);
+
+        // Play the melee sound
+        source.PlayOneShot(meleeNoise);
 
         RaycastHit[] hits = Physics.BoxCastAll(meleeHitbox.transform.position, meleeHitbox.transform.localScale, 
             meleeHitbox.transform.forward, meleeHitbox.transform.rotation, meleeHitbox.transform.localScale.z,
