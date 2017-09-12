@@ -183,7 +183,6 @@ public class ControllableUnit : MonoBehaviour, IUnit
     public void fireFireball()
     {
         GameObject newFireball = Instantiate(fireBall, fireBallTransform.transform.position, fireBallTransform.transform.rotation);
-        newFireball.GetComponent<Rigidbody>().AddForce(newFireball.transform.forward * 1000.0f);
         newFireball.transform.parent = GetObjects.getAttackParticleContainer();
     }
 

@@ -6,15 +6,29 @@ public class AttackParticle : MonoBehaviour
 {
     [SerializeField]
     private GameObject impactParticle;
+    [SerializeField]
+    private GameObject muzzleParticle;
 
     [SerializeField]
     private int attackDamage = 20;
 
+    [SerializeField]
+    private float startingForce = 1000.0f;
+
 	// Use this for initialization
 	void Start ()
     {
-	
-	}
+        // Start out by adding force to the particle in its starting forward direction
+        GetComponent<Rigidbody>().AddForce(transform.forward * startingForce);
+
+        // Create a muzzle particle if applicable
+        if (muzzleParticle)
+        {
+            muzzleParticle = Instantiate(muzzleParticle, transform.position, transform.rotation) as GameObject;
+            muzzleParticle.transform.parent = GetObjects.getAttackParticleContainer();
+            Destroy(muzzleParticle, 1.5f); // Lifetime of muzzle effect.
+        }
+    }
 	
 	// Update is called once per frame
 	void Update ()
@@ -22,31 +36,21 @@ public class AttackParticle : MonoBehaviour
 	
 	}
 
-	void OnParticleCollision(GameObject other)
+    void OnCollisionEnter(Collision hit)
     {
-		Rigidbody body = other.GetComponent<Rigidbody>();
-        if (body == null)
+        GameObject other = hit.gameObject;
+
+        // Deal damage if we hit an enemy
+        IUnit foundEnemy = other.GetComponent<IUnit>();
+        if (foundEnemy != null)
         {
-            return;
+            foundEnemy.dealDamage(attackDamage, hit.impulse.normalized);
         }
-
-        IUnit foundEnemy = body.gameObject.GetComponent<IUnit>();
-        if (foundEnemy == null)
-        {
-            return;
-        }
-
-        // Get access to the collision data
-        List<ParticleCollisionEvent> collisionEvents = new List<ParticleCollisionEvent>();
-        GetComponent<ParticleSystem>().GetCollisionEvents(other, collisionEvents);
-
-        // If we have collided with an enemy deal the appropriate amount of damage
-        foundEnemy.dealDamage(attackDamage, collisionEvents[0].velocity.normalized);
 
         // Spawn an impact particle if necessary
         if (impactParticle != null)
         {
-            GameObject newImpactParticle = Instantiate(impactParticle, collisionEvents[0].intersection, Quaternion.identity);
+            GameObject newImpactParticle = Instantiate(impactParticle, hit.contacts[0].point, Quaternion.identity);
             newImpactParticle.transform.parent = GetObjects.getAttackParticleContainer();
             newImpactParticle.SetActive(true);
         }
