@@ -87,6 +87,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Cross Section Shader\Examples\Scripts\PositionController.cs" />
+    <Compile Include="Assets\Cross Section Shader\Examples\Scripts\RotationController.cs" />
+    <Compile Include="Assets\Cross Section Shader\Examples\Scripts\SliderValueToText.cs" />
+    <Compile Include="Assets\Cross Section Shader\Scripts\ArcBall.cs" />
+    <Compile Include="Assets\Cross Section Shader\Scripts\GenericThreePlanesCuttingController.cs" />
+    <Compile Include="Assets\Cross Section Shader\Scripts\OnePlaneCuttingController.cs" />
+    <Compile Include="Assets\Cross Section Shader\Scripts\ThreeAAPlanesCuttingController.cs" />
     <Compile Include="Assets\GameFolder\Models\Enemies\Zombie_0_1\Script\PlayGUI.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Attacks\AAttack.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Attacks\AttackParticle.cs" />
@@ -304,6 +311,12 @@
     <Compile Include="Assets\Warrior Pack Bundle 1 FREE\Code\WarriorAnimationDemoFREE.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Cross Section Shader\Shaders\DoubleFaceUnlit.shader" />
+    <None Include="Assets\Cross Section Shader\Shaders\GenericThreePlanesBSP.shader" />
+    <None Include="Assets\Cross Section Shader\Shaders\OnePlaneBSP.shader" />
+    <None Include="Assets\Cross Section Shader\Shaders\StandardDoubleFace.shader" />
+    <None Include="Assets\Cross Section Shader\Shaders\StincelledUnlitTexture.shader" />
+    <None Include="Assets\Cross Section Shader\Shaders\ThreeAAPlanesBSP.shader" />
     <None Include="Assets\GameFolder\Models\Enemies\Zombie_0_1\AnimationFrameTable\Zombie_0_1.txt" />
     <None Include="Assets\GameFolder\Models\Environment\Water\Shaders\FXWater4Advanced.shader" />
     <None Include="Assets\GameFolder\Models\Environment\Water\Shaders\FXWater4Simple.shader" />
