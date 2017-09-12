@@ -133,6 +133,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\crossSection\Editor\CrossSectionStdShaderGUI.cs" />
+    <Compile Include="Assets\crossSection\Editor\StandardShaderGUI.cs" />
     <Compile Include="Assets\GameFolder\Shaders\Editor\TerrainSurfaceGUI.cs" />
     <Compile Include="Assets\OVR\Editor\OVRBuild.cs" />
     <Compile Include="Assets\OVR\Editor\OVRManifestPreprocessor.cs" />
@@ -327,6 +329,53 @@
     <None Include="Assets\Universal Sound FX\#Game Genre References\Real Time Stategy (RTS) Sci-Fi.txt" />
     <None Include="Assets\Universal Sound FX\#Game Genre References\Shoot em Up.txt" />
     <None Include="Assets\Universal Sound FX\version_history.txt" />
+    <None Include="Assets\crossSection\AdvGizmo\Unlit-Color-Gizmo.shader" />
+    <None Include="Assets\crossSection\Resources\CS_Shaders\CGIncludes\UnityStandardCoreForward_CS.cginc" />
+    <None Include="Assets\crossSection\Resources\CS_Shaders\CGIncludes\section_clipping_CS.cginc" />
+    <None Include="Assets\crossSection\Resources\CS_Shaders\CGIncludes\standard_CS.cginc" />
+    <None Include="Assets\crossSection\Resources\CS_Shaders\CGIncludes\standard_shadow_CS.cginc" />
+    <None Include="Assets\crossSection\Resources\CS_Shaders\ClippingBoxGlassStainedBumpDistort.shader" />
+    <None Include="Assets\crossSection\Resources\CS_Shaders\ClippingBoxStandard.shader" />
+    <None Include="Assets\crossSection\Resources\CS_Shaders\ClippingBoxStandardSpecular.shader" />
+    <None Include="Assets\crossSection\Resources\CS_Shaders\ClippingBoxSurfaceStd.shader" />
+    <None Include="Assets\crossSection\Resources\CS_Shaders\ClippingCornerStandard.shader" />
+    <None Include="Assets\crossSection\Resources\CS_Shaders\ClippingCornerStandardSpecular.shader" />
+    <None Include="Assets\crossSection\Resources\CS_Shaders\ClippingCornerSurfaceStd.shader" />
+    <None Include="Assets\crossSection\Resources\CS_Shaders\CrossSection-Unlit-Color.shader" />
+    <None Include="Assets\crossSection\Resources\CS_Shaders\CrossSection-Unlit-Normal.shader" />
+    <None Include="Assets\crossSection\Resources\CS_Shaders\CrossSectionBD.shader" />
+    <None Include="Assets\crossSection\Resources\CS_Shaders\CrossSectionBS.shader" />
+    <None Include="Assets\crossSection\Resources\CS_Shaders\CrossSectionD.shader" />
+    <None Include="Assets\crossSection\Resources\CS_Shaders\CrossSectionDec.shader" />
+    <None Include="Assets\crossSection\Resources\CS_Shaders\CrossSectionGlassStainedBumpDistort.shader" />
+    <None Include="Assets\crossSection\Resources\CS_Shaders\CrossSectionGlassStainedBumpDistortWS.shader" />
+    <None Include="Assets\crossSection\Resources\CS_Shaders\CrossSectionLm-B.shader" />
+    <None Include="Assets\crossSection\Resources\CS_Shaders\CrossSectionLm-D.shader" />
+    <None Include="Assets\crossSection\Resources\CS_Shaders\CrossSectionRD.shader" />
+    <None Include="Assets\crossSection\Resources\CS_Shaders\CrossSectionRS.shader" />
+    <None Include="Assets\crossSection\Resources\CS_Shaders\CrossSectionS.shader" />
+    <None Include="Assets\crossSection\Resources\CS_Shaders\CrossSectionStandard.shader" />
+    <None Include="Assets\crossSection\Resources\CS_Shaders\CrossSectionStandardSpecular.shader" />
+    <None Include="Assets\crossSection\Resources\CS_Shaders\CrossSectionSurfaceShader.shader" />
+    <None Include="Assets\crossSection\Resources\CS_Shaders\CrossSectionSurfaceShaderMetal.shader" />
+    <None Include="Assets\crossSection\Resources\CS_Shaders\CrossSectionSurfaceShaderMetalBumped.shader" />
+    <None Include="Assets\crossSection\Resources\CS_Shaders\CrossSectionTBS.shader" />
+    <None Include="Assets\crossSection\Resources\CS_Shaders\CrossSectionTCBS.shader" />
+    <None Include="Assets\crossSection\Resources\CS_Shaders\CrossSectionTD.shader" />
+    <None Include="Assets\crossSection\Resources\CS_Shaders\CrossSectionTS.shader" />
+    <None Include="Assets\crossSection\Resources\CS_Shaders\CrossSectionVC.shader" />
+    <None Include="Assets\crossSection\ShadersOther\GlassStainedBumpDistort.shader" />
+    <None Include="Assets\crossSection\ShadersOther\GlassStainedBumpDistortWS.shader" />
+    <None Include="Assets\crossSection\ShadersOther\Standard.shader" />
+    <None Include="Assets\crossSection\ShadersOther\StandardDouble.shader" />
+    <None Include="Assets\crossSection\ShadersOther\StandardSpecular.shader" />
+    <None Include="Assets\crossSection\ShadersOther\SurfaceShader.shader" />
+    <None Include="Assets\crossSection\ShadersOther\SurfaceShaderMetal.shader" />
+    <None Include="Assets\crossSection\ShadersOther\SurfaceShaderMetalBumped.shader" />
+    <None Include="Assets\crossSection\ShadersOther\Unlit-Color.shader" />
+    <None Include="Assets\crossSection\ShadersOther\Unlit-Normal.shader" />
+    <None Include="Assets\crossSection\ShadersOther\Unlit-NormalTinted.shader" />
+    <None Include="Assets\crossSection\capped_setups\StencilledTexture.shader" />
     <None Include="Assets\third_party_notices.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
