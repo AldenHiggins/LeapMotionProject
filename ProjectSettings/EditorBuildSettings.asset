@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/GameFolder/Scenes/TableMovingScene1CombinedMeshes.unity
+    path: Assets/GameFolder/Scenes/TableMovingScene1.unity
     guid: 8f0b4deea1a5fdd4aa370def5e9ef473
   - enabled: 1
     path: Assets/GameFolder/Scenes/RoomLightMap.unity
