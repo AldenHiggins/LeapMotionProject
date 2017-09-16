@@ -125,6 +125,13 @@ public static class GetObjects
         return returnGrid;
     }
 
+    public static LevelBounds GetLevelBounds()
+    {
+        LevelBounds returnBounds = null;
+        findFirstObjectOfType(ref returnBounds, getRootTransform());
+        return returnBounds;
+    }
+
     // Try and find an object with a specific name ONLY within the direct children of the supplied transform
     public static void findNameInChildren(string name, Transform findObjectInThis, ref GameObject foundObject)
     {
