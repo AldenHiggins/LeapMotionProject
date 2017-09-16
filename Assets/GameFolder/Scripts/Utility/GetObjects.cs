@@ -18,6 +18,13 @@ public static class GetObjects
         return returnPlayer;
     }
 
+    public static ControllableUnit getControllableUnit()
+    {
+        ControllableUnit returnUnit = null;
+        findFirstObjectOfType(ref returnUnit, getRootTransform());
+        return returnUnit;
+    }
+
     public static Transform getRootTransform()
     {
         GameObject[] root = GameObject.FindGameObjectsWithTag("Root");

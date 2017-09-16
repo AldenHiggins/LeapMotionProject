@@ -14,11 +14,20 @@ public class DragWorldAttack : AAttack
 
     private LevelBounds bounds;
 
+    private ControllableUnit playerCharacter;
+
+    [SerializeField]
+    private float tableXDistance = 52.0f;
+
+    [SerializeField]
+    private float tableZDistance = 35.0f;
+
     void Start()
     {
         controllerStartPosition = Vector3.zero;
         objectToMove = GetObjects.getMovingObjectsContainer();
         bounds = GetObjects.GetLevelBounds();
+        playerCharacter = GetObjects.getControllableUnit();
     }
 
     public override void inactiveFunction() { }
@@ -44,6 +53,12 @@ public class DragWorldAttack : AAttack
         // Clamp the x and z to prevent the user from going outside the level bounds
         moveVector.x = Mathf.Clamp(moveVector.x, bounds.minBounds.x, bounds.maxBounds.x);
         moveVector.z = Mathf.Clamp(moveVector.z, bounds.minBounds.z, bounds.maxBounds.z);
+
+        // Clamp the x and z so we don't lose sight of the player's character
+        Vector3 playerPos = playerCharacter.transform.position;
+        moveVector.x = Mathf.Clamp(moveVector.x, playerPos.x - tableXDistance, playerPos.x + tableXDistance);
+        moveVector.z = Mathf.Clamp(moveVector.z, playerPos.z - tableZDistance, playerPos.z + tableZDistance);
+
         objectToMove.transform.position = moveVector;
     }
 }
