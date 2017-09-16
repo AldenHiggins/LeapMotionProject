@@ -1029,7 +1029,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1109436247200236}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 24.5, y: 0, z: -18.3}
+  m_LocalPosition: {x: -6.1, y: 0, z: 2.9}
   m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
   m_Children:
   - {fileID: 4754043174439328}
@@ -1367,7 +1367,7 @@ MonoBehaviour:
   attackWalkSpeed: 2
   turnSpeed: 5
   movementAngle: 45
-  fireBall: {fileID: 100000, guid: 090a6f230c97fac4694506851289e3aa, type: 2}
+  fireBall: {fileID: 1372007776742328, guid: d0e96d4f42d47c24491ebad8026f91d8, type: 2}
   fireBallTransform: {fileID: 1302268893530980}
   meleeHitbox: {fileID: 1134080184220416}
   meleeDamage: 10
