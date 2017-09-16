@@ -19,9 +19,9 @@ public class Enemy : AUnit
         {
             target = newTarget;
         }
-        else if (target == null)
-        {
-            target = goalPosition.GetComponent<IUnit>();
-        }
+        //else if (target == null)
+        //{
+        //    target = goalPosition.GetComponent<IUnit>();
+        //}
     }
 }
