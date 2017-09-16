@@ -16,9 +16,17 @@ public class VRControls : MonoBehaviour
     [SerializeField]
     private AAttack fireballAttack;
 
+    [SerializeField]
+    private AAttack handTriggerAttack;
+
     // Keep track of the current update function and switch it out as the game switches state
     private delegate void UpdateFunction();
     private UpdateFunction currentUpdate;
+    private UpdateFunction alternateUpdate;
+
+    // Control states
+    private bool rHandTriggerDown;
+    private bool lHandTriggerDown;
 
     // Use this for initialization
     void Start ()
@@ -30,6 +38,7 @@ public class VRControls : MonoBehaviour
         placeDefenseAttack = Instantiate(placeDefenseAttack.gameObject, GetObjects.getAttackContainer()).GetComponent<AAttack>();
         switchDefenseAttack = Instantiate(switchDefenseAttack.gameObject, GetObjects.getAttackContainer()).GetComponent<AAttack>();
         fireballAttack = Instantiate(fireballAttack.gameObject, GetObjects.getAttackContainer()).GetComponent<AAttack>();
+        handTriggerAttack = Instantiate(handTriggerAttack.gameObject, GetObjects.getAttackContainer()).GetComponent<AAttack>();
 
         // Install our state-switching listeners
         EventManager.StartListening(GameEvents.DefensivePhaseStart, delegate() { currentUpdate = defensiveUpdate; });
@@ -37,6 +46,9 @@ public class VRControls : MonoBehaviour
 
         // Start by waiting for input
         currentUpdate = waitForStartInputUpdate;
+
+        // Always check the hand triggers
+        alternateUpdate = checkHandTriggersUpdate;
     }
 
     void offensiveUpdate()
@@ -78,6 +90,25 @@ public class VRControls : MonoBehaviour
         }
     }
 
+    void checkHandTriggersUpdate()
+    {
+        // Check if the user wants to switch the defense they're placing
+        if (OVRInput.GetDown(OVRInput.RawButton.RHandTrigger))
+        {
+            rHandTriggerDown = true;
+        }
+        else if (OVRInput.GetUp(OVRInput.RawButton.RHandTrigger))
+        {
+            rHandTriggerDown = false;
+            handTriggerAttack.releaseFunction(OVRInput.Controller.RTouch);
+        }
+
+        if (rHandTriggerDown)
+        {
+            handTriggerAttack.holdFunction(OVRInput.Controller.RTouch);
+        }
+    }
+
     void waitForStartInputUpdate()
     {
         // Wait for input to start the game
@@ -91,5 +122,6 @@ public class VRControls : MonoBehaviour
     void Update ()
     {
         currentUpdate();
+        alternateUpdate();
 	}
 }

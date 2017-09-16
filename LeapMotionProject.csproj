@@ -127,6 +127,7 @@
     <Compile Include="Assets\GameFolder\Models\Enemies\Zombie_0_1\Script\PlayGUI.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Attacks\AAttack.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Attacks\AttackParticle.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\Attacks\DragWorldAttack.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Attacks\EmptyAttack.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Attacks\FireballAttack.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Attacks\PlaceDefenseAttack.cs" />

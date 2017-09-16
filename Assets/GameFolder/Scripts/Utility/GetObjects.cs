@@ -111,6 +111,13 @@ public static class GetObjects
         return firstFoundOfName.transform;
     }
 
+    public static GameObject getMovingObjectsContainer()
+    {
+        GameObject firstFoundOfName = null;
+        findFirstObjectWithName("MovingObjects", getRootTransform(), ref firstFoundOfName);
+        return firstFoundOfName;
+    }
+
     public static DefensiveGrid getDefensiveGrid()
     {
         DefensiveGrid returnGrid = null;
