@@ -132,6 +132,12 @@
     <Compile Include="Assets\GameFolder\Scripts\Attacks\FireballAttack.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Attacks\PlaceDefenseAttack.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Attacks\SwitchDefenseAttack.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\BehaviorTree\Behavior.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\BehaviorTree\BehaviorTypes.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\BehaviorTree\Leaf.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\BehaviorTree\Parallel.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\BehaviorTree\Selector.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\BehaviorTree\Sequence.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Defenses\DefensiveGrid.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Defenses\DefensiveObject.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Defenses\EmitterBehaviorBallista.cs" />
@@ -142,6 +148,7 @@
     <Compile Include="Assets\GameFolder\Scripts\Player\PlayerLogic.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Player\UILogic.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Player\VRControls.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\Units\AIControllers\TestAIController.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\Ally.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\AUnit.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\BloodSystem.cs" />
