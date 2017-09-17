@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public abstract class AUnit : MonoBehaviour, IUnit
 {
@@ -26,6 +27,12 @@ public abstract class AUnit : MonoBehaviour, IUnit
     // MOVEMENT
     protected UnityEngine.AI.NavMeshAgent agent;
     protected IUnit target;
+    // PATROLLING
+    protected Vector3 targetPosition;
+    [SerializeField]
+    protected float patrolSearchRange = 50.0f;
+    [SerializeField]
+    protected float patrolDestinationReachedRange = 1.0f;
     // ENEMY SEARCH
     protected int enemySearchLayer = (1 << 16) | (1 << 11);
     [SerializeField]
@@ -70,32 +77,112 @@ public abstract class AUnit : MonoBehaviour, IUnit
         // Search for a new target
         findTarget();
 
-        // If the unit has no target idle
+        // If the unit has no target start patrolling
         if (target == null)
         {
-            // Stop running
-            anim.SetBool("Running", false);
-            anim.SetBool("Attacking", false);
-            agent.isStopped = true;
-            return;
-        }
+            // Look for a new patrol position if needed
+            if (targetPosition == Vector3.zero)
+            {
+                Debug.Log("Finding new target position");
+                Vector3 newTargetPosition = Vector3.zero;
+                if (RandomPoint(transform.position, patrolSearchRange, out newTargetPosition))
+                {
+                    // Temporarily make a cube at your target
+                    //GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                    //cube.transform.position = newTargetPosition;
 
-        // Determine if the unit should start attacking its target
-        Vector3 targetVector = target.getGameObject().transform.position - transform.position;
-        targetVector.y = 0.0f;
-        float distanceToTarget = targetVector.magnitude;
+                    targetPosition = newTargetPosition;
+                    anim.SetBool("Running", true);
+                    anim.SetBool("Attacking", false);
 
-        // If the enemy is outside attack range keep coming forward
-        if (distanceToTarget > attackRadius)
-        {
-            moveToTarget();
+                    // Activate our nav mesh agent and start moving to our destination
+                    if (!agent.isActiveAndEnabled)
+                    {
+                        agent.enabled = true;
+                    }
+                    agent.isStopped = false;
+                    agent.SetDestination(targetPosition);
+                }
+            }
+
+            // Check to see if we've reached our target position
+            float distanceToTarget = (targetPosition - transform.position).magnitude;
+            Debug.Log("Distance: " + distanceToTarget);
+            if (distanceToTarget <= patrolDestinationReachedRange)
+            {
+                targetPosition = Vector3.zero;
+            }
+
+            // If we have a target position move towards it
+            if (targetPosition != Vector3.zero)
+            {
+                //Debug.Log("Moving to target");
+                //anim.SetBool("Running", true);
+                //anim.SetBool("Attacking", false);
+
+                //// Activate our nav mesh agent and start moving to our destination
+                //if (!agent.isActiveAndEnabled)
+                //{
+                //    agent.enabled = true;
+                //}
+                //agent.isStopped = false;
+                //agent.SetDestination(targetPosition);
+            }
+            // If not stop running
+            else
+            {
+                anim.SetBool("Running", false);
+                anim.SetBool("Attacking", false);
+                agent.isStopped = true;
+                return;
+            }
         }
-        // If the target is in range attack it
         else
         {
-            attackTarget();
+            // Determine if the unit should start attacking its target
+            Vector3 targetVector = target.getGameObject().transform.position - transform.position;
+            targetVector.y = 0.0f;
+            float distanceToTarget = targetVector.magnitude;
+
+            // If the enemy is outside attack range keep coming forward
+            if (distanceToTarget > attackRadius)
+            {
+                moveToTarget();
+            }
+            // If the target is in range attack it
+            else
+            {
+                attackTarget();
+            }
         }
     }
+
+    bool RandomPoint(Vector3 center, float range, out Vector3 result)
+    {
+        for (int i = 0; i < 30; i++)
+        {
+            Vector3 randomPoint = center + UnityEngine.Random.insideUnitSphere * range;
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(randomPoint, out hit, 1.0f, NavMesh.AllAreas))
+            {
+                result = hit.position;
+                return true;
+            }
+        }
+        result = Vector3.zero;
+        return false;
+    }
+
+    //private void getNewPatrolPosition()
+    //{
+    //    Vector3 newPosition = new Vector3();
+
+    //    if (RandomPoint(transform.position, patrolSearchRange, out newPosition))
+    //    {
+
+    //    }
+
+    //}
 
     protected virtual void moveToTarget()
     {
