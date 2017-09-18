@@ -138,6 +138,7 @@
     <Compile Include="Assets\GameFolder\Scripts\BehaviorTree\Parallel.cs" />
     <Compile Include="Assets\GameFolder\Scripts\BehaviorTree\Selector.cs" />
     <Compile Include="Assets\GameFolder\Scripts\BehaviorTree\Sequence.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\BehaviorTree\StateSequence.cs" />
     <Compile Include="Assets\GameFolder\Scripts\BehaviorTree\Timer.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Defenses\DefensiveGrid.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Defenses\DefensiveObject.cs" />

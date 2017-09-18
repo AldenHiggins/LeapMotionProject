@@ -14,13 +14,11 @@ public class TestAIController : MonoBehaviour
         // Get access to the unit we are controlling
         unit = GetComponent<AUnit>();
 
-        Leaf leaf1 = new Leaf(delegate ()
+        Leaf getPatrolPath = new Leaf(delegate ()
         {
             // If the unit isn't moving on the nav mesh give it a destination
             if (unit.getIsPatrolling() == false)
             {
-                Debug.Log("Finding new patrol position");
-
                 Vector3 newTargetPosition = Vector3.zero;
                 if (unit.RandomPoint(transform.position, unit.getPatrolSearchRange(), out newTargetPosition))
                 {
@@ -36,7 +34,6 @@ public class TestAIController : MonoBehaviour
                     }
 
                     unit.getAnim().SetBool("Running", true);
-                    unit.getAnim().SetBool("Attacking", false);
 
                     // Activate our nav mesh agent and start moving to our destination
                     if (!unit.getAgent().isActiveAndEnabled)
@@ -57,7 +54,7 @@ public class TestAIController : MonoBehaviour
             return BehaviorReturnCode.Success;
         });
 
-        Leaf leaf2 = new Leaf(delegate ()
+        Leaf waitToReachDestination = new Leaf(delegate ()
         {
             if (unit.isMovingNavMesh())
             {
@@ -69,23 +66,30 @@ public class TestAIController : MonoBehaviour
             }
         });
 
-        Leaf leaf3 = new Leaf(delegate ()
+        Leaf stopRunning = new Leaf(delegate ()
         {
             unit.getAnim().SetBool("Running", false);
-            unit.getAnim().SetBool("Attacking", false);
             unit.getAgent().isStopped = true;
             return BehaviorReturnCode.Success;
         });
 
-        Leaf leaf4 = new Leaf(delegate ()
+        Leaf playIdleAnim = new Leaf(delegate ()
+        {
+            unit.getAnim().SetTrigger("PatrolIdleAnim1Trigger");
+            return BehaviorReturnCode.Success;
+        });
+
+        Timer playIdleAnimTimer = new Timer(1.0f, playIdleAnim);
+
+        Leaf stopPatrolling = new Leaf(delegate ()
         {
             unit.setIsPatrolling(false);
             return BehaviorReturnCode.Success;
         });
 
-        Timer stopTimer = new Timer(5.0f, leaf4);
+        Timer stopPatrollingTimer = new Timer(5.0f, stopPatrolling);
 
-        root = new Sequence(leaf1, leaf2, leaf3, stopTimer);
+        root = new StateSequence(getPatrolPath, waitToReachDestination, stopRunning, playIdleAnimTimer, stopPatrollingTimer);
 	}
 	
 	// Update is called once per frame
