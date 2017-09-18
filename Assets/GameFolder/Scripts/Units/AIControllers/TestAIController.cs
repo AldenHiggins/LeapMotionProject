@@ -77,7 +77,15 @@ public class TestAIController : MonoBehaviour
             return BehaviorReturnCode.Success;
         });
 
-        root = new Sequence(leaf1, leaf2, leaf3);
+        Leaf leaf4 = new Leaf(delegate ()
+        {
+            unit.setIsPatrolling(false);
+            return BehaviorReturnCode.Success;
+        });
+
+        Timer stopTimer = new Timer(5.0f, leaf4);
+
+        root = new Sequence(leaf1, leaf2, leaf3, stopTimer);
 	}
 	
 	// Update is called once per frame
