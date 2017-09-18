@@ -79,7 +79,9 @@ public class TestAIController : MonoBehaviour
             return BehaviorReturnCode.Success;
         });
 
-        Timer playIdleAnimTimer = new Timer(1.0f, playIdleAnim);
+        RandomBehavior idleRand = new RandomBehavior(.1f, playIdleAnim);
+
+        Timer playIdleAnimTimer = new Timer(1.0f, idleRand);
 
         Leaf stopPatrolling = new Leaf(delegate ()
         {

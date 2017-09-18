@@ -136,6 +136,7 @@
     <Compile Include="Assets\GameFolder\Scripts\BehaviorTree\BehaviorTypes.cs" />
     <Compile Include="Assets\GameFolder\Scripts\BehaviorTree\Leaf.cs" />
     <Compile Include="Assets\GameFolder\Scripts\BehaviorTree\Parallel.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\BehaviorTree\RandomBehavior.cs" />
     <Compile Include="Assets\GameFolder\Scripts\BehaviorTree\Selector.cs" />
     <Compile Include="Assets\GameFolder\Scripts\BehaviorTree\Sequence.cs" />
     <Compile Include="Assets\GameFolder\Scripts\BehaviorTree\StateSequence.cs" />
