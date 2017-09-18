@@ -33,6 +33,7 @@ public abstract class AUnit : MonoBehaviour, IUnit
     protected float patrolSearchRange = 50.0f;
     [SerializeField]
     protected float patrolDestinationReachedRange = 1.0f;
+    protected bool patrolling;
     // ENEMY SEARCH
     protected int enemySearchLayer = (1 << 16) | (1 << 11);
     [SerializeField]
@@ -74,90 +75,90 @@ public abstract class AUnit : MonoBehaviour, IUnit
             return;
         }
 
-        // Search for a new target
-        findTarget();
+        //// Search for a new target
+        //findTarget();
 
-        // If the unit has no target start patrolling
-        if (target == null)
-        {
-            // Look for a new patrol position if needed
-            if (targetPosition == Vector3.zero)
-            {
-                Debug.Log("Finding new target position");
-                Vector3 newTargetPosition = Vector3.zero;
-                if (RandomPoint(transform.position, patrolSearchRange, out newTargetPosition))
-                {
-                    // Temporarily make a cube at your target
-                    //GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                    //cube.transform.position = newTargetPosition;
+        //// If the unit has no target start patrolling
+        //if (target == null)
+        //{
+        //    // Look for a new patrol position if needed
+        //    if (targetPosition == Vector3.zero)
+        //    {
+        //        Debug.Log("Finding new target position");
+        //        Vector3 newTargetPosition = Vector3.zero;
+        //        if (RandomPoint(transform.position, patrolSearchRange, out newTargetPosition))
+        //        {
+        //            // Temporarily make a cube at your target
+        //            //GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        //            //cube.transform.position = newTargetPosition;
 
-                    targetPosition = newTargetPosition;
-                    anim.SetBool("Running", true);
-                    anim.SetBool("Attacking", false);
+        //            targetPosition = newTargetPosition;
+        //            anim.SetBool("Running", true);
+        //            anim.SetBool("Attacking", false);
 
-                    // Activate our nav mesh agent and start moving to our destination
-                    if (!agent.isActiveAndEnabled)
-                    {
-                        agent.enabled = true;
-                    }
-                    agent.isStopped = false;
-                    agent.SetDestination(targetPosition);
-                }
-            }
+        //            // Activate our nav mesh agent and start moving to our destination
+        //            if (!agent.isActiveAndEnabled)
+        //            {
+        //                agent.enabled = true;
+        //            }
+        //            agent.isStopped = false;
+        //            agent.SetDestination(targetPosition);
+        //        }
+        //    }
 
-            // Check to see if we've reached our target position
-            float distanceToTarget = (targetPosition - transform.position).magnitude;
-            Debug.Log("Distance: " + distanceToTarget);
-            if (distanceToTarget <= patrolDestinationReachedRange)
-            {
-                targetPosition = Vector3.zero;
-            }
+        //    // Check to see if we've reached our target position
+        //    float distanceToTarget = (targetPosition - transform.position).magnitude;
+        //    Debug.Log("Distance: " + distanceToTarget);
+        //    if (distanceToTarget <= patrolDestinationReachedRange)
+        //    {
+        //        targetPosition = Vector3.zero;
+        //    }
 
-            // If we have a target position move towards it
-            if (targetPosition != Vector3.zero)
-            {
-                //Debug.Log("Moving to target");
-                //anim.SetBool("Running", true);
-                //anim.SetBool("Attacking", false);
+        //    // If we have a target position move towards it
+        //    if (targetPosition != Vector3.zero)
+        //    {
+        //        //Debug.Log("Moving to target");
+        //        //anim.SetBool("Running", true);
+        //        //anim.SetBool("Attacking", false);
 
-                //// Activate our nav mesh agent and start moving to our destination
-                //if (!agent.isActiveAndEnabled)
-                //{
-                //    agent.enabled = true;
-                //}
-                //agent.isStopped = false;
-                //agent.SetDestination(targetPosition);
-            }
-            // If not stop running
-            else
-            {
-                anim.SetBool("Running", false);
-                anim.SetBool("Attacking", false);
-                agent.isStopped = true;
-                return;
-            }
-        }
-        else
-        {
-            // Determine if the unit should start attacking its target
-            Vector3 targetVector = target.getGameObject().transform.position - transform.position;
-            targetVector.y = 0.0f;
-            float distanceToTarget = targetVector.magnitude;
+        //        //// Activate our nav mesh agent and start moving to our destination
+        //        //if (!agent.isActiveAndEnabled)
+        //        //{
+        //        //    agent.enabled = true;
+        //        //}
+        //        //agent.isStopped = false;
+        //        //agent.SetDestination(targetPosition);
+        //    }
+        //    // If not stop running
+        //    else
+        //    {
+        //        anim.SetBool("Running", false);
+        //        anim.SetBool("Attacking", false);
+        //        agent.isStopped = true;
+        //        return;
+        //    }
+        //}
+        //else
+        //{
+        //    // Determine if the unit should start attacking its target
+        //    Vector3 targetVector = target.getGameObject().transform.position - transform.position;
+        //    targetVector.y = 0.0f;
+        //    float distanceToTarget = targetVector.magnitude;
 
-            // If the enemy is outside attack range keep coming forward
-            if (distanceToTarget > attackRadius)
-            {
-                moveToTarget();
-            }
-            // If the target is in range attack it
-            else
-            {
-                attackTarget();
-            }
-        }
+        //    // If the enemy is outside attack range keep coming forward
+        //    if (distanceToTarget > attackRadius)
+        //    {
+        //        moveToTarget();
+        //    }
+        //    // If the target is in range attack it
+        //    else
+        //    {
+        //        attackTarget();
+        //    }
+        //}
     }
 
-    bool RandomPoint(Vector3 center, float range, out Vector3 result)
+    public bool RandomPoint(Vector3 center, float range, out Vector3 result)
     {
         for (int i = 0; i < 30; i++)
         {
@@ -260,7 +261,7 @@ public abstract class AUnit : MonoBehaviour, IUnit
         // Find the closest enemy
         for (int hitIndex = 0; hitIndex < hitColliders.Length; hitIndex++)
         {
-            IUnit enemyUnit = (IUnit) hitColliders[hitIndex].gameObject.GetComponent(typeof(IUnit));
+            IUnit enemyUnit = (IUnit)hitColliders[hitIndex].gameObject.GetComponent(typeof(IUnit));
             if (enemyUnit != null && !enemyUnit.isUnitDying())
             {
                 float enemyDistance = Vector3.Distance(enemyUnit.getGameObject().transform.position, gameObject.transform.position);
@@ -410,5 +411,47 @@ public abstract class AUnit : MonoBehaviour, IUnit
     public GameObject getGameObject()
     {
         return gameObject;
+    }
+
+    public NavMeshAgent getAgent()
+    {
+        return agent;
+    }
+
+    public float getPatrolSearchRange()
+    {
+        return patrolSearchRange;
+    }
+
+    public Animator getAnim()
+    {
+        return anim;
+    }
+
+    public bool getIsPatrolling()
+    {
+        return patrolling;
+    }
+
+    public void setIsPatrolling(bool isPatrollingInput)
+    {
+        patrolling = isPatrollingInput;
+    }
+
+    // Helper function to determine if the unit is moving on the nav mesh and has a destination
+    public bool isMovingNavMesh()
+    {
+        if (!agent.pathPending)
+        {
+            if (agent.remainingDistance <= agent.stoppingDistance)
+            {
+                if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 }
