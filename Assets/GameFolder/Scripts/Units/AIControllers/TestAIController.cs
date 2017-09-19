@@ -23,10 +23,10 @@ public class TestAIController : MonoBehaviour
         Leaf getPatrolPath = new Leaf(delegate ()
         {
             // If the unit isn't moving on the nav mesh give it a destination
-            if (unit.getIsPatrolling() == false)
+            if (unit.patrolling == false)
             {
                 Vector3 newTargetPosition = Vector3.zero;
-                if (unit.RandomPoint(transform.position, unit.getPatrolSearchRange(), out newTargetPosition))
+                if (unit.RandomPoint(transform.position, unit.patrolSearchRange, out newTargetPosition))
                 {
                     // If we can't find a complete path to the target position return failure and try again
                     NavMeshPath path = new NavMeshPath();
@@ -39,17 +39,17 @@ public class TestAIController : MonoBehaviour
                         return BehaviorReturnCode.Failure;
                     }
 
-                    unit.getAnim().SetBool("Running", true);
+                    unit.anim.SetBool("Running", true);
 
                     // Activate our nav mesh agent and start moving to our destination
-                    if (!unit.getAgent().isActiveAndEnabled)
+                    if (!unit.agent.isActiveAndEnabled)
                     {
-                        unit.getAgent().enabled = true;
+                        unit.agent.enabled = true;
                     }
-                    unit.getAgent().isStopped = false;
-                    unit.getAgent().SetDestination(newTargetPosition);
+                    unit.agent.isStopped = false;
+                    unit.agent.SetDestination(newTargetPosition);
 
-                    unit.setIsPatrolling(true);
+                    unit.patrolling = true;
                 }
             }
             // If the unit is patrolling return success
@@ -74,14 +74,14 @@ public class TestAIController : MonoBehaviour
 
         Leaf stopRunning = new Leaf(delegate ()
         {
-            unit.getAnim().SetBool("Running", false);
-            unit.getAgent().isStopped = true;
+            unit.anim.SetBool("Running", false);
+            unit.agent.isStopped = true;
             return BehaviorReturnCode.Success;
         });
 
         Leaf playIdleAnim = new Leaf(delegate ()
         {
-            unit.getAnim().SetTrigger("PatrolIdleAnim1Trigger");
+            unit.anim.SetTrigger("PatrolIdleAnim1Trigger");
             return BehaviorReturnCode.Success;
         });
 
@@ -91,7 +91,7 @@ public class TestAIController : MonoBehaviour
 
         Leaf stopPatrolling = new Leaf(delegate ()
         {
-            unit.setIsPatrolling(false);
+            unit.patrolling = false;
             return BehaviorReturnCode.Success;
         });
 
@@ -106,7 +106,7 @@ public class TestAIController : MonoBehaviour
         Leaf checkForNearbyEnemies = new Leaf(delegate ()
         {
             // If we already have a target just return success
-            if (unit.getTarget() != null)
+            if (unit.target != null)
             {
                 return BehaviorReturnCode.Success;
             }
@@ -114,7 +114,7 @@ public class TestAIController : MonoBehaviour
             // Search for the closest enemy
             IUnit foundTarget = null;
             // Sphere cast around the unit for a target
-            Collider[] hitColliders = Physics.OverlapSphere(transform.position, unit.getEnemySearchRadius(), unit.getEnemySearchLayer());
+            Collider[] hitColliders = Physics.OverlapSphere(transform.position, unit.enemySearchRadius, unit.enemySearchLayer);
             float minimumDistance = float.MaxValue;
             // Find the closest enemy
             for (int hitIndex = 0; hitIndex < hitColliders.Length; hitIndex++)
@@ -134,7 +134,7 @@ public class TestAIController : MonoBehaviour
             // If we were able to find a target return success, otherwise we failed
             if (foundTarget != null)
             {
-                unit.setTarget(foundTarget);
+                unit.target = foundTarget;
                 return BehaviorReturnCode.Success;
             }
             else
@@ -146,37 +146,37 @@ public class TestAIController : MonoBehaviour
         Leaf checkToAttack = new Leaf(delegate () 
         {
             // If we are already attacking continue
-            if (unit.isAttacking())
+            if (unit.attacking)
             {
                 return BehaviorReturnCode.Success;
             }
 
             // Check if our target is within the attack radius and isn't already dying
-            Vector3 distance = unit.getTarget().getGameObject().transform.position - transform.position;
+            Vector3 distance = unit.target.getGameObject().transform.position - transform.position;
             distance.y = 0.0f;
-            if (distance.magnitude <= unit.getAttackRadius())
+            if (distance.magnitude <= unit.attackRadius)
             {
                 // Check to see if our target has died
-                if (unit.getTarget().isUnitDying())
+                if (unit.target.isUnitDying())
                 {
-                    unit.setTarget(null);
+                    unit.target = null;
                     return BehaviorReturnCode.Failure;
                 }
 
                 // Face the target
-                Quaternion lookRot = Quaternion.LookRotation(unit.getTarget().getGameObject().transform.position - unit.transform.position);
+                Quaternion lookRot = Quaternion.LookRotation(unit.target.getGameObject().transform.position - unit.transform.position);
                 unit.transform.rotation = Quaternion.Euler(0, lookRot.eulerAngles.y, 0);
 
                 // Stop the navmesh agent
-                unit.getAgent().isStopped = true;
+                unit.agent.isStopped = true;
 
                 // Play our attack animation
-                unit.getAnim().SetTrigger("AttackTrigger");
-                unit.setAttacking(true);
+                unit.anim.SetTrigger("AttackTrigger");
+                unit.attacking = true;
             }
             else
             {
-                unit.setAttacking(false);
+                unit.attacking = false;
             }
             return BehaviorReturnCode.Success;
         });
@@ -184,21 +184,21 @@ public class TestAIController : MonoBehaviour
         Leaf moveToTarget = new Leaf(delegate () 
         {
             // If we're still attacking wait to finish
-            if (unit.isAttacking() == true)
+            if (unit.attacking == true)
             {
                 return BehaviorReturnCode.Success;
             }
 
             // Animate the unit to start running
-            unit.getAnim().SetBool("Running", true);
+            unit.anim.SetBool("Running", true);
 
             // Activate our nav mesh agent and start moving to our destination
-            if (!unit.getAgent().isActiveAndEnabled)
+            if (!unit.agent.isActiveAndEnabled)
             {
-                unit.getAgent().enabled = true;
+                unit.agent.enabled = true;
             }
-            unit.getAgent().isStopped = false;
-            unit.getAgent().SetDestination(unit.getTarget().getGameObject().transform.position);
+            unit.agent.isStopped = false;
+            unit.agent.SetDestination(unit.target.getGameObject().transform.position);
             return BehaviorReturnCode.Success;
         });
 

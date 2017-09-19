@@ -6,46 +6,51 @@ using UnityEngine.AI;
 
 public class Unit : MonoBehaviour, IUnit
 {
-    // UNIT CHARACTERISTICS
-    [SerializeField]
-    protected int startingHealth = 100;
-    [SerializeField]
-    protected float attackRadius = 2.0f;
-    [SerializeField]
-    protected int attackDamage = 1;
-    [SerializeField]
-    protected float bodyDespawnTime = 10.0f;
-    // ALLY/ENEMY
-    protected bool isAlly = false;
-    // HEADSHOTS
-    [SerializeField]
-    protected float headshotHeight = 1.5f;
-    // ANIMATOR
-    protected Animator anim;
-    protected int health;
-    protected bool attacking = false;
-    // MOVEMENT
-    protected UnityEngine.AI.NavMeshAgent agent;
-    protected IUnit target;
-    // PATROLLING
-    protected Vector3 targetPosition;
-    [SerializeField]
-    protected float patrolSearchRange = 50.0f;
-    [SerializeField]
-    protected float patrolDestinationReachedRange = 1.0f;
-    protected bool patrolling;
-    // ENEMY SEARCH
-    protected int enemySearchLayer = (1 << 16) | (1 << 11);
-    [SerializeField]
-    protected float enemySearchRadius = 10.0f;
-    // AUDIO
-    protected AudioSource source;
-    [SerializeField]
-    protected AudioClip woundSound;
-    [SerializeField]
-    protected AudioClip killSound;
-    // RAGDOLL/DEATH
-    protected bool isDying = false;
+    [Header("Unit Attributes")]
+    public int startingHealth = 100;
+    public float attackRadius = 2.0f;
+    public int attackDamage = 1;
+    public float bodyDespawnTime = 10.0f;
+    public float headshotHeight = 1.5f;
+    public float enemySearchRadius = 10.0f;
+
+    [Header("Patrolling")]
+    public float patrolSearchRange = 50.0f;
+    public float patrolDestinationReachedRange = 1.0f;
+
+    [Header("Team")]
+    public bool isAlly = false;
+
+    [Header("Audio")]
+    public AudioClip woundSound;
+    public AudioClip killSound;
+
+    // UNIT STATE
+    [HideInInspector]
+    public int health;
+    [HideInInspector]
+    public bool attacking = false;
+    [HideInInspector]
+    public IUnit target;
+    [HideInInspector]
+    public Vector3 targetPosition;
+    [HideInInspector]
+    public bool patrolling;
+    [HideInInspector]
+    public bool isDying = false;
+
+    // UNIT INFO
+    [HideInInspector]
+    public int enemySearchLayer = (1 << 16) | (1 << 11);
+
+    // COMPONENTS
+    [HideInInspector]
+    public Animator anim;
+    [HideInInspector]
+    public UnityEngine.AI.NavMeshAgent agent;
+    [HideInInspector]
+    public AudioSource source;
+
     // DELEGATES
     private Action onDeath;
     private Action<int, Vector3> onDamageTaken;
@@ -172,29 +177,9 @@ public class Unit : MonoBehaviour, IUnit
         onDamageTaken += onDamageCallback;
     }
 
-    public int getCurrentHealth()
-    {
-        return health;
-    }
-
-    public int getMaxHealth()
-    {
-        return startingHealth;
-    }
-
     public void slowDown()
     {
         agent.speed = 1;
-    }
-
-    public bool isUnitDying()
-    {
-        return isDying;
-    }
-
-    public virtual bool isUnitAlly()
-    {
-        return isAlly;
     }
 
     public GameObject getGameObject()
@@ -202,69 +187,24 @@ public class Unit : MonoBehaviour, IUnit
         return gameObject;
     }
 
-    public NavMeshAgent getAgent()
+    public bool isUnitAlly()
     {
-        return agent;
+        return isAlly;
     }
 
-    public float getPatrolSearchRange()
+    public int getMaxHealth()
     {
-        return patrolSearchRange;
+        return startingHealth;
     }
 
-    public Animator getAnim()
+    public int getCurrentHealth()
     {
-        return anim;
+        return health;
     }
 
-    public bool getIsPatrolling()
+    public bool isUnitDying()
     {
-        return patrolling;
-    }
-
-    public void setIsPatrolling(bool isPatrollingInput)
-    {
-        patrolling = isPatrollingInput;
-    }
-
-    public float getEnemySearchRadius()
-    {
-        return enemySearchRadius;
-    }
-
-    public int getEnemySearchLayer()
-    {
-        return enemySearchLayer;
-    }
-
-    public IUnit getTarget()
-    {
-        return target;
-    }
-
-    public void setTarget(IUnit targetInput)
-    {
-        target = targetInput;
-    }
-
-    public float getAttackRadius()
-    {
-        return attackRadius;
-    }
-
-    public int getAttackDamage()
-    {
-        return attackDamage;
-    }
-
-    public void setAttacking(bool attackingInput)
-    {
-        attacking = attackingInput;
-    }
-
-    public bool isAttacking()
-    {
-        return attacking;
+        return isDying;
     }
 
     // Helper function to determine if the unit is moving on the nav mesh and has a destination
