@@ -26,7 +26,7 @@ public class TestAIController : MonoBehaviour
             if (unit.patrolling == false)
             {
                 Vector3 newTargetPosition = Vector3.zero;
-                if (unit.RandomPoint(transform.position, unit.patrolSearchRange, out newTargetPosition))
+                if (unit.findRandomPointOnNavMesh(transform.position, unit.patrolSearchRange, out newTargetPosition))
                 {
                     // If we can't find a complete path to the target position return failure and try again
                     NavMeshPath path = new NavMeshPath();

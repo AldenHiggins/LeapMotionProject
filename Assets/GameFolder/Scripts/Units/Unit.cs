@@ -57,7 +57,10 @@ public class Unit : MonoBehaviour, IUnit
     private Action onDeath;
     private Action<int, Vector3> onDamageTaken;
 
-    // Use this for initialization
+    /////////////////////////////////////////////////////////
+    //////////////////  INITIALIZATION  /////////////////////
+    /////////////////////////////////////////////////////////
+
     void Start()
     {
         // Register the unit's components
@@ -74,7 +77,37 @@ public class Unit : MonoBehaviour, IUnit
         agent.updateRotation = true;
     }
 
-    public bool RandomPoint(Vector3 center, float range, out Vector3 result)
+    /////////////////////////////////////////////////////////
+    ///////////////  ANIMATION CALLBACKS  ///////////////////
+    /////////////////////////////////////////////////////////
+
+    public void attackAnimDone()
+    {
+        attacking = false;
+    }
+
+    public void damageTarget()
+    {
+        // Check if we have a target
+        if (target == null) return;
+
+        // Check to see if our target has died
+        if (target.isUnitDying()) return;
+
+        // If we are still in range deal damage to the target
+        Vector3 distance = target.getGameObject().transform.position - transform.position;
+        distance.y = 0.0f;
+        if (distance.magnitude <= attackRadius)
+        {
+            target.dealDamage(attackDamage, distance.normalized);
+        }
+    }
+
+    /////////////////////////////////////////////////////////
+    /////////////////  HELPER FUNCTIONS  ////////////////////
+    /////////////////////////////////////////////////////////
+
+    public bool findRandomPointOnNavMesh(Vector3 center, float range, out Vector3 result)
     {
         for (int i = 0; i < 30; i++)
         {
@@ -90,34 +123,36 @@ public class Unit : MonoBehaviour, IUnit
         return false;
     }
 
-    public void attackAnimDone()
+    // Determine if the unit is moving on the nav mesh and has a destination
+    public bool isMovingNavMesh()
     {
-        attacking = false;
+        if (!agent.pathPending)
+        {
+            if (agent.remainingDistance <= agent.stoppingDistance)
+            {
+                if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
-    public void damageTarget()
+    /////////////////////////////////////////////////////////
+    //////////////////  STATUS EFFECTS  /////////////////////
+    /////////////////////////////////////////////////////////
+
+    public void slowDown()
     {
-        // Check if we have a target
-        if (target == null)
-        {
-            return;
-        }
-
-        // Check to see if our target has died
-        if (target.isUnitDying())
-        {
-            return;
-        }
-
-        // If we are still in range deal damage to the target
-        Vector3 distance = target.getGameObject().transform.position - transform.position;
-        distance.y = 0.0f;
-        if (distance.magnitude <= attackRadius)
-        {
-            target.dealDamage(attackDamage, distance.normalized);
-        }
+        agent.speed = 1;
     }
 
+    /////////////////////////////////////////////////////////
+    /////////////////    DAMAGE/DEATH    ////////////////////
+    /////////////////////////////////////////////////////////
+
+    // Have the unit take damage
     public void dealDamage(int damage, Vector3 damageVector)
     {
         health -= damage;
@@ -169,20 +204,9 @@ public class Unit : MonoBehaviour, IUnit
         Destroy(gameObject);
     }
 
-    public void installDeathListener(Action onDeathCallback)
-    {
-        onDeath += onDeathCallback;
-    }
-
-    public void installDamageListener(Action<int, Vector3> onDamageCallback)
-    {
-        onDamageTaken += onDamageCallback;
-    }
-
-    public void slowDown()
-    {
-        agent.speed = 1;
-    }
+    /////////////////////////////////////////////////////////
+    /////////////////  GETTERS/SETTERS  /////////////////////
+    /////////////////////////////////////////////////////////
 
     public GameObject getGameObject()
     {
@@ -209,20 +233,13 @@ public class Unit : MonoBehaviour, IUnit
         return isDying;
     }
 
-    // Helper function to determine if the unit is moving on the nav mesh and has a destination
-    public bool isMovingNavMesh()
+    public void installDeathListener(Action onDeathCallback)
     {
-        if (!agent.pathPending)
-        {
-            if (agent.remainingDistance <= agent.stoppingDistance)
-            {
-                if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
-                {
-                    return false;
-                }
-            }
-        }
+        onDeath += onDeathCallback;
+    }
 
-        return true;
+    public void installDamageListener(Action<int, Vector3> onDamageCallback)
+    {
+        onDamageTaken += onDamageCallback;
     }
 }
