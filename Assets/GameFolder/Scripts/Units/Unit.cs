@@ -107,6 +107,19 @@ public class Unit : MonoBehaviour, IUnit
     /////////////////  HELPER FUNCTIONS  ////////////////////
     /////////////////////////////////////////////////////////
 
+    public void setDestination(Vector3 newDestination)
+    {
+        anim.SetBool("Running", true);
+
+        // Activate our nav mesh agent and start moving to our destination
+        if (!agent.isActiveAndEnabled)
+        {
+            agent.enabled = true;
+        }
+        agent.isStopped = false;
+        agent.SetDestination(newDestination);
+    }
+
     public bool findRandomPointOnNavMesh(Vector3 center, float range, out Vector3 result)
     {
         for (int i = 0; i < 30; i++)
@@ -115,6 +128,16 @@ public class Unit : MonoBehaviour, IUnit
             NavMeshHit hit;
             if (NavMesh.SamplePosition(randomPoint, out hit, 1.0f, NavMesh.AllAreas))
             {
+                // Check if we can find a path to the target position before returning it
+                NavMeshPath path = new NavMeshPath();
+                if (!NavMesh.CalculatePath(transform.position, hit.position, NavMesh.AllAreas, path))
+                {
+                    continue;
+                }
+                else if (path.status == NavMeshPathStatus.PathPartial)
+                {
+                    continue;
+                }
                 result = hit.position;
                 return true;
             }

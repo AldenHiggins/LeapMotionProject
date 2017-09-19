@@ -28,27 +28,8 @@ public class TestAIController : MonoBehaviour
                 Vector3 newTargetPosition = Vector3.zero;
                 if (unit.findRandomPointOnNavMesh(transform.position, unit.patrolSearchRange, out newTargetPosition))
                 {
-                    // If we can't find a complete path to the target position return failure and try again
-                    NavMeshPath path = new NavMeshPath();
-                    if (!NavMesh.CalculatePath(transform.position, newTargetPosition, NavMesh.AllAreas, path))
-                    {
-                        return BehaviorReturnCode.Failure;
-                    }
-                    else if (path.status == NavMeshPathStatus.PathPartial)
-                    {
-                        return BehaviorReturnCode.Failure;
-                    }
-
-                    unit.anim.SetBool("Running", true);
-
-                    // Activate our nav mesh agent and start moving to our destination
-                    if (!unit.agent.isActiveAndEnabled)
-                    {
-                        unit.agent.enabled = true;
-                    }
-                    unit.agent.isStopped = false;
-                    unit.agent.SetDestination(newTargetPosition);
-
+                    // Start moving towards our new random point
+                    unit.setDestination(newTargetPosition);
                     unit.patrolling = true;
                 }
             }
@@ -189,16 +170,8 @@ public class TestAIController : MonoBehaviour
                 return BehaviorReturnCode.Success;
             }
 
-            // Animate the unit to start running
-            unit.anim.SetBool("Running", true);
-
-            // Activate our nav mesh agent and start moving to our destination
-            if (!unit.agent.isActiveAndEnabled)
-            {
-                unit.agent.enabled = true;
-            }
-            unit.agent.isStopped = false;
-            unit.agent.SetDestination(unit.target.getGameObject().transform.position);
+            // Start moving towards our target
+            unit.setDestination(unit.target.getGameObject().transform.position);
             return BehaviorReturnCode.Success;
         });
 
