@@ -55,6 +55,10 @@ public abstract class AUnit : MonoBehaviour, IUnit
     {
         // Register the unit's components
         anim = transform.GetChild(0).gameObject.GetComponent<Animator>();
+        if (anim == null)
+        {
+            anim = GetComponent<Animator>();
+        }
         agent = gameObject.GetComponent<UnityEngine.AI.NavMeshAgent>();
         source = GetComponent<AudioSource>();
 
@@ -65,98 +69,6 @@ public abstract class AUnit : MonoBehaviour, IUnit
     }
 
     abstract protected void initializeUnit();
-
-    // Update is called once per frame
-    void Update()
-    {
-        // If the unit is dying don't do anything
-        if (health <= 0)
-        {
-            return;
-        }
-
-        //// Search for a new target
-        //findTarget();
-
-        //// If the unit has no target start patrolling
-        //if (target == null)
-        //{
-        //    // Look for a new patrol position if needed
-        //    if (targetPosition == Vector3.zero)
-        //    {
-        //        Debug.Log("Finding new target position");
-        //        Vector3 newTargetPosition = Vector3.zero;
-        //        if (RandomPoint(transform.position, patrolSearchRange, out newTargetPosition))
-        //        {
-        //            // Temporarily make a cube at your target
-        //            //GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        //            //cube.transform.position = newTargetPosition;
-
-        //            targetPosition = newTargetPosition;
-        //            anim.SetBool("Running", true);
-        //            anim.SetBool("Attacking", false);
-
-        //            // Activate our nav mesh agent and start moving to our destination
-        //            if (!agent.isActiveAndEnabled)
-        //            {
-        //                agent.enabled = true;
-        //            }
-        //            agent.isStopped = false;
-        //            agent.SetDestination(targetPosition);
-        //        }
-        //    }
-
-        //    // Check to see if we've reached our target position
-        //    float distanceToTarget = (targetPosition - transform.position).magnitude;
-        //    Debug.Log("Distance: " + distanceToTarget);
-        //    if (distanceToTarget <= patrolDestinationReachedRange)
-        //    {
-        //        targetPosition = Vector3.zero;
-        //    }
-
-        //    // If we have a target position move towards it
-        //    if (targetPosition != Vector3.zero)
-        //    {
-        //        //Debug.Log("Moving to target");
-        //        //anim.SetBool("Running", true);
-        //        //anim.SetBool("Attacking", false);
-
-        //        //// Activate our nav mesh agent and start moving to our destination
-        //        //if (!agent.isActiveAndEnabled)
-        //        //{
-        //        //    agent.enabled = true;
-        //        //}
-        //        //agent.isStopped = false;
-        //        //agent.SetDestination(targetPosition);
-        //    }
-        //    // If not stop running
-        //    else
-        //    {
-        //        anim.SetBool("Running", false);
-        //        anim.SetBool("Attacking", false);
-        //        agent.isStopped = true;
-        //        return;
-        //    }
-        //}
-        //else
-        //{
-        //    // Determine if the unit should start attacking its target
-        //    Vector3 targetVector = target.getGameObject().transform.position - transform.position;
-        //    targetVector.y = 0.0f;
-        //    float distanceToTarget = targetVector.magnitude;
-
-        //    // If the enemy is outside attack range keep coming forward
-        //    if (distanceToTarget > attackRadius)
-        //    {
-        //        moveToTarget();
-        //    }
-        //    // If the target is in range attack it
-        //    else
-        //    {
-        //        attackTarget();
-        //    }
-        //}
-    }
 
     public bool RandomPoint(Vector3 center, float range, out Vector3 result)
     {
@@ -174,133 +86,32 @@ public abstract class AUnit : MonoBehaviour, IUnit
         return false;
     }
 
-    //private void getNewPatrolPosition()
-    //{
-    //    Vector3 newPosition = new Vector3();
-
-    //    if (RandomPoint(transform.position, patrolSearchRange, out newPosition))
-    //    {
-
-    //    }
-
-    //}
-
-    protected virtual void moveToTarget()
+    public void attackAnimDone()
     {
-        // If we're still attacking wait to finish
-        if (attacking == true)
+        attacking = false;
+    }
+
+    public void damageTarget()
+    {
+        // Check if we have a target
+        if (target == null)
         {
             return;
         }
 
-        // Animate the unit to start running
-        anim.SetBool("Running", true);
-        anim.SetBool("Attacking", false);
-
-        // Activate our nav mesh agent and start moving to our destination
-        if (!agent.isActiveAndEnabled)
+        // Check to see if our target has died
+        if (target.isUnitDying())
         {
-            agent.enabled = true;
-        }
-        agent.isStopped = false;
-        agent.SetDestination(target.getGameObject().transform.position);
-    }
-
-    protected virtual void attackTarget()
-    {
-        // Stop running
-        anim.SetBool("Running", false);
-        agent.isStopped = true;
-
-        // Face the target
-        transform.rotation = Quaternion.LookRotation(target.getGameObject().transform.position - transform.position);
-        transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
-
-        // If the unit isn't attacking yet start the attack function
-        if (attacking == false)
-        {
-            attacking = true;
-            StartCoroutine(attack());
-        }
-    }
-
-    protected virtual void findTarget()
-    {
-        IUnit newTarget = findClosestUnit();
-
-        if (newTarget != null)
-        {
-            target = newTarget;
-        }
-    }
-
-    protected IUnit findClosestUnit()
-    {
-        IUnit foundTarget = null;
-
-        // If we have a target and we are attacking it don't switch
-        if (target != null)
-        {
-            // If our target is dying null it out
-            if (target.isUnitDying())
-            {
-                anim.SetBool("Attacking", false);
-                attacking = false;
-                target = null;
-            }
-            // If the target is still alive and we are attacking don't switch targets
-            else if (attacking)
-            {
-                return foundTarget;
-            }
+            return;
         }
 
-        // Sphere cast around the unit for a target
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, enemySearchRadius, enemySearchLayer);
-        float minimumDistance = float.MaxValue;
-        // Find the closest enemy
-        for (int hitIndex = 0; hitIndex < hitColliders.Length; hitIndex++)
-        {
-            IUnit enemyUnit = (IUnit)hitColliders[hitIndex].gameObject.GetComponent(typeof(IUnit));
-            if (enemyUnit != null && !enemyUnit.isUnitDying())
-            {
-                float enemyDistance = Vector3.Distance(enemyUnit.getGameObject().transform.position, gameObject.transform.position);
-                if (enemyDistance < minimumDistance)
-                {
-                    foundTarget = enemyUnit;
-                    minimumDistance = enemyDistance;
-                }
-            }
-        }
-
-        return foundTarget;
-    }
-
-    IEnumerator attack()
-    {
-        anim.SetBool("Attacking", true);
-        // Let the animation play for half a second before dealing damage to the target
-        yield return new WaitForSeconds(.5f);
-
-        // Check if our target is within the attack radius and isn't already dying
+        // If we are still in range deal damage to the target
         Vector3 distance = target.getGameObject().transform.position - transform.position;
         distance.y = 0.0f;
         if (distance.magnitude <= attackRadius)
         {
-            // Check to see if our target has died
-            if (target.isUnitDying())
-            {
-                attacking = false;
-                anim.SetBool("Attacking", false);
-                yield break;
-            }
-
             target.dealDamage(attackDamage, distance.normalized);
         }
-
-        // Wait another second before attacking again
-        yield return new WaitForSeconds(2.0f);
-        attacking = false;
     }
 
     public void dealDamage(int damage, Vector3 damageVector)
@@ -314,7 +125,10 @@ public abstract class AUnit : MonoBehaviour, IUnit
 
         if (health > 0)
         {
-            anim.Play("wound");
+            // Getting attacked interrupts attacking
+            attacking = false;
+            // Play the wound animation/sound
+            anim.SetTrigger("WoundTrigger");
             source.PlayOneShot(woundSound);
         }
         else
@@ -361,9 +175,7 @@ public abstract class AUnit : MonoBehaviour, IUnit
         }
         BoxCollider collider = gameObject.GetComponent<BoxCollider>();
         collider.enabled = false;
-        StopCoroutine(attack());
-        anim.SetBool("Attacking", false);
-        anim.SetBool("Dead", true);
+        anim.SetTrigger("DeathTrigger");
         StartCoroutine(despawnBody());
     }
 
@@ -436,6 +248,46 @@ public abstract class AUnit : MonoBehaviour, IUnit
     public void setIsPatrolling(bool isPatrollingInput)
     {
         patrolling = isPatrollingInput;
+    }
+
+    public float getEnemySearchRadius()
+    {
+        return enemySearchRadius;
+    }
+
+    public int getEnemySearchLayer()
+    {
+        return enemySearchLayer;
+    }
+
+    public IUnit getTarget()
+    {
+        return target;
+    }
+
+    public void setTarget(IUnit targetInput)
+    {
+        target = targetInput;
+    }
+
+    public float getAttackRadius()
+    {
+        return attackRadius;
+    }
+
+    public int getAttackDamage()
+    {
+        return attackDamage;
+    }
+
+    public void setAttacking(bool attackingInput)
+    {
+        attacking = attackingInput;
+    }
+
+    public bool isAttacking()
+    {
+        return attacking;
     }
 
     // Helper function to determine if the unit is moving on the nav mesh and has a destination
