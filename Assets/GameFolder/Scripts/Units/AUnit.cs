@@ -138,29 +138,6 @@ public abstract class AUnit : MonoBehaviour, IUnit
         }
     }
 
-    public void applyForce(Vector3 force)
-    {
-        GetComponent<Rigidbody>().AddForce(force, ForceMode.Impulse);
-        GetComponent<Rigidbody>().isKinematic = false;
-        StartCoroutine(restartAgent());
-    }
-
-    public void applyExplosiveForce(float force, Vector3 position, float radius)
-    {
-        GetComponent<Rigidbody>().AddExplosionForce(force, position, radius, 20.0f, ForceMode.Impulse);
-        GetComponent<Rigidbody>().isKinematic = false;
-        StartCoroutine(restartAgent());
-    }
-
-    IEnumerator restartAgent()
-    {
-        while (GetComponent<Rigidbody>().velocity.magnitude > 0.1)
-        {
-            yield return new WaitForSeconds(.1f);
-        }
-        agent.enabled = true;
-    }
-
     void kill()
     {
         isDying = true;
