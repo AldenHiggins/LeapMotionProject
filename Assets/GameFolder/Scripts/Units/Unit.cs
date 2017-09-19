@@ -107,6 +107,36 @@ public class Unit : MonoBehaviour, IUnit
     /////////////////  HELPER FUNCTIONS  ////////////////////
     /////////////////////////////////////////////////////////
 
+    public float distanceToTarget()
+    {
+        if (target == null) return 0.0f;
+
+        return Vector3.Distance(target.getGameObject().transform.position, transform.position);
+    }
+
+    public IUnit findClosestTarget()
+    {
+        IUnit foundTarget = null;
+        // Sphere cast around the unit for a target
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, enemySearchRadius, enemySearchLayer);
+        float minimumDistance = float.MaxValue;
+        // Find the closest enemy
+        for (int hitIndex = 0; hitIndex < hitColliders.Length; hitIndex++)
+        {
+            IUnit enemyUnit = (IUnit)hitColliders[hitIndex].gameObject.GetComponent(typeof(IUnit));
+            if (enemyUnit != null && !enemyUnit.isUnitDying())
+            {
+                float enemyDistance = Vector3.Distance(enemyUnit.getGameObject().transform.position, gameObject.transform.position);
+                if (enemyDistance < minimumDistance)
+                {
+                    foundTarget = enemyUnit;
+                    minimumDistance = enemyDistance;
+                }
+            }
+        }
+        return foundTarget;
+    }
+
     public void setDestination(Vector3 newDestination)
     {
         anim.SetBool("Running", true);

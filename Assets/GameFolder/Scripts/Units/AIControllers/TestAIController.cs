@@ -84,33 +84,35 @@ public class TestAIController : MonoBehaviour
         /////////////////////   AGGRO/ATTACKING   //////////////////////////
         ////////////////////////////////////////////////////////////////////
 
-        Leaf checkForNearbyEnemies = new Leaf(delegate ()
+        Leaf dropTargetLogic = new Leaf(delegate () 
         {
-            // If we already have a target just return success
+            // If we don't have a target continue
+            if (unit.target == null) return BehaviorReturnCode.Success;
+
+            // If our target is dying search for a new one
+            if (unit.target.isUnitDying())
+            {
+                unit.target = null;
+            }
+            // If our target it outside of our aggro radius clear it
+            if (unit.distanceToTarget() > unit.enemySearchRadius)
+            {
+                unit.target = null;
+            }
+
+            return BehaviorReturnCode.Success;
+        });
+
+        Leaf acquireTarget = new Leaf(delegate ()
+        {
+            // If we already have a living target just return success
             if (unit.target != null)
             {
                 return BehaviorReturnCode.Success;
             }
 
             // Search for the closest enemy
-            IUnit foundTarget = null;
-            // Sphere cast around the unit for a target
-            Collider[] hitColliders = Physics.OverlapSphere(transform.position, unit.enemySearchRadius, unit.enemySearchLayer);
-            float minimumDistance = float.MaxValue;
-            // Find the closest enemy
-            for (int hitIndex = 0; hitIndex < hitColliders.Length; hitIndex++)
-            {
-                IUnit enemyUnit = (IUnit)hitColliders[hitIndex].gameObject.GetComponent(typeof(IUnit));
-                if (enemyUnit != null && !enemyUnit.isUnitDying())
-                {
-                    float enemyDistance = Vector3.Distance(enemyUnit.getGameObject().transform.position, gameObject.transform.position);
-                    if (enemyDistance < minimumDistance)
-                    {
-                        foundTarget = enemyUnit;
-                        minimumDistance = enemyDistance;
-                    }
-                }
-            }
+            IUnit foundTarget = unit.findClosestTarget();
 
             // If we were able to find a target return success, otherwise we failed
             if (foundTarget != null)
@@ -127,30 +129,19 @@ public class TestAIController : MonoBehaviour
         Leaf checkToAttack = new Leaf(delegate () 
         {
             // If we are already attacking continue
-            if (unit.attacking)
-            {
-                return BehaviorReturnCode.Success;
-            }
+            if (unit.attacking) return BehaviorReturnCode.Success;
 
             // Check if our target is within the attack radius and isn't already dying
-            Vector3 distance = unit.target.getGameObject().transform.position - transform.position;
-            distance.y = 0.0f;
-            if (distance.magnitude <= unit.attackRadius)
+            if (unit.distanceToTarget() <= unit.attackRadius)
             {
-                // Check to see if our target has died
-                if (unit.target.isUnitDying())
-                {
-                    unit.target = null;
-                    return BehaviorReturnCode.Failure;
-                }
-
                 // Face the target
                 Quaternion lookRot = Quaternion.LookRotation(unit.target.getGameObject().transform.position - unit.transform.position);
                 unit.transform.rotation = Quaternion.Euler(0, lookRot.eulerAngles.y, 0);
 
                 // Stop the navmesh agent
                 unit.agent.isStopped = true;
-
+                // Stop running
+                unit.anim.SetBool("Running", false);
                 // Play our attack animation
                 unit.anim.SetTrigger("AttackTrigger");
                 unit.attacking = true;
@@ -175,7 +166,7 @@ public class TestAIController : MonoBehaviour
             return BehaviorReturnCode.Success;
         });
 
-        Sequence attackSequence = new Sequence(checkForNearbyEnemies, checkToAttack, moveToTarget);
+        Sequence attackSequence = new Sequence(dropTargetLogic, acquireTarget, checkToAttack, moveToTarget);
 
         ////////////////////////////////////////////////////////////////////
         //////////////////////////   ROOT   ////////////////////////////////
