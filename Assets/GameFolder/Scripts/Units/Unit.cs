@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public abstract class AUnit : MonoBehaviour, IUnit
+public class Unit : MonoBehaviour, IUnit
 {
     // UNIT CHARACTERISTICS
     [SerializeField]
@@ -64,11 +64,7 @@ public abstract class AUnit : MonoBehaviour, IUnit
 
         health = startingHealth;
         agent.updateRotation = true;
-
-        initializeUnit();
     }
-
-    abstract protected void initializeUnit();
 
     public bool RandomPoint(Vector3 center, float range, out Vector3 result)
     {

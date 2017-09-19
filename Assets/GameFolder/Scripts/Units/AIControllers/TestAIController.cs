@@ -6,13 +6,13 @@ using UnityEngine.AI;
 public class TestAIController : MonoBehaviour
 {
     private Behavior root;
-    private AUnit unit;
+    private Unit unit;
 
 	// Use this for initialization
 	void Start ()
     {
         // Get access to the unit we are controlling
-        unit = GetComponent<AUnit>();
+        unit = GetComponent<Unit>();
 
         // Install an on death function to remove all logic from the unit
         unit.installDeathListener(delegate () { root = new Leaf(delegate () { return BehaviorReturnCode.Success; }); });

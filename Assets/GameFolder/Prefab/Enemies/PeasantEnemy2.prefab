@@ -502,7 +502,6 @@ GameObject:
   - component: {fileID: 4093523583166470}
   - component: {fileID: 65911141850126058}
   - component: {fileID: 54652868355272224}
-  - component: {fileID: 114104239088847280}
   - component: {fileID: 195860338660231298}
   - component: {fileID: 82007594410244468}
   m_Layer: 8
@@ -1229,27 +1228,6 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114104239088847280
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1959649207596190}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67a91693c3a64f6418bbd0b7b5b68146, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  startingHealth: 100
-  attackRadius: 3
-  attackDamage: 1
-  bodyDespawnTime: 10
-  headshotHeight: 1.5
-  patrolSearchRange: 50
-  patrolDestinationReachedRange: 1
-  enemySearchRadius: 20
-  woundSound: {fileID: 8300000, guid: c7e2366c7a424b34196cd52618c484be, type: 3}
-  killSound: {fileID: 8300000, guid: f99cb71f0022a4a49b7f6a7e3f8ce0f1, type: 3}
 --- !u!114 &114420226368720818
 MonoBehaviour:
   m_ObjectHideFlags: 1

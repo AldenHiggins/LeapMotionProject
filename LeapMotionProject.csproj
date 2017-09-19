@@ -152,11 +152,8 @@
     <Compile Include="Assets\GameFolder\Scripts\Player\UILogic.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Player\VRControls.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\AIControllers\TestAIController.cs" />
-    <Compile Include="Assets\GameFolder\Scripts\Units\Ally.cs" />
-    <Compile Include="Assets\GameFolder\Scripts\Units\AUnit.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\BloodSystem.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\ControllableUnit.cs" />
-    <Compile Include="Assets\GameFolder\Scripts\Units\Enemy.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\EnemySpawner.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\HealthBar.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\IUnit.cs" />
@@ -164,6 +161,7 @@
     <Compile Include="Assets\GameFolder\Scripts\Units\NavTest.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\Ragdoll.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\StaticUnit.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\Units\Unit.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\AttachToParentOnLoad.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\CircularParticleEmission.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\DamageInRadius.cs" />
