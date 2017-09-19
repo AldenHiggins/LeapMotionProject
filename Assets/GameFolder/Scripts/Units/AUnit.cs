@@ -175,6 +175,10 @@ public abstract class AUnit : MonoBehaviour, IUnit
         }
         BoxCollider collider = gameObject.GetComponent<BoxCollider>();
         collider.enabled = false;
+        // Clear other triggers so the unit doesn't do anything other than play the death animation
+        anim.ResetTrigger("WoundTrigger");
+        anim.ResetTrigger("AttackTrigger");
+        // Trigger the death animation
         anim.SetTrigger("DeathTrigger");
         StartCoroutine(despawnBody());
     }

@@ -14,6 +14,9 @@ public class TestAIController : MonoBehaviour
         // Get access to the unit we are controlling
         unit = GetComponent<AUnit>();
 
+        // Install an on death function to remove all logic from the unit
+        unit.installDeathListener(delegate () { root = new Leaf(delegate () { return BehaviorReturnCode.Success; }); });
+
         ////////////////////////////////////////////////////////////////////
         /////////////////////   PATROLLING/IDLE   //////////////////////////
         ////////////////////////////////////////////////////////////////////
