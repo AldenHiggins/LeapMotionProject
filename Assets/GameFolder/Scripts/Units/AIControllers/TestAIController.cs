@@ -25,6 +25,16 @@ public class TestAIController : MonoBehaviour
             // If the unit isn't moving on the nav mesh give it a destination
             if (unit.patrolling == false)
             {
+                // If we have a patrol path just use that
+                PatrolPath path = unit.GetComponent<PatrolPath>();
+                if (path != null)
+                {
+                    unit.setDestination(path.patrolPointHolder.transform.GetChild(path.nextPatrolPoint()).position);
+                    unit.patrolling = true;
+                    return BehaviorReturnCode.Success;
+                }
+
+                // If there isn't a defined path generate a random position nearby
                 Vector3 newTargetPosition = Vector3.zero;
                 if (unit.findRandomPointOnNavMesh(transform.position, unit.patrolSearchRange, out newTargetPosition))
                 {
