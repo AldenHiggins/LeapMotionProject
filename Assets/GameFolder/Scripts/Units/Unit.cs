@@ -50,6 +50,8 @@ public class Unit : MonoBehaviour, IUnit
     public UnityEngine.AI.NavMeshAgent agent;
     [HideInInspector]
     public AudioSource source;
+    [HideInInspector]
+    public Collider unitCollider;
 
     // DELEGATES
     private Action onDeath;
@@ -66,6 +68,7 @@ public class Unit : MonoBehaviour, IUnit
         }
         agent = gameObject.GetComponent<UnityEngine.AI.NavMeshAgent>();
         source = GetComponent<AudioSource>();
+        unitCollider = GetComponent<Collider>();
 
         health = startingHealth;
         agent.updateRotation = true;
@@ -151,8 +154,7 @@ public class Unit : MonoBehaviour, IUnit
         {
             onDeath();
         }
-        BoxCollider collider = gameObject.GetComponent<BoxCollider>();
-        collider.enabled = false;
+        unitCollider.enabled = false;
         // Clear other triggers so the unit doesn't do anything other than play the death animation
         anim.ResetTrigger("WoundTrigger");
         anim.ResetTrigger("AttackTrigger");
