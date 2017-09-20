@@ -64,6 +64,21 @@ public class TestAIController : MonoBehaviour
             return BehaviorReturnCode.Failure;
         });
 
+        Leaf manualPatrol = new Leaf(delegate ()
+        {
+            // Check to see if the unit manually patrols
+            ManualPatrol manualPatrolling = unit.GetComponent<ManualPatrol>();
+            if (manualPatrolling == null) return BehaviorReturnCode.Failure;
+
+            // If the unit manually patrols wait for a new patrol position
+            if (manualPatrolling.getPatrolConsumed()) return BehaviorReturnCode.Running;
+
+            // If we have a new patrol position consume it
+            unit.setDestination(manualPatrolling.getPatrolPosition());
+            unit.patrolling = true;
+            return BehaviorReturnCode.Success;
+        });
+
         Leaf patrolRandom = new Leaf(delegate ()
         {
             // If we don't have a defined path generate a random position
@@ -82,7 +97,28 @@ public class TestAIController : MonoBehaviour
             return BehaviorReturnCode.Failure;
         });
 
-        Selector selectPatrolPath = new Selector(checkIsPatrolling, patrolPath, patrolArea, patrolRandom);
+        Selector selectPatrolPath = new Selector(checkIsPatrolling, patrolPath, patrolArea, manualPatrol, patrolRandom);
+
+        Leaf sendPatrolToSquad = new Leaf(delegate ()
+        {
+            SquadLeader squad = unit.GetComponent<SquadLeader>();
+            if (squad == null) return BehaviorReturnCode.Success;
+
+            // If the unit is part of a squad generate appropriate follow positions for the squad members
+            Vector3 patrolVector = (unit.transform.position - unit.targetPosition).normalized;
+            patrolVector *= 5.0f;
+
+            // Set the unit's squad to follow it
+            for (int squadIndex = 0; squadIndex < squad.troops.Length; squadIndex++)
+            {
+                ManualPatrol troopPatrol = squad.troops[squadIndex].GetComponent<ManualPatrol>();
+                if (troopPatrol == null) continue;
+
+                Vector3 patrolPosition = unit.targetPosition + (Quaternion.Euler(0.0f, -45.0f + (45.0f * squadIndex), 0.0f) * patrolVector);
+                troopPatrol.setPatrolPosition(patrolPosition);
+            }
+            return BehaviorReturnCode.Success;
+        });
 
         Leaf waitToReachDestination = new Leaf(delegate ()
         {
@@ -121,7 +157,7 @@ public class TestAIController : MonoBehaviour
 
         Timer stopPatrollingTimer = new Timer(5.0f, stopPatrolling);
 
-        StateSequence patrolLogic = new StateSequence(selectPatrolPath, waitToReachDestination, stopRunning, playIdleAnimTimer, stopPatrollingTimer);
+        StateSequence patrolLogic = new StateSequence(selectPatrolPath, sendPatrolToSquad, waitToReachDestination, stopRunning, playIdleAnimTimer, stopPatrollingTimer);
 
         ////////////////////////////////////////////////////////////////////
         /////////////////////   AGGRO/ATTACKING   //////////////////////////
