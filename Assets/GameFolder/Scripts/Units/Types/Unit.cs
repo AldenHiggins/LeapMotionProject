@@ -43,6 +43,8 @@ public class Unit : MonoBehaviour, IUnit
     // UNIT INFO
     [HideInInspector]
     public int enemySearchLayer = (1 << 16) | (1 << 11);
+    private int allyLayers = (1 << 16) | (1 << 11);
+    private int enemyLayers = (1 << 8);
 
     // COMPONENTS
     [HideInInspector]
@@ -74,8 +76,17 @@ public class Unit : MonoBehaviour, IUnit
         source = GetComponent<AudioSource>();
         unitCollider = GetComponent<Collider>();
 
+        // Initialize things
         health = startingHealth;
         agent.updateRotation = true;
+        if (isAlly)
+        {
+            enemySearchLayer = enemyLayers;
+        }
+        else
+        {
+            enemySearchLayer = allyLayers;
+        }
     }
 
     /////////////////////////////////////////////////////////

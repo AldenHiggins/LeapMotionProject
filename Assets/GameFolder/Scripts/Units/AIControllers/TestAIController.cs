@@ -111,7 +111,7 @@ public class TestAIController : MonoBehaviour
 
         Leaf waitToReachDestination = new Leaf(delegate ()
         {
-            if (unit.isMovingNavMesh())
+            if (unit.isMovingNavMesh() && unit.patrolling)
             {
                 return BehaviorReturnCode.Running;
             }
@@ -185,6 +185,8 @@ public class TestAIController : MonoBehaviour
             // If we were able to find a target return success, otherwise we failed
             if (foundTarget != null)
             {
+                // If we find a new target stop patrolling
+                unit.patrolling = false;
                 unit.target = foundTarget;
                 return BehaviorReturnCode.Success;
             }
