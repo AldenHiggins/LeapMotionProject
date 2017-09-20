@@ -7,7 +7,7 @@ public class PatrolPath : MonoBehaviour
     public GameObject patrolPointHolder;
 
     [HideInInspector]
-    public int currentPatrolPoint = 0;
+    public int currentPatrolPoint = -1;
 
     public int nextPatrolPoint()
     {
