@@ -17,6 +17,7 @@ public class Unit : MonoBehaviour, IUnit
     [Header("Patrolling")]
     public float patrolSearchRange = 50.0f;
     public float patrolDestinationReachedRange = 1.0f;
+    public float patrolWaitTime = 5.0f;
 
     [Header("Team")]
     public bool isAlly = false;

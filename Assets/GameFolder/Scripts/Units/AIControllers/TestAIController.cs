@@ -155,7 +155,7 @@ public class TestAIController : MonoBehaviour
             return BehaviorReturnCode.Success;
         });
 
-        Timer stopPatrollingTimer = new Timer(5.0f, stopPatrolling);
+        Timer stopPatrollingTimer = new Timer(unit.patrolWaitTime, stopPatrolling);
 
         StateSequence patrolLogic = new StateSequence(selectPatrolPath, sendPatrolToSquad, waitToReachDestination, stopRunning, playIdleAnimTimer, stopPatrollingTimer);
 
