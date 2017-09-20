@@ -141,6 +141,9 @@ public class Unit : MonoBehaviour, IUnit
     {
         anim.SetBool("Running", true);
 
+        // Set our target position
+        targetPosition = newDestination;
+
         // Activate our nav mesh agent and start moving to our destination
         if (!agent.isActiveAndEnabled)
         {

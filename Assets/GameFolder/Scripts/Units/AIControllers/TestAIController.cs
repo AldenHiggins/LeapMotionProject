@@ -20,48 +20,69 @@ public class TestAIController : MonoBehaviour
         ////////////////////////////////////////////////////////////////////
         /////////////////////   PATROLLING/IDLE   //////////////////////////
         ////////////////////////////////////////////////////////////////////
-        Leaf getPatrolPath = new Leaf(delegate ()
+
+        Leaf checkIsPatrolling = new Leaf(delegate ()
         {
-            // If the unit isn't moving on the nav mesh give it a destination
             if (unit.patrolling == false)
             {
-                // If we have a patrol path just use that
-                PatrolPath path = unit.GetComponent<PatrolPath>();
-                if (path != null)
-                {
-                    unit.setDestination(path.patrolPointHolder.transform.GetChild(path.nextPatrolPoint()).position);
-                    unit.patrolling = true;
-                    return BehaviorReturnCode.Success;
-                }
-
-                // If we don't have a defined path generate a random position
-                Vector3 patrolCenterPosition = transform.position;
-                float patrolRange = unit.patrolSearchRange;
-                Vector3 newTargetPosition = Vector3.zero;
-
-                // If we have a patrol area use that to find our random position
-                PatrolArea area = unit.GetComponent<PatrolArea>();
-                if (area != null)
-                {
-                    patrolCenterPosition = area.patrolAreaObject.transform.position;
-                    patrolRange = area.patrolAreaObject.transform.localScale.x;
-                }
-
-                // Generate our patrol position
-                if (unit.findRandomPointOnNavMesh(patrolCenterPosition, patrolRange, out newTargetPosition))
-                {
-                    // Start moving towards our new random point
-                    unit.setDestination(newTargetPosition);
-                    unit.patrolling = true;
-                }
+                return BehaviorReturnCode.Failure;
             }
-            // If the unit is patrolling return success
-            else
-            {
-                return BehaviorReturnCode.Success;
-            }
+
             return BehaviorReturnCode.Success;
         });
+
+        Leaf patrolPath = new Leaf(delegate ()
+        {
+            // Check if we have a patrol path to make use of
+            PatrolPath path = unit.GetComponent<PatrolPath>();
+            if (path != null)
+            {
+                unit.setDestination(path.patrolPointHolder.transform.GetChild(path.nextPatrolPoint()).position);
+                unit.patrolling = true;
+                return BehaviorReturnCode.Success;
+            }
+            return BehaviorReturnCode.Failure;
+        });
+
+        Leaf patrolArea = new Leaf(delegate ()
+        {
+            // If we have a patrol area use that to find our random position
+            PatrolArea area = unit.GetComponent<PatrolArea>();
+            if (area == null) return BehaviorReturnCode.Failure;
+
+            // Generate our patrol position
+            Vector3 newTargetPosition = Vector3.zero;
+            Vector3 patrolPosition = area.patrolAreaObject.transform.position;
+            float patrolRange = area.patrolAreaObject.transform.localScale.x;
+            if (unit.findRandomPointOnNavMesh(patrolPosition, patrolRange, out newTargetPosition))
+            {
+                // Start moving towards our new random point
+                unit.setDestination(newTargetPosition);
+                unit.patrolling = true;
+                return BehaviorReturnCode.Success;
+            }
+            return BehaviorReturnCode.Failure;
+        });
+
+        Leaf patrolRandom = new Leaf(delegate ()
+        {
+            // If we don't have a defined path generate a random position
+            Vector3 patrolCenterPosition = transform.position;
+            float patrolRange = unit.patrolSearchRange;
+            Vector3 newTargetPosition = Vector3.zero;
+
+            // Generate our patrol position
+            if (unit.findRandomPointOnNavMesh(patrolCenterPosition, patrolRange, out newTargetPosition))
+            {
+                // Start moving towards our new random point
+                unit.setDestination(newTargetPosition);
+                unit.patrolling = true;
+                return BehaviorReturnCode.Success;
+            }
+            return BehaviorReturnCode.Failure;
+        });
+
+        Selector selectPatrolPath = new Selector(checkIsPatrolling, patrolPath, patrolArea, patrolRandom);
 
         Leaf waitToReachDestination = new Leaf(delegate ()
         {
@@ -100,7 +121,7 @@ public class TestAIController : MonoBehaviour
 
         Timer stopPatrollingTimer = new Timer(5.0f, stopPatrolling);
 
-        StateSequence patrolLogic = new StateSequence(getPatrolPath, waitToReachDestination, stopRunning, playIdleAnimTimer, stopPatrollingTimer);
+        StateSequence patrolLogic = new StateSequence(selectPatrolPath, waitToReachDestination, stopRunning, playIdleAnimTimer, stopPatrollingTimer);
 
         ////////////////////////////////////////////////////////////////////
         /////////////////////   AGGRO/ATTACKING   //////////////////////////
