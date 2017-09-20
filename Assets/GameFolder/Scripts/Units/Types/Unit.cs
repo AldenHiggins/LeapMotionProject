@@ -151,6 +151,16 @@ public class Unit : MonoBehaviour, IUnit
 
     public void setDestination(Vector3 newDestination)
     {
+        // If our new destination is close enough to where we currently are don't do anything
+        if (Vector3.Distance(transform.position, newDestination) <= 1.0f)
+        {
+            // Stop the navmesh agent
+            agent.isStopped = true;
+            // Stop running
+            anim.SetBool("Running", false);
+            return;
+        }
+
         anim.SetBool("Running", true);
 
         // Set our target position

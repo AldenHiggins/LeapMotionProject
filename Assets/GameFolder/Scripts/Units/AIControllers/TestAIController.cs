@@ -79,6 +79,18 @@ public class TestAIController : MonoBehaviour
             return BehaviorReturnCode.Success;
         });
 
+        Leaf patrolFollowLeader = new Leaf(delegate ()
+        {
+            // Check to see if the unit has a leader to follow
+            FollowLeader leaderToFollow = unit.GetComponent<FollowLeader>();
+            if (leaderToFollow == null) return BehaviorReturnCode.Failure;
+
+            // If the unit has a leader follow it but don't start patrolling.  This allows
+            // the unit to continuously follow the leader as it moves.
+            unit.setDestination(leaderToFollow.getFollowPosition());
+            return BehaviorReturnCode.Success;
+        });
+
         Leaf patrolRandom = new Leaf(delegate ()
         {
             // If we don't have a defined path generate a random position
@@ -97,7 +109,7 @@ public class TestAIController : MonoBehaviour
             return BehaviorReturnCode.Failure;
         });
 
-        Selector selectPatrolPath = new Selector(checkIsPatrolling, patrolPath, patrolArea, manualPatrol, patrolRandom);
+        Selector selectPatrolPath = new Selector(checkIsPatrolling, patrolPath, patrolArea, manualPatrol, patrolFollowLeader, patrolRandom);
 
         Leaf sendPatrolToSquad = new Leaf(delegate ()
         {
@@ -114,6 +126,11 @@ public class TestAIController : MonoBehaviour
             if (unit.isMovingNavMesh() && unit.patrolling)
             {
                 return BehaviorReturnCode.Running;
+            }
+            // If the unit is a follower then don't bother waiting to reach a destination
+            else if (unit.GetComponent<FollowLeader>() != null)
+            {
+                return BehaviorReturnCode.Failure;
             }
             else
             {
