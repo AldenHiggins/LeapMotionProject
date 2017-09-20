@@ -131,6 +131,7 @@
     <Compile Include="Assets\GameFolder\Scripts\Attacks\EmptyAttack.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Attacks\FireballAttack.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Attacks\PlaceDefenseAttack.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\Attacks\ScaleChangeAttack.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Attacks\SwitchDefenseAttack.cs" />
     <Compile Include="Assets\GameFolder\Scripts\BehaviorTree\Behavior.cs" />
     <Compile Include="Assets\GameFolder\Scripts\BehaviorTree\BehaviorTypes.cs" />

@@ -19,6 +19,9 @@ public class VRControls : MonoBehaviour
     [SerializeField]
     private AAttack handTriggerAttack;
 
+    [SerializeField]
+    private AAttack scaleChangeAttack;
+
     // Keep track of the current update function and switch it out as the game switches state
     private delegate void UpdateFunction();
     private UpdateFunction currentUpdate;
@@ -39,6 +42,7 @@ public class VRControls : MonoBehaviour
         switchDefenseAttack = Instantiate(switchDefenseAttack.gameObject, GetObjects.getAttackContainer()).GetComponent<AAttack>();
         fireballAttack = Instantiate(fireballAttack.gameObject, GetObjects.getAttackContainer()).GetComponent<AAttack>();
         handTriggerAttack = Instantiate(handTriggerAttack.gameObject, GetObjects.getAttackContainer()).GetComponent<AAttack>();
+        scaleChangeAttack = Instantiate(scaleChangeAttack.gameObject, GetObjects.getAttackContainer()).GetComponent<AAttack>();
 
         // Install our state-switching listeners
         EventManager.StartListening(GameEvents.DefensivePhaseStart, delegate() { currentUpdate = defensiveUpdate; });
@@ -47,8 +51,9 @@ public class VRControls : MonoBehaviour
         // Start by waiting for input
         currentUpdate = waitForStartInputUpdate;
 
-        // Always check the hand triggers
+        // Always check the hand triggers and start button
         alternateUpdate = checkHandTriggersUpdate;
+        alternateUpdate += checkForStartButtonUpdate;
     }
 
     void offensiveUpdate()
@@ -106,6 +111,14 @@ public class VRControls : MonoBehaviour
         if (rHandTriggerDown)
         {
             handTriggerAttack.holdFunction(OVRInput.Controller.RTouch);
+        }
+    }
+
+    void checkForStartButtonUpdate()
+    {
+        if (OVRInput.GetDown(OVRInput.RawButton.Start))
+        {
+            scaleChangeAttack.releaseFunction(OVRInput.Controller.LTouch);
         }
     }
 
