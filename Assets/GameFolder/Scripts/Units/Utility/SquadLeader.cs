@@ -11,6 +11,19 @@ public class SquadLeader : MonoBehaviour
     void Start()
     {
         unit = GetComponent<Unit>();
+        // When the squad leader dies dismantle the squad
+        unit.installDeathListener(dismantleSquad);
+    }
+
+    // For now when a squad gets dismantled just remove the manual patrol components from the troops
+    private void dismantleSquad()
+    {
+        checkForDeadSquadMembers();
+
+        for (int troopIndex = 0; troopIndex < troops.Count; troopIndex++)
+        {
+            Destroy(troops[troopIndex].GetComponent<ManualPatrol>());
+        }
     }
 
     private void checkForDeadSquadMembers()
