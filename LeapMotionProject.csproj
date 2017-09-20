@@ -159,6 +159,7 @@
     <Compile Include="Assets\GameFolder\Scripts\Units\Types\StaticUnit.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\Types\Unit.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\Utility\BloodSystem.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\Units\Utility\FollowLeader.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\Utility\HealthBar.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\Utility\ManualPatrol.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\Utility\NavTest.cs" />
