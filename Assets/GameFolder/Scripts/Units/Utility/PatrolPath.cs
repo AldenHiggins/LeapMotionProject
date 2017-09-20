@@ -13,7 +13,7 @@ public class PatrolPath : MonoBehaviour
     {
         currentPatrolPoint++;
 
-        if (currentPatrolPoint > patrolPointHolder.transform.childCount)
+        if (currentPatrolPoint >= patrolPointHolder.transform.childCount)
         {
             currentPatrolPoint = 0;
         }
