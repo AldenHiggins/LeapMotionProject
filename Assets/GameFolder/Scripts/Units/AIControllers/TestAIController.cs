@@ -104,19 +104,8 @@ public class TestAIController : MonoBehaviour
             SquadLeader squad = unit.GetComponent<SquadLeader>();
             if (squad == null) return BehaviorReturnCode.Success;
 
-            // If the unit is part of a squad generate appropriate follow positions for the squad members
-            Vector3 patrolVector = (unit.transform.position - unit.targetPosition).normalized;
-            patrolVector *= 5.0f;
-
-            // Set the unit's squad to follow it
-            for (int squadIndex = 0; squadIndex < squad.troops.Length; squadIndex++)
-            {
-                ManualPatrol troopPatrol = squad.troops[squadIndex].GetComponent<ManualPatrol>();
-                if (troopPatrol == null) continue;
-
-                Vector3 patrolPosition = unit.targetPosition + (Quaternion.Euler(0.0f, -45.0f + (45.0f * squadIndex), 0.0f) * patrolVector);
-                troopPatrol.setPatrolPosition(patrolPosition);
-            }
+            // If the unit is part of a squad inform the subordinates of a new patrol position
+            squad.issueNewTroopMovement();
             return BehaviorReturnCode.Success;
         });
 
