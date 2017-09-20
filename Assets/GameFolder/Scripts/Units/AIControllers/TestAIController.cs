@@ -34,9 +34,21 @@ public class TestAIController : MonoBehaviour
                     return BehaviorReturnCode.Success;
                 }
 
-                // If there isn't a defined path generate a random position nearby
+                // If we don't have a defined path generate a random position
+                Vector3 patrolCenterPosition = transform.position;
+                float patrolRange = unit.patrolSearchRange;
                 Vector3 newTargetPosition = Vector3.zero;
-                if (unit.findRandomPointOnNavMesh(transform.position, unit.patrolSearchRange, out newTargetPosition))
+
+                // If we have a patrol area use that to find our random position
+                PatrolArea area = unit.GetComponent<PatrolArea>();
+                if (area != null)
+                {
+                    patrolCenterPosition = area.patrolAreaObject.transform.position;
+                    patrolRange = area.patrolAreaObject.transform.localScale.x;
+                }
+
+                // Generate our patrol position
+                if (unit.findRandomPointOnNavMesh(patrolCenterPosition, patrolRange, out newTargetPosition))
                 {
                     // Start moving towards our new random point
                     unit.setDestination(newTargetPosition);

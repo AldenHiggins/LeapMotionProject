@@ -161,6 +161,7 @@
     <Compile Include="Assets\GameFolder\Scripts\Units\Utility\BloodSystem.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\Utility\HealthBar.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\Utility\NavTest.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\Units\Utility\PatrolArea.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\Utility\PatrolPath.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\Utility\Ragdoll.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\AttachToParentOnLoad.cs" />
