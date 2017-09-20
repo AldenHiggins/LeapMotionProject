@@ -6,17 +6,33 @@ public class PatrolPath : MonoBehaviour
 {
     public GameObject patrolPointHolder;
 
-    [HideInInspector]
-    public int currentPatrolPoint = -1;
+    public bool backAndForthPath;
+
+    private int currentPatrolPoint = -1;
+
+    private int patrolDirection = 1;
 
     public int nextPatrolPoint()
     {
-        currentPatrolPoint++;
-
-        if (currentPatrolPoint >= patrolPointHolder.transform.childCount)
+        // Switch directions if the path goes back and forth
+        if (backAndForthPath)
         {
-            currentPatrolPoint = 0;
+            if (patrolDirection == 1 && currentPatrolPoint == patrolPointHolder.transform.childCount - 1)
+            {
+                patrolDirection = -1;
+            }
+            else if (currentPatrolPoint == 0)
+            {
+                patrolDirection = 1;
+            }
         }
+        // Otherwise wrap the path back around to the start position
+        else if (currentPatrolPoint == patrolPointHolder.transform.childCount - 1)
+        {
+            currentPatrolPoint = -1;
+        }
+
+        currentPatrolPoint = currentPatrolPoint + patrolDirection;
 
         return currentPatrolPoint;
     }
