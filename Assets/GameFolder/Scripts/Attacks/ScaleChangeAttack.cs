@@ -10,8 +10,8 @@ public class ScaleChangeAttack : AAttack
     private Vector3 playerInitialPosition;
 
     private float playerLargeScale = 40.0f;
-    private float playerSmallScale = 1.0f;
-    private Vector3 smallScaleOffset = new Vector3(0.0f, 8.0f, -20.0f);
+    private float playerSmallScale = 4.0f;
+    private Vector3 smallScaleOffset = new Vector3(0.0f, 2.0f, -20.0f);
 
     private bool playerIsSmall = false;
 
@@ -44,6 +44,7 @@ public class ScaleChangeAttack : AAttack
         }
 
         playerIsSmall = !playerIsSmall;
+        player.isSmall = playerIsSmall;
     }
 
     public override void holdFunctionConcrete(Vector3 localPos, Vector3 worldPos, Quaternion localRot, Quaternion worldRot) { }

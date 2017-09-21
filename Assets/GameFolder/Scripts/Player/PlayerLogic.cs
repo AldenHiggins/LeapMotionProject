@@ -17,6 +17,9 @@ public class PlayerLogic : MonoBehaviour, IUnit
 
     private bool isAlive = true;
 
+    [HideInInspector]
+    public bool isSmall = false;
+
     // Use this for initialization
     void Start()
     {
