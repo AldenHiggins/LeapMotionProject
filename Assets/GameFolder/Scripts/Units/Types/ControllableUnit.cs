@@ -26,7 +26,7 @@ public class ControllableUnit : MonoBehaviour, IUnit
     [SerializeField]
     private GameObject fireBallTransform;
     private bool attacking;
-    private float attackCooldown = .5f;
+    private float attackCooldown = .3f;
     // ENEMIES
     private int enemySearchLayer = 1 << 8;
     // ALLIES
