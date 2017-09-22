@@ -271,7 +271,7 @@ public class Unit : MonoBehaviour, IUnit
         // If we have a corpse prefab create one
         if (corpsePrefab != null)
         {
-            GameObject corpse = Instantiate(corpsePrefab, transform.position, Quaternion.Euler(-90.0f, transform.rotation.eulerAngles.y, 0.0f), transform.parent);
+            Instantiate(corpsePrefab, transform.position, Quaternion.Euler(-90.0f, transform.rotation.eulerAngles.y, 0.0f), transform.parent);
         }
 
         unitCollider.enabled = false;
