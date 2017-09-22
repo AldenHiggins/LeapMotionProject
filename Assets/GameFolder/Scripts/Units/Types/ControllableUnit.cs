@@ -41,6 +41,7 @@ public class ControllableUnit : MonoBehaviour, IUnit
     private GameObject meleeParticle;
     [SerializeField]
     private AudioClip meleeNoise;
+    private int meleeAttackNumber;
     // PLAYER CAMERA
     private GameObject playerCamera;
     // IS ALIVE
@@ -181,6 +182,14 @@ public class ControllableUnit : MonoBehaviour, IUnit
 
     public void dealMeleeDamage()
     {
+        // Increment to the next melee attack
+        meleeAttackNumber++;
+        if (meleeAttackNumber > 2)
+        {
+            meleeAttackNumber = 0;
+        }
+        anim.SetInteger("MeleeAttackNumber", meleeAttackNumber);
+
         // Fire the melee particle
         meleeParticle.SetActive(false);
         meleeParticle.SetActive(true);
