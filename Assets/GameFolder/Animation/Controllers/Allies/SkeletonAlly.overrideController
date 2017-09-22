@@ -1,0 +1,12 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: SkeletonAlly
+  m_Controller: {fileID: 9100000, guid: a358ff692bb20ca449fb4494de5b721b, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: b2137e48176714f4694ba379fe109b49, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: cd46c1ac980507240aaa201e79afc657, type: 2}

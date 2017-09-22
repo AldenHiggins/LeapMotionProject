@@ -282,6 +282,8 @@
     <Compile Include="Assets\OVRInspector\Scripts\UIUtils\OVRGazeScroller.cs" />
     <Compile Include="Assets\OVRInspector\Scripts\UIUtils\OVRProgressIndicator.cs" />
     <Compile Include="Assets\RPG Character Animation Pack\Code\CameraController.cs" />
+    <Compile Include="Assets\RPG Character Animation Pack\Code\GUIControls.cs" />
+    <Compile Include="Assets\RPG Character Animation Pack\Code\IKHands.cs" />
     <Compile Include="Assets\RPG Character Animation Pack\Code\RPGCharacterControllerFREE.cs" />
     <Compile Include="Assets\RPG Character Animation Pack\Code\RPGCharacterGUI.cs" />
     <Compile Include="Assets\RPG Character Animation Pack\Elements\ImageEffects\Scripts\Bloom.cs" />
@@ -358,7 +360,6 @@
     <Compile Include="Assets\Simple Mesh Combine\Scripts C\Examples\RunTimeCombineAndRelease.cs" />
     <Compile Include="Assets\Simple Mesh Combine\Scripts C\SimpleMeshCombine.cs" />
     <Compile Include="Assets\Simple Mesh Combine\Scripts C\SimpleMeshCombineMaster.cs" />
-    <Compile Include="Assets\Warrior Pack Bundle 1 FREE\Code\IKHands.cs" />
     <Compile Include="Assets\Warrior Pack Bundle 1 FREE\Code\SmoothFollow.cs" />
     <Compile Include="Assets\Warrior Pack Bundle 1 FREE\Code\WarriorAnimationDemoFREE.cs" />
   </ItemGroup>

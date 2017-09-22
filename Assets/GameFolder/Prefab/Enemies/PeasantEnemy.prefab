@@ -73,6 +73,8 @@ GameObject:
   - component: {fileID: 54318256305336124}
   - component: {fileID: 195363308733420780}
   - component: {fileID: 82861483003464160}
+  - component: {fileID: 114443883104186862}
+  - component: {fileID: 114232438549085782}
   m_Layer: 8
   m_Name: PeasantEnemy
   m_TagString: Untagged
@@ -1309,6 +1311,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d799cd9373ff52e42b236e031b9d2b62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114232438549085782
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1117104466984096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d29f5fbaa95693342a84989be4ee1b96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114304925299642610
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1320,6 +1333,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 740a328154f80ee4dbe8a7a13e205ca9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114443883104186862
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1117104466984096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5f8c7050cea9fc46870b466f175d93b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startingHealth: 100
+  attackRadius: 4
+  attackDamage: 1
+  bodyDespawnTime: 10
+  headshotHeight: 1.5
+  enemySearchRadius: 10
+  patrolSearchRange: 50
+  patrolDestinationReachedRange: 1
+  patrolWaitTime: 5
+  isAlly: 0
+  woundSound: {fileID: 8300000, guid: f99cb71f0022a4a49b7f6a7e3f8ce0f1, type: 3}
+  killSound: {fileID: 8300000, guid: c7e2366c7a424b34196cd52618c484be, type: 3}
+  health: 0
+  attacking: 0
+  targetPosition: {x: 0, y: 0, z: 0}
+  patrolling: 0
+  isDying: 0
+  enemySearchLayer: 67584
+  anim: {fileID: 0}
+  agent: {fileID: 0}
+  source: {fileID: 0}
+  unitCollider: {fileID: 0}
 --- !u!137 &137408172634152714
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
