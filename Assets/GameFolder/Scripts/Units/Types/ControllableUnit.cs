@@ -6,8 +6,6 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class ControllableUnit : MonoBehaviour, IUnit
 {
-    // CONTROLLER
-    private CharacterController controller;
     // ANIMATOR
     private Animator anim;
     // AUDIO SOURCE
@@ -17,10 +15,6 @@ public class ControllableUnit : MonoBehaviour, IUnit
     private int startingHealth = 100;
     private int currentHealth;
     // MOVEMENT
-    [SerializeField]
-    private float walkSpeed = .1f;
-    [SerializeField]
-    private float attackWalkSpeed = .1f;
     private float moveSpeed;
     [SerializeField]
     private float turnSpeed = .1f;
@@ -61,11 +55,9 @@ public class ControllableUnit : MonoBehaviour, IUnit
     void Start()
     {
         currentHealth = startingHealth;
-        controller = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
         source = GetComponent<AudioSource>();
         playerCamera = GetObjects.getCamera();
-        moveSpeed = walkSpeed;
         isControlled = true;
         // Don't accept player input during the defensive phase
         EventManager.StartListening(GameEvents.DefensivePhaseStart, delegate { isControlled = false; });
@@ -175,11 +167,9 @@ public class ControllableUnit : MonoBehaviour, IUnit
     {
         attacking = true;
         anim.SetTrigger(attackName);
-        moveSpeed = attackWalkSpeed;
 
         // Wait for a cooldown before attacking again
         yield return new WaitForSeconds(attackCooldown);
-        moveSpeed = walkSpeed;
         attacking = false;
     }
 

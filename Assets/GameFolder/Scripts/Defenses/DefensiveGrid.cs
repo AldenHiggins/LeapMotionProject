@@ -20,15 +20,9 @@ public class DefensiveGrid : MonoBehaviour
 
     private bool[,] placedDefenses;
 
-    // Keep the game around to display the grid only during the defensive mode
-    private GameLogic game;
-
     // Use this for initialization
     void Start()
     {
-        // Get access to the game
-        game = GetObjects.getGame();
-
         // Generate all of the columns
         for (int colIndex = 0; colIndex < numColumns; colIndex++)
         {

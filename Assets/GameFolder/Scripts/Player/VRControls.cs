@@ -5,7 +5,6 @@ using UnityEngine;
 public class VRControls : MonoBehaviour
 {
     private GameLogic game;
-    private PlayerLogic player;
 
     [SerializeField]
     private AAttack placeDefenseAttack;
@@ -35,7 +34,6 @@ public class VRControls : MonoBehaviour
     void Start ()
     {
         game = GetObjects.getGame();
-        player = GetObjects.getPlayer();
 
         // Instantiate all of the attacks we're going to use
         placeDefenseAttack = Instantiate(placeDefenseAttack.gameObject, GetObjects.getAttackContainer()).GetComponent<AAttack>();
