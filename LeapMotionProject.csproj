@@ -130,6 +130,7 @@
     <Compile Include="Assets\GameFolder\Scripts\Attacks\DragWorldAttack.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Attacks\EmptyAttack.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Attacks\FireballAttack.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\Attacks\LoadStartLevelAttack.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Attacks\PlaceDefenseAttack.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Attacks\ScaleChangeAttack.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Attacks\SwitchDefenseAttack.cs" />
