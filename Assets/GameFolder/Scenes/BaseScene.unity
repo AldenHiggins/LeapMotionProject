@@ -6131,7 +6131,11 @@ MonoBehaviour:
     type: 2}
   handTriggerAttack: {fileID: 114427458172639936, guid: 7a7bbc313339b6c4ba3fac81e031d1d7,
     type: 2}
-  scaleChangeAttack: {fileID: 114285204732569484, guid: 2b8ab26ad00057e40b9147cc8f1a100e,
+  scaleChangeAttack: {fileID: 114869262807265124, guid: 404600e0133457140bc55c317f071545,
+    type: 2}
+  bButtonAttack: {fileID: 114709310609146696, guid: 4ac105a5d397ddb40b9c9ca93d8a0123,
+    type: 2}
+  aButtonAttack: {fileID: 114709310609146696, guid: 4ac105a5d397ddb40b9c9ca93d8a0123,
     type: 2}
 --- !u!114 &1118577966
 MonoBehaviour:
@@ -6837,7 +6841,6 @@ GameObject:
   - component: {fileID: 1292733996}
   - component: {fileID: 1292733999}
   - component: {fileID: 1292734000}
-  - component: {fileID: 1292734001}
   - component: {fileID: 1292734002}
   m_Layer: 0
   m_Name: GameLogic
@@ -6903,7 +6906,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1292733994}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a9aa35d679245764da79c7f46d0a96bd, type: 3}
   m_Name: 
@@ -6922,25 +6925,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minBounds: {x: -3.4, y: 0, z: -3.9}
   maxBounds: {x: 183.9, y: 0, z: 238.5}
---- !u!114 &1292734001
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1292733994}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9aa35d679245764da79c7f46d0a96bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  levelName: LoadingScene
 --- !u!114 &1292734002
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1292733994}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a9aa35d679245764da79c7f46d0a96bd, type: 3}
   m_Name: 

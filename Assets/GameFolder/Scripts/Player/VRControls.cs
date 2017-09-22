@@ -21,6 +21,12 @@ public class VRControls : MonoBehaviour
     [SerializeField]
     private AAttack scaleChangeAttack;
 
+    [SerializeField]
+    private AAttack bButtonAttack;
+
+    [SerializeField]
+    private AAttack aButtonAttack;
+
     // Keep track of the current update function and switch it out as the game switches state
     private delegate void UpdateFunction();
     private UpdateFunction currentUpdate;
@@ -41,6 +47,8 @@ public class VRControls : MonoBehaviour
         fireballAttack = Instantiate(fireballAttack.gameObject, GetObjects.getAttackContainer()).GetComponent<AAttack>();
         handTriggerAttack = Instantiate(handTriggerAttack.gameObject, GetObjects.getAttackContainer()).GetComponent<AAttack>();
         scaleChangeAttack = Instantiate(scaleChangeAttack.gameObject, GetObjects.getAttackContainer()).GetComponent<AAttack>();
+        bButtonAttack = Instantiate(bButtonAttack.gameObject, GetObjects.getAttackContainer()).GetComponent<AAttack>();
+        aButtonAttack = Instantiate(aButtonAttack.gameObject, GetObjects.getAttackContainer()).GetComponent<AAttack>();
 
         // Install our state-switching listeners
         EventManager.StartListening(GameEvents.DefensivePhaseStart, delegate() { currentUpdate = defensiveUpdate; });
@@ -52,6 +60,7 @@ public class VRControls : MonoBehaviour
         // Always check the hand triggers and start button
         alternateUpdate = checkHandTriggersUpdate;
         alternateUpdate += checkForStartButtonUpdate;
+        alternateUpdate += checkABButtonUpdate;
     }
 
     void offensiveUpdate()
@@ -117,6 +126,18 @@ public class VRControls : MonoBehaviour
         if (OVRInput.GetDown(OVRInput.RawButton.Start))
         {
             scaleChangeAttack.releaseFunction(OVRInput.Controller.LTouch);
+        }
+    }
+
+    void checkABButtonUpdate()
+    {
+        if (OVRInput.GetDown(OVRInput.RawButton.B))
+        {
+            bButtonAttack.releaseFunction(OVRInput.Controller.RTouch);
+        }
+        if (OVRInput.GetDown(OVRInput.RawButton.A))
+        {
+            aButtonAttack.releaseFunction(OVRInput.Controller.RTouch);
         }
     }
 

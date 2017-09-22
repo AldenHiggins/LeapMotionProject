@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FollowLeader : MonoBehaviour
 {
-    public GameObject leader;
+    private GameObject leader;
 
     private float followAngle;
     private float followDistance = 5.0f;
@@ -12,6 +12,7 @@ public class FollowLeader : MonoBehaviour
     void Start()
     {
         followAngle = Random.value * 180.0f;
+        leader = GetObjects.getControllableUnit().gameObject;
     }
 
     public Vector3 getFollowPosition()
