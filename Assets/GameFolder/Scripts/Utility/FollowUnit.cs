@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class FollowUnit : MonoBehaviour
 {
-    [SerializeField]
     private GameObject objectToMove;
 
     private Vector3 objectToMoveStartPosition;
@@ -14,6 +13,7 @@ public class FollowUnit : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
+        objectToMove = GetObjects.getMovingObjectsContainer();
         startingPosition = transform.position;
         objectToMoveStartPosition = objectToMove.transform.position;
     }
