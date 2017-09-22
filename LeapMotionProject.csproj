@@ -183,8 +183,10 @@
     <Compile Include="Assets\GameFolder\Scripts\Utility\LevelBoundary.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\LevelBounds.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\LoadLevelOnStart.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\Utility\LoadLevelOnTriggerEnter.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\ParticleDestroy.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\ProjectileDestroy.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\Utility\ResetMovingObjectsOnLoad.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\RotateObject.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\UIFollowPlayer.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\WaitToActivateButton.cs" />
