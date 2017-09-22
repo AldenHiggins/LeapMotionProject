@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4682328020092712}
   - component: {fileID: 198477424339965830}
   - component: {fileID: 199781241071261700}
-  m_Layer: 0
+  m_Layer: 19
   m_Name: ShadowGlow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 4243881540610430}
   - component: {fileID: 198372076698675352}
   - component: {fileID: 199039674733078712}
-  m_Layer: 0
+  m_Layer: 19
   m_Name: ShadowTrail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55,7 +55,7 @@ GameObject:
   - component: {fileID: 4652155440870650}
   - component: {fileID: 198362351528433632}
   - component: {fileID: 199583319541260868}
-  m_Layer: 0
+  m_Layer: 19
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72,7 +72,7 @@ GameObject:
   - component: {fileID: 4214774153890802}
   - component: {fileID: 198985781744806204}
   - component: {fileID: 199380294112247178}
-  m_Layer: 0
+  m_Layer: 19
   m_Name: ShadowSparkles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 4260057552743428}
   - component: {fileID: 198374719838565836}
   - component: {fileID: 199644164050419130}
-  m_Layer: 0
+  m_Layer: 19
   m_Name: ShadowWaves
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -106,7 +106,7 @@ GameObject:
   - component: {fileID: 4280647320706362}
   - component: {fileID: 198568420377084424}
   - component: {fileID: 199034707880990658}
-  m_Layer: 0
+  m_Layer: 19
   m_Name: ShadowCloud
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -126,7 +126,7 @@ GameObject:
   - component: {fileID: 198929082453172454}
   - component: {fileID: 114464779309054416}
   - component: {fileID: 114602421662275506}
-  m_Layer: 0
+  m_Layer: 19
   m_Name: ShadowBallExplosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}

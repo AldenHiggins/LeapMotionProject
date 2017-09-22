@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4410597648867400}
   - component: {fileID: 198375594593978282}
   - component: {fileID: 199407071760936218}
-  m_Layer: 0
+  m_Layer: 19
   m_Name: Rings
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41,7 +41,7 @@ GameObject:
   - component: {fileID: 54053106700211638}
   - component: {fileID: 114684137061138030}
   - component: {fileID: 114930491642417778}
-  m_Layer: 0
+  m_Layer: 19
   m_Name: ShadowBall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -58,7 +58,7 @@ GameObject:
   - component: {fileID: 4019664869163216}
   - component: {fileID: 198655572088404256}
   - component: {fileID: 199352982372251862}
-  m_Layer: 0
+  m_Layer: 19
   m_Name: Rings
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -75,7 +75,7 @@ GameObject:
   - component: {fileID: 4079842628680736}
   - component: {fileID: 198754687361004254}
   - component: {fileID: 199615392441298468}
-  m_Layer: 0
+  m_Layer: 19
   m_Name: ShadowMothTrail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -91,7 +91,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4407025743937916}
   - component: {fileID: 96811350032812190}
-  m_Layer: 0
+  m_Layer: 19
   m_Name: Trail1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -108,7 +108,7 @@ GameObject:
   - component: {fileID: 4276760469371262}
   - component: {fileID: 198586632629863396}
   - component: {fileID: 199714041008500396}
-  m_Layer: 0
+  m_Layer: 19
   m_Name: ShadowGlowTrail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -126,7 +126,7 @@ GameObject:
   - component: {fileID: 82339667271896730}
   - component: {fileID: 199394371013513980}
   - component: {fileID: 198199649976683728}
-  m_Layer: 0
+  m_Layer: 19
   m_Name: ShadowProjectileMega
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -142,7 +142,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4394297094973396}
   - component: {fileID: 114840236965312532}
-  m_Layer: 0
+  m_Layer: 19
   m_Name: Trails
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -158,7 +158,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4158416377950572}
   - component: {fileID: 96794838692446446}
-  m_Layer: 0
+  m_Layer: 19
   m_Name: Trail2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -175,7 +175,7 @@ GameObject:
   - component: {fileID: 4252420249576342}
   - component: {fileID: 198443849237955126}
   - component: {fileID: 199489737857205886}
-  m_Layer: 0
+  m_Layer: 19
   m_Name: Tentacles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
