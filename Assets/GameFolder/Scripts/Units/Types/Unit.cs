@@ -13,6 +13,7 @@ public class Unit : MonoBehaviour, IUnit
     public float bodyDespawnTime = 10.0f;
     public float headshotHeight = 1.5f;
     public float enemySearchRadius = 10.0f;
+    public GameObject corpsePrefab;
 
     [Header("Patrolling")]
     public float patrolSearchRange = 50.0f;
@@ -267,6 +268,12 @@ public class Unit : MonoBehaviour, IUnit
         {
             onDeath();
         }
+        // If we have a corpse prefab create one
+        if (corpsePrefab != null)
+        {
+            GameObject corpse = Instantiate(corpsePrefab, transform.position, Quaternion.Euler(-90.0f, transform.rotation.eulerAngles.y, 0.0f), transform.parent);
+        }
+
         unitCollider.enabled = false;
         // Clear other triggers so the unit doesn't do anything other than play the death animation
         anim.ResetTrigger("WoundTrigger");
