@@ -12,7 +12,6 @@ public class GameLogic : MonoBehaviour
 	// LEVEL ROUNDS
 	public bool roundActive = false;
 	// MONSTER WAVES
-	private GameObject waveContainer;
 	private MonsterWave[] enemyWaves;
 	// INTERNAL VARIABLES
 	private PlayerLogic playerLogic;
@@ -25,14 +24,6 @@ public class GameLogic : MonoBehaviour
         mainCamera = GetObjects.getCamera();
         playerLogic = GetObjects.getPlayer();
         spawnedEnemies = GetObjects.getSpawnedEnemies();
-        waveContainer = GetObjects.getEnemyWaves();
-
-		// Initialize waves
-		enemyWaves = new MonsterWave[waveContainer.transform.childCount];
-		for (int i = 0; i < waveContainer.transform.childCount; i++)
-		{
-			enemyWaves[i] = (MonsterWave) waveContainer.transform.GetChild(i).gameObject.GetComponent(typeof(MonsterWave));
-		}
 
         // Install event listeners
         EventManager.StartListening(GameEvents.GameStart, startGame);
