@@ -4,7 +4,7 @@ using UnityEngine;
 public class SpawnSkeletonAttack : AAttack
 {
 	public GameObject zombiePrefab;
-    public PlayerLogic player;
+    private PlayerLogic player;
 
     private void Start()
     {

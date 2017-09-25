@@ -6134,7 +6134,7 @@ MonoBehaviour:
     type: 2}
   scaleChangeAttack: {fileID: 114869262807265124, guid: 404600e0133457140bc55c317f071545,
     type: 2}
-  bButtonAttack: {fileID: 114709310609146696, guid: 4ac105a5d397ddb40b9c9ca93d8a0123,
+  bButtonAttack: {fileID: 114709310609146696, guid: 7fa1685a73f3726498d3cdb046251c8c,
     type: 2}
   aButtonAttack: {fileID: 114709310609146696, guid: 4ac105a5d397ddb40b9c9ca93d8a0123,
     type: 2}
