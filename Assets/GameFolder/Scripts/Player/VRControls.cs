@@ -131,11 +131,20 @@ public class VRControls : MonoBehaviour
 
     void checkABButtonUpdate()
     {
-        if (OVRInput.GetDown(OVRInput.RawButton.B))
+        if (OVRInput.Get(OVRInput.RawButton.B))
+        {
+            bButtonAttack.holdFunction(OVRInput.Controller.RTouch);
+        }
+        else if (OVRInput.GetUp(OVRInput.RawButton.B))
         {
             bButtonAttack.releaseFunction(OVRInput.Controller.RTouch);
         }
-        if (OVRInput.GetDown(OVRInput.RawButton.A))
+
+        if (OVRInput.Get(OVRInput.RawButton.A))
+        {
+            aButtonAttack.holdFunction(OVRInput.Controller.RTouch);
+        }
+        else if (OVRInput.GetUp(OVRInput.RawButton.A))
         {
             aButtonAttack.releaseFunction(OVRInput.Controller.RTouch);
         }

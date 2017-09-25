@@ -20,11 +20,22 @@ public class PlayerLogic : MonoBehaviour, IUnit
     [HideInInspector]
     public bool isSmall = false;
 
+    [SerializeField]
+    private GameObject selectionPointer;
+
+    private GameObject leftPointer;
+    private GameObject rightPointer;
+
     // Use this for initialization
     void Start()
     {
         health = startingHealth;
         game = GetObjects.getGame();
+
+        // Instantiate our selection pointers
+        leftPointer = Instantiate(selectionPointer, transform.GetChild(0).GetChild(4));
+        rightPointer = Instantiate(selectionPointer, transform.GetChild(0).GetChild(5));
+        hidePointers();
     }
 
     // Update is called once per frame
@@ -104,6 +115,24 @@ public class PlayerLogic : MonoBehaviour, IUnit
 
         gold -= goldSpent;
         return true;
+    }
+
+    public void showPointer(bool leftHand)
+    {
+        if (leftHand)
+        {
+            leftPointer.SetActive(true);
+        }
+        else
+        {
+            rightPointer.SetActive(true);
+        }
+    }
+
+    public void hidePointers()
+    {
+        leftPointer.SetActive(false);
+        rightPointer.SetActive(false);
     }
 }
 
