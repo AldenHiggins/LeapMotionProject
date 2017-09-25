@@ -87,6 +87,13 @@ public class ControllableUnit : MonoBehaviour, IUnit
         Vector2 leftInput = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick);
         Vector2 rightInput = OVRInput.Get(OVRInput.Axis2D.SecondaryThumbstick);
 
+        // Take in gamepad input if we don't have an OVR controller
+        if (OVRInput.GetActiveController() == OVRInput.Controller.None)
+        {
+            leftInput = new Vector2(Input.GetAxis("Move_X_Axis"), Input.GetAxis("Move_Y_Axis"));
+            rightInput = new Vector2(Input.GetAxis("Look_X_Axis"), Input.GetAxis("Look_Y_Axis"));
+        }
+
         // Find the look vector of the unit
         Vector3 lookVector = new Vector3(rightInput.x, 0.0f, rightInput.y);
         // Find the movement vector of the unit
@@ -152,9 +159,26 @@ public class ControllableUnit : MonoBehaviour, IUnit
             {
                 StopCoroutine(attack("Attack1Trigger"));
                 StartCoroutine(attack("Attack1Trigger"));
-            }            
+            }
         }
+        else if (Input.GetAxis("Left_Trigger") > 0.0f)
+        {
+            if (!attacking)
+            {
+                StopCoroutine(attack("Attack1Trigger"));
+                StartCoroutine(attack("Attack1Trigger"));
+            }
+        }
+
         if (OVRInput.GetDown(OVRInput.RawButton.RIndexTrigger))
+        {
+            if (!attacking)
+            {
+                StopCoroutine(attack("Attack2Trigger"));
+                StartCoroutine(attack("Attack2Trigger"));
+            }
+        }
+        else if (Input.GetAxis("Right_Trigger") > 0.0f)
         {
             if (!attacking)
             {
