@@ -200,7 +200,7 @@ public class ControllableUnit : MonoBehaviour, IUnit
 
     public void fireFireball()
     {
-        GameObject newFireball = Instantiate(fireBall, fireBallTransform.transform.position,
+        Instantiate(fireBall, fireBallTransform.transform.position,
             fireBallTransform.transform.rotation, GetObjects.instance.getAttackParticleContainer());
     }
 
