@@ -5,8 +5,6 @@ using System;
 
 public class PlayerLogic : MonoBehaviour, IUnit
 {
-    private GameLogic game;
-
     [SerializeField]
     private int startingHealth = 100;
 
@@ -30,8 +28,6 @@ public class PlayerLogic : MonoBehaviour, IUnit
     void Start()
     {
         health = startingHealth;
-        game = GetObjects.instance.getGame();
-
         // Instantiate our selection pointers
         leftPointer = Instantiate(selectionPointer, transform.GetChild(0).GetChild(4));
         rightPointer = Instantiate(selectionPointer, transform.GetChild(0).GetChild(5));
@@ -45,11 +41,9 @@ public class PlayerLogic : MonoBehaviour, IUnit
 
     public void respawn()
     {
-        if (game != null)
-        {
-            isAlive = false;
-            game.killPlayerEndGame(false);
-        }
+        isAlive = false;
+        // Trigger the game over event
+        EventManager.TriggerEvent(GameEvents.GameOver);
     }
 
     public void dealDamage(int damageToDeal, Vector3 damageDirection)

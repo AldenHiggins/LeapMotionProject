@@ -3,7 +3,6 @@ using System.Collections;
 
 public class MoveBolt : MonoBehaviour 
 {
-	public GameLogic game;
 	public int damage;
 	private Vector3 velocity;
 	private GameObject target;

@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class VRControls : MonoBehaviour
 {
-    private GameLogic game;
-
     [SerializeField]
     private AAttack placeDefenseAttack;
 
@@ -42,8 +40,6 @@ public class VRControls : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
-        game = GetObjects.instance.getGame();
-
         // Instantiate all of the attacks we're going to use
         Transform attackContainer = GetObjects.instance.getAttackContainer();
         placeDefenseAttack = Instantiate(placeDefenseAttack.gameObject, attackContainer).GetComponent<AAttack>();
@@ -85,12 +81,6 @@ public class VRControls : MonoBehaviour
 
     void defensiveUpdate()
     {
-        // Check for the user skipping the defensive stage and activating the wave
-        if (OVRInput.GetDown(OVRInput.Button.One) || Input.GetKeyDown("v"))
-        {
-            game.startRound();
-        }
-
         // Iterate the hold function of the place defense attack
         placeDefenseAttack.holdFunction(OVRInput.Controller.RTouch);
 

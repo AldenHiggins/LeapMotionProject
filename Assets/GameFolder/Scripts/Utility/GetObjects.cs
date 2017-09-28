@@ -7,7 +7,6 @@ public class GetObjects : MonoBehaviour
     public static GetObjects instance;
 
     // Key game objects
-    private GameLogic game;
     private PlayerLogic player;
     private GameObject mainCamera;
     private ControllableUnit controllableUnit;
@@ -37,22 +36,6 @@ public class GetObjects : MonoBehaviour
         {
             Destroy(this);
         }
-    }
-
-    public GameLogic getGame()
-    {
-        if (game)
-        {
-            return game;
-        }
-
-        findFirstObjectOfType(ref game, getRootTransform());
-
-        if (game == null)
-        {
-            Debug.LogError("Game logic not found in scene!");
-        }
-        return game;
     }
 
     public PlayerLogic getPlayer()

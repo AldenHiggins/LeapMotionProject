@@ -7,7 +7,7 @@ public class AttachToParentOnLoad : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
-        transform.parent = GetObjects.instance.getGame().gameObject.transform.parent;	
+        transform.parent = GetObjects.instance.getMovingObjectsContainer();	
 	}
 	
 	// Update is called once per frame
