@@ -152,6 +152,7 @@
     <Compile Include="Assets\GameFolder\Scripts\Defenses\OilSlick.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Player\GameEvents.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Player\PlayerLogic.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\Player\SceneLogic.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Player\UILogic.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Player\VRControls.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\AIControllers\TestAIController.cs" />
