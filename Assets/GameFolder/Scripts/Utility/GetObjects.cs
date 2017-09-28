@@ -139,6 +139,19 @@ public static class GetObjects
         return returnBounds;
     }
 
+    public static GameObject getScene()
+    {
+        GameObject[] sceneRootObjects = UnityEngine.SceneManagement.SceneManager.GetSceneAt(2).GetRootGameObjects();
+        return sceneRootObjects[0];
+    }
+
+    public static GameObject getPauseMenu()
+    {
+        GameObject firstFoundOfName = null;
+        findFirstObjectWithName("PauseMenu", getRootTransform(), ref firstFoundOfName);
+        return firstFoundOfName;
+    }
+
     // Try and find an object with a specific name ONLY within the direct children of the supplied transform
     public static void findNameInChildren(string name, Transform findObjectInThis, ref GameObject foundObject)
     {

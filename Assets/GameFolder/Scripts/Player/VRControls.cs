@@ -22,6 +22,9 @@ public class VRControls : MonoBehaviour
     private AAttack scaleChangeAttack;
 
     [SerializeField]
+    private AAttack startButtonAttack;
+
+    [SerializeField]
     private AAttack bButtonAttack;
 
     [SerializeField]
@@ -49,6 +52,7 @@ public class VRControls : MonoBehaviour
         scaleChangeAttack = Instantiate(scaleChangeAttack.gameObject, GetObjects.getAttackContainer()).GetComponent<AAttack>();
         bButtonAttack = Instantiate(bButtonAttack.gameObject, GetObjects.getAttackContainer()).GetComponent<AAttack>();
         aButtonAttack = Instantiate(aButtonAttack.gameObject, GetObjects.getAttackContainer()).GetComponent<AAttack>();
+        startButtonAttack = Instantiate(startButtonAttack.gameObject, GetObjects.getAttackContainer()).GetComponent<AAttack>();
 
         // Install our state-switching listeners
         EventManager.StartListening(GameEvents.DefensivePhaseStart, delegate() { currentUpdate = defensiveUpdate; });
@@ -125,7 +129,7 @@ public class VRControls : MonoBehaviour
     {
         if (OVRInput.GetDown(OVRInput.RawButton.Start))
         {
-            scaleChangeAttack.releaseFunction(OVRInput.Controller.LTouch);
+            startButtonAttack.releaseFunction(OVRInput.Controller.RTouch);
         }
     }
 
