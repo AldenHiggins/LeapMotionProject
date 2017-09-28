@@ -232,22 +232,8 @@ public class ControllableUnit : MonoBehaviour, IUnit
             {
                 Vector3 damageVector = hitUnit.getGameObject().transform.position - transform.position;
                 hitUnit.dealDamage(meleeDamage, damageVector.normalized);
-
-                // If we have killed a unit spawn a skeleton ally on their corpse
-                //if (hitUnit.getCurrentHealth() <= 0)
-                //{
-                //    StartCoroutine(spawnSkeleton(hitUnit.getGameObject().transform.position, hitUnit.getGameObject().transform.rotation));
-                //}
             }
         }
-    }
-
-    IEnumerator spawnSkeleton(Vector3 position, Quaternion rotation)
-    {
-        yield return new WaitForSeconds(3.0f);
-
-        GameObject newSkeleton = Instantiate(skeletonAlly, position, rotation, transform.parent);
-        //newSkeleton.GetComponent<FollowLeader>().leader = gameObject;
     }
 
     public void installDeathListener(Action onDeathCallback)
