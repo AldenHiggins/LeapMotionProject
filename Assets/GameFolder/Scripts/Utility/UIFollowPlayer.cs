@@ -19,7 +19,7 @@ public class UIFollowPlayer : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-        playerCamera = GetObjects.getPlayer().gameObject;
+        playerCamera = GetObjects.instance.getPlayer().gameObject;
         Debug.Log("Camera name: " + playerCamera.name);
 		enableUI ();
 	}

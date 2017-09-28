@@ -58,7 +58,7 @@ public class ControllableUnit : MonoBehaviour, IUnit
         currentHealth = startingHealth;
         anim = GetComponent<Animator>();
         source = GetComponent<AudioSource>();
-        playerCamera = GetObjects.getCamera();
+        playerCamera = GetObjects.instance.getCamera();
         isControlled = true;
         // Don't accept player input during the defensive phase
         EventManager.StartListening(GameEvents.DefensivePhaseStart, delegate { isControlled = false; });
@@ -201,7 +201,7 @@ public class ControllableUnit : MonoBehaviour, IUnit
     public void fireFireball()
     {
         GameObject newFireball = Instantiate(fireBall, fireBallTransform.transform.position, fireBallTransform.transform.rotation);
-        newFireball.transform.parent = GetObjects.getAttackParticleContainer();
+        newFireball.transform.parent = GetObjects.instance.getAttackParticleContainer();
     }
 
     public void dealMeleeDamage()

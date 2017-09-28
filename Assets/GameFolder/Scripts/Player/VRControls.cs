@@ -42,17 +42,18 @@ public class VRControls : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
-        game = GetObjects.getGame();
+        game = GetObjects.instance.getGame();
 
         // Instantiate all of the attacks we're going to use
-        placeDefenseAttack = Instantiate(placeDefenseAttack.gameObject, GetObjects.getAttackContainer()).GetComponent<AAttack>();
-        switchDefenseAttack = Instantiate(switchDefenseAttack.gameObject, GetObjects.getAttackContainer()).GetComponent<AAttack>();
-        fireballAttack = Instantiate(fireballAttack.gameObject, GetObjects.getAttackContainer()).GetComponent<AAttack>();
-        handTriggerAttack = Instantiate(handTriggerAttack.gameObject, GetObjects.getAttackContainer()).GetComponent<AAttack>();
-        scaleChangeAttack = Instantiate(scaleChangeAttack.gameObject, GetObjects.getAttackContainer()).GetComponent<AAttack>();
-        bButtonAttack = Instantiate(bButtonAttack.gameObject, GetObjects.getAttackContainer()).GetComponent<AAttack>();
-        aButtonAttack = Instantiate(aButtonAttack.gameObject, GetObjects.getAttackContainer()).GetComponent<AAttack>();
-        startButtonAttack = Instantiate(startButtonAttack.gameObject, GetObjects.getAttackContainer()).GetComponent<AAttack>();
+        Transform attackContainer = GetObjects.instance.getAttackContainer();
+        placeDefenseAttack = Instantiate(placeDefenseAttack.gameObject, attackContainer).GetComponent<AAttack>();
+        switchDefenseAttack = Instantiate(switchDefenseAttack.gameObject, attackContainer).GetComponent<AAttack>();
+        fireballAttack = Instantiate(fireballAttack.gameObject, attackContainer).GetComponent<AAttack>();
+        handTriggerAttack = Instantiate(handTriggerAttack.gameObject, attackContainer).GetComponent<AAttack>();
+        scaleChangeAttack = Instantiate(scaleChangeAttack.gameObject, attackContainer).GetComponent<AAttack>();
+        bButtonAttack = Instantiate(bButtonAttack.gameObject, attackContainer).GetComponent<AAttack>();
+        aButtonAttack = Instantiate(aButtonAttack.gameObject, attackContainer).GetComponent<AAttack>();
+        startButtonAttack = Instantiate(startButtonAttack.gameObject, attackContainer).GetComponent<AAttack>();
 
         // Install our state-switching listeners
         EventManager.StartListening(GameEvents.DefensivePhaseStart, delegate() { currentUpdate = defensiveUpdate; });

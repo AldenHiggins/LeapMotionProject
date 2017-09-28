@@ -18,8 +18,8 @@ public class ScaleChangeAttack : AAttack
 	// Use this for initialization
 	void Start ()
     {
-        player = GetObjects.getPlayer();
-        playerUnit = GetObjects.getControllableUnit();
+        player = GetObjects.instance.getPlayer();
+        playerUnit = GetObjects.instance.getControllableUnit();
         playerInitialPosition = player.transform.parent.localPosition;
 	}
 	

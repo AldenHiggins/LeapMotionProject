@@ -8,7 +8,7 @@ public class SpawnSkeletonAttack : AAttack
 
     private void Start()
     {
-        player = GetObjects.getPlayer();
+        player = GetObjects.instance.getPlayer();
     }
 
     private int corpseLayerMask = 1 << 20;

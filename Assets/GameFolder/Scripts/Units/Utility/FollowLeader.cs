@@ -12,7 +12,7 @@ public class FollowLeader : MonoBehaviour
     void Start()
     {
         followAngle = Random.value * 180.0f;
-        leader = GetObjects.getControllableUnit().gameObject;
+        leader = GetObjects.instance.getControllableUnit().gameObject;
     }
 
     public Vector3 getFollowPosition()

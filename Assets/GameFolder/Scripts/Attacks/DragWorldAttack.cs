@@ -29,10 +29,10 @@ public class DragWorldAttack : AAttack
     void Start()
     {
         controllerStartPosition = Vector3.zero;
-        objectToMove = GetObjects.getMovingObjectsContainer();
-        bounds = GetObjects.GetLevelBounds();
-        playerCharacter = GetObjects.getControllableUnit();
-        player = GetObjects.getPlayer();
+        objectToMove = GetObjects.instance.getMovingObjectsContainer().gameObject;
+        bounds = GetObjects.instance.GetLevelBounds();
+        playerCharacter = GetObjects.instance.getControllableUnit();
+        player = GetObjects.instance.getPlayer();
         startingMoveSpeed = moveSpeed;
     }
 

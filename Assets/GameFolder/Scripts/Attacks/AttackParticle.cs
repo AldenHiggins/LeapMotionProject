@@ -25,7 +25,7 @@ public class AttackParticle : MonoBehaviour
         if (muzzleParticle)
         {
             muzzleParticle = Instantiate(muzzleParticle, transform.position, transform.rotation) as GameObject;
-            muzzleParticle.transform.parent = GetObjects.getAttackParticleContainer();
+            muzzleParticle.transform.parent = GetObjects.instance.getAttackParticleContainer();
             Destroy(muzzleParticle, 1.5f); // Lifetime of muzzle effect.
         }
     }
@@ -51,7 +51,7 @@ public class AttackParticle : MonoBehaviour
         if (impactParticle != null)
         {
             GameObject newImpactParticle = Instantiate(impactParticle, hit.contacts[0].point, Quaternion.identity);
-            newImpactParticle.transform.parent = GetObjects.getAttackParticleContainer();
+            newImpactParticle.transform.parent = GetObjects.instance.getAttackParticleContainer();
             newImpactParticle.SetActive(true);
         }
 

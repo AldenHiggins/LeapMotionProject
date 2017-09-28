@@ -2,154 +2,357 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public static class GetObjects
+public class GetObjects : MonoBehaviour
 {
-    public static GameLogic getGame()
+    public static GetObjects instance;
+
+    // Key game objects
+    private GameLogic game;
+    private PlayerLogic player;
+    private GameObject mainCamera;
+    private ControllableUnit controllableUnit;
+    private GameObject goalPosition;
+    private DefensiveGrid defensiveGrid;
+    private LevelBounds levelBounds;
+    private GameObject pauseMenu;
+
+    // Object containers
+    private Transform rootTransform;
+    private Transform scene;
+    private Transform attackContainer;
+    private Transform defenseContainer;
+    private Transform attackParticleContainer;
+    private Transform miscContainer;
+    private Transform spawnedEnemies;
+    private Transform enemyWaves;
+    private Transform movingObjectsContainer;
+
+    void Awake()
     {
-        GameLogic returnGame = null;
-        findFirstObjectOfType(ref returnGame, getRootTransform());
-        return returnGame;
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
     }
 
-    public static PlayerLogic getPlayer()
+    public GameLogic getGame()
     {
-        PlayerLogic returnPlayer = null;
-        findFirstObjectOfType(ref returnPlayer, getRootTransform());
-        return returnPlayer;
+        if (game)
+        {
+            return game;
+        }
+
+        findFirstObjectOfType(ref game, getRootTransform());
+
+        if (game == null)
+        {
+            Debug.LogError("Game logic not found in scene!");
+        }
+        return game;
     }
 
-    public static ControllableUnit getControllableUnit()
+    public PlayerLogic getPlayer()
     {
-        ControllableUnit returnUnit = null;
-        findFirstObjectOfType(ref returnUnit, getRootTransform());
-        return returnUnit;
+        if (player)
+        {
+            return player;
+        }
+
+        findFirstObjectOfType(ref player, getRootTransform());
+
+        if (player == null)
+        {
+            Debug.LogError("PlayerLogic could not be found in scene!");
+        }
+        return player;
     }
 
-    public static Transform getRootTransform()
+    public ControllableUnit getControllableUnit()
     {
+        if (controllableUnit)
+        {
+            return controllableUnit;
+        }
+        
+        findFirstObjectOfType(ref controllableUnit, getScene().transform);
+
+        if (controllableUnit == null)
+        {
+            Debug.LogError("ControllableUnit could not be found in scene!");
+        }
+
+        return controllableUnit;
+    }
+
+    public Transform getRootTransform()
+    {
+        if (rootTransform)
+        {
+            return rootTransform;
+        }
+
         GameObject[] root = GameObject.FindGameObjectsWithTag("Root");
-        Transform xform = root[0].transform;
-        return xform.root;
-    }
 
-    public static Transform getAttackContainer()
-    {
-        GameObject attackContainer = null;
-        findNameInChildren("Attacks", getRootTransform(), ref attackContainer);
-
-        if (attackContainer != null)
+        if (root == null || root.Length == 0)
         {
-            return attackContainer.transform;
+            Debug.LogError("RootTransform could not be found in scene!");
         }
 
-        attackContainer = new GameObject();
-        attackContainer.name = "Attacks";
-        attackContainer.transform.parent = getRootTransform();
-
-        return attackContainer.transform;
+        rootTransform = root[0].transform;
+        return rootTransform;
     }
 
-    public static Transform getDefenseContainer()
+    public Transform getAttackContainer()
     {
-        GameObject defenseContainer = null;
-        findNameInChildren("Defenses", getRootTransform(), ref defenseContainer);
-
-        if (defenseContainer != null)
+        if (attackContainer)
         {
-            return defenseContainer.transform;
+            return attackContainer;
         }
 
-        defenseContainer = new GameObject();
-        defenseContainer.name = "Defenses";
-        defenseContainer.transform.parent = getRootTransform();
+        GameObject attackContainerGameObject = null;
+        findNameInChildren("Attacks", getRootTransform(), ref attackContainerGameObject);
 
-        return defenseContainer.transform;
-    }
-
-    public static Transform getAttackParticleContainer()
-    {
-        GameObject attackParticleContainer = null;
-        findNameInChildren("AttackParticles", getRootTransform(), ref attackParticleContainer);
-
-        if (attackParticleContainer != null)
+        if (attackContainerGameObject != null)
         {
-            return attackParticleContainer.transform;
+            attackContainer = attackContainerGameObject.transform;
+            return attackContainer;
         }
 
-        attackParticleContainer = new GameObject();
-        attackParticleContainer.name = "AttackParticles";
-        attackParticleContainer.transform.parent = getRootTransform();
-
-        return attackParticleContainer.transform;
+        attackContainerGameObject = new GameObject();
+        attackContainerGameObject.name = "Attacks";
+        attackContainerGameObject.transform.parent = getRootTransform();
+        attackContainer = attackContainerGameObject.transform;
+        return attackContainer;
     }
 
-    public static GameObject getCamera()
+    public Transform getDefenseContainer()
     {
-        GameObject firstFoundOfName = null;
-        findFirstObjectWithName("CenterEyeAnchor", getRootTransform(), ref firstFoundOfName);
-        return firstFoundOfName;
+        if (defenseContainer)
+        {
+            return defenseContainer;
+        }
+
+        GameObject defenseContainerGameObject = null;
+        findNameInChildren("Defenses", getScene(), ref defenseContainerGameObject);
+
+        if (defenseContainerGameObject != null)
+        {
+            defenseContainer = defenseContainerGameObject.transform;
+            return defenseContainer;
+        }
+
+        defenseContainerGameObject = new GameObject();
+        defenseContainerGameObject.name = "Defenses";
+        defenseContainerGameObject.transform.parent = getScene();
+        defenseContainer = defenseContainerGameObject.transform;
+        return defenseContainer;
     }
 
-    public static GameObject getSpawnedEnemies()
+    public Transform getAttackParticleContainer()
     {
-        GameObject firstFoundOfName = null;
-        findFirstObjectWithName("SpawnedEnemies", getRootTransform(), ref firstFoundOfName);
-        return firstFoundOfName;
+        if (attackParticleContainer)
+        {
+            return attackParticleContainer;
+        }
+
+        GameObject attackParticleContainerGameObject = null;
+        findNameInChildren("AttackParticles", getScene().transform, ref attackParticleContainerGameObject);
+
+        if (attackParticleContainerGameObject != null)
+        {
+            attackParticleContainer = attackParticleContainerGameObject.transform;
+            return attackParticleContainer;
+        }
+
+        attackParticleContainerGameObject = new GameObject();
+        attackParticleContainerGameObject.name = "AttackParticles";
+        attackParticleContainerGameObject.transform.parent = getScene().transform;
+        attackParticleContainerGameObject.transform.localScale = Vector3.one;
+        attackParticleContainer = attackParticleContainerGameObject.transform;
+        return attackParticleContainer;
     }
 
-    public static GameObject getGoalPosition()
+    public GameObject getCamera()
     {
-        GameObject firstFoundOfName = null;
-        findFirstObjectWithName("EnemyGoal", getRootTransform(), ref firstFoundOfName);
-        return firstFoundOfName;
+        if (mainCamera)
+        {
+            return mainCamera;
+        }
+
+        findFirstObjectWithName("CenterEyeAnchor", getRootTransform(), ref mainCamera);
+
+        if (mainCamera == null)
+        {
+            Debug.LogError("MainCamera not found in scene!!");
+        }
+
+        return mainCamera;
     }
 
-    public static GameObject getEnemyWaves()
+    public Transform getSpawnedEnemies()
     {
-        GameObject firstFoundOfName = null;
-        findFirstObjectWithName("EnemyWaves", getRootTransform(), ref firstFoundOfName);
-        return firstFoundOfName;
+        if (spawnedEnemies)
+        {
+            return spawnedEnemies;
+        }
+
+        GameObject spawnedEnemiesGameObject = null;
+        findFirstObjectWithName("SpawnedEnemies", getScene(), ref spawnedEnemiesGameObject);
+
+        if (spawnedEnemiesGameObject == null)
+        {
+            Debug.LogError("SpawnedEnemies not found in scene!");
+        }
+
+        spawnedEnemies = spawnedEnemiesGameObject.transform;
+        return spawnedEnemies;
     }
 
-    public static Transform getMiscContainer()
+    public GameObject getGoalPosition()
     {
-        GameObject firstFoundOfName = null;
-        findFirstObjectWithName("MiscGameObjects", getRootTransform(), ref firstFoundOfName);
-        return firstFoundOfName.transform;
+        if (goalPosition)
+        {
+            return goalPosition;
+        }
+
+        findFirstObjectWithName("EnemyGoal", getRootTransform(), ref goalPosition);
+
+        if (goalPosition == null)
+        {
+            Debug.LogError("GoalPosition not found in scene!");
+        }
+
+        return goalPosition;
     }
 
-    public static GameObject getMovingObjectsContainer()
+    public Transform getEnemyWaves()
     {
-        GameObject firstFoundOfName = null;
-        findFirstObjectWithName("MovingObjects", getRootTransform(), ref firstFoundOfName);
-        return firstFoundOfName;
+        if (enemyWaves)
+        {
+            return enemyWaves;
+        }
+
+        GameObject enemyWavesGameObject = null;
+        findFirstObjectWithName("EnemyWaves", getScene(), ref enemyWavesGameObject);
+
+        if (enemyWaves == null)
+        {
+            Debug.LogError("EnemyWaves not found in scene!");
+        }
+
+        enemyWaves = enemyWavesGameObject.transform;
+        return enemyWaves;
     }
 
-    public static DefensiveGrid getDefensiveGrid()
+    public Transform getMiscContainer()
     {
-        DefensiveGrid returnGrid = null;
-        findFirstObjectOfType(ref returnGrid, getRootTransform());
-        return returnGrid;
+        if (miscContainer)
+        {
+            return miscContainer;
+        }
+
+        GameObject miscContainerGameObject = null;
+        findFirstObjectWithName("MiscGameObjects", getRootTransform(), ref miscContainerGameObject);
+
+        if (miscContainerGameObject == null)
+        {
+            Debug.LogError("MiscGameObjects not found in scene!!");
+        }
+
+        miscContainer = miscContainerGameObject.transform;
+        return miscContainer;
     }
 
-    public static LevelBounds GetLevelBounds()
+    public Transform getMovingObjectsContainer()
     {
-        LevelBounds returnBounds = null;
-        findFirstObjectOfType(ref returnBounds, getRootTransform());
-        return returnBounds;
+        if (movingObjectsContainer)
+        {
+            return movingObjectsContainer;
+        }
+
+        GameObject movingObjectsContainerGameObject = null;
+        findFirstObjectWithName("MovingObjects", getRootTransform(), ref movingObjectsContainerGameObject);
+
+        if (movingObjectsContainerGameObject == null)
+        {
+            Debug.LogError("MovingObjects not found in scene!");
+        }
+
+        movingObjectsContainer = movingObjectsContainerGameObject.transform;
+        return movingObjectsContainer;
     }
 
-    public static GameObject getScene()
+    public DefensiveGrid getDefensiveGrid()
     {
+        if (defensiveGrid)
+        {
+            return defensiveGrid;
+        }
+
+        findFirstObjectOfType(ref defensiveGrid, getRootTransform());
+
+        if (defensiveGrid == null)
+        {
+            Debug.LogError("DefensiveGrid not found in scene!!");
+        }
+
+        return defensiveGrid;
+    }
+
+    public LevelBounds GetLevelBounds()
+    {
+        if (levelBounds)
+        {
+            return levelBounds;
+        }
+
+        findFirstObjectOfType(ref levelBounds, getRootTransform());
+
+        if (levelBounds == null)
+        {
+            Debug.LogError("LevelBounds not found in scene!!");
+        }
+
+        return levelBounds;
+    }
+
+    public Transform getScene()
+    {
+        if (scene)
+        {
+            return scene;
+        }
+
         GameObject[] sceneRootObjects = UnityEngine.SceneManagement.SceneManager.GetSceneAt(2).GetRootGameObjects();
-        return sceneRootObjects[0];
+
+        if (sceneRootObjects == null || sceneRootObjects.Length == 0)
+        {
+            Debug.LogError("Could not find scene!");
+        }
+
+        scene = sceneRootObjects[0].transform;
+        return scene;
     }
 
-    public static GameObject getPauseMenu()
+    public GameObject getPauseMenu()
     {
-        GameObject firstFoundOfName = null;
-        findFirstObjectWithName("PauseMenu", getRootTransform(), ref firstFoundOfName);
-        return firstFoundOfName;
+        if (pauseMenu)
+        {
+            return pauseMenu;
+        }
+
+        findFirstObjectWithName("PauseMenu", getRootTransform(), ref pauseMenu);
+
+        if (pauseMenu == null)
+        {
+            Debug.LogError("PauseMenu not found in scene!");
+        }
+
+        return pauseMenu;
     }
 
     // Try and find an object with a specific name ONLY within the direct children of the supplied transform

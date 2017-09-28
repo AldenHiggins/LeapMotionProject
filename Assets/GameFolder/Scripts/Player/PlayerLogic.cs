@@ -30,7 +30,7 @@ public class PlayerLogic : MonoBehaviour, IUnit
     void Start()
     {
         health = startingHealth;
-        game = GetObjects.getGame();
+        game = GetObjects.instance.getGame();
 
         // Instantiate our selection pointers
         leftPointer = Instantiate(selectionPointer, transform.GetChild(0).GetChild(4));

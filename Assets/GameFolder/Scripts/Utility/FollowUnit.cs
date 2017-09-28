@@ -13,7 +13,7 @@ public class FollowUnit : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
-        objectToMove = GetObjects.getMovingObjectsContainer();
+        objectToMove = GetObjects.instance.getMovingObjectsContainer().gameObject;
         startingPosition = transform.position;
         objectToMoveStartPosition = objectToMove.transform.position;
     }

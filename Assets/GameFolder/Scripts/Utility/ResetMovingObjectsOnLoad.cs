@@ -8,7 +8,7 @@ public class ResetMovingObjectsOnLoad : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
-        GetObjects.getMovingObjectsContainer().transform.position = Vector3.zero;	
+        GetObjects.instance.getMovingObjectsContainer().transform.position = Vector3.zero;	
 	}
 	
 	// Update is called once per frame

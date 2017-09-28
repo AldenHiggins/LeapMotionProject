@@ -10,7 +10,7 @@ public class FireballAttack : AAttack
     {
         // Generate a fireball at the controller that fires out from the correct angle (so that the controller is a gun)
         GameObject newFireball = Instantiate(fireBall, worldPos, worldRot);
-        newFireball.transform.parent = GetObjects.getAttackParticleContainer();
+        newFireball.transform.parent = GetObjects.instance.getAttackParticleContainer();
         newFireball.SetActive(true);
         newFireball.GetComponent<Renderer>().enabled = true;
     }

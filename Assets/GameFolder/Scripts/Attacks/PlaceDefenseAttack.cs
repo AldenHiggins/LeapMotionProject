@@ -38,12 +38,12 @@ public class PlaceDefenseAttack : AAttack
         // Initialize the first defense
         currentDefense = -1;
         switchDefense();
-        game = GetObjects.getGame();
-        grid = GetObjects.getDefensiveGrid();
-        player = GetObjects.getPlayer();
+        game = GetObjects.instance.getGame();
+        grid = GetObjects.instance.getDefensiveGrid();
+        player = GetObjects.instance.getPlayer();
         // Instantiate our defensive pointer
         defensivePointer = Instantiate(defensivePointer);
-        defensivePointer.transform.parent = GetObjects.getMiscContainer();
+        defensivePointer.transform.parent = GetObjects.instance.getMiscContainer();
         defensivePointer.SetActive(false);
     }
 
@@ -80,7 +80,7 @@ public class PlaceDefenseAttack : AAttack
         if (grid.placeNewDefense(defenseLocation))
         {
             GameObject ballistaFinal = Instantiate(defenses[currentDefense].getDefensiveObject(), defenseLocation + new Vector3(0.0f, 0.1f, 0.0f), defenseRotation(localRot));
-            ballistaFinal.transform.parent = GetObjects.getDefenseContainer();
+            ballistaFinal.transform.parent = GetObjects.instance.getDefenseContainer();
             player.spendGold(defenses[currentDefense].getCost());
             destroyPendingObject();
         }

@@ -13,8 +13,8 @@ public class PauseMenuAttack : AAttack
     {
         menuActive = !menuActive;
 
-        GetObjects.getPauseMenu().SetActive(menuActive);
-        GetObjects.getScene().SetActive(!menuActive);
+        GetObjects.instance.getPauseMenu().SetActive(menuActive);
+        GetObjects.instance.getScene().gameObject.SetActive(!menuActive);
         return;
     }
 

@@ -11,7 +11,7 @@ public class LoadStartLevelAttack : AAttack
     {
         SceneManager.UnloadSceneAsync(SceneManager.GetSceneAt(2).name);
         SceneManager.LoadScene("LevelSelectTest", LoadSceneMode.Additive);
-        GetObjects.getMovingObjectsContainer().transform.position = Vector3.zero;
+        GetObjects.instance.getMovingObjectsContainer().transform.position = Vector3.zero;
         return;
     }
 

@@ -21,13 +21,13 @@ public abstract class AAttack : MonoBehaviour
     // Helper function to get the controller's world position
     private Vector3 getWorldPosition(OVRInput.Controller hand)
     {
-        return GetObjects.getPlayer().gameObject.transform.parent.TransformPoint(OVRInput.GetLocalControllerPosition(hand));
+        return GetObjects.instance.getPlayer().gameObject.transform.parent.TransformPoint(OVRInput.GetLocalControllerPosition(hand));
     }
 
     // Helper function to get the controller's world rotation
     private Quaternion getWorldRotation(OVRInput.Controller hand)
     {
-        return GetObjects.getPlayer().gameObject.transform.parent.rotation * OVRInput.GetLocalControllerRotation(hand);
+        return GetObjects.instance.getPlayer().gameObject.transform.parent.rotation * OVRInput.GetLocalControllerRotation(hand);
     }
 }
 

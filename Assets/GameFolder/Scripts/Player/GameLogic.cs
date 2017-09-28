@@ -21,9 +21,9 @@ public class GameLogic : MonoBehaviour
 	// Initialize variables
 	void Start () 
 	{
-        mainCamera = GetObjects.getCamera();
-        playerLogic = GetObjects.getPlayer();
-        spawnedEnemies = GetObjects.getSpawnedEnemies();
+        mainCamera = GetObjects.instance.getCamera();
+        playerLogic = GetObjects.instance.getPlayer();
+        spawnedEnemies = GetObjects.instance.getSpawnedEnemies().gameObject;
 
         // Install event listeners
         EventManager.StartListening(GameEvents.GameStart, startGame);
