@@ -1,23 +1,12 @@
 ﻿using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class VRControls : MonoBehaviour
 {
     [SerializeField]
-    private AAttack placeDefenseAttack;
-
-    [SerializeField]
-    private AAttack switchDefenseAttack;
-
-    [SerializeField]
-    private AAttack fireballAttack;
-
-    [SerializeField]
     private AAttack handTriggerAttack;
-
-    [SerializeField]
-    private AAttack scaleChangeAttack;
 
     [SerializeField]
     private AAttack startButtonAttack;
@@ -28,10 +17,8 @@ public class VRControls : MonoBehaviour
     [SerializeField]
     private AAttack aButtonAttack;
 
-    // Keep track of the current update function and switch it out as the game switches state
-    private delegate void UpdateFunction();
-    private UpdateFunction currentUpdate;
-    private UpdateFunction alternateUpdate;
+    // Keep track of the current update function
+    private Action controlUpdate;
 
     // Control states
     private bool rHandTriggerDown;
@@ -40,62 +27,30 @@ public class VRControls : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
-        // Instantiate all of the attacks we're going to use
+        // Get the container for the attacks we will instantiate
         Transform attackContainer = GetObjects.instance.getAttackContainer();
-        placeDefenseAttack = Instantiate(placeDefenseAttack.gameObject, attackContainer).GetComponent<AAttack>();
-        switchDefenseAttack = Instantiate(switchDefenseAttack.gameObject, attackContainer).GetComponent<AAttack>();
-        fireballAttack = Instantiate(fireballAttack.gameObject, attackContainer).GetComponent<AAttack>();
-        handTriggerAttack = Instantiate(handTriggerAttack.gameObject, attackContainer).GetComponent<AAttack>();
-        scaleChangeAttack = Instantiate(scaleChangeAttack.gameObject, attackContainer).GetComponent<AAttack>();
-        bButtonAttack = Instantiate(bButtonAttack.gameObject, attackContainer).GetComponent<AAttack>();
-        aButtonAttack = Instantiate(aButtonAttack.gameObject, attackContainer).GetComponent<AAttack>();
-        startButtonAttack = Instantiate(startButtonAttack.gameObject, attackContainer).GetComponent<AAttack>();
-
-        // Install our state-switching listeners
-        EventManager.StartListening(GameEvents.DefensivePhaseStart, delegate() { currentUpdate = defensiveUpdate; });
-        EventManager.StartListening(GameEvents.OffensivePhaseStart, delegate () { currentUpdate = offensiveUpdate; });
-
-        // Start by waiting for input
-        currentUpdate = waitForStartInputUpdate;
-
-        // Always check the hand triggers and start button
-        alternateUpdate = checkHandTriggersUpdate;
-        alternateUpdate += checkForStartButtonUpdate;
-        alternateUpdate += checkABButtonUpdate;
-    }
-
-    void offensiveUpdate()
-    {
-        return;
-
-        //// Check for the user firing fireballs
-        //if (OVRInput.GetDown(OVRInput.RawButton.RIndexTrigger))
-        //{
-        //    fireballAttack.releaseFunction(OVRInput.Controller.RTouch);
-        //}
-        //if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger))
-        //{
-        //    fireballAttack.releaseFunction(OVRInput.Controller.LTouch);
-        //}
-    }
-
-    void defensiveUpdate()
-    {
-        // Iterate the hold function of the place defense attack
-        placeDefenseAttack.holdFunction(OVRInput.Controller.RTouch);
-
-        // Check if the user wants to place a defense
-        if (OVRInput.GetDown(OVRInput.RawButton.RIndexTrigger))
+        
+        // Check for the controls only for attacks that we have
+        controlUpdate = noUpdate;
+        if (handTriggerAttack)
         {
-            placeDefenseAttack.releaseFunction(OVRInput.Controller.RTouch);
+            handTriggerAttack = Instantiate(handTriggerAttack.gameObject, attackContainer).GetComponent<AAttack>();
+            controlUpdate += checkHandTriggersUpdate;
         }
-
-        // Check if the user wants to switch the defense they're placing
-        if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger))
+        if (startButtonAttack)
         {
-            switchDefenseAttack.releaseFunction(OVRInput.Controller.RTouch);
+            startButtonAttack = Instantiate(startButtonAttack.gameObject, attackContainer).GetComponent<AAttack>();
+            controlUpdate += checkForStartButtonUpdate;
+        }
+        if (aButtonAttack && bButtonAttack)
+        {
+            bButtonAttack = Instantiate(bButtonAttack.gameObject, attackContainer).GetComponent<AAttack>();
+            aButtonAttack = Instantiate(aButtonAttack.gameObject, attackContainer).GetComponent<AAttack>();
+            controlUpdate += checkABButtonUpdate;
         }
     }
+
+    void noUpdate() { }
 
     void checkHandTriggersUpdate()
     {
@@ -145,19 +100,9 @@ public class VRControls : MonoBehaviour
         }
     }
 
-    void waitForStartInputUpdate()
-    {
-        // Wait for input to start the game
-        if (OVRInput.GetDown(OVRInput.Button.One) || Input.GetKeyDown("v"))
-        {
-            EventManager.TriggerEvent(GameEvents.GameStart);
-        }
-    }
-
     // Update is called once per frame
     void Update ()
     {
-        currentUpdate();
-        alternateUpdate();
+        controlUpdate();
 	}
 }
