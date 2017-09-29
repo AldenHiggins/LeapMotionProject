@@ -131,9 +131,11 @@
     <Compile Include="Assets\GameFolder\Scripts\Attacks\EmptyAttack.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Attacks\FireballAttack.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Attacks\LoadStartLevelAttack.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\Attacks\MeleeAttack.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Attacks\PauseMenuAttack.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Attacks\PlaceDefenseAttack.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Attacks\ScaleChangeAttack.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\Attacks\ShadowBallAttack.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Attacks\SpawnSkeletonAttack.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Attacks\SwitchDefenseAttack.cs" />
     <Compile Include="Assets\GameFolder\Scripts\BehaviorTree\Behavior.cs" />

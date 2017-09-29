@@ -17,12 +17,20 @@ public class VRControls : MonoBehaviour
     [SerializeField]
     private AAttack aButtonAttack;
 
+    [SerializeField]
+    private AAttack rightTriggerAttack;
+
+    [SerializeField]
+    private AAttack leftTriggerAttack;
+
     // Keep track of the current update function
     private Action controlUpdate;
 
     // Control states
     private bool rHandTriggerDown;
     private bool lHandTriggerDown;
+    private bool rIndexTriggerDown;
+    private bool lIndexTriggerDown;
 
     // Use this for initialization
     void Start ()
@@ -48,9 +56,48 @@ public class VRControls : MonoBehaviour
             aButtonAttack = Instantiate(aButtonAttack.gameObject, attackContainer).GetComponent<AAttack>();
             controlUpdate += checkABButtonUpdate;
         }
+        if (leftTriggerAttack && rightTriggerAttack)
+        {
+            rightTriggerAttack = Instantiate(rightTriggerAttack.gameObject, attackContainer).GetComponent<AAttack>();
+            leftTriggerAttack = Instantiate(leftTriggerAttack.gameObject, attackContainer).GetComponent<AAttack>();
+            controlUpdate += checkTriggersUpdate;
+        }
     }
 
     void noUpdate() { }
+
+    void checkTriggersUpdate()
+    {
+        if (OVRInput.Get(OVRInput.RawButton.RIndexTrigger))
+        {
+            rIndexTriggerDown = true;
+        }
+        else if (OVRInput.GetUp(OVRInput.RawButton.RIndexTrigger))
+        {
+            rIndexTriggerDown = false;
+            rightTriggerAttack.releaseFunction(OVRInput.Controller.RTouch);
+        }
+
+        if (rIndexTriggerDown)
+        {
+            rightTriggerAttack.holdFunction(OVRInput.Controller.RTouch);
+        }
+
+        if (OVRInput.Get(OVRInput.RawButton.LIndexTrigger))
+        {
+            lIndexTriggerDown = true;
+        }
+        else if (OVRInput.GetUp(OVRInput.RawButton.LIndexTrigger))
+        {
+            lIndexTriggerDown = false;
+            leftTriggerAttack.releaseFunction(OVRInput.Controller.LTouch);
+        }
+
+        if (lIndexTriggerDown)
+        {
+            leftTriggerAttack.holdFunction(OVRInput.Controller.LTouch);
+        }
+    }
 
     void checkHandTriggersUpdate()
     {
@@ -105,4 +152,10 @@ public class VRControls : MonoBehaviour
     {
         controlUpdate();
 	}
+
+    public void changeRightTriggerControl(int newAttackIndex)
+    {
+        rightTriggerAttack = aButtonAttack;
+        leftTriggerAttack = bButtonAttack;
+    }
 }

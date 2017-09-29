@@ -77,8 +77,6 @@ public class ControllableUnit : MonoBehaviour, IUnit
         }
 
         handleMovement();
-
-        handleAttacks();
     }
 
     void handleMovement()
@@ -150,41 +148,21 @@ public class ControllableUnit : MonoBehaviour, IUnit
         }
     }
 
-    void handleAttacks()
+    public void doMeleeAttack()
     {
-        // Accept player input to initiate attacks
-        if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger))
+        if (!attacking)
         {
-            if (!attacking)
-            {
-                StopCoroutine(attack("Attack1Trigger"));
-                StartCoroutine(attack("Attack1Trigger"));
-            }
+            StopCoroutine(attack("Attack2Trigger"));
+            StartCoroutine(attack("Attack2Trigger"));
         }
-        else if (Input.GetAxis("Left_Trigger") > 0.0f)
-        {
-            if (!attacking)
-            {
-                StopCoroutine(attack("Attack1Trigger"));
-                StartCoroutine(attack("Attack1Trigger"));
-            }
-        }
+    }
 
-        if (OVRInput.GetDown(OVRInput.RawButton.RIndexTrigger))
+    public void doShadowBallAttack()
+    {
+        if (!attacking)
         {
-            if (!attacking)
-            {
-                StopCoroutine(attack("Attack2Trigger"));
-                StartCoroutine(attack("Attack2Trigger"));
-            }
-        }
-        else if (Input.GetAxis("Right_Trigger") > 0.0f)
-        {
-            if (!attacking)
-            {
-                StopCoroutine(attack("Attack2Trigger"));
-                StartCoroutine(attack("Attack2Trigger"));
-            }
+            StopCoroutine(attack("Attack1Trigger"));
+            StartCoroutine(attack("Attack1Trigger"));
         }
     }
 
