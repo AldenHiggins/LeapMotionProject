@@ -193,6 +193,7 @@
     <Compile Include="Assets\GameFolder\Scripts\Utility\ProjectileDestroy.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\ResetMovingObjectsOnLoad.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\RotateObject.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\Utility\SelectionPointer.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\UIFollowPlayer.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Utility\WaitToActivateButton.cs" />
     <Compile Include="Assets\MagicArsenal\Demo\Scripts\MagicButtonScript.cs" />

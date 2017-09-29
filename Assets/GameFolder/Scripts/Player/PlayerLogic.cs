@@ -21,16 +21,16 @@ public class PlayerLogic : MonoBehaviour, IUnit
     [SerializeField]
     private GameObject selectionPointer;
 
-    private GameObject leftPointer;
-    private GameObject rightPointer;
+    private SelectionPointer leftPointer;
+    private SelectionPointer rightPointer;
 
     // Use this for initialization
     void Start()
     {
         health = startingHealth;
         // Instantiate our selection pointers
-        leftPointer = Instantiate(selectionPointer, transform.GetChild(0).GetChild(4));
-        rightPointer = Instantiate(selectionPointer, transform.GetChild(0).GetChild(5));
+        leftPointer = Instantiate(selectionPointer, transform.GetChild(0).GetChild(4)).GetComponent<SelectionPointer>();
+        rightPointer = Instantiate(selectionPointer, transform.GetChild(0).GetChild(5)).GetComponent<SelectionPointer>();
         hidePointers();
     }
 
@@ -115,18 +115,18 @@ public class PlayerLogic : MonoBehaviour, IUnit
     {
         if (leftHand)
         {
-            leftPointer.SetActive(true);
+            leftPointer.enablePointer();
         }
         else
         {
-            rightPointer.SetActive(true);
+            rightPointer.enablePointer();
         }
     }
 
     public void hidePointers()
     {
-        leftPointer.SetActive(false);
-        rightPointer.SetActive(false);
+        leftPointer.disablePointer();
+        rightPointer.disablePointer();
     }
 }
 

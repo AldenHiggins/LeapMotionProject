@@ -38,29 +38,52 @@ public class VRControls : MonoBehaviour
         // Get the container for the attacks we will instantiate
         Transform attackContainer = GetObjects.instance.getAttackContainer();
         
-        // Check for the controls only for attacks that we have
-        controlUpdate = noUpdate;
-        controlUpdate += joysticksUpdate;
+        // Initialize the attacks
         if (handTriggerAttack)
         {
             handTriggerAttack = Instantiate(handTriggerAttack.gameObject, attackContainer).GetComponent<AAttack>();
-            controlUpdate += checkHandTriggersUpdate;
         }
         if (startButtonAttack)
         {
             startButtonAttack = Instantiate(startButtonAttack.gameObject, attackContainer).GetComponent<AAttack>();
-            controlUpdate += checkForStartButtonUpdate;
         }
         if (aButtonAttack && bButtonAttack)
         {
             bButtonAttack = Instantiate(bButtonAttack.gameObject, attackContainer).GetComponent<AAttack>();
             aButtonAttack = Instantiate(aButtonAttack.gameObject, attackContainer).GetComponent<AAttack>();
-            controlUpdate += checkABButtonUpdate;
         }
         if (leftTriggerAttack && rightTriggerAttack)
         {
             rightTriggerAttack = Instantiate(rightTriggerAttack.gameObject, attackContainer).GetComponent<AAttack>();
             leftTriggerAttack = Instantiate(leftTriggerAttack.gameObject, attackContainer).GetComponent<AAttack>();
+        }
+
+        // Enable controls
+        enableControls();
+
+        // Only accept start button inputs while the game is paused, resume all input once the game resumes
+        EventManager.StartListening(GameEvents.GamePause, delegate () { controlUpdate = checkForStartButtonUpdate; });
+        EventManager.StartListening(GameEvents.GameResume, enableControls);
+    }
+
+    void enableControls()
+    {
+        controlUpdate = noUpdate;
+        controlUpdate += joysticksUpdate;
+        if (handTriggerAttack)
+        {
+            controlUpdate += checkHandTriggersUpdate;
+        }
+        if (startButtonAttack)
+        {
+            controlUpdate += checkForStartButtonUpdate;
+        }
+        if (aButtonAttack && bButtonAttack)
+        {
+            controlUpdate += checkABButtonUpdate;
+        }
+        if (leftTriggerAttack && rightTriggerAttack)
+        {
             controlUpdate += checkTriggersUpdate;
         }
     }
