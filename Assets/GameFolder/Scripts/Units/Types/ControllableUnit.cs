@@ -150,7 +150,7 @@ public class ControllableUnit : MonoBehaviour, IUnit
 
     public void doMeleeAttack()
     {
-        if (!attacking)
+        if (!attacking && !isDying)
         {
             StopCoroutine(attack("Attack2Trigger"));
             StartCoroutine(attack("Attack2Trigger"));
@@ -159,7 +159,7 @@ public class ControllableUnit : MonoBehaviour, IUnit
 
     public void doShadowBallAttack()
     {
-        if (!attacking)
+        if (!attacking && !isDying)
         {
             StopCoroutine(attack("Attack1Trigger"));
             StartCoroutine(attack("Attack1Trigger"));
