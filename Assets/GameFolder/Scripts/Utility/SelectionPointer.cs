@@ -6,6 +6,10 @@ public class SelectionPointer : MonoBehaviour
 {
     private int raycastLayers = 1 << 10 | 1 << 5;
     private bool pointerEnabled = false;
+    private float inactiveScale = 3.0f;
+
+    public Color highlightColor;
+    public Color inactiveColor;
 
     private void Start()
     {
@@ -24,8 +28,14 @@ public class SelectionPointer : MonoBehaviour
         if (Physics.Raycast(transform.position, transform.forward, out hit, 300.0f, raycastLayers))
         {
             transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, hit.distance / 2.0f);
+            transform.GetChild(0).gameObject.GetComponent<Renderer>().sharedMaterial.color = highlightColor;
         }
-	}
+        else
+        {
+            transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, inactiveScale);
+            transform.GetChild(0).gameObject.GetComponent<Renderer>().sharedMaterial.color = inactiveColor;
+        }
+    }
 
     public void enablePointer()
     {
