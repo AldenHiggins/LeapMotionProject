@@ -29,11 +29,13 @@ public class SelectionPointer : MonoBehaviour
         {
             transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, hit.distance / 2.0f);
             transform.GetChild(0).gameObject.GetComponent<Renderer>().sharedMaterial.color = highlightColor;
+            transform.GetChild(1).localScale = new Vector3(.02f, .02f / (hit.distance / 2.0f), .02f);
         }
         else
         {
             transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, inactiveScale);
             transform.GetChild(0).gameObject.GetComponent<Renderer>().sharedMaterial.color = inactiveColor;
+            transform.GetChild(1).localScale = new Vector3(.01f, .01f / inactiveScale, .01f);
         }
     }
 
@@ -41,11 +43,13 @@ public class SelectionPointer : MonoBehaviour
     {
         pointerEnabled = true;
         transform.GetChild(0).gameObject.SetActive(true);
+        transform.GetChild(1).gameObject.SetActive(true);
     }
 
     public void disablePointer()
     {
         pointerEnabled = false;
         transform.GetChild(0).gameObject.SetActive(false);
+        transform.GetChild(1).gameObject.SetActive(false);
     }
 }
