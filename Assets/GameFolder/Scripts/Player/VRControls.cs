@@ -2,25 +2,47 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class VRControls : MonoBehaviour
 {
+    // List of all of the attacks
+    [Header("Primary Attacks")]
     [SerializeField]
+    private AAttack meleeAttack;
+    [SerializeField]
+    private AAttack shadowBallAttack;
+    [SerializeField]
+    private AAttack spikesAttack;
+    [Header("Corpse Attacks")]
+    [SerializeField]
+    private AAttack corpseExplosionAttack;
+    [SerializeField]
+    private AAttack spawnSkeletonAttack;
+    [Header("Command AI Attacks")]
+    [SerializeField]
+    private AAttack rallyAlliesAttack;
+    [SerializeField]
+    private AAttack commandAlliesAttack;
+    [Header("Utilities")]
+    [SerializeField]
+    private AAttack pauseGameAttack;
+    [SerializeField]
+    private AAttack zoomInAttack;
+
+    // Get references to the UI to select attacks
+    [Header("Attack Selection UI")]
+    [SerializeField]
+    private ToggleGroup rightTriggerToggles;
+    [SerializeField]
+    private ToggleGroup leftTriggerToggles;
+
+    // Currently assigned attacks to each of the controls
     private AAttack handTriggerAttack;
-
-    [SerializeField]
     private AAttack startButtonAttack;
-
-    [SerializeField]
     private AAttack bButtonAttack;
-
-    [SerializeField]
     private AAttack aButtonAttack;
-
-    [SerializeField]
     private AAttack rightTriggerAttack;
-
-    [SerializeField]
     private AAttack leftTriggerAttack;
 
     // Keep track of the current update function
@@ -37,26 +59,24 @@ public class VRControls : MonoBehaviour
     {
         // Get the container for the attacks we will instantiate
         Transform attackContainer = GetObjects.instance.getAttackContainer();
-        
+
         // Initialize the attacks
-        if (handTriggerAttack)
-        {
-            handTriggerAttack = Instantiate(handTriggerAttack.gameObject, attackContainer).GetComponent<AAttack>();
-        }
-        if (startButtonAttack)
-        {
-            startButtonAttack = Instantiate(startButtonAttack.gameObject, attackContainer).GetComponent<AAttack>();
-        }
-        if (aButtonAttack && bButtonAttack)
-        {
-            bButtonAttack = Instantiate(bButtonAttack.gameObject, attackContainer).GetComponent<AAttack>();
-            aButtonAttack = Instantiate(aButtonAttack.gameObject, attackContainer).GetComponent<AAttack>();
-        }
-        if (leftTriggerAttack && rightTriggerAttack)
-        {
-            rightTriggerAttack = Instantiate(rightTriggerAttack.gameObject, attackContainer).GetComponent<AAttack>();
-            leftTriggerAttack = Instantiate(leftTriggerAttack.gameObject, attackContainer).GetComponent<AAttack>();
-        }
+        initializeAttack(ref meleeAttack);
+        initializeAttack(ref shadowBallAttack);
+        initializeAttack(ref spikesAttack);
+        initializeAttack(ref corpseExplosionAttack);
+        initializeAttack(ref spawnSkeletonAttack);
+        initializeAttack(ref rallyAlliesAttack);
+        initializeAttack(ref commandAlliesAttack);
+        initializeAttack(ref pauseGameAttack);
+        initializeAttack(ref zoomInAttack);
+
+        // Set default controls
+        startButtonAttack = pauseGameAttack;
+        bButtonAttack = spawnSkeletonAttack;
+        aButtonAttack = corpseExplosionAttack;
+        rightTriggerAttack = meleeAttack;
+        leftTriggerAttack = shadowBallAttack;
 
         // Enable controls
         enableControls();
@@ -64,6 +84,12 @@ public class VRControls : MonoBehaviour
         // Only accept start button inputs while the game is paused, resume all input once the game resumes
         EventManager.StartListening(GameEvents.GamePause, delegate () { controlUpdate = checkForStartButtonUpdate; });
         EventManager.StartListening(GameEvents.GameResume, enableControls);
+    }
+
+    void initializeAttack(ref AAttack attackToInitialize)
+    {
+        if (attackToInitialize == null) return;
+        attackToInitialize = Instantiate(attackToInitialize.gameObject, GetObjects.instance.getAttackContainer()).GetComponent<AAttack>();
     }
 
     void enableControls()
