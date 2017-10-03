@@ -2,6 +2,8 @@ using UnityEngine;
 
 public abstract class AAttack : MonoBehaviour
 {
+    public AttackTypes attackType;
+
     abstract public void inactiveFunction();
 
     public void releaseFunction(OVRInput.Controller hand)

@@ -51,3 +51,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2c41ef95c0d3114a9f8bc28ec931eb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackType: 7

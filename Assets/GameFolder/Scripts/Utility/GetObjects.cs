@@ -14,6 +14,10 @@ public class GetObjects : MonoBehaviour
     private DefensiveGrid defensiveGrid;
     private LevelBounds levelBounds;
     private GameObject pauseMenu;
+    private VRControls vrControls;
+
+    // UI elements
+    private AttackSelection attackSelectionUI;
 
     // Object containers
     private Transform rootTransform;
@@ -336,6 +340,40 @@ public class GetObjects : MonoBehaviour
         }
 
         return pauseMenu;
+    }
+
+    public AttackSelection getAttackSelection()
+    {
+        if (attackSelectionUI)
+        {
+            return attackSelectionUI;
+        }
+
+        findFirstObjectOfType(ref attackSelectionUI, getRootTransform());
+
+        if (attackSelectionUI == null)
+        {
+            Debug.LogError("AttackSelection not found in scene!");
+        }
+
+        return attackSelectionUI;
+    }
+
+    public VRControls getVRControls()
+    {
+        if (vrControls)
+        {
+            return vrControls;
+        }
+
+        findFirstObjectOfType(ref vrControls, getRootTransform());
+
+        if (vrControls == null)
+        {
+            Debug.LogError("VRControls not found in scene!");
+        }
+
+        return vrControls;
     }
 
     // Try and find an object with a specific name ONLY within the direct children of the supplied transform

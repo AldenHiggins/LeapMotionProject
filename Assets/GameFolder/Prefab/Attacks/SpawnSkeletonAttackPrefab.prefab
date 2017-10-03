@@ -51,5 +51,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: caf096653d7ec044b97b0bd069538c1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackType: 4
   zombiePrefab: {fileID: 1334509804305912, guid: 380f01fab3a857a42a76a34f3d8c43c2,
     type: 2}

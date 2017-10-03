@@ -7,35 +7,8 @@ using UnityEngine.UI;
 public class VRControls : MonoBehaviour
 {
     // List of all of the attacks
-    [Header("Primary Attacks")]
     [SerializeField]
-    private AAttack meleeAttack;
-    [SerializeField]
-    private AAttack shadowBallAttack;
-    [SerializeField]
-    private AAttack spikesAttack;
-    [Header("Corpse Attacks")]
-    [SerializeField]
-    private AAttack corpseExplosionAttack;
-    [SerializeField]
-    private AAttack spawnSkeletonAttack;
-    [Header("Command AI Attacks")]
-    [SerializeField]
-    private AAttack rallyAlliesAttack;
-    [SerializeField]
-    private AAttack commandAlliesAttack;
-    [Header("Utilities")]
-    [SerializeField]
-    private AAttack pauseGameAttack;
-    [SerializeField]
-    private AAttack zoomInAttack;
-
-    // Get references to the UI to select attacks
-    [Header("Attack Selection UI")]
-    [SerializeField]
-    private ToggleGroup rightTriggerToggles;
-    [SerializeField]
-    private ToggleGroup leftTriggerToggles;
+    private AAttack[] attackList;
 
     // Currently assigned attacks to each of the controls
     private AAttack handTriggerAttack;
@@ -57,26 +30,18 @@ public class VRControls : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
-        // Get the container for the attacks we will instantiate
-        Transform attackContainer = GetObjects.instance.getAttackContainer();
-
         // Initialize the attacks
-        initializeAttack(ref meleeAttack);
-        initializeAttack(ref shadowBallAttack);
-        initializeAttack(ref spikesAttack);
-        initializeAttack(ref corpseExplosionAttack);
-        initializeAttack(ref spawnSkeletonAttack);
-        initializeAttack(ref rallyAlliesAttack);
-        initializeAttack(ref commandAlliesAttack);
-        initializeAttack(ref pauseGameAttack);
-        initializeAttack(ref zoomInAttack);
+        for (int attackIndex = 0; attackIndex < attackList.Length; attackIndex++)
+        {
+            initializeAttack(ref attackList[attackIndex]);
+        }
 
         // Set default controls
-        startButtonAttack = pauseGameAttack;
-        bButtonAttack = spawnSkeletonAttack;
-        aButtonAttack = corpseExplosionAttack;
-        rightTriggerAttack = meleeAttack;
-        leftTriggerAttack = shadowBallAttack;
+        changeControl(InputTypes.Start, AttackTypes.PauseGame);
+        changeControl(InputTypes.BButton, AttackTypes.SummonSkeleton);
+        changeControl(InputTypes.AButton, AttackTypes.CorpseExplosion);
+        changeControl(InputTypes.RightTrigger, AttackTypes.Melee);
+        changeControl(InputTypes.LeftTrigger, AttackTypes.ShadowBall);
 
         // Enable controls
         enableControls();
@@ -84,6 +49,44 @@ public class VRControls : MonoBehaviour
         // Only accept start button inputs while the game is paused, resume all input once the game resumes
         EventManager.StartListening(GameEvents.GamePause, delegate () { controlUpdate = checkForStartButtonUpdate; });
         EventManager.StartListening(GameEvents.GameResume, enableControls);
+    }
+
+    public void changeControl(InputTypes inputType, AttackTypes attackType)
+    {
+        switch (inputType)
+        {
+            case InputTypes.RightTrigger:
+                rightTriggerAttack = getAttack(attackType);
+                break;
+            case InputTypes.LeftTrigger:
+                leftTriggerAttack = getAttack(attackType);
+                break;
+            case InputTypes.AButton:
+                aButtonAttack = getAttack(attackType);
+                break;
+            case InputTypes.BButton:
+                bButtonAttack = getAttack(attackType);
+                break;
+            case InputTypes.YButton:
+                break;
+            case InputTypes.XButton:
+                break;
+            case InputTypes.Start:
+                startButtonAttack = getAttack(attackType);
+                break;
+        }
+    }
+
+    private AAttack getAttack(AttackTypes attackType)
+    {
+        for (int attackIndex = 0; attackIndex < attackList.Length; attackIndex++)
+        {
+            if (attackList[attackIndex].attackType == attackType)
+            {
+                return attackList[attackIndex];
+            }
+        }
+        return null;
     }
 
     void initializeAttack(ref AAttack attackToInitialize)

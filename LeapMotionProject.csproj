@@ -157,6 +157,11 @@
     <Compile Include="Assets\GameFolder\Scripts\Player\SceneLogic.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Player\UILogic.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Player\VRControls.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\UI\AttackChoice.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\UI\AttackSelection.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\UI\AttackTypes.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\UI\InputChoice.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\UI\InputTypes.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\AIControllers\TestAIController.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\Spawning\EnemySpawner.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\Spawning\MonsterWave.cs" />
