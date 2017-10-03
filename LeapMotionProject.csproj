@@ -163,7 +163,7 @@
     <Compile Include="Assets\GameFolder\Scripts\UI\AttackTypes.cs" />
     <Compile Include="Assets\GameFolder\Scripts\UI\InputChoice.cs" />
     <Compile Include="Assets\GameFolder\Scripts\UI\InputTypes.cs" />
-    <Compile Include="Assets\GameFolder\Scripts\Units\AIControllers\TestAIController.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\Units\AIControllers\AIController.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\Spawning\EnemySpawner.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\Spawning\MonsterWave.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Units\Types\ControllableUnit.cs" />

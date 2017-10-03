@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class TestAIController : MonoBehaviour
+public class AIController : MonoBehaviour
 {
     private Behavior root;
     private Unit unit;
