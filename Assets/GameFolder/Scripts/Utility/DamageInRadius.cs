@@ -7,25 +7,30 @@ public class DamageInRadius : MonoBehaviour
 	public float radius;
 	public float interval;
     public bool damageAllies;
+    public bool damageOnce;
 
 	// Use this for initialization
 	void Start ()
 	{
-		dealDamageInRadius ();
-		StartCoroutine (damageOverInterval ());
+        StartCoroutine (damageOverInterval ());
 	}
 
 	IEnumerator damageOverInterval()
 	{
 		if (interval == 0)
 		{
+            dealDamageInRadius();
             yield break;
 		}
 
 		while (true)
 		{
 			yield return new WaitForSeconds(interval);
-			dealDamageInRadius();
+            dealDamageInRadius();
+            if (damageOnce)
+            {
+                Destroy(this);
+            }
 		}
 	}
 
