@@ -21,32 +21,18 @@ public class ControllableUnit : MonoBehaviour, IUnit
     [SerializeField]
     private float movementAngle = 10.0f;
     // ATTACKS
-    [SerializeField]
-    private GameObject fireBall;
-    [SerializeField]
-    private GameObject fireBallTransform;
     private bool attacking;
-    private float attackCooldown = .3f;
+    private float attackCooldown = .5f;
     // ENEMIES
     private int enemySearchLayer = 1 << 8;
-    // ALLIES
-    [SerializeField]
-    private GameObject skeletonAlly;
     // MELEE
-    [SerializeField]
     private GameObject meleeHitbox;
-    [SerializeField]
-    private int meleeDamage = 10;
-    [SerializeField]
-    private GameObject meleeParticle;
-    [SerializeField]
-    private AudioClip meleeNoise;
-    private int meleeAttackNumber;
     // IS ALIVE
     private bool isDying;
     // DELEGATES
     private Action onDeath;
     private Action<int, Vector3> onDamageTaken;
+    private Action onAnimationFinished;
 
     // Use this for initialization
     void Start()
@@ -54,7 +40,13 @@ public class ControllableUnit : MonoBehaviour, IUnit
         currentHealth = startingHealth;
         anim = GetComponent<Animator>();
         source = GetComponent<AudioSource>();
+        onAnimationFinished = delegate(){};
+        meleeHitbox = transform.Find("MeleeHitbox").gameObject;
     }
+
+    /////////////////////////////////////////////////////////////
+    ////////////////////    MOVEMENT   //////////////////////////
+    /////////////////////////////////////////////////////////////
 
     public void movementUpdate(Vector3 moveVector, Vector3 lookVector, bool isStrafing)
     {
@@ -86,19 +78,26 @@ public class ControllableUnit : MonoBehaviour, IUnit
         }
     }
 
-    public void doMeleeAttack()
+    /////////////////////////////////////////////////////////////
+    ////////////////////    ATTACKS   ///////////////////////////
+    /////////////////////////////////////////////////////////////
+
+    public void doMeleeAttack(int attackIndex, Action callBack)
     {
         if (!attacking && !isDying)
         {
+            onAnimationFinished = callBack;
+            anim.SetInteger("MeleeAttackNumber", attackIndex);
             StopCoroutine(attack("Attack2Trigger"));
             StartCoroutine(attack("Attack2Trigger"));
         }
     }
 
-    public void doShadowBallAttack()
+    public void castSpell(Action spellCastCallback)
     {
         if (!attacking && !isDying)
         {
+            onAnimationFinished = spellCastCallback;
             StopCoroutine(attack("Attack1Trigger"));
             StartCoroutine(attack("Attack1Trigger"));
         }
@@ -114,31 +113,20 @@ public class ControllableUnit : MonoBehaviour, IUnit
         attacking = false;
     }
 
-    public void fireFireball()
+    private void castAnimEvent()
     {
-        Instantiate(fireBall, fireBallTransform.transform.position,
-            fireBallTransform.transform.rotation, GetObjects.instance.getAttackParticleContainer());
+        onAnimationFinished();
     }
 
-    public void dealMeleeDamage()
+    private void meleeAnimEvent()
     {
-        // Increment to the next melee attack
-        meleeAttackNumber++;
-        if (meleeAttackNumber > 2)
-        {
-            meleeAttackNumber = 0;
-        }
-        anim.SetInteger("MeleeAttackNumber", meleeAttackNumber);
+        onAnimationFinished();
+    }
 
-        // Fire the melee particle
-        meleeParticle.SetActive(false);
-        meleeParticle.SetActive(true);
-
-        // Play the melee sound
-        source.PlayOneShot(meleeNoise);
-
-        RaycastHit[] hits = Physics.BoxCastAll(meleeHitbox.transform.position, meleeHitbox.transform.localScale, 
-            meleeHitbox.transform.forward, meleeHitbox.transform.rotation, meleeHitbox.transform.localScale.z,
+    public void doMeleeDamage(float scaleFactor, int damageAmount)
+    {
+        RaycastHit[] hits = Physics.BoxCastAll(meleeHitbox.transform.position, meleeHitbox.transform.localScale * scaleFactor,
+            meleeHitbox.transform.forward, meleeHitbox.transform.rotation, meleeHitbox.transform.localScale.z * scaleFactor,
             enemySearchLayer);
 
         for (int hitIndex = 0; hitIndex < hits.Length; hitIndex++)
@@ -147,30 +135,14 @@ public class ControllableUnit : MonoBehaviour, IUnit
             if (hitUnit != null)
             {
                 Vector3 damageVector = hitUnit.getGameObject().transform.position - transform.position;
-                hitUnit.dealDamage(meleeDamage, damageVector.normalized);
+                hitUnit.dealDamage(damageAmount, damageVector.normalized);
             }
         }
     }
 
-    public void installDeathListener(Action onDeathCallback)
-    {
-        onDeath += onDeathCallback;
-    }
-
-    public void installDamageListener(Action<int, Vector3> onDamageCallback)
-    {
-        onDamageTaken += onDamageCallback;
-    }
-
-    public int getMaxHealth()
-    {
-        return startingHealth;
-    }
-
-    public int getCurrentHealth()
-    {
-        return currentHealth;
-    }
+    /////////////////////////////////////////////////////////////
+    /////////////////    HEALTH/DAMAGE   ////////////////////////
+    /////////////////////////////////////////////////////////////
 
     public void dealDamage(int damageToDeal, Vector3 damageDirection)
     {
@@ -192,6 +164,35 @@ public class ControllableUnit : MonoBehaviour, IUnit
         }
     }
 
+    /////////////////////////////////////////////////////////////
+    /////////////////    GETTERS/SETTERS   //////////////////////
+    /////////////////////////////////////////////////////////////
+
+    public void installDeathListener(Action onDeathCallback)
+    {
+        onDeath += onDeathCallback;
+    }
+
+    public void installDamageListener(Action<int, Vector3> onDamageCallback)
+    {
+        onDamageTaken += onDamageCallback;
+    }
+
+    public int getMaxHealth()
+    {
+        return startingHealth;
+    }
+
+    public int getCurrentHealth()
+    {
+        return currentHealth;
+    }
+
+    public AudioSource getSource()
+    {
+        return source;
+    }
+
     public bool isUnitDying()
     {
         return isDying;
@@ -208,7 +209,4 @@ public class ControllableUnit : MonoBehaviour, IUnit
     {
         return gameObject;
     }
-
-    public void FootR() { }
-    public void FootL() { }
 }

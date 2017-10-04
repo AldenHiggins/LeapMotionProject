@@ -51,3 +51,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4be39d180e06694da2085b18ca219d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackType: 0
+  meleeNoise: {fileID: 8300000, guid: 38d5df9d8fad11047b70a64d40d0ebd7, type: 3}
+  meleeParticle: {fileID: 1696266511414406, guid: e61f3e8ed94698d48921089fde900db3,
+    type: 2}
+  meleeDamage: 20

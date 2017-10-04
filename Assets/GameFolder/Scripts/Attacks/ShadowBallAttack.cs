@@ -3,6 +3,12 @@ using UnityEngine;
 
 public class ShadowBallAttack : AAttack
 {
+    [SerializeField]
+    private GameObject shadowBall;
+
+    [SerializeField]
+    private Vector3 spawnPosition;
+
     private bool hasAttacked = false;
 
     public override void inactiveFunction(){}
@@ -16,9 +22,16 @@ public class ShadowBallAttack : AAttack
     {
         if (!hasAttacked)
         {
-            GetObjects.instance.getControllableUnit().doShadowBallAttack();
+            GetObjects.instance.getControllableUnit().castSpell(castShadowBall);
             hasAttacked = true;
         }
+    }
+
+    private void castShadowBall()
+    {
+        ControllableUnit unit = GetObjects.instance.getControllableUnit();
+        Instantiate(shadowBall, unit.transform.TransformPoint(spawnPosition),
+            unit.transform.rotation, GetObjects.instance.getAttackParticleContainer());
     }
 }
 
