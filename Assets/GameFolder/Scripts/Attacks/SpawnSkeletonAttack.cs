@@ -6,12 +6,13 @@ public class SpawnSkeletonAttack : AAttack
 	public GameObject zombiePrefab;
     private PlayerLogic player;
 
+    private int corpseLayerMask;
+
     private void Start()
     {
+        corpseLayerMask = LayerMask.GetMask("Corpses");
         player = GetObjects.instance.getPlayer();
     }
-
-    private int corpseLayerMask = 1 << 20;
 
     public override void inactiveFunction(){}
 

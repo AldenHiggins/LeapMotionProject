@@ -43,9 +43,9 @@ public class Unit : MonoBehaviour, IUnit
 
     // UNIT INFO
     [HideInInspector]
-    public int enemySearchLayer = (1 << 16) | (1 << 11);
-    private int allyLayers = (1 << 16) | (1 << 11);
-    private int enemyLayers = (1 << 8);
+    public int enemySearchLayer;
+    private int allyLayers;
+    private int enemyLayers;
 
     // COMPONENTS
     [HideInInspector]
@@ -80,6 +80,9 @@ public class Unit : MonoBehaviour, IUnit
         // Initialize things
         health = startingHealth;
         agent.updateRotation = true;
+        enemySearchLayer = LayerMask.GetMask("Allies");
+        allyLayers = LayerMask.GetMask("Allies");
+        enemyLayers = LayerMask.GetMask("Enemies");
         if (isAlly)
         {
             enemySearchLayer = enemyLayers;

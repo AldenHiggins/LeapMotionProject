@@ -22,7 +22,7 @@ public class PlaceDefenseAttack : AAttack
     private GameObject defensivePointer;
 
     // The layer that we raycast to for our defenses
-    private int defenseGridLayerMask = 1 << 10;
+    private int defenseGridLayerMask;
 
     // Keep a reference to the player around to deduct gold to place defenses
     private PlayerLogic player;
@@ -32,6 +32,8 @@ public class PlaceDefenseAttack : AAttack
 
     void Start()
 	{
+        // Get our raycasting layer
+        defenseGridLayerMask = LayerMask.GetMask("Ground");
         // Initialize the first defense
         currentDefense = -1;
         switchDefense();

@@ -24,7 +24,7 @@ public class ControllableUnit : MonoBehaviour, IUnit
     private bool attacking;
     private float attackCooldown = .5f;
     // ENEMIES
-    private int enemySearchLayer = 1 << 8;
+    private int enemySearchLayer;
     // MELEE
     private GameObject meleeHitbox;
     // IS ALIVE
@@ -37,6 +37,7 @@ public class ControllableUnit : MonoBehaviour, IUnit
     // Use this for initialization
     void Start()
     {
+        enemySearchLayer = LayerMask.GetMask("Enemies");
         currentHealth = startingHealth;
         anim = GetComponent<Animator>();
         source = GetComponent<AudioSource>();

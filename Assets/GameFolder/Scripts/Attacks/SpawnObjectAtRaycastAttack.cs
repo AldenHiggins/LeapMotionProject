@@ -10,7 +10,7 @@ public class SpawnObjectAtRaycastAttack : AAttack
 
     public float castRange;
 
-    private int groundLayer = 1 << 10;
+    private int groundLayer;
 
     private PlayerLogic player;
 
@@ -18,6 +18,7 @@ public class SpawnObjectAtRaycastAttack : AAttack
 
     private void Start()
     {
+        groundLayer = LayerMask.GetMask("Ground");
         player = GetObjects.instance.getPlayer();
         aoeIndicator = Instantiate(aoeIndicator, GetObjects.instance.getAttackContainer());
         aoeIndicator.SetActive(false);

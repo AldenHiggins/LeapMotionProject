@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SelectionPointer : MonoBehaviour
 {
-    private int raycastLayers = 1 << 10 | 1 << 5;
+    private int raycastLayers;
     private bool pointerEnabled = false;
     private float inactiveScale = 3.0f;
 
@@ -13,6 +13,7 @@ public class SelectionPointer : MonoBehaviour
 
     private void Start()
     {
+        raycastLayers = LayerMask.GetMask("Ground", "UI");
         EventManager.StartListening(GameEvents.GamePause, enablePointer);
         EventManager.StartListening(GameEvents.GameResume, disablePointer);
     }
