@@ -65,6 +65,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4560355644057336}
   - component: {fileID: 135086229684570454}
+  - component: {fileID: 54848153504245484}
   m_Layer: 20
   m_Name: Corpse
   m_TagString: Untagged
@@ -708,6 +709,21 @@ Transform:
   m_Father: {fileID: 4467287861507318}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &54848153504245484
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1032712096552930}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!135 &135086229684570454
 SphereCollider:
   m_ObjectHideFlags: 1
