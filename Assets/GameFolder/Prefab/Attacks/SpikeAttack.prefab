@@ -54,3 +54,5 @@ MonoBehaviour:
   attackType: 2
   objectToSpawn: {fileID: 1832104302015604, guid: a45ce8b4fafaf8345a6e9023d74bccf9,
     type: 2}
+  aoeIndicator: {fileID: 1501393161019814, guid: 05d57acd19771c14a8842ccaecd4ba42,
+    type: 2}
