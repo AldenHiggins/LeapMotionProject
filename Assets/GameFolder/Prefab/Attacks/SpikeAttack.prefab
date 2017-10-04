@@ -56,3 +56,4 @@ MonoBehaviour:
     type: 2}
   aoeIndicator: {fileID: 1501393161019814, guid: 05d57acd19771c14a8842ccaecd4ba42,
     type: 2}
+  castRange: 15
