@@ -10,6 +10,8 @@ public class SpawnObjectAtRaycastAttack : AAttack
 
     private PlayerLogic player;
 
+    private Vector3 currentSpawnPosition;
+
     private void Start()
     {
         player = GetObjects.instance.getPlayer();
@@ -21,6 +23,12 @@ public class SpawnObjectAtRaycastAttack : AAttack
     {
         // Hide the pointer
         player.hidePointers();
+
+        // Get access to the unit
+        ControllableUnit unit = GetObjects.instance.getControllableUnit();
+
+        // Check that the unit isn't already attacking
+        if (unit.getAttacking()) return;
 
         // Raycast onto the defensive grid
         RaycastHit hit;
@@ -36,11 +44,21 @@ public class SpawnObjectAtRaycastAttack : AAttack
             return;
         }
 
-        Instantiate(objectToSpawn, hit.point, Quaternion.identity, GetObjects.instance.getAttackParticleContainer());
+        // Set the spawn position for the object to be our raycast point
+        currentSpawnPosition = hit.point;
+        // Have the unit face the point we're casting towards
+        unit.transform.LookAt(currentSpawnPosition, Vector3.up);
+        // Have the unit cast this spell
+        unit.castSpell(createObjectOnCast);
     }
 
     public override void holdFunctionConcrete(Vector3 localPos, Vector3 worldPos, Quaternion localRot, Quaternion worldRot)
     {
         player.showPointer(false);
+    }
+
+    private void createObjectOnCast()
+    {
+        Instantiate(objectToSpawn, currentSpawnPosition, Quaternion.identity, GetObjects.instance.getAttackParticleContainer());
     }
 }

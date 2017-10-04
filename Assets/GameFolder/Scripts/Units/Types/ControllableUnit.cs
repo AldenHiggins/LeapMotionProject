@@ -50,8 +50,8 @@ public class ControllableUnit : MonoBehaviour, IUnit
 
     public void movementUpdate(Vector3 moveVector, Vector3 lookVector, bool isStrafing)
     {
-        // Don't take movement if the unit is dead
-        if (isDying) return;
+        // Don't take movement if the unit is dead or attacking
+        if (isDying || attacking) return;
 
         // Set strafing to true if the look vector is zero
         anim.SetBool("Strafing", isStrafing);
@@ -176,6 +176,11 @@ public class ControllableUnit : MonoBehaviour, IUnit
     public void installDamageListener(Action<int, Vector3> onDamageCallback)
     {
         onDamageTaken += onDamageCallback;
+    }
+
+    public bool getAttacking()
+    {
+        return attacking;
     }
 
     public int getMaxHealth()
