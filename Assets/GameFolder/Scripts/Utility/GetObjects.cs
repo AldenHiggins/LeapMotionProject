@@ -54,6 +54,7 @@ public class GetObjects : MonoBehaviour
         if (player == null)
         {
             Debug.LogError("PlayerLogic could not be found in scene!");
+            return null;
         }
         return player;
     }
@@ -70,6 +71,7 @@ public class GetObjects : MonoBehaviour
         if (controllableUnit == null)
         {
             Debug.LogError("ControllableUnit could not be found in scene!");
+            return null;
         }
 
         return controllableUnit;
@@ -87,6 +89,7 @@ public class GetObjects : MonoBehaviour
         if (root == null || root.Length == 0)
         {
             Debug.LogError("RootTransform could not be found in scene!");
+            return null;
         }
 
         rootTransform = root[0].transform;
@@ -175,6 +178,7 @@ public class GetObjects : MonoBehaviour
         if (mainCamera == null)
         {
             Debug.LogError("MainCamera not found in scene!!");
+            return null;
         }
 
         return mainCamera;
@@ -193,6 +197,7 @@ public class GetObjects : MonoBehaviour
         if (spawnedEnemiesGameObject == null)
         {
             Debug.LogError("SpawnedEnemies not found in scene!");
+            return null;
         }
 
         spawnedEnemies = spawnedEnemiesGameObject.transform;
@@ -211,6 +216,7 @@ public class GetObjects : MonoBehaviour
         if (goalPosition == null)
         {
             Debug.LogError("GoalPosition not found in scene!");
+            return null;
         }
 
         return goalPosition;
@@ -229,6 +235,7 @@ public class GetObjects : MonoBehaviour
         if (enemyWaves == null)
         {
             Debug.LogError("EnemyWaves not found in scene!");
+            return null;
         }
 
         enemyWaves = enemyWavesGameObject.transform;
@@ -248,6 +255,7 @@ public class GetObjects : MonoBehaviour
         if (miscContainerGameObject == null)
         {
             Debug.LogError("MiscGameObjects not found in scene!!");
+            return null;
         }
 
         miscContainer = miscContainerGameObject.transform;
@@ -267,6 +275,7 @@ public class GetObjects : MonoBehaviour
         if (movingObjectsContainerGameObject == null)
         {
             Debug.LogError("MovingObjects not found in scene!");
+            return null;
         }
 
         movingObjectsContainer = movingObjectsContainerGameObject.transform;
@@ -285,6 +294,7 @@ public class GetObjects : MonoBehaviour
         if (defensiveGrid == null)
         {
             Debug.LogError("DefensiveGrid not found in scene!!");
+            return null;
         }
 
         return defensiveGrid;
@@ -302,6 +312,7 @@ public class GetObjects : MonoBehaviour
         if (levelBounds == null)
         {
             Debug.LogError("LevelBounds not found in scene!!");
+            return null;
         }
 
         return levelBounds;
@@ -316,12 +327,29 @@ public class GetObjects : MonoBehaviour
 
         GameObject[] sceneRootObjects = UnityEngine.SceneManagement.SceneManager.GetSceneAt(2).GetRootGameObjects();
 
+        // If there are multiple scene root objects look for the one that is named "Scene"
         if (sceneRootObjects == null || sceneRootObjects.Length == 0)
         {
             Debug.LogError("Could not find scene!");
+            return null;
         }
-
-        scene = sceneRootObjects[0].transform;
+        else if (sceneRootObjects.Length == 1)
+        {
+            scene = sceneRootObjects[0].transform;
+        }
+        else
+        {
+            for (int objectIndex = 0; objectIndex < sceneRootObjects.Length; objectIndex++)
+            {
+                GameObject objectToTest = sceneRootObjects[objectIndex];
+                if (objectToTest.name == "Scene")
+                {
+                    scene = objectToTest.transform;
+                    break;
+                }
+            }
+        }
+        
         return scene;
     }
 
@@ -337,6 +365,7 @@ public class GetObjects : MonoBehaviour
         if (pauseMenu == null)
         {
             Debug.LogError("PauseMenu not found in scene!");
+            return null;
         }
 
         return pauseMenu;
@@ -354,6 +383,7 @@ public class GetObjects : MonoBehaviour
         if (attackSelectionUI == null)
         {
             Debug.LogError("AttackSelection not found in scene!");
+            return null;
         }
 
         return attackSelectionUI;
@@ -371,6 +401,7 @@ public class GetObjects : MonoBehaviour
         if (vrControls == null)
         {
             Debug.LogError("VRControls not found in scene!");
+            return null;
         }
 
         return vrControls;
