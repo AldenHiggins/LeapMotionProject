@@ -10,11 +10,14 @@ public class ControllableUnit : MonoBehaviour, IUnit
     private Animator anim;
     // AUDIO SOURCE
     private AudioSource source;
+    // CHARACTER CONTROLLER
+    private CharacterController controller;
     // HEALTH
     [SerializeField]
     private int startingHealth = 100;
     private int currentHealth;
     // MOVEMENT
+    [SerializeField]
     private float moveSpeed;
     [SerializeField]
     private float turnSpeed = .1f;
@@ -41,6 +44,7 @@ public class ControllableUnit : MonoBehaviour, IUnit
         currentHealth = startingHealth;
         anim = GetComponent<Animator>();
         source = GetComponent<AudioSource>();
+        controller = GetComponent<CharacterController>();
         onAnimationFinished = delegate(){};
         meleeHitbox = transform.Find("MeleeHitbox").gameObject;
     }
@@ -66,6 +70,9 @@ public class ControllableUnit : MonoBehaviour, IUnit
         // Set the player's move direction
         anim.SetFloat("MoveX", moveVector.x);
         anim.SetFloat("MoveY", moveVector.z);
+
+        // Move the character controller
+        controller.Move(transform.TransformDirection(moveVector) * moveSpeed * Time.deltaTime);
 
         // Rotate the unit towards lookVector
         Quaternion targetRot = Quaternion.LookRotation(lookVector);

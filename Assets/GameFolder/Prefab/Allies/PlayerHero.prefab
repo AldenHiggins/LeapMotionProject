@@ -1459,7 +1459,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 0b825c8afc238c64eb45647066d1d7af, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
@@ -1861,6 +1861,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startingHealth: 40
+  moveSpeed: 5
   turnSpeed: 5
   movementAngle: 45
 --- !u!114 &114864077266882918
