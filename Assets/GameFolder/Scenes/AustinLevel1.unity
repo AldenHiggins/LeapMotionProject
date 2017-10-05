@@ -56902,12 +56902,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc6e537761f0fca49bd4197fd5c225fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  placeDefenseAttack: {fileID: 114282185735976166, guid: 3143c1d6f0592d04ea2d53cb381a5fa3,
-    type: 2}
-  switchDefenseAttack: {fileID: 114078050404335136, guid: fbaf74b0dcc2df94b936a101b8f5c45e,
-    type: 2}
-  fireballAttack: {fileID: 114393415746591526, guid: 79f78ef7c74ee694db38260c2d0d2ae0,
-    type: 2}
+  attackList: []
 --- !u!114 &1118577966
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -56921,6 +56916,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startingHealth: 100
   gold: 15
+  isSmall: 0
+  selectionPointer: {fileID: 0}
 --- !u!136 &1118577967
 CapsuleCollider:
   m_ObjectHideFlags: 0
