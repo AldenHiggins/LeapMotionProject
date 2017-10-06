@@ -11,37 +11,51 @@ public class SceneGridCulling : MonoBehaviour
 
     private GameObject[,] sceneSections;
     private Transform movingObjects;
-    float minX;
-    float maxX;
-    float minZ;
-    float maxZ;
-    float horizontalStep;
-    float verticalStep;
+    public float minX;
+    public float minZ;
+    public float horizontalStep;
+    public float verticalStep;
 
     private void Start()
     {
-        sceneSections = buildGrid();
         movingObjects = GetObjects.instance.getMovingObjectsContainer();
+        // Populate the scene sections object
+        sceneSections = populateSceneSectionArray();
+    }
 
-        // Disable the old scene geometry
-        getSceneGeometry().gameObject.SetActive(false);
+    private GameObject[,] populateSceneSectionArray()
+    {
+        // Get our scene section reference container
+        Transform sceneSectionParent = getSceneSections();
+
+        // Generate all of the scene sections
+        GameObject[,] sceneSectionsPopulated = new GameObject[horizontalLines, verticalLines];
+        for (int horizontalIndex = 0; horizontalIndex < horizontalLines; horizontalIndex++)
+        {
+            for (int verticalIndex = 0; verticalIndex < verticalLines; verticalIndex++)
+            {
+                sceneSectionsPopulated[horizontalIndex, verticalIndex] = sceneSectionParent.GetChild((horizontalIndex * horizontalLines) + verticalIndex).gameObject;
+            }
+        }
+
+        return sceneSectionsPopulated;
     }
 
     private void Update()
     {
+        if (sceneSections == null)
+        {
+            Debug.LogError("Scene sections was not initialized");
+            return;
+        }
+
         Vector3 tableOrigin = movingObjects.transform.position;
-        Debug.Log("TableOrigin: " + tableOrigin);
-        Debug.Log("Numerator: " + (tableOrigin.x - minX));
-        Debug.Log("Horizontal step: " + horizontalStep);
         int xIndex = (int)(Mathf.Floor((tableOrigin.x - minX) / horizontalStep));
         int minXIndex = xIndex - 2;
         int maxXIndex = xIndex + 2;
         int yIndex = (int)(Mathf.Floor((tableOrigin.z - minZ) / verticalStep));
         int minYIndex = yIndex - 2;
         int maxYIndex = yIndex + 2;
-
-        Debug.Log("X index: " + xIndex);
-        Debug.Log("Y Index: " + yIndex);
 
         // Get rid of all the x transforms greater than xIndex
         for (int xIndexToDisable = 0; xIndexToDisable < horizontalLines; xIndexToDisable++)
@@ -58,6 +72,20 @@ public class SceneGridCulling : MonoBehaviour
         }
     }
 
+    public void combineMeshes()
+    {
+        Transform sceneSections = getSceneSections();
+        // Iterate through all of the scene sections
+        for (int sectionIndex = 0; sectionIndex < sceneSections.childCount; sectionIndex++)
+        {
+            SimpleMeshCombine meshCombiner = sceneSections.GetChild(sectionIndex).gameObject.GetComponent<SimpleMeshCombine>();
+            if (meshCombiner == null) continue;
+            if (meshCombiner.transform.childCount == 0) continue;
+            meshCombiner.CombineMeshes();
+            meshCombiner.combined.isStatic = true;
+        }
+    }
+
     public GameObject[,] buildGrid()
     {
         Debug.Log("Building Scene Grid");
@@ -65,9 +93,7 @@ public class SceneGridCulling : MonoBehaviour
 
         // Build the parameters for the scene
         minX = sceneTransform.position.x - (sceneTransform.localScale.x / 2.0f);
-        maxX = sceneTransform.position.x + (sceneTransform.localScale.x / 2.0f);
         minZ = sceneTransform.position.z - (sceneTransform.localScale.z / 2.0f);
-        maxZ = sceneTransform.position.z + (sceneTransform.localScale.z / 2.0f);
         horizontalStep = sceneTransform.localScale.x / horizontalLines;
         verticalStep = sceneTransform.localScale.z / verticalLines;
 
@@ -75,10 +101,13 @@ public class SceneGridCulling : MonoBehaviour
         constructReferenceGrid(minX, minZ, horizontalStep, verticalStep, sceneTransform);
 
         // Create the containers for the sections of the level
-        GameObject[,] sceneSections = constructSceneSectionContainers(minX, minZ, horizontalStep, verticalStep, sceneTransform);
+        sceneSections = constructSceneSectionContainers(minX, minZ, horizontalStep, verticalStep, sceneTransform);
 
         // Iterate through the scene's game objects and place copies of them into a scene section
         copySceneObjectsIntoSceneSections(sceneSections, minX, minZ, horizontalStep, verticalStep);
+
+        // Combine all of the meshes in the scene sections
+        combineMeshes();
 
         // Return the scene sections
         return sceneSections;
