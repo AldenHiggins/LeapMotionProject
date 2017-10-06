@@ -150,15 +150,15 @@ public class SceneGridCulling : MonoBehaviour
         for (int horizontalIndex = 0; horizontalIndex < horizontalLines + 1; horizontalIndex++)
         {
             GameObject newLine = Instantiate(sceneGridLine, new Vector3(minX + (horizontalStep * horizontalIndex),
-                3.0f, sceneTransform.position.z), Quaternion.identity, gridReferenceParent);
-            newLine.transform.localScale = new Vector3(1.0f, 1.0f, sceneTransform.localScale.z);
+                0.3f, sceneTransform.position.z), Quaternion.identity, gridReferenceParent);
+            newLine.transform.localScale = new Vector3(0.2f, 0.2f, sceneTransform.localScale.z);
         }
         // Create a set of vertical lines
         for (int verticalIndex = 0; verticalIndex < verticalLines + 1; verticalIndex++)
         {
             GameObject newLine = Instantiate(sceneGridLine, new Vector3(sceneTransform.position.x,
-                3.0f, minZ + (verticalStep * verticalIndex)), Quaternion.identity, gridReferenceParent);
-            newLine.transform.localScale = new Vector3(sceneTransform.localScale.x, 1.0f, 1.0f);
+                0.3f, minZ + (verticalStep * verticalIndex)), Quaternion.identity, gridReferenceParent);
+            newLine.transform.localScale = new Vector3(sceneTransform.localScale.x, 0.2f, 0.2f);
         }
     }
 
