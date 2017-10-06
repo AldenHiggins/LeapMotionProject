@@ -158,6 +158,8 @@
     <Compile Include="Assets\GameFolder\Scripts\Player\PlayerLogic.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Player\SceneLogic.cs" />
     <Compile Include="Assets\GameFolder\Scripts\Player\VRControls.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\SceneCulling\SceneGridCulling.cs" />
+    <Compile Include="Assets\GameFolder\Scripts\SceneCulling\SceneGridCullingEditor.cs" />
     <Compile Include="Assets\GameFolder\Scripts\UI\AttackChoice.cs" />
     <Compile Include="Assets\GameFolder\Scripts\UI\AttackSelection.cs" />
     <Compile Include="Assets\GameFolder\Scripts\UI\AttackTypes.cs" />

@@ -12,14 +12,11 @@ EditorBuildSettings:
     path: Assets/GameFolder/Scenes/RoomLightMap.unity
     guid: 57d9030e423a1a043ac12d72b8b1f2e8
   - enabled: 1
-    path: Assets/GameFolder/Scenes/NPCLoadingTest.unity
-    guid: 0ed97b62e26cb0f428c917cef2eda446
-  - enabled: 1
-    path: Assets/GameFolder/Scenes/LevelSelectTest.unity
-    guid: 4aff8bbd9e781b748a7d48d761294f5a
-  - enabled: 1
-    path: Assets/GameFolder/Scenes/LoadingScene.unity
+    path: Assets/GameFolder/Scenes/FieldLevel1.unity
     guid: cfa34dcb49b58af41afdec3f6c2fd774
-  - enabled: 1
-    path: Assets/GameFolder/Scenes/TableMovingScene1.unity
-    guid: 8f0b4deea1a5fdd4aa370def5e9ef473
+  - enabled: 0
+    path: Assets/GameFolder/Scenes/CombatTestLevel.unity
+    guid: 0ed97b62e26cb0f428c917cef2eda446
+  - enabled: 0
+    path: Assets/GameFolder/Scenes/LevelSelect.unity
+    guid: 4aff8bbd9e781b748a7d48d761294f5a
