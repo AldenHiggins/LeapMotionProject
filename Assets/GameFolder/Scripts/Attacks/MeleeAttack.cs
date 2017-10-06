@@ -12,11 +12,15 @@ public class MeleeAttack : AAttack
 
     private bool hasAttacked = false;
     private int meleeAttackNumber = 0;
+    private bool particleInitialized = false;
 
-    private void Start()
+    private void createMeleeParticle()
     {
-        meleeParticle = Instantiate(meleeParticle, meleeParticle.transform.position, meleeParticle.transform.rotation, GetObjects.instance.getControllableUnit().gameObject.transform);
+        ControllableUnit unit = GetObjects.instance.getControllableUnit();
+        if (unit == null) return;
+        meleeParticle = Instantiate(meleeParticle, meleeParticle.transform.position, meleeParticle.transform.rotation, unit.gameObject.transform);
         meleeParticle.SetActive(false);
+        particleInitialized = true;
     }
 
     public override void inactiveFunction() { }
@@ -42,7 +46,12 @@ public class MeleeAttack : AAttack
         // Deal melee damage
         unit.doMeleeDamage(1.0f, meleeDamage);
 
-        // Play the melee particle
+        // Play the melee particle, initialize it if needed
+        if (!particleInitialized)
+        {
+            createMeleeParticle();
+        }
+
         meleeParticle.SetActive(false);
         meleeParticle.SetActive(true);
 
