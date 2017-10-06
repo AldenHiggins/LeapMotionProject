@@ -18,8 +18,11 @@ public class MeleeAttack : AAttack
     {
         ControllableUnit unit = GetObjects.instance.getControllableUnit();
         if (unit == null) return;
-        meleeParticle = Instantiate(meleeParticle, meleeParticle.transform.position, meleeParticle.transform.rotation, unit.gameObject.transform);
-        meleeParticle.SetActive(false);
+        GameObject instantiatedMeleeParticle = Instantiate(meleeParticle, unit.gameObject.transform, false);
+        instantiatedMeleeParticle.transform.localPosition = meleeParticle.transform.position;
+        instantiatedMeleeParticle.transform.localRotation = meleeParticle.transform.rotation;
+        instantiatedMeleeParticle.SetActive(false);
+        meleeParticle = instantiatedMeleeParticle;
         particleInitialized = true;
     }
 
