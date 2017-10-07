@@ -109,7 +109,7 @@ NavMeshSettings:
     manualTileSize: 0
     tileSize: 256
     accuratePlacement: 0
-  m_NavMeshData: {fileID: 0}
+  m_NavMeshData: {fileID: 23800000, guid: cd347454eaa68d8458102b73b3495367, type: 2}
 --- !u!1 &15743784
 GameObject:
   m_ObjectHideFlags: 0
@@ -122,7 +122,7 @@ GameObject:
   - component: {fileID: 15743787}
   - component: {fileID: 15743786}
   - component: {fileID: 15743788}
-  m_Layer: 0
+  m_Layer: 21
   m_Name: SF_Env_Tile_Grass_12
   m_TagString: Untagged
   m_Icon: {fileID: 0}
