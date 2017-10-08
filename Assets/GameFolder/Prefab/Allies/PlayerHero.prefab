@@ -1353,7 +1353,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 84
   m_CollisionDetection: 0
 --- !u!65 &65413731842655030
 BoxCollider:
@@ -1861,7 +1861,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startingHealth: 40
-  moveSpeed: 5
+  moveSpeed: 7
   turnSpeed: 5
   movementAngle: 45
 --- !u!114 &114864077266882918
@@ -1892,7 +1892,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1197291423878336}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d729f97834207f14fab72c3c060b95f4, type: 3}
   m_Name: 
