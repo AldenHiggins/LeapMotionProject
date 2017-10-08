@@ -141,14 +141,12 @@ Assets/Bow/Prefabs/
 Assets/Bow/Scene/
 RagnarokVive_Data/
 *.pdb
-*.mat
 Assets/GameFolder/Scenes/BowTestLevel/LightingData.asset
 Assets/GameFolder/Models/Swords/
 Assets/GameFolder/Scenes/BowTestLevel/NavMesh.asset
 Assets/Zombie/
 Assets/ghoul/
 Assets/Elven Long Bow (fully animated)/
-*.controller
 CastleCourtyardNoTerrain_Data/
 2015-04-21_000056/
 Assets/SampleScenes/
