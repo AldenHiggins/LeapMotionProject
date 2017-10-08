@@ -183,3 +183,8 @@ Assets/GameFolder/Scenes/TableMovingScene1/
 Assets/GameFolder/Scenes/TableMovingScene1CombinedMeshes/
 Assets/GameFolder/Scenes/RoomLightMap/
 Assets/MixamoTest/
+Assets/GameFolder/Textures/
+SongOfTheSkeletonKing.csproj
+SongOfTheSkeletonKing.Editor.csproj
+SongOfTheSkeletonKing.Plugins.csproj
+SongOfTheSkeletonKing.sln

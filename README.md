@@ -1,4 +1,3 @@
-Leap Motion Game For Senior Design
+Song of the Skeleton King (working title)
 
-This is our game for our senior design class Comp460 at Rice University.
-We are focusing on making a VR game using the Occulus Rift and Leap Motion technologies.
+Personal project - a Diablo-style fast action RPG in VR that takes place on a virtual tabletop.
