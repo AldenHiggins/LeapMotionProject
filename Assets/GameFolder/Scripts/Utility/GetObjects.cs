@@ -307,7 +307,7 @@ public class GetObjects : MonoBehaviour
             return levelBounds;
         }
 
-        findFirstObjectOfType(ref levelBounds, getRootTransform());
+        findFirstObjectOfType(ref levelBounds, getScene());
 
         if (levelBounds == null)
         {
