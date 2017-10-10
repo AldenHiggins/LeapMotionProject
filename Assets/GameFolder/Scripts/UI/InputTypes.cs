@@ -5,7 +5,9 @@ using UnityEngine;
 public enum InputTypes
 {
     RightTrigger,
+    RightHandTrigger,
     LeftTrigger,
+    LeftHandTrigger,
     AButton,
     BButton,
     XButton,

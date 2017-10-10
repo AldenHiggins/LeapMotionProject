@@ -11,12 +11,13 @@ public class VRControls : MonoBehaviour
     private AAttack[] attackList;
 
     // Currently assigned attacks to each of the controls
-    private AAttack handTriggerAttack;
     private AAttack startButtonAttack;
     private AAttack bButtonAttack;
     private AAttack aButtonAttack;
     private AAttack rightTriggerAttack;
     private AAttack leftTriggerAttack;
+    private AAttack rightHandTriggerAttack;
+    private AAttack leftHandTriggerAttack;
 
     // Keep track of the current update function
     private Action controlUpdate;
@@ -42,6 +43,7 @@ public class VRControls : MonoBehaviour
         changeControl(InputTypes.AButton, AttackTypes.CorpseExplosion);
         changeControl(InputTypes.RightTrigger, AttackTypes.Melee);
         changeControl(InputTypes.LeftTrigger, AttackTypes.ShadowBall);
+        changeControl(InputTypes.RightHandTrigger, AttackTypes.DragWorld);
 
         // Enable controls
         enableControls();
@@ -57,6 +59,9 @@ public class VRControls : MonoBehaviour
         {
             case InputTypes.RightTrigger:
                 rightTriggerAttack = getAttack(attackType);
+                break;
+            case InputTypes.RightHandTrigger:
+                rightHandTriggerAttack = getAttack(attackType);
                 break;
             case InputTypes.LeftTrigger:
                 leftTriggerAttack = getAttack(attackType);
@@ -99,7 +104,7 @@ public class VRControls : MonoBehaviour
     {
         controlUpdate = noUpdate;
         controlUpdate += joysticksUpdate;
-        if (handTriggerAttack)
+        if (rightTriggerAttack)
         {
             controlUpdate += checkHandTriggersUpdate;
         }
@@ -217,12 +222,12 @@ public class VRControls : MonoBehaviour
         else if (OVRInput.GetUp(OVRInput.RawButton.RHandTrigger))
         {
             rHandTriggerDown = false;
-            handTriggerAttack.releaseFunction(OVRInput.Controller.RTouch);
+            rightHandTriggerAttack.releaseFunction(OVRInput.Controller.RTouch);
         }
 
         if (rHandTriggerDown)
         {
-            handTriggerAttack.holdFunction(OVRInput.Controller.RTouch);
+            rightHandTriggerAttack.holdFunction(OVRInput.Controller.RTouch);
         }
     }
 

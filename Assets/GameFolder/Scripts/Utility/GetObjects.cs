@@ -15,6 +15,7 @@ public class GetObjects : MonoBehaviour
     private LevelBounds levelBounds;
     private GameObject pauseMenu;
     private VRControls vrControls;
+    private CameraFollowUnit cameraFollow;
 
     // UI elements
     private AttackSelection attackSelectionUI;
@@ -316,6 +317,24 @@ public class GetObjects : MonoBehaviour
         }
 
         return levelBounds;
+    }
+
+    public CameraFollowUnit getCameraFollowUnit()
+    {
+        if (cameraFollow)
+        {
+            return cameraFollow;
+        }
+
+        findFirstObjectOfType(ref cameraFollow, getScene());
+
+        if (cameraFollow == null)
+        {
+            Debug.LogError("LevelBounds not found in scene!!");
+            return null;
+        }
+
+        return cameraFollow;
     }
 
     public Transform getScene()

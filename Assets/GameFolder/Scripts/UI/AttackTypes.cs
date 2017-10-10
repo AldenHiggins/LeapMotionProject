@@ -12,5 +12,6 @@ public enum AttackTypes
     CommandAllies,
     RallyAllies,
     PauseGame,
-    Empty
+    Empty,
+    DragWorld
 }

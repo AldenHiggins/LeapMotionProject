@@ -43,4 +43,22 @@ public class CameraFollowUnit : MonoBehaviour
         // Move the camera
         movingObjectsContainer.position = newCameraPosition;
     }
+
+    public void addCameraDelta(Vector3 cameraDelta)
+    {
+        // Get the new position of the camera after the delta
+        Vector3 newCameraPosition = movingObjectsContainer.position + cameraDelta;
+
+        // Prevent the added camera delta from moving the player out of the camera dead zone
+        Vector3 vectorFromTableCenter = transform.position - newCameraPosition;
+        vectorFromTableCenter.y = 0.0f;
+        if (vectorFromTableCenter.magnitude >= centerMovementRadius) return;
+
+        // Clamp the camera so it doesn't exceed the bounds of the level
+        newCameraPosition.x = Mathf.Clamp(newCameraPosition.x, bounds.minBounds.x + tableSize.x, bounds.maxBounds.x - tableSize.x);
+        newCameraPosition.z = Mathf.Clamp(newCameraPosition.z, bounds.minBounds.z + tableSize.z, bounds.maxBounds.z - tableSize.z);
+
+        // Move the camera
+        movingObjectsContainer.position = newCameraPosition;
+    }
 }
