@@ -11,6 +11,11 @@ public class LoadLevelOnStart : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
-        SceneManager.LoadScene(levelName, LoadSceneMode.Additive);
-	}
+        // Only load the scene if it isn't already loaded, so far this is useful to keep the script enabled
+        // during multi-scene editing and not have it doubly load scenes
+        if (!SceneManager.GetSceneByName(levelName).isLoaded)
+        {
+            SceneManager.LoadScene(levelName, LoadSceneMode.Additive);
+        }
+    }
 }
