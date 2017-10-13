@@ -1,9 +1,7 @@
 # Auto detect text files and perform LF normalization
 * text=auto
-
 # Custom for Visual Studio
 *.cs     diff=csharp
-
 # Standard to msysgit
 *.doc	 diff=astextplain
 *.DOC	 diff=astextplain
@@ -15,3 +13,30 @@
 *.PDF	 diff=astextplain
 *.rtf	 diff=astextplain
 *.RTF	 diff=astextplain
+Assets/CubeSpace/CubeSpace_Effects_Free.meta filter=lfs diff=lfs merge=lfs -text
+Assets/CubeSpace/CubeSpace_Effects_Free filter=lfs diff=lfs merge=lfs -text
+Assets/crossSection/** filter=lfs diff=lfs merge=lfs -text
+Assets/CubeSpace/** filter=lfs diff=lfs merge=lfs -text
+Assets/MagicArsenal/** filter=lfs diff=lfs merge=lfs -text
+Assets/OVR/** filter=lfs diff=lfs merge=lfs -text
+Assets/OvrAvatar/** filter=lfs diff=lfs merge=lfs -text
+Assets/OVRHarness/** filter=lfs diff=lfs merge=lfs -text
+Assets/OVRInspector/** filter=lfs diff=lfs merge=lfs -text
+Assets/Parse/** filter=lfs diff=lfs merge=lfs -text
+Assets/Plugins/** filter=lfs diff=lfs merge=lfs -text
+Assets/Resources/** filter=lfs diff=lfs merge=lfs -text
+Assets/RPG[[:space:]]Character[[:space:]]Animation[[:space:]]Pack/** filter=lfs diff=lfs merge=lfs -text
+Assets/SampleScenes/** filter=lfs diff=lfs merge=lfs -text
+Assets/Simple[[:space:]]Mesh[[:space:]]Combine/** filter=lfs diff=lfs merge=lfs -text
+Assets/SimpleFantasy/** filter=lfs diff=lfs merge=lfs -text
+Assets/SimpleFX/** filter=lfs diff=lfs merge=lfs -text
+Assets/Standard[[:space:]]Assets/** filter=lfs diff=lfs merge=lfs -text
+Assets/StreamingAssets/** filter=lfs diff=lfs merge=lfs -text
+Assets/Universal[[:space:]]Sound[[:space:]]FX/** filter=lfs diff=lfs merge=lfs -text
+Assets/Warrior[[:space:]]Pack[[:space:]]Bundle[[:space:]]1[[:space:]]FREE/** filter=lfs diff=lfs merge=lfs -text
+Assets/Warrior[[:space:]]Pack[[:space:]]Bundle[[:space:]]2[[:space:]]FREE/** filter=lfs diff=lfs merge=lfs -text
+Assets/Warrior[[:space:]]Pack[[:space:]]Bundle[[:space:]]3[[:space:]]FREE/** filter=lfs diff=lfs merge=lfs -text
+Assets/GameFolder/Models/** filter=lfs diff=lfs merge=lfs -text
+Assets/GameFolder/Textures/** filter=lfs diff=lfs merge=lfs -text
+Assets/GameFolder/Scenes/** filter=lfs diff=lfs merge=lfs -text
+Assets/GameFolder/Audio/** filter=lfs diff=lfs merge=lfs -text
